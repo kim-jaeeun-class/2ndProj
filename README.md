@@ -1,7 +1,7 @@
 # J2P4_2ndProj
 휴먼교육센터 9기 2차 프로젝트
 
-tomcat : 9버전
+tomcat : 9버전 <br>
 java : 11버전
 Sts : 3.xx버전
 
