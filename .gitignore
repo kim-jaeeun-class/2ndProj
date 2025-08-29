@@ -27,6 +27,3 @@ logs/
 .DS_Store
 Thumbs.db
 
-# === (옵션) 개인 환경 파일 예시 ===
-application-local.properties
-application-*.local.properties
