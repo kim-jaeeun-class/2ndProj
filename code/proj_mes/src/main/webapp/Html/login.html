@@ -113,7 +113,7 @@
     }
     .btn:active { transform: translateY(1px); }
 
-    /* Make it look close to the wireframe even on very small screens */
+    /* 반응형 */
     @media (max-width: 420px) {
       .form-row { grid-template-columns: 1fr; gap: 8px; }
       label { padding-left: 2px; }
@@ -126,15 +126,15 @@
 	    <h1 class="title">로그인</h1>
 	
 	    <div class="card">
-	      <form method = "post" action = "Login">
+	      <form method = "post" action = "../login" id = "loginform">
 	        <div class="form-row">
 	          <label for="userid">아이디</label>
-	          <input id="userid" type="text" placeholder="" />
+	          <input id="userid"  name="userid" type="text" placeholder="" />
 	        </div>
 	
 	        <div class="form-row">
 	          <label for="userpw">비밀번호</label>
-	          <input id="userpw" type="password" placeholder="" />
+	          <input id="userpw" name="password" type="password" placeholder="" />
 	        </div>
 	
 	        <div class="actions">
