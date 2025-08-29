@@ -1,501 +1,1447 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>유리 액정 공정 MES ERD 가이드 (테이블·변수·관계)</title>
-<style>
-  :root {
-    --bg: #0b1220;
-    --panel: #0f172a;
-    --soft: #111827;
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --accent: #7dd3fc;
-    --line: #1f2937;
-  }
-  * { box-sizing: border-box; }
-  body { margin:0; padding:24px; background: linear-gradient(180deg, var(--bg), #090f1a); color: var(--text);
-    font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Pretendard, Apple SD Gothic Neo, Noto Sans KR, Helvetica, Arial; }
-  header { max-width: 1200px; margin: 0 auto 20px; padding: 20px; background: var(--panel); border:1px solid var(--line); border-radius:16px; }
-  h1 { margin:0 0 6px; font-size: 28px; }
-  .sub { color: var(--muted); font-size: 14px; }
-  main { max-width: 1200px; margin: 0 auto; }
-  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; }
-  .card h2 { margin: 0 0 8px 0; font-size: 20px; color: #f1f5f9; }
-  .desc { color: var(--muted); margin: 2px 0 10px; }
-  .flow { border-left:3px solid var(--accent); padding-left: 10px; color:#d1fae5; }
-  table { width:100%; border-collapse: collapse; font-size: 14px; }
-  th, td { padding: 10px 12px; border-bottom: 1px dashed #213; vertical-align: top; }
-  th { text-align: left; background: rgba(125,211,252,.08); color:#c7d2fe; }
-  tr:hover td { background: rgba(125,211,252,.05); }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-  .pkdef { color:#86efac; margin-bottom: 8px; }
-  footer { color: var(--muted); text-align: right; font-size: 12px; margin-top: 20px; }
-  .pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--line); background:#0b1324; color:#9ca3af; font-size:12px; }
-</style>
-</head>
-<body>
-<header>
-  <h1>유리 액정 공정 MES ERD 가이드</h1>
-  <div class="sub">테이블 & 변수(컬럼) 설명 · 기본키/외래키 · 참조 관계 · 문서 버전 1.0 · 생성 2025-08-28 07:19 (Asia/Seoul)</div>
-</header>
+<html><head><meta charset='utf-8'><title>MES Spec</title></head><body><h1>MES Data Model Specification</h1><p>Generated: 2025-08-29 06:21:28</p>
 
-<main class="grid">
-  <section class="card">
-    <h2>개요 · 흐름</h2>
-    <p class="desc">
-      유리 액정 공정(LCD/TFT 등)용 MES의 ERD를 테이블/변수 중심으로 설명합니다. 시간 컬럼은 UTC 저장, 화면 표시는 Asia/Seoul 권장.
-    </p>
-    <div class="flow">
-      <b>업무 흐름:</b> <span class="pill">품목/라우팅</span> → <span class="pill">생산오더/스케줄</span> → <span class="pill">재공/계보</span> →
-      <span class="pill">자재/발주/입고</span> → <span class="pill">검사/불량/SPC</span> → <span class="pill">창고/라벨/재고이동</span> → 
-      <span class="pill">설비상태/환경</span> → <span class="pill">승인/감사/이벤트</span>
-    </div>
-  </section>
+<h2>Legend</h2>
+<ul>
+  <li><b>type</b>: logical type as modeled (string/int/float/bool/timestamp/date)</li>
+  <li><b>is_pk</b>: primary key (Y/N)</li>
+  <li><b>fk_ref</b>: foreign key reference if any (table.column)</li>
+  <li><b>recommended_nullable</b>: suggested nullability (adjust per business rule)</li>
+</ul>
 
-  <section class="card">
-    <h2>관계 요약 (PK/FK 매핑)</h2>
-    <table>
-      <thead><tr><th>참조(From)</th><th></th><th>대상(To)</th><th>카디널리티</th></tr></thead>
-      <tbody>
-        <tr><td><code>UserRoles.user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N UserRoles</td></tr>
-<tr><td><code>UserRoles.role_id</code></td><td>→</td><td><code>Roles.role_id</code></td><td>Roles 1 ↔ N UserRoles</td></tr>
-<tr><td><code>RoutingOperations.routing_id</code></td><td>→</td><td><code>Routings.routing_id</code></td><td>Routings 1 ↔ N RoutingOperations</td></tr>
-<tr><td><code>RoutingOperations.workcenter_id</code></td><td>→</td><td><code>WorkCenters.workcenter_id</code></td><td>WorkCenters 1 ↔ N RoutingOperations</td></tr>
-<tr><td><code>WorkCenters.equipment_id</code></td><td>→</td><td><code>Equipment.equipment_id</code></td><td>Equipment 1 ↔ N WorkCenters</td></tr>
-<tr><td><code>ProductionOrders.item_id</code></td><td>→</td><td><code>Items.item_id</code></td><td>Items 1 ↔ N ProductionOrders</td></tr>
-<tr><td><code>ProductionOrders.routing_id</code></td><td>→</td><td><code>Routings.routing_id</code></td><td>Routings 1 ↔ N ProductionOrders</td></tr>
-<tr><td><code>OrderSchedules.order_id</code></td><td>→</td><td><code>ProductionOrders.order_id</code></td><td>ProductionOrders 1 ↔ N OrderSchedules</td></tr>
-<tr><td><code>OrderSchedules.op_id</code></td><td>→</td><td><code>RoutingOperations.op_id</code></td><td>RoutingOperations 1 ↔ N OrderSchedules</td></tr>
-<tr><td><code>OrderSchedules.equipment_id</code></td><td>→</td><td><code>Equipment.equipment_id</code></td><td>Equipment 1 ↔ N OrderSchedules</td></tr>
-<tr><td><code>WIPUnits.order_id</code></td><td>→</td><td><code>ProductionOrders.order_id</code></td><td>ProductionOrders 1 ↔ N WIPUnits</td></tr>
-<tr><td><code>Genealogy.parent_unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N Genealogy (as parent)</td></tr>
-<tr><td><code>Genealogy.child_unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N Genealogy (as child)</td></tr>
-<tr><td><code>Genealogy.op_id</code></td><td>→</td><td><code>RoutingOperations.op_id</code></td><td>RoutingOperations 1 ↔ N Genealogy</td></tr>
-<tr><td><code>MaterialLots.item_id</code></td><td>→</td><td><code>Items.item_id</code></td><td>Items 1 ↔ N MaterialLots</td></tr>
-<tr><td><code>Receiving.po_id</code></td><td>→</td><td><code>PurchaseOrders.po_id</code></td><td>PurchaseOrders 1 ↔ N Receiving</td></tr>
-<tr><td><code>Receiving.mat_lot_id</code></td><td>→</td><td><code>MaterialLots.mat_lot_id</code></td><td>MaterialLots 1 ↔ N Receiving</td></tr>
-<tr><td><code>Receiving.created_by</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N Receiving (created_by)</td></tr>
-<tr><td><code>Receiving.updated_by</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N Receiving (updated_by)</td></tr>
-<tr><td><code>Receiving.approved_by</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N Receiving (approved_by)</td></tr>
-<tr><td><code>Nonconformance.op_id</code></td><td>→</td><td><code>RoutingOperations.op_id</code></td><td>RoutingOperations 1 ↔ N Nonconformance</td></tr>
-<tr><td><code>Nonconformance.unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N Nonconformance</td></tr>
-<tr><td><code>Nonconformance.mat_lot_id</code></td><td>→</td><td><code>MaterialLots.mat_lot_id</code></td><td>MaterialLots 1 ↔ N Nonconformance</td></tr>
-<tr><td><code>SPCSAMPLES.op_id</code></td><td>→</td><td><code>RoutingOperations.op_id</code></td><td>RoutingOperations 1 ↔ N SPCSAMPLES</td></tr>
-<tr><td><code>SPCSAMPLES.equipment_id</code></td><td>→</td><td><code>Equipment.equipment_id</code></td><td>Equipment 1 ↔ N SPCSAMPLES</td></tr>
-<tr><td><code>SPCSAMPLES.unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N SPCSAMPLES</td></tr>
-<tr><td><code>Containers.loc_id</code></td><td>→</td><td><code>WarehouseLocations.loc_id</code></td><td>WarehouseLocations 1 ↔ N Containers</td></tr>
-<tr><td><code>Labels.operator_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N Labels</td></tr>
-<tr><td><code>Labels.unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N Labels</td></tr>
-<tr><td><code>Labels.mat_lot_id</code></td><td>→</td><td><code>MaterialLots.mat_lot_id</code></td><td>MaterialLots 1 ↔ N Labels</td></tr>
-<tr><td><code>Labels.container_id</code></td><td>→</td><td><code>Containers.container_id</code></td><td>Containers 1 ↔ N Labels</td></tr>
-<tr><td><code>InventoryTransactions.mat_lot_id</code></td><td>→</td><td><code>MaterialLots.mat_lot_id</code></td><td>MaterialLots 1 ↔ N InventoryTransactions</td></tr>
-<tr><td><code>InventoryTransactions.unit_id</code></td><td>→</td><td><code>WIPUnits.unit_id</code></td><td>WIPUnits 1 ↔ N InventoryTransactions</td></tr>
-<tr><td><code>InventoryTransactions.container_id</code></td><td>→</td><td><code>Containers.container_id</code></td><td>Containers 1 ↔ N InventoryTransactions</td></tr>
-<tr><td><code>InventoryTransactions.from_loc_id</code></td><td>→</td><td><code>WarehouseLocations.loc_id</code></td><td>WarehouseLocations 1 ↔ N InventoryTransactions (from)</td></tr>
-<tr><td><code>InventoryTransactions.to_loc_id</code></td><td>→</td><td><code>WarehouseLocations.loc_id</code></td><td>WarehouseLocations 1 ↔ N InventoryTransactions (to)</td></tr>
-<tr><td><code>InventoryTransactions.operator_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N InventoryTransactions</td></tr>
-<tr><td><code>EnvSensors.loc_id</code></td><td>→</td><td><code>WarehouseLocations.loc_id</code></td><td>WarehouseLocations 1 ↔ N EnvSensors</td></tr>
-<tr><td><code>EnvReadings.sensor_id</code></td><td>→</td><td><code>EnvSensors.sensor_id</code></td><td>EnvSensors 1 ↔ N EnvReadings</td></tr>
-<tr><td><code>EquipStateLog.equipment_id</code></td><td>→</td><td><code>Equipment.equipment_id</code></td><td>Equipment 1 ↔ N EquipStateLog</td></tr>
-<tr><td><code>EquipStateLog.operator_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N EquipStateLog</td></tr>
-<tr><td><code>AuditLog.user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N AuditLog</td></tr>
-<tr><td><code>AuditLog.esign_user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N AuditLog (esign_user_id)</td></tr>
-<tr><td><code>EventBus.workcenter_id</code></td><td>→</td><td><code>WorkCenters.workcenter_id</code></td><td>WorkCenters 1 ↔ N EventBus</td></tr>
-<tr><td><code>EventBus.op_id</code></td><td>→</td><td><code>RoutingOperations.op_id</code></td><td>RoutingOperations 1 ↔ N EventBus</td></tr>
-<tr><td><code>ApprovalHistory.actor_user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N ApprovalHistory</td></tr>
-<tr><td><code>ApprovalHistory.esign_id</code></td><td>→</td><td><code>ESignatures.esign_id</code></td><td>ESignatures 1 ↔ N ApprovalHistory</td></tr>
-<tr><td><code>ESignatures.user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N ESignatures</td></tr>
-<tr><td><code>HoldReleaseHistory.actor_user_id</code></td><td>→</td><td><code>Users.user_id</code></td><td>Users 1 ↔ N HoldReleaseHistory</td></tr>
-      </tbody>
-    </table>
-    <p class="desc">표기 예: <code>OrderSchedules.order_id → ProductionOrders.order_id</code> 는 오더(1) 대 스케줄(N) 관계를 의미합니다.</p>
-  </section>
-
-  
-    <section class="card">
-      <h2>Users</h2>
-      <p class="desc">MES 시스템 사용자 계정</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>user_id</code></td><td>VARCHAR2(36)</td><td>PK 사용자 고유 ID</td><td>PK</td></tr><tr><td><code>name</code></td><td>VARCHAR2(100)</td><td>이름</td><td></td></tr><tr><td><code>email</code></td><td>VARCHAR2(150)</td><td>이메일 (유일)</td><td>UQ</td></tr><tr><td><code>created_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>계정 생성 일시</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Roles</h2>
-      <p class="desc">권한/역할 정의</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>role_id</code></td><td>VARCHAR2(36)</td><td>PK 역할 ID</td><td>PK</td></tr><tr><td><code>name</code></td><td>VARCHAR2(50)</td><td>역할명</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>UserRoles</h2>
-      <p class="desc">사용자-역할 매핑(다대다 해소)</p>
-      <div class='pkdef'><b>복합 PK:</b> <code>PRIMARY KEY (user_id, role_id)</code></div>
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>role_id</code></td><td>VARCHAR2(36)</td><td>FK → Roles.role_id</td><td>FK</td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Items</h2>
-      <p class="desc">제품/자재 품목 정의</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>item_id</code></td><td>VARCHAR2(36)</td><td>PK 품목 ID</td><td>PK</td></tr><tr><td><code>rev</code></td><td>VARCHAR2(20)</td><td>리비전(설계/사양 버전)</td><td></td></tr><tr><td><code>spec_thickness</code></td><td>NUMBER(10,3)</td><td>두께 스펙</td><td></td></tr><tr><td><code>spec_size</code></td><td>VARCHAR2(50)</td><td>사이즈 스펙</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Routings</h2>
-      <p class="desc">제품별 표준 공정 경로(라우팅)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>routing_id</code></td><td>VARCHAR2(36)</td><td>PK 라우팅 ID</td><td>PK</td></tr><tr><td><code>name</code></td><td>VARCHAR2(100)</td><td>라우팅명</td><td></td></tr><tr><td><code>version</code></td><td>NUMBER(5)</td><td>라우팅 버전</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>RoutingOperations</h2>
-      <p class="desc">라우팅 내 세부 작업공정(순서/작업장/레시피)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>PK 공정(Operation) ID</td><td>PK</td></tr><tr><td><code>routing_id</code></td><td>VARCHAR2(36)</td><td>FK → Routings.routing_id</td><td>FK</td></tr><tr><td><code>seq</code></td><td>NUMBER(5)</td><td>공정 순서</td><td></td></tr><tr><td><code>workcenter_id</code></td><td>VARCHAR2(36)</td><td>FK → WorkCenters.workcenter_id</td><td>FK</td></tr><tr><td><code>recipe_id</code></td><td>VARCHAR2(36)</td><td>공정 레시피/세팅 ID(옵션)</td><td></td></tr><tr><td><code>std_ct_sec</code></td><td>NUMBER(10,2)</td><td>표준 사이클타임(초)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>WorkCenters</h2>
-      <p class="desc">작업장(라인/셀)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>workcenter_id</code></td><td>VARCHAR2(36)</td><td>PK 작업장 ID</td><td>PK</td></tr><tr><td><code>name</code></td><td>VARCHAR2(100)</td><td>작업장 이름</td><td></td></tr><tr><td><code>line</code></td><td>VARCHAR2(50)</td><td>라인명/코드</td><td></td></tr><tr><td><code>equipment_id</code></td><td>VARCHAR2(36)</td><td>FK → Equipment.equipment_id (주 설비)</td><td>FK</td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Equipment</h2>
-      <p class="desc">설비/기계 정보(트리 구조 가능)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>equipment_id</code></td><td>VARCHAR2(36)</td><td>PK 설비 ID</td><td>PK</td></tr><tr><td><code>type</code></td><td>VARCHAR2(50)</td><td>설비 타입</td><td></td></tr><tr><td><code>maker</code></td><td>VARCHAR2(50)</td><td>제조사</td><td></td></tr><tr><td><code>model</code></td><td>VARCHAR2(50)</td><td>모델명</td><td></td></tr><tr><td><code>serial_no</code></td><td>VARCHAR2(50)</td><td>시리얼 번호</td><td></td></tr><tr><td><code>parent_equipment_id</code></td><td>VARCHAR2(36)</td><td>상위 설비 ID(옵션, 셀프 FK 개념)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>ProductionOrders</h2>
-      <p class="desc">생산 지시 오더</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>order_id</code></td><td>VARCHAR2(36)</td><td>PK 오더 ID</td><td>PK</td></tr><tr><td><code>item_id</code></td><td>VARCHAR2(36)</td><td>FK → Items.item_id</td><td>FK</td></tr><tr><td><code>qty</code></td><td>NUMBER(12)</td><td>계획 수량</td><td></td></tr><tr><td><code>routing_id</code></td><td>VARCHAR2(36)</td><td>FK → Routings.routing_id</td><td>FK</td></tr><tr><td><code>due_date</code></td><td>DATE</td><td>납기일</td><td></td></tr><tr><td><code>status</code></td><td>VARCHAR2(20)</td><td>상태(계획/진행/완료 등)</td><td></td></tr><tr><td><code>priority</code></td><td>NUMBER(3)</td><td>우선순위</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>OrderSchedules</h2>
-      <p class="desc">오더별 공정/설비 계획(간트)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>sched_id</code></td><td>VARCHAR2(36)</td><td>PK 스케줄 ID</td><td>PK</td></tr><tr><td><code>order_id</code></td><td>VARCHAR2(36)</td><td>FK → ProductionOrders.order_id</td><td>FK</td></tr><tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>FK → RoutingOperations.op_id</td><td>FK</td></tr><tr><td><code>equipment_id</code></td><td>VARCHAR2(36)</td><td>FK → Equipment.equipment_id</td><td>FK</td></tr><tr><td><code>start_plan</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>계획 시작</td><td></td></tr><tr><td><code>end_plan</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>계획 종료</td><td></td></tr><tr><td><code>lock_flag</code></td><td>CHAR(1)</td><td>스케줄 확정 여부(Y/N)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>WIPUnits</h2>
-      <p class="desc">재공/제품 단위(LOT/Serial)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>unit_id</code></td><td>VARCHAR2(36)</td><td>PK 단위 ID</td><td>PK</td></tr><tr><td><code>order_id</code></td><td>VARCHAR2(36)</td><td>FK → ProductionOrders.order_id</td><td>FK</td></tr><tr><td><code>current_op_id</code></td><td>VARCHAR2(36)</td><td>현재 공정 ID(업무상 FK 성격)</td><td></td></tr><tr><td><code>unit_type</code></td><td>VARCHAR2(20)</td><td>Lot/Serial</td><td></td></tr><tr><td><code>qty</code></td><td>NUMBER(12)</td><td>수량</td><td></td></tr><tr><td><code>status</code></td><td>VARCHAR2(20)</td><td>상태</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Genealogy</h2>
-      <p class="desc">계보(부모-자식 관계: 분할/병합/소모)</p>
-      <div class='pkdef'><b>복합 PK:</b> <code>PRIMARY KEY (parent_unit_id, child_unit_id, op_id)</code></div>
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>parent_unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>child_unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>FK → RoutingOperations.op_id</td><td>FK</td></tr><tr><td><code>ts_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>발생 시각</td><td></td></tr><tr><td><code>relation</code></td><td>VARCHAR2(20)</td><td>관계 유형(split/merge/consume)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>MaterialLots</h2>
-      <p class="desc">자재 LOT 관리</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>mat_lot_id</code></td><td>VARCHAR2(36)</td><td>PK 자재 LOT ID</td><td>PK</td></tr><tr><td><code>item_id</code></td><td>VARCHAR2(36)</td><td>FK → Items.item_id</td><td>FK</td></tr><tr><td><code>mfg_date</code></td><td>DATE</td><td>제조일자</td><td></td></tr><tr><td><code>expiry_date</code></td><td>DATE</td><td>유효기간</td><td></td></tr><tr><td><code>qty_on_hand</code></td><td>NUMBER(12)</td><td>현재고</td><td></td></tr><tr><td><code>uom</code></td><td>VARCHAR2(20)</td><td>단위</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>PurchaseOrders</h2>
-      <p class="desc">구매 발주</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>po_id</code></td><td>VARCHAR2(36)</td><td>PK 발주 ID</td><td>PK</td></tr><tr><td><code>supplier_id</code></td><td>VARCHAR2(36)</td><td>공급업체 ID(외부 마스터)</td><td></td></tr><tr><td><code>eta</code></td><td>DATE</td><td>입고 예정일</td><td></td></tr><tr><td><code>status</code></td><td>VARCHAR2(20)</td><td>발주 상태</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Receiving</h2>
-      <p class="desc">입고 처리 + 승인 메타</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>rcv_id</code></td><td>VARCHAR2(36)</td><td>PK 입고 ID</td><td>PK</td></tr><tr><td><code>po_id</code></td><td>VARCHAR2(36)</td><td>FK → PurchaseOrders.po_id</td><td>FK</td></tr><tr><td><code>mat_lot_id</code></td><td>VARCHAR2(36)</td><td>FK → MaterialLots.mat_lot_id</td><td>FK</td></tr><tr><td><code>qty</code></td><td>NUMBER(12)</td><td>입고 수량</td><td></td></tr><tr><td><code>ts_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>입고 시각</td><td></td></tr><tr><td><code>inspected_flag</code></td><td>CHAR(1)</td><td>검사 여부(Y/N)</td><td></td></tr><tr><td><code>created_by</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id 작성자</td><td>FK</td></tr><tr><td><code>created_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>작성 일시</td><td></td></tr><tr><td><code>updated_by</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id 수정자</td><td>FK</td></tr><tr><td><code>updated_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>수정 일시</td><td></td></tr><tr><td><code>approved_by</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id 승인자</td><td>FK</td></tr><tr><td><code>approved_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>승인 일시</td><td></td></tr><tr><td><code>status</code></td><td>VARCHAR2(20)</td><td>DRAFT/SUBMITTED/APPROVED/REJECTED/...</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Nonconformance</h2>
-      <p class="desc">불량/부적합 이력</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>nc_id</code></td><td>VARCHAR2(36)</td><td>PK 불량 ID</td><td>PK</td></tr><tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>FK → RoutingOperations.op_id</td><td>FK</td></tr><tr><td><code>unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>mat_lot_id</code></td><td>VARCHAR2(36)</td><td>FK → MaterialLots.mat_lot_id</td><td>FK</td></tr><tr><td><code>defect_code</code></td><td>VARCHAR2(50)</td><td>불량 코드</td><td></td></tr><tr><td><code>severity</code></td><td>VARCHAR2(20)</td><td>심각도</td><td></td></tr><tr><td><code>qty</code></td><td>NUMBER(12)</td><td>불량 수량</td><td></td></tr><tr><td><code>detected_ts</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>발견 시각</td><td></td></tr><tr><td><code>disposition</code></td><td>VARCHAR2(20)</td><td>처리(보류/스크랩/재작업 등)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>SPCSAMPLES</h2>
-      <p class="desc">공정 파라미터/샘플 시계열</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>sample_id</code></td><td>VARCHAR2(36)</td><td>PK 샘플 ID</td><td>PK</td></tr><tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>FK → RoutingOperations.op_id</td><td>FK</td></tr><tr><td><code>equipment_id</code></td><td>VARCHAR2(36)</td><td>FK → Equipment.equipment_id</td><td>FK</td></tr><tr><td><code>unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>param_code</code></td><td>VARCHAR2(50)</td><td>측정 항목</td><td></td></tr><tr><td><code>value</code></td><td>NUMBER(15,5)</td><td>측정 값</td><td></td></tr><tr><td><code>measured_ts</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>측정 시각</td><td></td></tr><tr><td><code>uom</code></td><td>VARCHAR2(20)</td><td>단위</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>WarehouseLocations</h2>
-      <p class="desc">창고/라인사이드/랙/빈 등 보관 위치(계층)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>loc_id</code></td><td>VARCHAR2(36)</td><td>PK 위치 ID</td><td>PK</td></tr><tr><td><code>warehouse</code></td><td>VARCHAR2(50)</td><td>창고/라인</td><td></td></tr><tr><td><code>area</code></td><td>VARCHAR2(50)</td><td>구역</td><td></td></tr><tr><td><code>aisle</code></td><td>VARCHAR2(20)</td><td>통로</td><td></td></tr><tr><td><code>rack</code></td><td>VARCHAR2(20)</td><td>랙</td><td></td></tr><tr><td><code>shelf</code></td><td>VARCHAR2(20)</td><td>선반</td><td></td></tr><tr><td><code>bin</code></td><td>VARCHAR2(20)</td><td>빈</td><td></td></tr><tr><td><code>parent_loc_id</code></td><td>VARCHAR2(36)</td><td>상위 위치(자기참조)</td><td></td></tr><tr><td><code>width_mm</code></td><td>NUMBER(10,2)</td><td>폭(mm)</td><td></td></tr><tr><td><code>depth_mm</code></td><td>NUMBER(10,2)</td><td>깊이(mm)</td><td></td></tr><tr><td><code>height_mm</code></td><td>NUMBER(10,2)</td><td>높이(mm)</td><td></td></tr><tr><td><code>temp_min_c</code></td><td>NUMBER(6,2)</td><td>허용 최저온도</td><td></td></tr><tr><td><code>temp_max_c</code></td><td>NUMBER(6,2)</td><td>허용 최고온도</td><td></td></tr><tr><td><code>humid_min_pct</code></td><td>NUMBER(6,2)</td><td>허용 최소습도(%)</td><td></td></tr><tr><td><code>humid_max_pct</code></td><td>NUMBER(6,2)</td><td>허용 최대습도(%)</td><td></td></tr><tr><td><code>is_line_side</code></td><td>CHAR(1)</td><td>라인사이드 여부 Y/N</td><td></td></tr><tr><td><code>created_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>생성 시각</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Containers</h2>
-      <p class="desc">컨테이너/캐리어/팔레트</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>container_id</code></td><td>VARCHAR2(36)</td><td>PK 컨테이너 ID</td><td>PK</td></tr><tr><td><code>container_type</code></td><td>VARCHAR2(30)</td><td>유형</td><td></td></tr><tr><td><code>status</code></td><td>VARCHAR2(20)</td><td>상태</td><td></td></tr><tr><td><code>loc_id</code></td><td>VARCHAR2(36)</td><td>FK → WarehouseLocations.loc_id</td><td>FK</td></tr><tr><td><code>capacity_qty</code></td><td>NUMBER(12)</td><td>용량</td><td></td></tr><tr><td><code>uom</code></td><td>VARCHAR2(20)</td><td>단위</td><td></td></tr><tr><td><code>created_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>생성 시각</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>Labels</h2>
-      <p class="desc">라벨(LOT/Serial/Container)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>label_id</code></td><td>VARCHAR2(36)</td><td>PK 라벨 ID</td><td>PK</td></tr><tr><td><code>label_type</code></td><td>VARCHAR2(20)</td><td>LOT/SERIAL/CONTAINER</td><td></td></tr><tr><td><code>code_value</code></td><td>VARCHAR2(200)</td><td>바코드/QR 인쇄값 (UQ)</td><td>UQ</td></tr><tr><td><code>template_id</code></td><td>VARCHAR2(50)</td><td>라벨 템플릿</td><td></td></tr><tr><td><code>printed_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>인쇄 시각</td><td></td></tr><tr><td><code>operator_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>mat_lot_id</code></td><td>VARCHAR2(36)</td><td>FK → MaterialLots.mat_lot_id</td><td>FK</td></tr><tr><td><code>container_id</code></td><td>VARCHAR2(36)</td><td>FK → Containers.container_id</td><td>FK</td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>InventoryTransactions</h2>
-      <p class="desc">재고 이동(자재/재공/컨테이너 공통)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>txn_id</code></td><td>VARCHAR2(36)</td><td>PK 트랜잭션 ID</td><td>PK</td></tr><tr><td><code>txn_type</code></td><td>VARCHAR2(20)</td><td>RECEIPT/ISSUE/MOVE/RETURN/ADJUST</td><td></td></tr><tr><td><code>mat_lot_id</code></td><td>VARCHAR2(36)</td><td>FK → MaterialLots.mat_lot_id</td><td>FK</td></tr><tr><td><code>unit_id</code></td><td>VARCHAR2(36)</td><td>FK → WIPUnits.unit_id</td><td>FK</td></tr><tr><td><code>container_id</code></td><td>VARCHAR2(36)</td><td>FK → Containers.container_id</td><td>FK</td></tr><tr><td><code>from_loc_id</code></td><td>VARCHAR2(36)</td><td>FK → WarehouseLocations.loc_id</td><td>FK</td></tr><tr><td><code>to_loc_id</code></td><td>VARCHAR2(36)</td><td>FK → WarehouseLocations.loc_id</td><td>FK</td></tr><tr><td><code>qty</code></td><td>NUMBER(14,4)</td><td>수량</td><td></td></tr><tr><td><code>uom</code></td><td>VARCHAR2(20)</td><td>단위</td><td></td></tr><tr><td><code>ts_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>발생 시각(UTC)</td><td></td></tr><tr><td><code>ref_entity</code></td><td>VARCHAR2(50)</td><td>참조 원본 엔터티</td><td></td></tr><tr><td><code>ref_id</code></td><td>VARCHAR2(64)</td><td>참조 키</td><td></td></tr><tr><td><code>operator_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>note</code></td><td>VARCHAR2(4000)</td><td>비고</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>EnvSensors</h2>
-      <p class="desc">환경 센서(온도/습도/파티클 등)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>sensor_id</code></td><td>VARCHAR2(36)</td><td>PK 센서 ID</td><td>PK</td></tr><tr><td><code>loc_id</code></td><td>VARCHAR2(36)</td><td>FK → WarehouseLocations.loc_id</td><td>FK</td></tr><tr><td><code>sensor_type</code></td><td>VARCHAR2(30)</td><td>TEMP/HUMID/PARTICLE/DIFF_PRESS/...</td><td></td></tr><tr><td><code>model</code></td><td>VARCHAR2(50)</td><td>모델명</td><td></td></tr><tr><td><code>serial_no</code></td><td>VARCHAR2(50)</td><td>시리얼</td><td></td></tr><tr><td><code>installed_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>설치 시각</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>EnvReadings</h2>
-      <p class="desc">환경 센서 측정값(시계열)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>reading_id</code></td><td>VARCHAR2(36)</td><td>PK 리딩 ID</td><td>PK</td></tr><tr><td><code>sensor_id</code></td><td>VARCHAR2(36)</td><td>FK → EnvSensors.sensor_id</td><td>FK</td></tr><tr><td><code>value_num</code></td><td>NUMBER(18,6)</td><td>수치 값</td><td></td></tr><tr><td><code>value_text</code></td><td>VARCHAR2(200)</td><td>상태/메모</td><td></td></tr><tr><td><code>ts_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>측정 시각(UTC)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>EquipStateLog</h2>
-      <p class="desc">설비 상태 전이 로그(OEE 근거)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>state_log_id</code></td><td>VARCHAR2(36)</td><td>PK 로그 ID</td><td>PK</td></tr><tr><td><code>equipment_id</code></td><td>VARCHAR2(36)</td><td>FK → Equipment.equipment_id</td><td>FK</td></tr><tr><td><code>from_state</code></td><td>VARCHAR2(20)</td><td>변경 전 상태</td><td></td></tr><tr><td><code>to_state</code></td><td>VARCHAR2(20)</td><td>변경 후 상태</td><td></td></tr><tr><td><code>reason_code</code></td><td>VARCHAR2(30)</td><td>사유 코드</td><td></td></tr><tr><td><code>ts_start</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>시작 시각</td><td></td></tr><tr><td><code>ts_end</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>종료 시각</td><td></td></tr><tr><td><code>duration_sec</code></td><td>NUMBER(14,3)</td><td>지속 시간(초)</td><td></td></tr><tr><td><code>comment</code></td><td>VARCHAR2(1000)</td><td>비고</td><td></td></tr><tr><td><code>operator_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>AuditLog</h2>
-      <p class="desc">감사 로그(변경 전/후 스냅샷, 승인 포함)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>audit_id</code></td><td>VARCHAR2(36)</td><td>PK 감사 ID</td><td>PK</td></tr><tr><td><code>entity</code></td><td>VARCHAR2(100)</td><td>대상 엔터티(테이블)</td><td></td></tr><tr><td><code>entity_id</code></td><td>VARCHAR2(100)</td><td>대상 PK 값</td><td></td></tr><tr><td><code>action</code></td><td>VARCHAR2(20)</td><td>INSERT/UPDATE/DELETE/APPROVE/...</td><td></td></tr><tr><td><code>user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>ts_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>발생 시각(UTC)</td><td></td></tr><tr><td><code>old_json</code></td><td>CLOB</td><td>변경 전 데이터</td><td></td></tr><tr><td><code>new_json</code></td><td>CLOB</td><td>변경 후 데이터</td><td></td></tr><tr><td><code>esign_reason</code></td><td>VARCHAR2(200)</td><td>전자서명 사유</td><td></td></tr><tr><td><code>esign_user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id(서명자)</td><td>FK</td></tr><tr><td><code>esign_ts</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>서명 시각</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>EventBus</h2>
-      <p class="desc">원시 이벤트 수집(PLC/SCADA/MES/외부)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>event_id</code></td><td>VARCHAR2(36)</td><td>PK 이벤트 ID</td><td>PK</td></tr><tr><td><code>event_type</code></td><td>VARCHAR2(80)</td><td>이벤트 유형</td><td></td></tr><tr><td><code>occurred_at_utc</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>발생 시각(UTC)</td><td></td></tr><tr><td><code>site</code></td><td>VARCHAR2(40)</td><td>사이트</td><td></td></tr><tr><td><code>line</code></td><td>VARCHAR2(40)</td><td>라인</td><td></td></tr><tr><td><code>workcenter_id</code></td><td>VARCHAR2(36)</td><td>FK → WorkCenters.workcenter_id</td><td>FK</td></tr><tr><td><code>op_id</code></td><td>VARCHAR2(36)</td><td>FK → RoutingOperations.op_id</td><td>FK</td></tr><tr><td><code>source_system</code></td><td>VARCHAR2(40)</td><td>발생 원천</td><td></td></tr><tr><td><code>payload_json</code></td><td>CLOB</td><td>원문 페이로드</td><td></td></tr><tr><td><code>processed_flag</code></td><td>CHAR(1)</td><td>처리 여부(Y/N)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>ApprovalHistory</h2>
-      <p class="desc">다단계 승인 이력(불변)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>approval_id</code></td><td>VARCHAR2(36)</td><td>PK 승인 이력 ID</td><td>PK</td></tr><tr><td><code>entity</code></td><td>VARCHAR2(100)</td><td>대상 엔터티(예: Receiving)</td><td></td></tr><tr><td><code>entity_id</code></td><td>VARCHAR2(100)</td><td>대상 PK 값</td><td></td></tr><tr><td><code>step_no</code></td><td>NUMBER(3)</td><td>승인 단계</td><td></td></tr><tr><td><code>action</code></td><td>VARCHAR2(20)</td><td>SUBMIT/APPROVE/REJECT/CANCEL</td><td></td></tr><tr><td><code>actor_user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>acted_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>행위 시각</td><td></td></tr><tr><td><code>comment</code></td><td>VARCHAR2(1000)</td><td>비고</td><td></td></tr><tr><td><code>esign_id</code></td><td>VARCHAR2(36)</td><td>FK → ESignatures.esign_id</td><td>FK</td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>ESignatures</h2>
-      <p class="desc">전자서명(서명 사유/방식/해시)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>esign_id</code></td><td>VARCHAR2(36)</td><td>PK 서명 ID</td><td>PK</td></tr><tr><td><code>user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>reason</code></td><td>VARCHAR2(200)</td><td>서명 사유</td><td></td></tr><tr><td><code>signed_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>서명 시각</td><td></td></tr><tr><td><code>method</code></td><td>VARCHAR2(20)</td><td>PASSWORD/OTP/PKI/BIOMETRIC</td><td></td></tr><tr><td><code>signature_hash</code></td><td>VARCHAR2(256)</td><td>검증용 해시(옵션)</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-    <section class="card">
-      <h2>HoldReleaseHistory</h2>
-      <p class="desc">보류/해제(HOLD/RELEASE) 이력(불변)</p>
-      
-      <table>
-        <thead><tr><th>컬럼</th><th>타입</th><th>설명</th><th>키</th></tr></thead>
-        <tbody>
-          <tr><td><code>hr_id</code></td><td>VARCHAR2(36)</td><td>PK 보류/해제 ID</td><td>PK</td></tr><tr><td><code>entity</code></td><td>VARCHAR2(100)</td><td>대상 엔터티</td><td></td></tr><tr><td><code>entity_id</code></td><td>VARCHAR2(100)</td><td>대상 PK 값</td><td></td></tr><tr><td><code>action</code></td><td>VARCHAR2(10)</td><td>HOLD/RELEASE</td><td></td></tr><tr><td><code>reason_code</code></td><td>VARCHAR2(50)</td><td>사유 코드</td><td></td></tr><tr><td><code>comment</code></td><td>VARCHAR2(1000)</td><td>비고</td><td></td></tr><tr><td><code>actor_user_id</code></td><td>VARCHAR2(36)</td><td>FK → Users.user_id</td><td>FK</td></tr><tr><td><code>acted_at</code></td><td>TIMESTAMP WITH TIME ZONE</td><td>행위 시각</td><td></td></tr>
-        </tbody>
-      </table>
-    </section>
-    
-
-</main>
-
-<footer>
-  © MES ERD Guide · Generated for internal specification and review.
-</footer>
-</body>
-</html>
+<h2>Field Enumerations</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>field</th>
+      <th>allowed_values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>glass_lots.status</td>
+      <td>in_process, completed, scrapped</td>
+    </tr>
+    <tr>
+      <td>production_orders.status</td>
+      <td>scheduled, in_progress, completed</td>
+    </tr>
+    <tr>
+      <td>process_records.status</td>
+      <td>passed, failed, rechecked, scrapped</td>
+    </tr>
+    <tr>
+      <td>equipment.status</td>
+      <td>available, in_use, maintenance</td>
+    </tr>
+    <tr>
+      <td>packaging.status</td>
+      <td>packed, shipped</td>
+    </tr>
+    <tr>
+      <td>error_logs.severity</td>
+      <td>INFO, WARN, ERROR (예시)</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Relationships</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>table</th>
+      <th>column</th>
+      <th>ref_table</th>
+      <th>ref_column</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>glass_lots</td>
+      <td>supplier_id</td>
+      <td>suppliers</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td>glass_lot_id</td>
+      <td>glass_lots</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>process_records</td>
+      <td>production_order_id</td>
+      <td>production_orders</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>process_records</td>
+      <td>glass_lot_id</td>
+      <td>glass_lots</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>process_records</td>
+      <td>process_step_id</td>
+      <td>process_steps</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>process_records</td>
+      <td>operator_id</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>process_records</td>
+      <td>equipment_id</td>
+      <td>equipment</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>defect_records</td>
+      <td>process_record_id</td>
+      <td>process_records</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>defect_records</td>
+      <td>defect_type_id</td>
+      <td>defect_types</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>defect_records</td>
+      <td>recheck_operator_id</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>maintenance_logs</td>
+      <td>equipment_id</td>
+      <td>equipment</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>maintenance_logs</td>
+      <td>performed_by</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>packaging</td>
+      <td>glass_lot_id</td>
+      <td>glass_lots</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>packaging</td>
+      <td>packed_by</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>shipments</td>
+      <td>packaging_id</td>
+      <td>packaging</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>shipments</td>
+      <td>shipped_by</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>operator_assignments</td>
+      <td>operator_id</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>operator_assignments</td>
+      <td>process_step_id</td>
+      <td>process_steps</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>production_metrics</td>
+      <td>glass_lot_id</td>
+      <td>glass_lots</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>audit_trails</td>
+      <td>performed_by</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+    <tr>
+      <td>error_logs</td>
+      <td>operator_id</td>
+      <td>operators</td>
+      <td>id</td>
+    </tr>
+  </tbody>
+</table>
+<h2>glass_lots</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>유리 LOT 고유 ID</td>
+    </tr>
+    <tr>
+      <td>lot_number</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>LOT 라벨/바코드 번호</td>
+    </tr>
+    <tr>
+      <td>received_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>입고 시각</td>
+    </tr>
+    <tr>
+      <td>supplier_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK suppliers.id</td>
+      <td>NO</td>
+      <td>공급사 ID</td>
+    </tr>
+    <tr>
+      <td>material_type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>원자재 종류(예: GLASS_A)</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>LOT 총 수량</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상태(in_process/completed/scrapped)</td>
+    </tr>
+  </tbody>
+</table>
+<h2>inventory</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>재고 레코드 ID</td>
+    </tr>
+    <tr>
+      <td>glass_lot_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK glass_lots.id</td>
+      <td>NO</td>
+      <td>대상 LOT</td>
+    </tr>
+    <tr>
+      <td>location</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>보관 위치 코드/명</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>시스템 수량</td>
+    </tr>
+    <tr>
+      <td>updated_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>갱신 시각</td>
+    </tr>
+    <tr>
+      <td>real_time_quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실시간 수량(계측/IoT)</td>
+    </tr>
+    <tr>
+      <td>last_checked</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실사/검수 시각</td>
+    </tr>
+  </tbody>
+</table>
+<h2>production_orders</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>생산오더 ID</td>
+    </tr>
+    <tr>
+      <td>order_number</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>오더 번호</td>
+    </tr>
+    <tr>
+      <td>scheduled_start</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>계획 시작</td>
+    </tr>
+    <tr>
+      <td>scheduled_end</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>계획 종료</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상태(scheduled/in_progress/completed)</td>
+    </tr>
+    <tr>
+      <td>product_type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>제품 유형</td>
+    </tr>
+    <tr>
+      <td>planned_quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>계획 수량</td>
+    </tr>
+    <tr>
+      <td>actual_quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실적 수량</td>
+    </tr>
+    <tr>
+      <td>real_time_progress</td>
+      <td>float</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실시간 진행률(%)</td>
+    </tr>
+    <tr>
+      <td>last_updated</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>갱신 시각</td>
+    </tr>
+  </tbody>
+</table>
+<h2>process_steps</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>공정 ID</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>공정명(예: 1st Cutting)</td>
+    </tr>
+    <tr>
+      <td>sequence</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>라우팅 내 순서</td>
+    </tr>
+    <tr>
+      <td>is_automated</td>
+      <td>bool</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>자동화 여부</td>
+    </tr>
+    <tr>
+      <td>automation_level</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>자동화 수준</td>
+    </tr>
+    <tr>
+      <td>error_handling_procedure</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>에러 처리 절차</td>
+    </tr>
+  </tbody>
+</table>
+<h2>process_records</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>공정 실행 이력 ID</td>
+    </tr>
+    <tr>
+      <td>glass_lot_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK glass_lots.id</td>
+      <td>NO</td>
+      <td>대상 LOT</td>
+    </tr>
+    <tr>
+      <td>production_order_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK production_orders.id</td>
+      <td>NO</td>
+      <td>생산오더</td>
+    </tr>
+    <tr>
+      <td>process_step_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK process_steps.id</td>
+      <td>NO</td>
+      <td>공정 단계</td>
+    </tr>
+    <tr>
+      <td>started_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>시작 시각</td>
+    </tr>
+    <tr>
+      <td>ended_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>종료 시각</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>결과(passed/failed/rechecked/scrapped)</td>
+    </tr>
+    <tr>
+      <td>operator_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>작업자</td>
+    </tr>
+    <tr>
+      <td>equipment_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK equipment.id</td>
+      <td>NO</td>
+      <td>설비</td>
+    </tr>
+    <tr>
+      <td>defect_count</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>불량 수</td>
+    </tr>
+    <tr>
+      <td>yield_rate</td>
+      <td>float</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>수율(%)</td>
+    </tr>
+    <tr>
+      <td>remarks</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>비고</td>
+    </tr>
+    <tr>
+      <td>real_time_status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실시간 상태</td>
+    </tr>
+    <tr>
+      <td>last_updated</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>갱신 시각</td>
+    </tr>
+  </tbody>
+</table>
+<h2>defect_types</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>불량 유형 ID</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>불량명</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>설명</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>심각도</td>
+    </tr>
+  </tbody>
+</table>
+<h2>defect_records</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>불량 이력 ID</td>
+    </tr>
+    <tr>
+      <td>process_record_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK process_records.id</td>
+      <td>NO</td>
+      <td>발생 공정 실행</td>
+    </tr>
+    <tr>
+      <td>defect_type_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK defect_types.id</td>
+      <td>NO</td>
+      <td>불량 유형</td>
+    </tr>
+    <tr>
+      <td>defect_count</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>불량 개수</td>
+    </tr>
+    <tr>
+      <td>detected_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>발견 시각</td>
+    </tr>
+    <tr>
+      <td>is_rechecked</td>
+      <td>bool</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>재검 여부</td>
+    </tr>
+    <tr>
+      <td>recheck_operator_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>재검 작업자</td>
+    </tr>
+    <tr>
+      <td>recheck_result</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>재검 결과(passed/scrapped)</td>
+    </tr>
+  </tbody>
+</table>
+<h2>operators</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>작업자 ID</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>성명</td>
+    </tr>
+    <tr>
+      <td>employee_number</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>사번</td>
+    </tr>
+    <tr>
+      <td>role</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>역할/직무</td>
+    </tr>
+    <tr>
+      <td>shift</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>교대</td>
+    </tr>
+    <tr>
+      <td>assigned_equipment_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상시 배정 설비</td>
+    </tr>
+  </tbody>
+</table>
+<h2>equipment</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>설비 ID</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>설비명</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>유형</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상태(available/in_use/maintenance)</td>
+    </tr>
+    <tr>
+      <td>last_maintenance_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>최근 보전 시각</td>
+    </tr>
+    <tr>
+      <td>location</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>설비 위치</td>
+    </tr>
+    <tr>
+      <td>real_time_status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실시간 상태</td>
+    </tr>
+    <tr>
+      <td>error_code</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>에러 코드</td>
+    </tr>
+    <tr>
+      <td>last_error_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>최근 에러 시각</td>
+    </tr>
+  </tbody>
+</table>
+<h2>maintenance_logs</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>보전 이력 ID</td>
+    </tr>
+    <tr>
+      <td>equipment_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK equipment.id</td>
+      <td>NO</td>
+      <td>설비</td>
+    </tr>
+    <tr>
+      <td>performed_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>수행 시각</td>
+    </tr>
+    <tr>
+      <td>performed_by</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>수행자</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>내용</td>
+    </tr>
+    <tr>
+      <td>result</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>결과</td>
+    </tr>
+  </tbody>
+</table>
+<h2>packaging</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>포장 이력 ID</td>
+    </tr>
+    <tr>
+      <td>glass_lot_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK glass_lots.id</td>
+      <td>NO</td>
+      <td>대상 LOT</td>
+    </tr>
+    <tr>
+      <td>packed_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>포장 시각</td>
+    </tr>
+    <tr>
+      <td>packed_by</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>포장자</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>포장 수량</td>
+    </tr>
+    <tr>
+      <td>packaging_type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>포장 유형</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상태(packed/shipped)</td>
+    </tr>
+  </tbody>
+</table>
+<h2>shipments</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>출하 ID</td>
+    </tr>
+    <tr>
+      <td>packaging_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK packaging.id</td>
+      <td>NO</td>
+      <td>포장 이력</td>
+    </tr>
+    <tr>
+      <td>shipped_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>출하 시각</td>
+    </tr>
+    <tr>
+      <td>shipped_by</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>출하자</td>
+    </tr>
+    <tr>
+      <td>destination</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>목적지</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>출하 수량</td>
+    </tr>
+    <tr>
+      <td>revenue</td>
+      <td>float</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>매출 금액</td>
+    </tr>
+    <tr>
+      <td>real_time_tracking_status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>배송 상태(실시간)</td>
+    </tr>
+    <tr>
+      <td>last_location</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>마지막 위치</td>
+    </tr>
+    <tr>
+      <td>estimated_arrival</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>도착 예정</td>
+    </tr>
+  </tbody>
+</table>
+<h2>operator_assignments</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>배치 이력 ID</td>
+    </tr>
+    <tr>
+      <td>operator_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>작업자</td>
+    </tr>
+    <tr>
+      <td>process_step_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK process_steps.id</td>
+      <td>NO</td>
+      <td>공정</td>
+    </tr>
+    <tr>
+      <td>assigned_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>배정 시각</td>
+    </tr>
+    <tr>
+      <td>unassigned_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>해제 시각</td>
+    </tr>
+    <tr>
+      <td>real_time_assignment_status</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>실시간 배치 상태</td>
+    </tr>
+    <tr>
+      <td>last_updated</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>갱신 시각</td>
+    </tr>
+  </tbody>
+</table>
+<h2>production_metrics</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>지표 ID</td>
+    </tr>
+    <tr>
+      <td>date</td>
+      <td>date</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>기준 일자</td>
+    </tr>
+    <tr>
+      <td>total_produced</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>총 생산량</td>
+    </tr>
+    <tr>
+      <td>total_defects</td>
+      <td>int</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>총 불량</td>
+    </tr>
+    <tr>
+      <td>yield_rate</td>
+      <td>float</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>수율(%)</td>
+    </tr>
+    <tr>
+      <td>revenue</td>
+      <td>float</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>매출</td>
+    </tr>
+    <tr>
+      <td>glass_lot_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK glass_lots.id</td>
+      <td>NO</td>
+      <td>대상 LOT(옵션)</td>
+    </tr>
+  </tbody>
+</table>
+<h2>suppliers</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>공급사 ID</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>공급사명</td>
+    </tr>
+    <tr>
+      <td>contact_info</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>연락처/주소</td>
+    </tr>
+  </tbody>
+</table>
+<h2>audit_trails</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>감사 로그 ID</td>
+    </tr>
+    <tr>
+      <td>entity_type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>대상 엔티티 타입</td>
+    </tr>
+    <tr>
+      <td>entity_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>대상 엔티티 ID</td>
+    </tr>
+    <tr>
+      <td>action</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>행위(INSERT/UPDATE/DELETE 등)</td>
+    </tr>
+    <tr>
+      <td>performed_by</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>수행자</td>
+    </tr>
+    <tr>
+      <td>performed_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>수행 시각</td>
+    </tr>
+    <tr>
+      <td>details</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>상세</td>
+    </tr>
+  </tbody>
+</table>
+<h2>error_logs</h2>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>column</th>
+      <th>type</th>
+      <th>is_pk</th>
+      <th>fk_ref</th>
+      <th>recommended_nullable</th>
+      <th>description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>string</td>
+      <td>Y</td>
+      <td></td>
+      <td>NO</td>
+      <td>에러 로그 ID</td>
+    </tr>
+    <tr>
+      <td>occurred_at</td>
+      <td>timestamp</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>발생 시각</td>
+    </tr>
+    <tr>
+      <td>source</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>출처 시스템/모듈</td>
+    </tr>
+    <tr>
+      <td>message</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>메시지</td>
+    </tr>
+    <tr>
+      <td>severity</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>심각도(INFO/WARN/ERROR 등)</td>
+    </tr>
+    <tr>
+      <td>related_entity_type</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>관련 엔티티 타입</td>
+    </tr>
+    <tr>
+      <td>related_entity_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td></td>
+      <td>YES</td>
+      <td>관련 엔티티 ID</td>
+    </tr>
+    <tr>
+      <td>operator_id</td>
+      <td>string</td>
+      <td>N</td>
+      <td>FK operators.id</td>
+      <td>NO</td>
+      <td>관련 작업자(옵션)</td>
+    </tr>
+  </tbody>
+</table></body></html>
