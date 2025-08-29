@@ -1,0 +1,32 @@
+# === Eclipse/STS ===
+.metadata/
+.settings/
+.project
+.classpath
+.springBeans
+.factorypath
+.apt_generated/
+.recommenders/
+.loadpath
+
+# === Build outputs ===
+target/
+build/
+bin/
+.gradle/
+
+# === Tomcat/WTP ===
+Servers/
+wtpwebapps/
+work/
+temp/
+logs/
+*.log
+
+# === OS junk ===
+.DS_Store
+Thumbs.db
+
+# === (옵션) 개인 환경 파일 예시 ===
+application-local.properties
+application-*.local.properties
