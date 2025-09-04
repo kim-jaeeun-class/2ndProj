@@ -39,41 +39,35 @@ header .search {
     margin-left: auto; 
 }
 
+/* 회원 아이콘 부분*/
 header .myIcon {
-    position: relative; 
-    padding-top: 2px;
-    padding-right: 10px; 
+    position: relative;
+    padding: 5px 10px 5px 0;
 }
 
-/* 공통 드롭다운 스타일 */
-.dropdown {
+header ul.subList {
+    display: none;
     background-color: turquoise;
     position: absolute;
-    top: 100%;
-    display: none;
-    flex-direction: column;
-    justify-content: flex-start;
-    z-index: 9999;
-    min-width: 150px;
-    font-weight: normal;
-    margin: 0;
-    padding: 0;
-}
-
-.dropdown li {
-    list-style-type: none;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-}
-
-/* 마이페이지 전용 */
-header .myIcon .mgrList {
+    top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
     right: 0;
+    list-style-type: none;
+    color: #000000;
+    font-weight: normal;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    z-index: 9999; 
+    min-width: 150px; 
+    margin: 0; /* ul 기본 margin 제거 */
+    padding: 0; /* ul 기본 padding 제거 */
 }
 
-header .myIcon .mgrList.show {
-    display: flex; /* JS에서 토글할 클래스 */
+/* 마우스를 올리면 하위 메뉴 보이기 */
+header .myIcon:hover .subList {
+    display: flex;
+    flex-direction: column;
 }
+
 
 /* GNB 부분 */
 .gnb {
@@ -90,37 +84,24 @@ header .myIcon .mgrList.show {
     padding-left: 0;
 }
 
-.gnb ul.mainList > li {
-    position: relative; /* 하위 메뉴 위치 기준 */
-}
-
-.gnb .subList {
-    display: none;
+.gnb ul.subList {
     background-color: turquoise;
     position: absolute;
-    top: 100%;
     left: 0;
-    flex-direction: column;
-    min-width: 150px;
-    z-index: 9999;
+    display: none;
+    font-weight: normal;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    z-index: 9999; 
+    min-width: 150px; 
+}
+.gnb ul.mainList > li {
+    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
+}
+.gnb ul.mainList > li:hover .subList {
+    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
 }
 
-.gnb ul.mainList > li:hover > .subList {
-    display: flex;
-}
-
-.gnb ul.subList {
-    left: 0;
-}
-
-/* 드롭다운 활성화 */
-.gnb ul.mainList > li:hover > .subList {
-    display: flex;
-}
-
-header .myIcon .mgrList.show {
-    display: flex;
-}
 
 /* a 링크 양식 지정 */
 a, a:link, a:visited {
