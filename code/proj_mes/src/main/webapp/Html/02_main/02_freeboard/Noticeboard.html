@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판</title>
+    <link rel="stylesheet" href="Noticeboard.css" />
+    <style>
+        body {
+    font-family : "맑은 고딕", sans-serif;
+    background-color: #f5f5f5;
+    margin:0;
+    padding: 0;
+}
+
+.container {
+    width : 900px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow : 0 0 10px rbga(0,0,0,0.1);
+}
+
+header {
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+    margin-bottom : 20px;
+}
+/* 헤더 영역: 한 줄에 좌우 배치 */
+.header-top {
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬 */
+  align-items: center;
+  width:100%;
+}
+/* 제목 스타일 */
+.board-title {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* 링크 스타일 */
+.main-link {
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+header h1 { 
+    margin : 0;
+    font-size : 24px;
+}
+.search-area {
+  display: flex;
+  justify-content: flex-end;  /* 오른쪽 정렬 */
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;         
+}
+.search-area select,
+.search-area input {
+  padding: 5px;
+}
+.main-link {
+    font-size : 14px;
+    color : #555;
+    text-decoration : none;
+}
+table {
+    width : 100% ;
+    border-collapse : collapse;
+}
+thead {
+    background-color : #e0e0e0;
+}
+th,td {
+    padding : 12px;
+    text-align : center;
+    border-bottom : 1px solid #ddd;
+}
+td:nth-child(2) {
+    text-align : left;
+}
+
+.pagination {
+    text-align : center;
+    margin : 20px 0;
+}
+
+.pagination span {
+    margin : 0 5px;
+    cursor: pointer;
+    color: #333;
+}
+
+.button-area {
+    text-align : right;
+}
+.button-area button {
+    padding: 8px 16px;
+    background-color: #333;
+    color : white ;
+    border : none;
+    cursor : pointer;
+}
+.button-area button:\hover {
+    background-color: #555;
+}
+/* 검색 조건 위치 맞추기 */
+.search-area-outside {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+ /* ✅ 담당부서 열 기준으로 margin-left 조정 (수동으로 맞춰야 함) */
+  margin-left: 600px;  /* 필요에 따라 조절 */
+}
+
+/* 입력 스타일 */
+.search-area-outside select,
+.search-area-outside input {
+  padding: 5px;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <header>
+            <div class="header-top">
+            <h1>자유게시판</h1>
+        
+            <a href="#" class="main-link"> 메인 화면으로</a>
+        </header>
+
+          <div class="search-area-outside">
+    <label for="search-select">검색 조건</label>
+    <select id="search-select">
+      <option>제목</option>
+      <option>내용</option>
+    </select>
+    <input type="text" placeholder="검색할 내용을 입력하세요" />
+  </div>
+        
+        <table>
+            <thead>
+                <tr>
+                <th>유형</th>
+                <th>제목</th>
+                <th>담당부서</th>
+                <th>등록일</th>
+                <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--예시 게시글-->
+                <tr>
+                    <td>[자유]
+                    </td>
+                    <td> 오늘 출근길에 무지개 봄</td>
+                    <td> 생산관리팀</td>
+                    <td> 2024-12-13</td>
+                    <td> 13</td>
+                </tr>
+                    <tr>
+                    <td>[자유]
+                    </td>
+                    <td> 체육대회 사진 공유합니다</td>
+                    <td> 생산관리팀</td>
+                    <td> 2024-12-13</td>
+                    <td> 13</td>
+                </tr>
+                <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 워크숍 후기 남겨요 ~</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                  <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 휴게실 에어컨 너무 세요</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 사내 프로젝트 도와주실 분 구합니다</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 요즘 스마트폰 개조에 빠졌어요</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 2층 휴게실에서 휴대폰 주우신 분 계신가요?</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 회사 근처 맛집 추천 받아요!</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 공장 입구에서 카드 주웠습니다</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 액정 뷸량률 줄이는 팁 공유합니다</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+                 <tr>
+                    <td>
+                    [자유]
+                </td>
+                <td> 이마트24 신상 음료후기</td>
+                <td> 생산관리팀</td>
+                <td> 2024-12-13</td>
+                <td> 24</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <span>1</span>
+             <span>2</span>
+              <span>3</span>
+               <span>4</span>
+        </div>
+      
+        <div class = "button-area">
+            <button> 글쓰기</button>
+        </div>
+    </div>
+    </div>
+
+    
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>자유게시판 - 게시글 보기</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+  font-family: '맑은 고딕', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 40px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+/* 헤더 */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.board-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.main-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+/* 게시글 정보 */
+.post-info {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f7f7f7;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.post-meta {
+  font-size: 13px;
+  color: #555;
+}
+
+/* 본문 */
+.post-content {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: #f2f2f2;
+  min-height: 150px;
+  margin-bottom: 30px;
+}
+
+.post-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #000;
+}
+
+/* 하단 버튼 */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+.btn.gray {
+  background-color: #999;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 헤더 -->
+    <header>
+      <div class="header-top">
+        <h1 class="board-title">자유게시판</h1>
+        <a href="#" class="main-link">메인 화면으로</a>
+      </div>
+    </header>
+
+    <!-- 게시글 상단 정보 -->
+    <section class="post-info">
+      <div class="post-title">
+        <strong>[자유]</strong> 2층 휴게실에서 휴대폰 주우신 분 계신가요?
+      </div>
+      <div class="post-meta">
+        작성자: 관리자 | 작성 시간: 2024-12-15 17:30
+      </div>
+    </section>
+
+    <!-- 게시글 본문 -->
+    <section class="post-content">
+      <p>2층 휴게실에서 휴대폰 주우신 분 계신가요?<br>
+        아무리 찾아도 안보입니다 ㅠㅠ<br><br>
+        혹시 찾으시면 <span class="highlight">010-****-****</span>으로 연락 주세요!
+      </p>
+    </section>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="button-group">
+      <button class="btn gray">목록 보기</button>
+      <div class="nav-buttons">
+        <button class="btn">이전 글</button>
+        <button class="btn">다음 글 ▼</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
