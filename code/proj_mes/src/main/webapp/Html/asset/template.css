@@ -1,0 +1,116 @@
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 10px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
+        "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 헤더 부분 */
+header {
+    background-color: #495057;
+    height : 50px;
+    border: 1px solid;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+header .corp {
+    display: flex;
+    align-items: center; 
+    padding-left: 10px;
+    gap: 10px; 
+}
+header .search {
+    margin-left: auto; 
+}
+header .myIcon {
+    padding-top: 2px;
+    padding-right: 10px; 
+}
+
+/* GNB 부분 */
+.gnb {
+    background-color: white;
+    border: 1px solid var(--border);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.gnb ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    padding-left: 0;
+}
+.gnb ul.subList {
+    background-color: turquoise;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    font-weight: normal;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    z-index: 9999; 
+    min-width: 150px; 
+}
+.gnb ul.mainList > li {
+    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
+}
+.gnb ul.mainList > li:hover .subList {
+    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
+}
+
+/* a 링크 양식 지정 */
+a, a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 제목 부분 */
+.titleBox {
+    background-color: var(--field-border);
+    height: 35px;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.titleBox span {
+    font-size: 1.7em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.toMainpage {
+    color: var(--button);
+    margin-right: 10px;
+}
+
+/* 메인 몸통 부분 */
+.wrap {
+    border: 1px solid var(--border);
+    width: 90%;
+    margin: 0 auto;
+    background-color: var(--page-bg);
+}
+
+
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+
+
+}
