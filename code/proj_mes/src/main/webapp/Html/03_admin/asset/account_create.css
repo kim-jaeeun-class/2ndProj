@@ -17,13 +17,7 @@
     }
 
 
-    body::before {
-      left: calc(50vw - var(--content-max) / 2 - var(--white-gutter));
-    }
-    /* 오른쪽: 컨텐츠의 오른쪽 모서리에 붙도록 계산 */
-    body::after {
-      left: calc(50vw + var(--content-max) / 2);
-    }
+
 
     .main {
       max-width: 1000px;
