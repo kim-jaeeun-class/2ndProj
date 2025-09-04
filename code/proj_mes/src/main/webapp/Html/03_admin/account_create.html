@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>계정 관리</title>
     <link rel="stylesheet" href="./asset/account_create.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <body>
@@ -44,12 +44,29 @@
             </tbody>
           </table>
         </div>
-        <div class="actions">
-          <button class="btn" type="button">계정생성</button>
-          <button class="btn" type="button">계정삭제</button>
+        <div class="actions">	            
+            <!--팝업 오픈 버튼-->
+
+            <button class="btn" type="button">계정생성</button>
+
+
+          <a href="#" class="btn_open" onClick="javascript:popOpen();">
+            <button class="btn" type="button">계정삭제</button>
+          </a>
         </div>
       </div>
     </section>
+
+
+  <!-- 모달팝업 -->
+    <div class="modal_bg" onClick="javascript:popClose();"></div>
+    <div class="modal_wrap">
+      ~~~님의 계정을 정말 삭제 하시겠습니까?
+      <br>
+      <button class="modal_close" onClick="javascript:popClose();">예</button>
+      <button class="modal_close" onClick="javascript:popClose();">아니요</button>   
+    </div>
+    <!-- // 모달팝업 -->
 
     <!-- 감사 로그 카드 -->
     <section class="card">
@@ -60,7 +77,29 @@
       </div>
     </section>
   </main>
+ 
+<script>
+  function popOpen() {
 
+    var modalPop = $('.modal_wrap');
+    var modalBg = $('.modal_bg'); 
+
+    $(modalPop).show();
+    $(modalBg).show();
+
+}
+
+ function popClose() {
+   var modalPop = $('.modal_wrap');
+   var modalBg = $('.modal_bg');
+
+   $(modalPop).hide();
+   $(modalBg).hide();
+
+}
+  </script>
 
 </body>
+
+
 </html>
