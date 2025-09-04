@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            /* 달력 레이아웃 설정 */
+            /* 기본 양식 비워두는 코드 */
+            input[type=date]::-webkit-datetime-edit-text, input[type=date]::-webkit-datetime-edit-month-field, input[type=date]::-webkit-datetime-edit-day-field, input[type=date]::-webkit-datetime-edit-year-field {
+                -webkit-appearance: none;
+                display: none;
+            }
+            input[type=date]::before {
+                color: #444444;
+                content: attr(placeholder);
+            }
+            /* input[type=date] {
+                height: 50px;
+            } */
+        </style>
+    </head>
+    <body style="width: 90%; border: 1px solid black;">
+        <!-- body 내부 요소만 템플릿에 복사 -->
+        <form class="date-filter" name="date-filter">
+            <input type="button" value="기간">
+            <input type="button" value="월별">
+            <input type="date" placeholder="플레이스홀더">
+            <input type="date">
+            <button type="button">조회</button>
+        </form>
+    </body>
+</html>
