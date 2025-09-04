@@ -27,18 +27,52 @@ header {
     align-items: center;
     gap: 20px;
 }
+
 header .corp {
     display: flex;
     align-items: center; 
     padding-left: 10px;
     gap: 10px; 
 }
+
 header .search {
     margin-left: auto; 
 }
+
 header .myIcon {
+    position: relative; 
     padding-top: 2px;
     padding-right: 10px; 
+}
+
+/* 공통 드롭다운 스타일 */
+.dropdown {
+    background-color: turquoise;
+    position: absolute;
+    top: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    z-index: 9999;
+    min-width: 150px;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown li {
+    list-style-type: none;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* 마이페이지 전용 */
+header .myIcon .mgrList {
+    right: 0;
+}
+
+header .myIcon .mgrList.show {
+    display: flex; /* JS에서 토글할 클래스 */
 }
 
 /* GNB 부분 */
@@ -48,29 +82,44 @@ header .myIcon {
     font-weight: bold;
     font-size: 1.2rem;
 }
+
 .gnb ul {
     list-style-type: none;
     display: flex;
     justify-content: space-evenly;
     padding-left: 0;
 }
-.gnb ul.subList {
+
+.gnb ul.mainList > li {
+    position: relative; /* 하위 메뉴 위치 기준 */
+}
+
+.gnb .subList {
+    display: none;
     background-color: turquoise;
     position: absolute;
     top: 100%;
     left: 0;
-    display: none;
-    font-weight: normal;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 150px; 
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 9999;
 }
-.gnb ul.mainList > li {
-    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
+
+.gnb ul.mainList > li:hover > .subList {
+    display: flex;
 }
-.gnb ul.mainList > li:hover .subList {
-    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
+
+.gnb ul.subList {
+    left: 0;
+}
+
+/* 드롭다운 활성화 */
+.gnb ul.mainList > li:hover > .subList {
+    display: flex;
+}
+
+header .myIcon .mgrList.show {
+    display: flex;
 }
 
 /* a 링크 양식 지정 */
@@ -89,11 +138,13 @@ a, a:link, a:visited {
     justify-content: space-between;
     align-items: center;
 }
+
 .titleBox span {
     font-size: 1.7em;
     font-weight: bold;
     margin-left: 10px;
 }
+
 .toMainpage {
     color: var(--button);
     margin-right: 10px;
@@ -108,9 +159,7 @@ a, a:link, a:visited {
 }
 
 
-
 /* 모바일 반응형 */
 @media (max-width: 768px) {
-
-
+    /* 여기에 모바일 스타일 넣으시면 됩니다 */
 }
