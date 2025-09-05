@@ -7,21 +7,65 @@
     <link rel="stylesheet" href="../asset/09_proPlan_view.css">
 </head>
 <body>
+    <form class="date-filter" name="date-filter">
+        <div class="filter-btn">
+            <input type="button" class="filter-btn-in" value="기간">
+            <input type="button" class="filter-btn-in" value="월별">
+        </div>
+        <div class="filter-date">
+            <input type="date">
+            <div>~</div>
+            <input type="date">
+        </div>
+        <div class="filter-submit">
+            <button type="button" class="filter-btn-in">조회</button>
+        </div>
+    </form>
     <div class="wrap">
-        <form class="date-filter" name="date-filter">
-            <div class="filter-btn">
-                <input type="button" class="filter-btn-in" value="기간">
-                <input type="button" class="filter-btn-in" value="월별">
-            </div>
-            <div class="filter-date">
-                <input type="date">
-                <div>~</div>
-                <input type="date">
-            </div>
-            <div class="filter-submit">
-                <button type="button" class="filter-btn-in">조회</button>
-            </div>
+        <form class = "wrap-filter">
+            <input type="button" class="filter-btn-in" value="생산실적번호별">
+            <input type="button" class="filter-btn-in" value="일자별">            
         </form>
+        <div class="wrap-tableView">
+            <table>
+                <thead>
+                    <th>체크</th>
+                    <th>순번</th>
+                    <th>생산계획번호</th>
+                    <th>제품 번호</th>
+                    <th>계획 수량</th>
+                    <th>진행 상태</th>
+                    <th>계획 기간</th>
+                    <th>진행률</th>
+                    <th>작업 공정</th>
+                    <th>달성률</th>
+                    <th>불량률</th>
+                    <th>비고</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>#생산계획번호</td>
+                        <td>#제품번호</td>
+                        <td>#계획수량</td>
+                        <td>#진행상태</td>
+                        <td>#계획기간</td>
+                        <td>#진행률</td>
+                        <td>#작업공정</td>
+                        <td>#달성률</td>
+                        <td>#불량률</td>
+                        <td>#비고 텍스트 꽉 끼게 쓰기</td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>
+        <div class = "wrap-tableBtn">
+            <form class = "wrap-btnBlock">
+                <input type="button" class="filter-btn-in" id = "delete-btn" value="삭제">
+                <input type="button" class="filter-btn-in" value="등록">            
+            </form>
+        </div>
     </div>
 </body>
 </html>

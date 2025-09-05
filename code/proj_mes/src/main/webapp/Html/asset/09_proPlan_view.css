@@ -71,7 +71,7 @@
     --button-text: #fff;
     --field-border: #999;
     --page-bg: #ffffff;
-    --radius: 10px;
+    --radius: 7px;
 }
 
 /* form 내부 영역 배치*/
@@ -131,7 +131,7 @@ input[type="date"] {
     min-width: 150px;
     height: 80%;
     padding: 0 10px;
-    border: 1px solid #5a5a5a;
+    border: 1px solid var(--border);
     border-radius: 10px;
     color: var(--text);
     background-color: #ffffff;
@@ -147,12 +147,53 @@ input[type="date"] {
     height: 80%;
     border-radius: 10px;
     border: none;
-    background-color: #5a5a5a;
+    background-color: var(--border);
     color: #ffffff;
     margin-right: 20px;
     font-family: 'Pretendard';
     font-weight: 700;
     font-size: 1.1rem;
+}
+
+/* 메인 영역 */
+.wrap-filter {
+    display: flex;
+    max-width: 1280px;
+    height: 50px;
+    max-height: 50px;
+    margin: 50px 0 10px;
+}
+.wrap-tableView {
+    border: 1px solid black;
+    height: 500px;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+}
+th {
+    background-color: var(--field-border);
+    height: 30px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--button-text);
+}
+th, tr, td {
+    border: 1px solid black;
+}
+
+.wrap-btnBlock {
+    display: flex;
+    justify-content: end;
+    margin-top: 50px;
+    height: 50px;
+}
+
+#delete-btn {
+    background-color: var(--border);
+    color: var(--text);
 }
 
 @media (max-width: 780px) {
