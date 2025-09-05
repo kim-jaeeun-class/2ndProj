@@ -18,7 +18,7 @@
     margin: 30px auto;
     background-color: #fff;
     padding: 20px;
-    box-shadow : 0 0 10px rbga(0,0,0,0.1);
+    box-shadow : 0 0 10px rgba(0,0,0,0.1);
 }
 
 header {
@@ -104,7 +104,7 @@ td:nth-child(2) {
     border : none;
     cursor : pointer;
 }
-.button-area button:\hover {
+.button-area button:hover {
     background-color: #555;
 }
 /* 검색 조건 위치 맞추기 */
@@ -156,105 +156,6 @@ td:nth-child(2) {
                 </tr>
             </thead>
             <tbody>
-                <!--예시 게시글-->
-                <tr>
-                    <td>[자유]
-                    </td>
-                    <td> 오늘 출근길에 무지개 봄</td>
-                    <td> 생산관리팀</td>
-                    <td> 2024-12-13</td>
-                    <td> 13</td>
-                </tr>
-                    <tr>
-                    <td>[자유]
-                    </td>
-                    <td> 체육대회 사진 공유합니다</td>
-                    <td> 생산관리팀</td>
-                    <td> 2024-12-13</td>
-                    <td> 13</td>
-                </tr>
-                <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 워크숍 후기 남겨요 ~</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                  <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 휴게실 에어컨 너무 세요</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 사내 프로젝트 도와주실 분 구합니다</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 요즘 스마트폰 개조에 빠졌어요</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 2층 휴게실에서 휴대폰 주우신 분 계신가요?</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 회사 근처 맛집 추천 받아요!</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 공장 입구에서 카드 주웠습니다</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 액정 뷸량률 줄이는 팁 공유합니다</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-                 <tr>
-                    <td>
-                    [자유]
-                </td>
-                <td> 이마트24 신상 음료후기</td>
-                <td> 생산관리팀</td>
-                <td> 2024-12-13</td>
-                <td> 24</td>
-                </tr>
-
             </tbody>
         </table>
 
@@ -270,7 +171,93 @@ td:nth-child(2) {
         </div>
     </div>
     </div>
+<script>
+  // 게시글 데이터 배열 (예시)
+  const posts = [
+    { type: "[자유]", title: "오늘 출근길에 무지개 봄", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "체육대회 사진 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "워크숍 후기 남겨요 ~", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "휴게실 에어컨 너무 세요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "사내 프로젝트 도와주실 분 구합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "요즘 스마트폰 개조에 빠졌어요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "2층 휴게실에서 휴대폰 주우신 분 계신가요?", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "회사 근처 맛집 추천 받아요!", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "공장 입구에서 카드 주웠습니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "액정 불량률 줄이는 팁 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "이마트24 신상 음료후기", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+     { type: "[자유]", title: "오늘 출근길에 무지개 봄", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "체육대회 사진 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "워크숍 후기 남겨요 ~", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "휴게실 에어컨 너무 세요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "사내 프로젝트 도와주실 분 구합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "요즘 스마트폰 개조에 빠졌어요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "2층 휴게실에서 휴대폰 주우신 분 계신가요?", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "회사 근처 맛집 추천 받아요!", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "공장 입구에서 카드 주웠습니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "액정 불량률 줄이는 팁 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "이마트24 신상 음료후기", dept: "생산관리팀", date: "2024-12-13", views: 24 }, 
+    { type: "[자유]", title: "오늘 출근길에 무지개 봄", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "체육대회 사진 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 13 },
+    { type: "[자유]", title: "워크숍 후기 남겨요 ~", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "휴게실 에어컨 너무 세요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "사내 프로젝트 도와주실 분 구합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "요즘 스마트폰 개조에 빠졌어요", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "2층 휴게실에서 휴대폰 주우신 분 계신가요?", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "회사 근처 맛집 추천 받아요!", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "공장 입구에서 카드 주웠습니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "액정 불량률 줄이는 팁 공유합니다", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+    { type: "[자유]", title: "이마트24 신상 음료후기", dept: "생산관리팀", date: "2024-12-13", views: 24 },
+  ];
 
-    
+ const postsPerPage = 10; // 한 페이지에 보여줄 글 개수
+let currentPage = 1;
+
+function renderTable(page) {
+  currentPage = page;
+  const tbody = document.querySelector('tbody');
+  tbody.innerHTML = ""; // 기존 내용 지우기
+
+  // 보여줄 글 범위 계산
+  const start = (page - 1) * postsPerPage;
+  const end = start + postsPerPage;
+  const pagePosts = posts.slice(start, end);
+
+  // 글을 tbody에 추가
+  pagePosts.forEach(post => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${post.type}</td>
+      <td>${post.title}</td>
+      <td>${post.dept}</td>
+      <td>${post.date}</td>
+      <td>${post.views}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updatePagination();
+}
+
+function updatePagination() {
+  const pagination = document.querySelector('.pagination');
+  pagination.innerHTML = "";
+
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
+  for(let i = 1; i <= totalPages; i++) {
+    const span = document.createElement('span');
+    span.textContent = i;
+    if(i === currentPage) {
+      span.style.fontWeight = "bold"; // 현재 페이지 강조
+    }
+    span.style.cursor = "pointer";
+    span.addEventListener("click", () => renderTable(i));
+    pagination.appendChild(span);
+  }
+}
+
+// 초기 렌더링
+renderTable(1);
+</script>
 </body>
 </html>
