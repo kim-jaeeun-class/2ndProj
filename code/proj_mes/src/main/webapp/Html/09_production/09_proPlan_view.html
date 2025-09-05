@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>생산 계획</title>
+    <link rel="stylesheet" href="../asset/font.css">
     <link rel="stylesheet" href="../asset/09_proPlan_view.css">
 </head>
 <body>
@@ -26,7 +27,7 @@
             <input type="button" class="filter-btn-in" value="생산실적번호별">
             <input type="button" class="filter-btn-in" value="일자별">            
         </form>
-        <div class="wrap-tableView">
+        <form class="wrap-tableView">
             <table>
                 <thead>
                     <th>체크</th>
@@ -44,7 +45,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
+                        <td>
+                            <input type = "checkbox" value = "전달값" name = "변수명">
+                        </td>
                         <td>1</td>
                         <td>#생산계획번호</td>
                         <td>#제품번호</td>
@@ -59,7 +62,7 @@
                     </tr>                    
                 </tbody>
             </table>
-        </div>
+        </form>
         <div class = "wrap-tableBtn">
             <form class = "wrap-btnBlock">
                 <input type="button" class="filter-btn-in" id = "delete-btn" value="삭제">

@@ -1,68 +1,4 @@
-/* 글씨 통일용 : pretendard. 추후 통일할 때, font-family만 바꾸면 ok. font용 css 파일... 빼놓을지 고민. */
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff") format('woff');
-    font-weight: 100;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff") format('woff');
-    font-weight: 200;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff") format('woff');
-    font-weight: 300;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format('woff');
-    font-weight: 400;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff") format('woff');
-    font-weight: 500;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff") format('woff');
-    font-weight: 600;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff") format('woff');
-    font-weight: 700;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff") format('woff');
-    font-weight: 800;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff") format('woff');
-    font-weight: 900;
-    font-display: swap;
-}
-
-/* templete의 :root 복사. 템플릿 적용됐다면 날려도 OK */
+/* template의 :root 복사. 템플릿 적용됐다면 날려도 OK */
 :root {
     --border: #9aa0a6;
     --text: #222;
@@ -74,12 +10,23 @@
     --radius: 7px;
 }
 
+.wrap {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: 90%;
+    margin: 10px auto;
+}
+
+body {
+    max-width: 1280px;
+}
+
 /* form 내부 영역 배치*/
 /* 전체 */
 .date-filter {
     display: flex;
     justify-content: space-between;
-    max-width: 1280px;
     height: 50px;
     max-height: 50px;
     background-color: var(--field-border);
@@ -164,8 +111,8 @@ input[type="date"] {
     margin: 50px 0 10px;
 }
 .wrap-tableView {
-    border: 1px solid black;
     height: 500px;
+    overflow: scroll;
 }
 
 table {
@@ -196,7 +143,7 @@ th, tr, td {
     color: var(--text);
 }
 
-@media (max-width: 780px) {
+@media (max-width: 768px) {
     .date-filter {
         flex-direction: column;
         align-items: center;
