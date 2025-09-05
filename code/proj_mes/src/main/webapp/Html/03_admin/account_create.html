@@ -6,8 +6,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>계정 생성</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -16,7 +14,7 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family: 'Pretendard',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+      margin:0; 
       background:var(--bg); color:var(--text);
     }
     .app{max-width:980px;margin:24px auto;padding:0 16px}
@@ -42,29 +40,82 @@
 
     .row.inline .field{display:flex;gap:6px;align-items:center}
     .row.inline select, .row.inline input[type="text"]{max-width:180px}
+    .row .field .btn{
+      white-space: nowrap;   /* '검 색' 줄바꿈 금지 */
+      flex: 0 0 auto;        /* 버튼 폭이 내용보다 작게 줄어들지 않게 */
+    }
 
+    /* input/select/textarea 테두리 제거 (row 안에서만) */
+    .row .field :is(input, select, textarea){
+      border: 0;
+      outline: none;
+      box-shadow: none;
+    }
+
+/* 포커스는 행 컨테이너로 표시 */
+.row:focus-within{
+  border-color:#96b3e6;
+  box-shadow:0 0 0 3px rgba(150,179,230,.25);
+}
     input[type="text"],input[type="password"],input[type="date"],input[type="tel"],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:4px;outline:none}
     input[readonly]{background:#f9fafb}
 
-    .hint{font-size:12px;color:#b91c1c;margin-top:4px;min-height:18px}
+    .hint{
+      font-size:12px;
+      color:#b91c1c;
+
+    }
+
+    .hint[hidden]{display:none !important;}
+    .hint:not([hidden]){margin-top:6px;}
 
     .actions{
         display:flex;
         gap:8px;
         justify-content:center;
         margin-top:12px}
-    .btn{appearance:none;border:1px solid #2f3545;background:#2f3545;color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer}
+    .btn{
+      appearance:none;
+      border:1px solid #2f3545;
+      background:#2f3545;
+      color:#fff;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer
+    }
+
     .btn.secondary{background:#9aa0a6;border-color:#9aa0a6;color:#111}
 
     /* 감사 로그 */
     .audit{margin-top:14px}
-    .audit .title{font-weight:700;border-bottom:1px solid var(--line);padding:12px 16px}
+    .audit .title{
+      font-weight:700;
+      border-bottom:1px solid var(--line);
+      padding:12px 16px
+    }
+
     .audit .body{padding:12px}
-    .audit textarea{width:100%;height:180px;border:1px solid var(--line);border-radius:6px;padding:10px;resize:vertical}
+    .audit textarea{
+      width:100%;
+      height:180px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      padding:10px;
+      resize:vertical
+    }
 
     /* 비밀번호 토글 */
     .pw-wrap{position:relative}
-    .pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:13px;color:var(--muted)}
+    .pw-toggle{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:
+      13px;color:
+      var(--muted)
+    }
 
 
 
@@ -87,8 +138,17 @@
 
           <!-- 왼쪽 컬럼 -->
           <div class="left">
-            <div class="row"><label for="name">이름</label><div class="field"><input id="name" name="name" type="text" required></div></div>
-            <div class="row"><label for="rrn">주민번호</label><div class="field"><input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리-7자리" autocomplete="off"></div></div>
+            <div class="row"><label for="name">이름</label>
+              <div class="field">
+              <input id="name" name="name" type="text" required>
+            </div>
+          </div>
+            <div class="row">
+              <label for="rrn">주민번호</label>
+              <div class="field">
+                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리-7자리" autocomplete="off">
+              </div>
+            </div>
             <div class="row"><label for="phone1">전화번호</label>
               <div class="field" style="display:flex;gap:6px;align-items:center">
                 <input id="phone1" type="tel" inputmode="numeric" maxlength="3" placeholder="010">
@@ -110,7 +170,7 @@
                 <span class="pw-toggle" data-target="password_confirm">보기</span>
               </div>
             </div>
-            <div class="hint" id="pwHint"></div>
+            <div class="hint" id="pwHint" hidden aria-live="polite"></div>
 
             <div class="row inline"><label for="email_id">E-mail</label>
               <div class="field">
@@ -201,10 +261,16 @@
     }
 
     function updateHint(){
-      const msg = checkStrength(pw.value);
+      const v = pw.value;
+      const msg = v ? checkStrength(v) : '';
       pwHint.textContent = msg;
+
+      // 입력 중이고 에러 메시지가 있을 때만 보이게
+      pwHint.hidden = !v || msg === '';
     }
+
     pw.addEventListener('input', updateHint);
+    pw.addEventListener('blur', () => { if (!pw.value) pwHint.hidden = true; });
 
     // 비밀번호 보기 토글
     document.querySelectorAll('.pw-toggle').forEach(el=>{
