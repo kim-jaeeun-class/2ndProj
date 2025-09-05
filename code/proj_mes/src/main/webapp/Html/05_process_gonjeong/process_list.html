@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>공정 목록</title>
+	<link rel="stylesheet" href="../asset/template.css">
+	<link rel="stylesheet" href="../asset/process_list.css">
+</head>
+<body>
+	<header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>공정 목록</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+		<div class="btnDiv">
+			<input type="button" value="신규" class="newProcessBtn btn"></input>
+			<input type="button" value="수정" class="updateProcessBtn btn"></input>
+		</div>
+		
+		<div class="lookup">
+			<div class="lookup_left">
+				담당 부서
+				<select>
+					<option value="" selected>1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+				</select>
+				공정 ID
+				<select>
+					<option value="" selected>1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+				</select>
+				공정명
+				<select>
+					<option value="" selected>1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+				</select>
+				설비 사용 여부
+				<select>
+					<option value="1" selected>사용</option>
+					<option value="0">비사용</option>
+				</select>
+			</div>
+			<input type="button" value="조회" class="lookupBtn btn"></input>
+		</div>
+		<div class="table-container">
+			<table class="proc_tab">
+				<thead>
+					<tr>
+						<th>순번</th>
+						<th>선택</th>
+						<th>공정 ID</th>
+						<th>공정명</th>
+						<th>담당 부서</th>
+						<th>담당자</th>
+						<th>설비 사용</th>
+						<th>검사 여부</th>
+					</tr>		
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td><input type="checkbox"></td>
+						<td>공정 ID</td>
+						<td>공정명</td>
+						<td>담당 부서 명</td>
+						<td>담담자 명</td>
+						<td>사용 / 비사용</td>
+						<td>검사 / 비검사</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>8</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td>9</td>
+						<td><input type="checkbox"></td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

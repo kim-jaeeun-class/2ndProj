@@ -1,0 +1,81 @@
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 10px;
+}
+/* ///////////////////////////////// */
+
+.wrap {
+    border: none;
+}
+
+input[type="text"], select {
+    font-size: 1.2rem;    
+}
+
+/* 버튼 양식 지정 */
+.btn {
+    border-radius: var(--radius);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+}
+
+.lookupBtn, .updateBtn {
+    background-color: var(--border);
+    border: 1px solid var(--border);
+}
+
+.newBtn, .createBtn  {
+    background-color: #000000;
+    border: 1px solid #000000;
+}
+
+.deleteBtn {
+    background-color: #FF0000;
+    border: 1px solid #FF0000;
+}
+
+/* 조회 부분 */
+.lookup {
+    border: 1px solid var(--border);
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* 공정 정보 입력 부분 */
+.processInfo {
+    border: 1px solid var(--border);
+    height: 400px; 
+}
+
+.processInfo > span {
+    display: block;
+    margin: 20px 20px 0 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.inputTb {
+    border-collapse: separate;
+    border-spacing: 20px;
+    font-size: 1.1rem;
+}
+
+/* 아래 버튼 3개 부분 */
+.bottomBtn {
+    display: flex; 
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 10px 15px 0 0;
+}

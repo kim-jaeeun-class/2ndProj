@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>BOM 등록/수정/삭제</title>
+	<link rel="stylesheet" href="../asset/template.css">
+	<link rel="stylesheet" href="../asset/bom_CUD.css">
+</head>
+<body>
+	<header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>BOM 등록 / 수정 / 삭제</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+        <div class="lookup">
+            <!-- 세션에 따라 수정 가능 or read only -->
+			<div>품목 코드 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
+            <div>품목명 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
+			<div>작성자 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
+		</div>
+
+		<div class="table-container">
+			<table class="bom_tab">
+				<thead>
+					<tr>
+						<th style="width: 30px;">선택</th>
+						<th style="width: 33px;">No.</th>
+						<th>원재료명</th>
+						<th>용도</th>
+						<th>자재 코드</th>
+						<th>단가</th>
+						<th>단위</th>
+						<th>소요량</th>
+						<th>입고처</th>
+					</tr>		
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>1</td>
+						<td>원재료명</td>
+						<td>용도</td>
+						<td>자재 코드</td>
+						<td>단가</td>
+						<td>단위</td>
+						<td>EA</td>
+						<td>입고처</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>2</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>3</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>4</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>5</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>6</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>7</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>8</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>9</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="itembtnDiv">
+			<input type="button" value="항목 추가" class="addItemBtn btn"></input>
+			<input type="button" value="항목 삭제" class="delItemBtn btn"></input>
+		</div>
+		
+		
+		<div class="bottomBtn">
+			<input type="button" value="삭제" class="deleteBtn btn"></input>
+			<input type="button" value="수정" class="updateBtn btn"></input>
+			<input type="button" value="등록" class="createBtn btn"></input>
+		</div>
+
+        
+
+	</div>
+</body>
+</html>

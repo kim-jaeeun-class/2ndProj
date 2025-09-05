@@ -1,0 +1,112 @@
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 7px;
+}
+/* ///////////////////////////////// */
+
+.wrap {
+    border: none;
+}
+
+/* 버튼 공통 양식*/
+.btn {
+    border-radius: var(--radius);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+}
+
+/* 조회 부분 */
+.lookup {
+    border: 1px solid var(--border);
+    padding: 12px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-evenly; /* 모든 자식 요소를 오른쪽으로 정렬 */
+    align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.lookup input[type="text"] {
+    font-size: 1.1rem;
+}
+
+/* 테이블 부분 */
+.table-container {
+    height: 400px; /* 고정된 세로 높이 설정 */
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+/* 테이블 전체에 테두리 적용 */
+.bom_tab {
+    border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
+    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 (선택 사항) */
+}
+
+/* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
+.bom_tab th, .bom_tab td {
+    border: 1px solid black; /* 1px 두께의 검은색 실선 테두리 */
+    padding: 8px; /* 셀 내용과 테두리 사이의 여백 추가 */
+    text-align: center; /* 텍스트 정렬 (선택 사항) */
+}
+
+/* thead 고정 */
+.bom_tab thead th {
+    position: sticky;
+    top: 0;
+    background: #999;
+    z-index: 2;
+}
+
+/* itembtnDiv 부분 */
+.itembtnDiv {
+    display: flex; 
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 10px;
+    border: 1px solid var(--border);
+}
+
+.addItemBtn {
+    background-color: #495087;
+    border: 1px solid #495087;
+}
+
+.delItemBtn {
+    background-color: var(--border);
+    border: 1px solid var(--border);
+}
+
+/* 아래 버튼 3개 부분 */
+.bottomBtn {
+    display: flex; 
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px 10px 10px 0;
+}
+
+.deleteBtn {
+    background-color: #FF0000;
+    border: 1px solid #FF0000;
+}
+
+.updateBtn {
+    background-color: var(--border);
+    border: 1px solid var(--border);
+}
+
+.createBtn  {
+    background-color: #000000;
+    border: 1px solid #000000;
+}

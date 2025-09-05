@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>품질 검사 입력</title>
+	<link rel="stylesheet" href="../asset/template.css">
+	<link rel="stylesheet" href="../asset/process_CUD.css">
+</head>
+<body>
+	<header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			회사 이름
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="40px" alt="마이페이지 아이콘" style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">하위메뉴1</a></li>
+					<li><a href="">하위메뉴2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>품질 검사 입력</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+        불량 처리 입력
+        <div class="lookup">
+            일자 <input type="date">
+            공정명 <input type="text">
+            작업자 <input type="text">
+        </div>
+
+        <div style="height: 400px; border: 1px solid red;">
+            테이블 자리<br>
+            모달 필요한 페이지!!!!<br>
+
+		    <input type="button" value="저장" class="saveBtn"></input>
+            <input type="button" value="삭제" class="deleteBtn"></input>
+		    <input type="button" value="초기화" class="resetBtn"></input>
+        </div>
+	</div>
+</body>
+</html>

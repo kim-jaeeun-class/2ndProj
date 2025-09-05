@@ -1,0 +1,115 @@
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 7px;
+}
+/* ///////////////////////////////// */
+
+.wrap {
+    border: none;
+}
+
+/* 버튼 양식*/
+.btn {
+    border-radius: var(--radius);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+}
+
+.newBOMBtn {
+    background-color: #0EB4FC;
+    border: 1px solid #0EB4FC;
+    margin:5px;
+}
+
+.btnDiv {
+    display: flex; 
+    justify-content: flex-end;
+}
+
+
+
+/* 조회 부분 */
+.lookup {
+    border: 1px solid var(--border);
+    padding: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between; /* 모든 자식 요소를 오른쪽으로 정렬 */
+    align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
+}
+
+.lookup_left {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.lookup_left, .lookup_left> select {
+    font-size: 1.1em;
+}
+
+.lookupBtn {
+    background-color: #000000;
+    border: 1px solid #000000;
+}
+
+/* 테이블 부분 */
+.table-container {
+    height: 400px; /* 고정된 세로 높이 설정 */
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--border);
+}
+
+/* 테이블 전체에 테두리 적용 */
+.bom_tab {
+    border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
+    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 (선택 사항) */
+}
+
+/* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
+.bom_tab th, .bom_tab td {
+    border: 1px solid black; /* 1px 두께의 검은색 실선 테두리 */
+    padding: 8px; /* 셀 내용과 테두리 사이의 여백 추가 */
+    text-align: center; /* 텍스트 정렬 (선택 사항) */
+}
+
+/* 작성자 라벨 고정 */
+.writer {
+    position: sticky;
+    top: 0;
+    right: 0;
+    background: #fff;
+    padding: 5px 5px;
+    font-weight: bold;
+    text-align: right;
+    z-index: 3;
+}
+
+/* thead 고정 */
+.bom_tab thead th {
+    position: sticky;
+    top: 30px;   /* writer div 높이만큼 조절 */
+    background: #999;
+    z-index: 2;
+}
+
+/* 수정 버튼 */
+.bottomBtn {
+    display: flex; 
+    justify-content: flex-end;
+    padding: 10px 0;
+}
+
+.updateBOMBtn {
+    background-color: #000000;
+    border: 1px solid #000000;
+}
+
