@@ -1,11 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>자유게시판 수정/등록</title>
+  <style>
+    body {
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+
+    /* 헤더 */
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .board-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .main-link {
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* 게시글 정보 */
+    .post-info {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      background-color: #f7f7f7;
+    }
+
+    .post-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .post-meta {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* 본문 에디터 */
+    .editor-toolbar {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      background: #e9e9e9;
+      padding: 8px 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .editor-toolbar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+
+    .editor-toolbar button:hover {
+      background-color: #d0d0d0;
+    }
+
+    .post-content {
+      border: 1px solid #ccc;
+      background-color: #f2f2f2;
+      min-height: 300px;
+      margin-bottom: 30px;
+      padding: 10px;
+      font-size: 15px;
+      resize: vertical;
+      width: 100%;
+      font-family: '맑은 고딕', sans-serif;
+    }
+
+    /* 첨부파일 */
+    .file-upload {
+      margin-bottom: 30px;
+    }
+
+    .file-upload label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .file-upload input[type="file"] {
+      width: 100%;
+    }
+
+    /* 하단 버튼 */
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #555;
+    }
+
+    .btn.gray {
+      background-color: #999;
+    }
+  </style>
 </head>
 <body>
-    
+  <div class="container">
+    <div class="header-top">
+      <h1 class="board-title">자유게시판</h1>
+      <a href="#" class="main-link">◀ 메인 화면으로</a>
+    </div>
+
+    <div class="post-info">
+      <div class="post-title">[자유] : 2층 휴게실에서 휴대폰 주우신 분 계신가요?</div>
+      <div class="post-meta">작성자: 고민지 | 작성 시간: 2024-12-15 17:30</div>
+    </div>
+
+    <div class="editor-toolbar">
+      <button type="button">사진</button>
+      <button type="button">링크</button>
+      <button type="button">인용</button>
+      <button type="button">표</button>
+      <button type="button">굵게</button>
+      <button type="button">기울임</button>
+      <button type="button">밑줄</button>
+      <button type="button">취소선</button>
+      <button type="button">글머리</button>
+    </div>
+
+    <textarea class="post-content" placeholder="본문을 입력하세요...">2층 휴게실에서 휴대폰 주우신 분 계신가요?
+아무리 찾아도 안보입니다 ㅠㅠ
+혹시 찾으시면 010-****-****으로 연락 주세요!</textarea>
+
+    <div class="file-upload">
+      <label for="file">첨부파일</label>
+      <input type="file" id="file" />
+    </div>
+
+    <div class="button-group">
+      <button class="btn gray">수정</button>
+      <button class="btn gray">삭제</button>
+      <button class="btn">등록</button>
+    </div>
+  </div>
 </body>
 </html>
