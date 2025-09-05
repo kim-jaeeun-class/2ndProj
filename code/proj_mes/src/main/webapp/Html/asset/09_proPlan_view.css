@@ -1,0 +1,209 @@
+/* 글씨 통일용 : pretendard. 추후 통일할 때, font-family만 바꾸면 ok. font용 css 파일... 빼놓을지 고민. */
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff") format('woff');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff") format('woff');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff") format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff") format('woff');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff") format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff") format('woff');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff") format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff") format('woff');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff") format('woff');
+    font-weight: 900;
+    font-display: swap;
+}
+
+/* templete의 :root 복사. 템플릿 적용됐다면 날려도 OK */
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 10px;
+}
+
+/* form 내부 영역 배치*/
+/* 전체 */
+.date-filter {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1280px;
+    height: 50px;
+    max-height: 50px;
+    background-color: var(--field-border);
+    /* 영역 확인용이므로 아래 border는 삭제 */
+    border: 1px solid black;
+}
+
+/* 기간/월별 필터링 버튼 블록*/
+.filter-btn {
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+/* 날짜 입력란 블록 */
+.filter-date {
+    display: flex;
+    align-items: center;
+    flex: 2;
+    gap: 20px;
+}
+/* 조회 버튼 블록 */
+.filter-submit {
+    flex: 1;
+    text-align: right;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+/* 필터, 조회 버튼 공통 */
+.filter-btn-in {
+    width: 40%;
+    height: 80%;
+    max-width: 120px;
+    border-radius: var(--radius);
+    border: none;
+    background-color: var(--button);
+    color: var(--button-text);
+    margin: 0 10px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+/* 날짜 입력란 */
+input[type="date"] {
+    position: relative;
+    flex: 1;
+    min-width: 150px;
+    height: 80%;
+    padding: 0 10px;
+    border: 1px solid #5a5a5a;
+    border-radius: 10px;
+    color: var(--text);
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    font-family: 'Pretendard';
+    font-size: 1.1rem;
+}
+
+.filter-search {
+    width: 40%;
+    max-width: 120px;
+    height: 80%;
+    border-radius: 10px;
+    border: none;
+    background-color: #5a5a5a;
+    color: #ffffff;
+    margin-right: 20px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 780px) {
+    .date-filter {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .filter-btn {
+        flex: none;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
+        gap: 10px;
+        height: 50px;
+    }
+
+    .filter-btn-in {
+        width: 48%;
+        margin: 0;
+    }
+
+    .filter-date {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .filter-date input[type="date"] {
+        width: 100%;
+        height: 50px;
+    }
+
+    .filter-date div {
+        display: none;
+    }
+
+    .filter-submit {
+        display: flex;
+        justify-content: center;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .filter-submit .filter-btn-in {
+        width: 100%;
+    }
+}
