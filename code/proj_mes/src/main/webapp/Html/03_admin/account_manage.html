@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>계정 관리</title>
+    <link rel="stylesheet" href="../asset/account_create.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+  <main class="main">
+    <!-- 상단 탭 -->
+    <div class="tabs">
+      <button class="tab active" role="tab" aria-selected="true">이슈</button>
+      <button class="tab" role="tab" aria-selected="false">계정 관리</button>
+    </div>
+
+    <!-- 계정 목록 카드 -->
+    <section class="card">
+      <header id="acc-title" class="card-header">계정목록</header>
+      <div class="card-body">
+        <div class="table-wrap" tabindex="0">
+          <table class="tables">
+            <thead>
+              <tr>
+                <th scope="col">사번</th>
+                <th scope="col">이름</th>
+                <th scope="col">부서</th>
+                <th scope="col">직급</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 비어 있는 행(그리드 라인 표현용). 필요 시 동적 데이터로 대체하세요. -->
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="actions">	            
+            <!--팝업 오픈 버튼-->
+
+            <button class="btn" type="button">계정생성</button>
+
+
+          <a href="#" class="btn_open" onClick="javascript:popOpen();">
+            <button class="btn" type="button">계정삭제</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+  <!-- 모달팝업 -->
+    <div class="modal_bg" onClick="javascript:popClose();"></div>
+    <div class="modal_wrap">
+      ~~~님의 계정을 정말 삭제 하시겠습니까?
+      <br>
+      <button class="modal_close" onClick="javascript:popClose();">예</button>
+      <button class="modal_close" onClick="javascript:popClose();">아니요</button>   
+    </div>
+    <!-- // 모달팝업 -->
+
+    <!-- 감사 로그 카드 -->
+    <section class="card">
+      <header id="audit-title" class="card-header audit-header">감사 로그(Audit)</header>
+      <div class="card-body">
+        <textarea id="audit" class="audit-textarea"
+         placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+      </div>
+    </section>
+  </main>
+ 
+<script>S
+  function popOpen() {
+
+    var modalPop = $('.modal_wrap');
+    var modalBg = $('.modal_bg'); 
+
+    $(modalPop).show();
+    $(modalBg).show();
+
+}
+
+ function popClose() {
+   var modalPop = $('.modal_wrap');
+   var modalBg = $('.modal_bg');
+
+   $(modalPop).hide();
+   $(modalBg).hide();
+
+}
+  </script>
+
+</body>
+
+
+</html>

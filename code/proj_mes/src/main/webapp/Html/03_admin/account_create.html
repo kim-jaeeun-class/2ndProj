@@ -1,105 +1,280 @@
 <!DOCTYPE html>
+
+<!-- 해결해야 하는 과제 : pw 확인 밑에 나타나는 여백 해결, 스토리 보드 수정, 버튼 크기 수정 -->
 <html lang="ko">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>계정 관리</title>
-    <link rel="stylesheet" href="../asset/account_create.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>계정 생성</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f1f1f1; --card:#ffffff; --line:#cfd4dc; --accent:#96b3e6; --muted:#6b7280; --text:#111827;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: 'Pretendard',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+      background:var(--bg); color:var(--text);
+    }
+    .app{max-width:980px;margin:24px auto;padding:0 16px}
 
+    /*  탭 헤더 (이미지 상단 바 느낌) */
+    .tabs{display:flex;gap:8px;background:#9aa0a6;color:#111;padding:8px;border-radius:6px}
+    .tab{background:#7d8187;color:#fff;border:none;border-radius:4px;padding:8px 14px;cursor:pointer}
+    .tab.active{background:#4b5563}
+
+    /* 카드 프레임 */
+    .card{background:var(--card);border:1px solid #b8bdc6;border-radius:8px;box-shadow:0 0 0 1px #e5e7eb inset;margin-top:12px}
+    .card .title{font-weight:700;text-align:center;padding:18px 16px;border-bottom:1px solid var(--line)}
+
+
+
+    .left{
+        margin-left : 5%;
+        width : 90%;
+    }
+
+    .row{display:grid;grid-template-columns:120px 1fr;align-items:center;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+    .row > label{background:#cfe0ff;font-weight:600;padding:10px 12px}
+
+    .row.inline .field{display:flex;gap:6px;align-items:center}
+    .row.inline select, .row.inline input[type="text"]{max-width:180px}
+
+    input[type="text"],input[type="password"],input[type="date"],input[type="tel"],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:4px;outline:none}
+    input[readonly]{background:#f9fafb}
+
+    .hint{font-size:12px;color:#b91c1c;margin-top:4px;min-height:18px}
+
+    .actions{
+        display:flex;
+        gap:8px;
+        justify-content:center;
+        margin-top:12px}
+    .btn{appearance:none;border:1px solid #2f3545;background:#2f3545;color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer}
+    .btn.secondary{background:#9aa0a6;border-color:#9aa0a6;color:#111}
+
+    /* 감사 로그 */
+    .audit{margin-top:14px}
+    .audit .title{font-weight:700;border-bottom:1px solid var(--line);padding:12px 16px}
+    .audit .body{padding:12px}
+    .audit textarea{width:100%;height:180px;border:1px solid var(--line);border-radius:6px;padding:10px;resize:vertical}
+
+    /* 비밀번호 토글 */
+    .pw-wrap{position:relative}
+    .pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:13px;color:var(--muted)}
+
+
+
+    @media (max-width:820px){
+      .form-grid{grid-template-columns:1fr}
+      .right .row{grid-template-columns:120px 1fr}
+    }
+  </style>
 </head>
 <body>
-  <main class="main">
-    <!-- 상단 탭 -->
+  <div class="app">
     <div class="tabs">
-      <button class="tab active" role="tab" aria-selected="true">이슈</button>
-      <button class="tab" role="tab" aria-selected="false">계정 관리</button>
+      <button class="tab active" type="button">이슈</button>
+      <button class="tab" type="button">계정 관리</button>
     </div>
 
-    <!-- 계정 목록 카드 -->
     <section class="card">
-      <header id="acc-title" class="card-header">계정목록</header>
-      <div class="card-body">
-        <div class="table-wrap" tabindex="0">
-          <table class="tables">
-            <thead>
-              <tr>
-                <th scope="col">사번</th>
-                <th scope="col">이름</th>
-                <th scope="col">부서</th>
-                <th scope="col">직급</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 비어 있는 행(그리드 라인 표현용). 필요 시 동적 데이터로 대체하세요. -->
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-            </tbody>
-          </table>
+      <div class="title">계정생성</div>
+      <form class="form" id="signupForm" novalidate>
+
+          <!-- 왼쪽 컬럼 -->
+          <div class="left">
+            <div class="row"><label for="name">이름</label><div class="field"><input id="name" name="name" type="text" required></div></div>
+            <div class="row"><label for="rrn">주민번호</label><div class="field"><input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리-7자리" autocomplete="off"></div></div>
+            <div class="row"><label for="phone1">전화번호</label>
+              <div class="field" style="display:flex;gap:6px;align-items:center">
+                <input id="phone1" type="tel" inputmode="numeric" maxlength="3" placeholder="010">
+                <span>-</span>
+                <input id="phone2" type="tel" inputmode="numeric" maxlength="4">
+                <span>-</span>
+                <input id="phone3" type="tel" inputmode="numeric" maxlength="4">
+              </div>
+            </div>
+            <div class="row"><label for="password">PW</label>
+              <div class="field pw-wrap">
+                <input id="password" name="password" type="password" autocomplete="new-password" required>
+                <span class="pw-toggle" data-target="password">보기</span>
+              </div>
+            </div>
+            <div class="row"><label for="password_confirm">PW 확인</label>
+              <div class="field pw-wrap">
+                <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required>
+                <span class="pw-toggle" data-target="password_confirm">보기</span>
+              </div>
+            </div>
+            <div class="hint" id="pwHint"></div>
+
+            <div class="row inline"><label for="email_id">E-mail</label>
+              <div class="field">
+                <input id="email_id" name="email_id" type="text" placeholder="아이디" required>
+                <span>@</span>
+                <select id="email_domain" name="email_domain" required>
+                  <option value="">선택</option>
+                  <option value="gmail.com">gmail.com</option>
+                  <option value="naver.com">naver.com</option>
+                  <option value="daum.net">daum.net</option>
+                  <option value="hanmail.net">hanmail.net</option>
+                  <option value="kakao.com">kakao.com</option>
+                  <option value="custom">직접입력</option>
+                </select>
+                <input id="custom_domain" type="text" placeholder="도메인 직접 입력" style="display:none">
+              </div>
+            </div>
+
+            <div class="row"><label for="address">주소</label>
+              <div class="field" style="display:flex;gap:8px;align-items:center">
+                <input id="address" name="address" type="text" placeholder="주소를 입력해주세요" readonly>
+                <button class="btn secondary" type="button" id="addrSearch">검색</button>
+              </div>
+            </div>
+            <div class="row"><label for="detail_address">상세 주소</label><div class="field"><input id="detail_address" name="detail_address" type="text" placeholder="상세 주소를 입력해주세요"></div></div>
+
+
+            
+            <div class="row"><label for="dept">부서</label><div class="field"><input id="dept" name="dept" type="text"></div></div>
+            <div class="row"><label for="position">직급</label><div class="field"><input id="position" name="position" type="text"></div></div>
+            <div class="row"><label for="birth">생년월일</label><div class="field"><input id="birth" name="birth" type="date" required></div></div>
+
+          
         </div>
-        <div class="actions">	            
-            <!--팝업 오픈 버튼-->
-
-            <button class="btn" type="button">계정생성</button>
 
 
-          <a href="#" class="btn_open" onClick="javascript:popOpen();">
-            <button class="btn" type="button">계정삭제</button>
-          </a>
+        <div class="actions">
+          <a class="btn secondary" href="#" onclick="history.back();return false;">뒤로 가기</a>
+          <button type="submit" class="btn">생성 하기</button>
         </div>
-      </div>
+      </form>
     </section>
 
-
-  <!-- 모달팝업 -->
-    <div class="modal_bg" onClick="javascript:popClose();"></div>
-    <div class="modal_wrap">
-      ~~~님의 계정을 정말 삭제 하시겠습니까?
-      <br>
-      <button class="modal_close" onClick="javascript:popClose();">예</button>
-      <button class="modal_close" onClick="javascript:popClose();">아니요</button>   
-    </div>
-    <!-- // 모달팝업 -->
-
-    <!-- 감사 로그 카드 -->
-    <section class="card">
-      <header id="audit-title" class="card-header audit-header">감사 로그(Audit)</header>
-      <div class="card-body">
-        <textarea id="audit" class="audit-textarea"
-         placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+    <!-- 감사 로그 -->
+    <section class="card audit">
+      <div class="title">감사 로그(Audit)</div>
+      <div class="body">
+        <textarea id="auditLog" placeholder="계정 생성 및 변경 내역이 이곳에 표시됩니다." readonly></textarea>
       </div>
     </section>
-  </main>
- 
-<script>S
-  function popOpen() {
+  </div>
 
-    var modalPop = $('.modal_wrap');
-    var modalBg = $('.modal_bg'); 
+  <!-- 다음 우편번호 서비스 -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script>
+    // 이메일 도메인 제어
+    const emailDomain = document.getElementById('email_domain');
+    const customDomain = document.getElementById('custom_domain');
+    emailDomain.addEventListener('change', () => {
+      if (emailDomain.value === 'custom') {
+        customDomain.style.display = 'inline-block';
+        customDomain.focus();
+      } else {
+        customDomain.style.display = 'none';
+        customDomain.value = '';
+      }
+    });
 
-    $(modalPop).show();
-    $(modalBg).show();
+    // 비밀번호 강도 및 확인
+    const pw = document.getElementById('password');
+    const pw2 = document.getElementById('password_confirm');
+    const pwHint = document.getElementById('pwHint');
 
-}
+    function checkStrength(v){
+      const len = v.length >= 8;
+      const upper = /[A-Z]/.test(v);
+      const lower = /[a-z]/.test(v);
+      const num = /[0-9]/.test(v);
+      const sp = /[^A-Za-z0-9]/.test(v);
+      const repeat = /(.)\1{2,}/.test(v); // 같은 문자 3회 이상
+      const seq = /(012|123|234|345|456|567|678|789|abcd|bcde|cdef|defg)/i.test(v);
+      if (!len) return '최소 8자 이상 입력하세요.';
+      if (!(upper && lower)) return '영문 대소문자를 포함하세요.';
+      if (!num) return '숫자를 포함하세요.';
+      if (!sp) return '특수문자를 포함하세요.';
+      if (repeat || seq) return '연속/반복되는 패턴은 금지됩니다.';
+      return '';
+    }
 
- function popClose() {
-   var modalPop = $('.modal_wrap');
-   var modalBg = $('.modal_bg');
+    function updateHint(){
+      const msg = checkStrength(pw.value);
+      pwHint.textContent = msg;
+    }
+    pw.addEventListener('input', updateHint);
 
-   $(modalPop).hide();
-   $(modalBg).hide();
+    // 비밀번호 보기 토글
+    document.querySelectorAll('.pw-toggle').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        const target = document.getElementById(el.dataset.target);
+        const type = target.getAttribute('type') === 'password' ? 'text':'password';
+        target.setAttribute('type', type);
+        el.textContent = type === 'password' ? '보기' : '숨기기';
+      });
+    });
 
-}
+    // 전화번호 숫자만 입력
+    ['phone1','phone2','phone3'].forEach(id=>{
+      const $el = document.getElementById(id);
+      $el.addEventListener('input',()=>{$el.value=$el.value.replace(/[^0-9]/g,'');});
+    });
+
+    // 주소 검색
+    document.getElementById('addrSearch').addEventListener('click', execDaumPostcode);
+    function execDaumPostcode(){
+      new daum.Postcode({
+        oncomplete: function(data) {
+          document.getElementById('address').value = data.address;
+          document.getElementById('detail_address').focus();
+        }
+      }).open();
+    }
+
+    // 폼 제출
+    const form = document.getElementById('signupForm');
+    const audit = document.getElementById('auditLog');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      updateHint();
+      const pwMsg = checkStrength(pw.value);
+      if (pwMsg){
+        alert('비밀번호 조건을 확인해주세요.');
+        return;
+      }
+      if (pw.value !== pw2.value){
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      const email = (() => {
+        const id = document.getElementById('email_id').value.trim();
+        const dom = emailDomain.value === 'custom' ? customDomain.value.trim() : emailDomain.value;
+        return id && dom ? `${id}@${dom}` : '';
+      })();
+
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        rrn: document.getElementById('rrn').value.trim(),
+        phone: [document.getElementById('phone1').value, document.getElementById('phone2').value, document.getElementById('phone3').value].join('-'),
+        email,
+        dept: document.getElementById('dept').value.trim(),
+        position: document.getElementById('position').value.trim(),
+        birth: document.getElementById('birth').value,
+        address: document.getElementById('address').value,
+        detail: document.getElementById('detail_address').value
+      };
+
+      // 실제 전송 대신 감사 로그에 남김 (데모)
+      const now = new Date().toLocaleString();
+      audit.value = `[${now}] 계정 생성 시도 : ${payload.name}/${payload.email}/${payload.phone}\n` + audit.value;
+      alert('계정 생성 요청이 접수되었습니다.');
+      form.reset();
+      pwHint.textContent='';
+      customDomain.style.display='none';
+    });
   </script>
-
 </body>
-
-
 </html>
