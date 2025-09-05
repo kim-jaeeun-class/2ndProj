@@ -122,6 +122,18 @@ td:nth-child(2) {
 .search-area-outside input {
   padding: 5px;
 }
+.write-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.write-button:hover {
+  background-color: #555;
+}
 
 
 
@@ -137,7 +149,7 @@ td:nth-child(2) {
         </header>
 
           <div class="search-area-outside">
-    <label for="search-select">검색 조건</label>
+    <label for="search-select">검색조건</label>
     <select id="search-select">
       <option>제목</option>
       <option>내용</option>
@@ -167,7 +179,7 @@ td:nth-child(2) {
         </div>
       
         <div class = "button-area">
-            <button> 글쓰기</button>
+            <a href="Noticeboardnext.html" class="write-button"> 글쓰기</a>
         </div>
     </div>
     </div>

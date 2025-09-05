@@ -131,7 +131,7 @@
     </section>
 
     <!-- 게시글 본문 -->
-    <section class="post-content">
+    <section id="postContent" class="post-content">
       <p>2층 휴게실에서 휴대폰 주우신 분 계신가요?<br>
         아무리 찾아도 안보입니다 ㅠㅠ<br><br>
         혹시 찾으시면 <span class="highlight">010-****-****</span>으로 연락 주세요!
@@ -140,13 +140,44 @@
 
     <!-- 하단 버튼 영역 -->
     <div class="button-group">
-      <button class = "btn black"> 수정 </button>
-      <button class="btn gray">목록 보기</button>
+      <button id ="editBtn" class="btn black"> 수정 </button>
+      <a href="Noticeboard.html" class="btn gray">목록보기</a>
       <div class="nav-buttons">
         <button class="btn">이전 글</button>
         <button class="btn">다음 글 ▼</button>
       </div>
     </div>
   </div>
+
+  <script>
+  const editBtn = document.getElementById("editBtn");
+  const postContent = document.getElementById("postContent");
+
+  let isEditing = false;
+
+  editBtn.addEventListener("click", () => {
+    if (!isEditing) {
+      // 수정 모드로 변경
+      const originalText = postContent.innerText.trim();
+
+      postContent.innerHTML = `
+        <textarea id="editArea" style="width: 100%; height: 250px;">${originalText}</textarea>
+      `;
+
+      editBtn.textContent = "저장";
+      isEditing = true;
+    } else {
+      // 저장 모드 - 텍스트 적용
+      const newText = document.getElementById("editArea").value;
+
+      // 줄바꿈 <br> 처리
+      const formattedText = newText.replace(/\n/g, "<br>");
+
+      postContent.innerHTML = `<p>${formattedText}</p>`;
+      editBtn.textContent = "수정";
+      isEditing = false;
+    }
+  });
+</script>
 </body>
 </html>
