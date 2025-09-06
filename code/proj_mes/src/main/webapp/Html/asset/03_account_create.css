@@ -1,0 +1,214 @@
+    :root {
+      --app-bg: #bfbfbf;            /* 전체 배경 그레이 */
+      --chrome-border: #9b9b9b;      /* 외곽 보더 */
+      --panel-bg: #ffffff;          /* 카드 바탕 */     
+      --tab-active: #3d3d3d;        /* 활성 탭 */
+      --tab-inactive: #e3e3e3;      /* 비활성 탭 */
+      --tab-border: #a0a0a0;
+      --text: #2b2b2b;
+      --table-header: #eaf2ff;      /* 표 헤더 연한 파랑톤 */
+      --table-line: #d8d8d8;        /* 표 보더 */
+      --btn-bg: #e2e2e2;
+      --btn-bg-hover: #d9d9d9;
+      --btn-border: #9d9d9d;
+      --radius: 6px;
+    }
+
+
+
+
+*{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; 
+      background:var(--bg); color:var(--text);
+    }
+    .wrap{
+      max-width:980px;
+      margin:24px auto;
+      padding:0 16px}
+
+    /* 상단 탭 영역 */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      padding: 6px 0 10px;
+      border : 2px solid #6f6f6f;
+      background-color: #6f6f6f;
+    }
+    .tab {
+      border: 1px solid var(--tab-border);
+      background: var(--tab-inactive);
+      padding: 6px 18px;
+      border-radius: 4px;
+      cursor: default;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .tab.active {
+      background: var(--tab-active);
+      color: #fff;
+      border-color: #2c2c2c;
+    }
+
+    /* 카드 프레임 */
+    .card{background:var(--card);border:1px solid #b8bdc6;border-radius:8px;box-shadow:0 0 0 1px #e5e7eb inset;margin-top:12px}
+    .card .title{font-weight:700;text-align:center;padding:18px 16px;border-bottom:1px solid var(--line)}
+
+
+
+    .left{
+        margin-left : 5%;
+        width : 90%;
+    }
+
+    .row{
+        display:grid;
+        grid-template-columns:120px 1fr;
+        align-items:center;
+        border:1px solid var(--line);
+        border-radius:4px;overflow:hidden
+    }
+
+    .row > label{background:#cfe0ff;font-weight:600;padding:10px 12px}
+
+    .row.inline .field{display:flex;gap:6px;align-items:center}
+    .row.inline select, .row.inline input[type="text"]{max-width:180px}
+    .row .field .btn{
+      white-space: nowrap;   /* '검 색' 줄바꿈 금지 */
+      flex: 0 0 auto;        /* 버튼 폭이 내용보다 작게 줄어들지 않게 */
+    }
+
+    /* input/select/textarea 테두리 제거 (row 안에서만) */
+    .row .field :is(input, select, textarea){
+      border: 0;
+      outline: none;
+      box-shadow: none;
+    }
+
+  /* 포커스는 행 컨테이너로 표시 */
+  .row:focus-within{
+    border-color:#96b3e6;
+    box-shadow:0 0 0 3px rgba(150,179,230,.25);
+  }
+    input[type="text"],input[type="password"],input[type="date"],input[type="tel"],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:4px;outline:none}
+    input[readonly]{background:#f9fafb}
+
+    .hint{
+      font-size:12px;
+      color:#b91c1c;
+
+    }
+
+    .hint[hidden]{display:none !important;}
+    .hint:not([hidden]){margin-top:6px;}
+
+    .actions{
+        display:flex;
+        gap:8px;
+        justify-content:center;
+        margin-top:12px}
+    .btn{
+      appearance:none;
+      border:1px solid #2f3545;
+      background:#2f3545;
+      color:#fff;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer
+    }
+
+    .btn.secondary{background:#9aa0a6;border-color:#9aa0a6;color:#fff}
+
+    /* 감사 로그 */
+    .audit{margin-top:14px}
+    .audit .title{
+      font-weight:700;
+      border-bottom:1px solid var(--line);
+      padding:12px 16px
+    }
+
+    .audit .body{padding:12px}
+    .audit textarea{
+      width:100%;
+      height:180px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      padding:10px;
+      resize:vertical
+    }
+
+    /* 비밀번호 토글 */
+    .pw-wrap{position:relative}
+    .pw-toggle{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:
+      13px;color:
+      var(--muted)
+    }
+
+
+    /* ============================
+   페이지 폭/정렬 오버라이드 (template.css 수정 없이)
+   ============================ */
+
+/* 페이지 공통 폭 변수(여기서만 사용해도 OK) */
+:root {
+  --page-max: 1200px;
+  --page-pad: 16px;
+}
+
+/* 헤더 내부 폭 제한 + 기존 레이아웃 유지 */
+header > .row-limit {
+  width: min(var(--page-max), 100% - calc(2 * var(--page-pad)));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px; /* template의 header 높이와 조화 */
+}
+
+/* GNB 내부 폭 제한 */
+.gnb > .row-limit {
+  width: min(var(--page-max), 100% - calc(2 * var(--page-pad)));
+  margin: 0 auto;
+}
+
+/* GNB 메뉴가 화면 전체로 퍼지지 않도록 오버라이드 */
+.gnb > .row-limit > .mainList {
+  /* template의 .gnb ul { justify-content: space-evenly } 보다 더 구체적으로 덮어쓰기 */
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+}
+
+/* 타이틀 라인도 같은 폭으로 정렬 + 고정 height 제거 */
+.titleBox {
+  margin: 10px auto;
+  padding: 10px 16px;
+  height: auto;       /* 기존 height 강제 제거 */
+  min-height: 45px;   /* 필요 시 기본 높이만 */
+
+}
+
+/* 본문 컨테이너(app) 폭 제한 */
+.app, .tabs {
+  width: min(var(--page-max), 100% - calc(2 * var(--page-pad)));
+  margin: 16px auto;
+}
+
+/* 카드가 너무 넓지 않도록 */
+.card {
+  max-width: 900px;
+  margin: 16px auto;
+}
+

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>기준 목록</title>
+  <link rel="stylesheet" href="../asset/template.css" />
+  <link rel="stylesheet" href="../asset/04_standard_list.css" />
+
+
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <div class="corp">
+      <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40" alt="회사 로고" />
+      <h3>J2P4</h3>
+    </div>
+    <div class="search">
+      <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30" alt="검색용 아이콘" />
+    </div>
+    <div class="logout">로그아웃</div>
+    <div class="myIcon">
+      <a href="javascript:void(0);" id="myIconBtn">
+        <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35" alt="마이페이지 아이콘"
+             style="background-color:#ffffff;border-radius:100%;" />
+      </a>
+      <ul class="subList">
+        <li><a href="">하위메뉴1</a></li>
+        <li><a href="">하위메뉴2</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- GNB -->
+  <div class="gnb">
+    <ul class="mainList">
+      <li>기준 관리
+        <ul class="subList">
+          <li><a href="">기준 목록</a></li>
+        </ul>
+      </li>
+      <li>공정 관리
+        <ul class="subList">
+          <li><a href="">공정 목록</a></li>
+          <li><a href="">공정 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>BOM 관리
+        <ul class="subList">
+          <li><a href="">BOM 목록</a></li>
+          <li><a href="">BOM 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>발주 관리
+        <ul class="subList">
+          <li><a href="">발주 목록</a></li>
+        </ul>
+      </li>
+      <li>재고 관리
+        <ul class="subList">
+          <li><a href="">재고 목록</a></li>
+          <li><a href="">재고 삭제</a></li>
+        </ul>
+      </li>
+      <li>생산 관리
+        <ul class="subList">
+          <li><a href="">생산 계획</a></li>
+          <li><a href="">생산 실적 현황</a></li>
+        </ul>
+      </li>
+      <li>품질 관리
+        <ul class="subList">
+          <li><a href="">LOT 추적</a></li>
+          <li><a href="">공정별 현황</a></li>
+          <li><a href="">품질 검사 입력</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 타이틀 -->
+  <div class="titleBox">
+    <span>기준 목록</span>
+    <a href="">
+      <div class="toMainpage">
+        <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13" alt="메인 화면으로 가는 화살표"
+             style="transform:scaleX(-1);" />
+        메인 화면으로
+      </div>
+    </a>
+  </div>
+
+  <!-- 본문 -->
+  <div class="wrap">
+    <main class="main">
+      <!-- 상단 툴바 -->
+      <div class="toolbar" role="region" aria-label="검색 및 등록">
+        <label for="std-category">분류</label>
+        <div class="select">
+          <select id="std-category">
+            <option value="">선택하세요</option>
+            <option>전체</option>
+            <option>원자재</option>
+            <option>반제품</option>
+            <option>완제품</option>
+          </select>
+        </div>
+        <button class="btn" type="button" id="std-search">조회</button>
+        <div class="spacer"></div>
+        <button class="btn" type="button" id="std-create">등록하기</button>
+      </div>
+
+      <!-- 표 -->
+      <section aria-label="기준 목록 표">
+        <div class="table-wrap" tabindex="0">
+          <table class="tables" aria-label="기준 목록">
+            <colgroup>
+              <col style="width:120px" />  <!-- 번호 -->
+              <col style="width:220px" />  <!-- 코드명 -->
+              <col style="width:260px" />  <!-- 이름 -->
+              <col />                      <!-- 속성: 남는 폭 -->
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">코드명</th>
+                <th scope="col">이름</th>
+                <th scope="col">속성</th>
+              </tr>
+            </thead>
+            <tbody id="std-body">
+              <!-- 라인 표시용 더미 행(필요 시 서버 데이터로 대체) -->
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+</body>
+</html>

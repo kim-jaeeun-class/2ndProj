@@ -1,0 +1,109 @@
+/* ===== 기준목록 전용 스타일 (template.css는 수정하지 않음) ===== */
+:root{
+  --table-line: #d8d8d8;
+  --table-header: #eaf2ff;
+}
+
+/* 상단 툴바 */
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:10px 0 12px;
+}
+.toolbar label{
+  font-weight:700;
+  margin-right:6px;
+}
+.select{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+}
+.select select{
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  height:36px;
+  min-width:180px;
+  padding:0 36px 0 12px;
+  border:1px solid #9aa0a6;
+  border-radius:4px;
+  background:#fff;
+  color:#222;
+}
+.select::after{
+  content:"";
+  position:absolute;
+  right:10px; top:50%;
+  transform:translateY(-50%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:7px solid #333;
+  pointer-events:none;
+}
+.spacer{ flex:1 1 auto; }
+
+.btn{
+  height:36px;
+  padding:0 14px;
+  border-radius:4px;
+  border:1px solid #333;
+  background:#fff;
+  color:#111;
+  cursor:pointer;
+  font-weight:700;
+}
+.btn:active{ transform:translateY(1px); }
+
+/* 표 컨테이너(스크롤) */
+.table-wrap{
+  border:1px solid var(--table-line);
+  border-radius:4px;
+  overflow:auto;
+  max-height:420px;          /* 스크롤 기준 높이 (필요시 조절) */
+  scrollbar-gutter: stable;  /* 스크롤 공간 고정 → 헤더/바디 정렬 유지 */
+}
+
+/* 표 본체 */
+table.tables{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;        /* colgroup 폭 고정 */
+}
+
+/* 헤더 고정 */
+table.tables thead th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:var(--table-header);
+  text-align:center;
+  font-weight:700;
+  padding:10px 12px;
+  border-bottom:1px solid var(--table-line);
+  border-right:1px solid var(--table-line);
+}
+table.tables thead th:last-child{ border-right:0; }
+
+/* 셀 */
+table.tables td{
+  height:44px;
+  padding:0 12px;
+  text-align:center;
+  border-bottom:1px solid var(--table-line);
+  border-right:1px solid var(--table-line);
+}
+table.tables td:last-child{ border-right:0; }
+table.tables tbody tr:last-child td{ border-bottom:0; }
+
+/* 스크롤바 (옵션) */
+.table-wrap::-webkit-scrollbar{ width:12px; height:12px; }
+.table-wrap::-webkit-scrollbar-track{ background:#f1f1f1; }
+.table-wrap::-webkit-scrollbar-thumb{
+  background:#c1c1c1; border-radius:10px; border:2px solid #f1f1f1;
+}
+
+/* 좁은 화면 대응 */
+@media (max-width: 720px){
+  .select select{ min-width:140px; }
+  /* 필요하면 colgroup width를 HTML에서 더 줄여 주세요 */
+}
