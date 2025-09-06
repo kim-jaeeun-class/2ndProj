@@ -9,7 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#f1f1f1; --card:#ffffff; --line:#cfd4dc; --accent:#96b3e6; --muted:#6b7280; --text:#111827;
+      --bg:#f1f1f1;
+      --card:#ffffff;
+      --line:#cfd4dc;
+      --accent:#96b3e6;
+      --muted:#6b7280;
+      --text:#111827;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -17,11 +22,30 @@
       margin:0; 
       background:var(--bg); color:var(--text);
     }
-    .app{max-width:980px;margin:24px auto;padding:0 16px}
+    .app{
+      max-width:980px;
+      margin:24px auto;
+      padding:0 16px}
 
     /*  탭 헤더 (이미지 상단 바 느낌) */
-    .tabs{display:flex;gap:8px;background:#9aa0a6;color:#111;padding:8px;border-radius:6px}
-    .tab{background:#7d8187;color:#fff;border:none;border-radius:4px;padding:8px 14px;cursor:pointer}
+    .tabs{
+      display:flex;
+      gap:8px;
+      background:#9aa0a6;
+      color:#111;
+      padding:8px;
+      border-radius:6px
+    }
+
+    .tab{
+      background:#7d8187;
+      color:#fff;
+      border:none;
+      border-radius:4px;
+      padding:8px 14px;
+      cursor:pointer
+    }
+
     .tab.active{background:#4b5563}
 
     /* 카드 프레임 */
@@ -52,11 +76,11 @@
       box-shadow: none;
     }
 
-/* 포커스는 행 컨테이너로 표시 */
-.row:focus-within{
-  border-color:#96b3e6;
-  box-shadow:0 0 0 3px rgba(150,179,230,.25);
-}
+  /* 포커스는 행 컨테이너로 표시 */
+  .row:focus-within{
+    border-color:#96b3e6;
+    box-shadow:0 0 0 3px rgba(150,179,230,.25);
+  }
     input[type="text"],input[type="password"],input[type="date"],input[type="tel"],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:4px;outline:none}
     input[readonly]{background:#f9fafb}
 
