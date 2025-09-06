@@ -100,8 +100,9 @@
 
     <!-- 계정 목록 카드 -->
     <section class="card">
-      <header id="acc-title" class="card-header">계정목록</header>
-      <div class="card-body">
+		<!-- 탬플릿의 헤더와 css가 겹쳐서 흰색글씨로 나타남 수정 -->
+    	<div id="acc-title" class="card-header">계정목록</div>
+    	<div class="card-body">
         <div class="table-wrap" tabindex="0">
           <table class="tables">
             <thead>
@@ -152,7 +153,7 @@
 
     <!-- 감사 로그 카드 -->
     <section class="card">
-      <header id="audit-title" class="card-header audit-header">감사 로그(Audit)</header>
+      <div id="audit-title" class="card-header audit-header" style = "text-align: center;">감사 로그(Audit)</div>
       <div class="card-body">
         <textarea id="audit" class="audit-textarea"
          placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>

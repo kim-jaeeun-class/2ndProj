@@ -1,13 +1,11 @@
     :root {
       --app-bg: #bfbfbf;            /* 전체 배경 그레이 */
       --chrome-border: #9b9b9b;      /* 외곽 보더 */
-      --panel-bg: #ffffff;          /* 카드 바탕 */
-      --panel-muted: #f6f6f6;       
+      --panel-bg: #ffffff;          /* 카드 바탕 */     
       --tab-active: #3d3d3d;        /* 활성 탭 */
       --tab-inactive: #e3e3e3;      /* 비활성 탭 */
       --tab-border: #a0a0a0;
       --text: #2b2b2b;
-      --muted: #6b6b6b;
       --table-header: #eaf2ff;      /* 표 헤더 연한 파랑톤 */
       --table-line: #d8d8d8;        /* 표 보더 */
       --btn-bg: #e2e2e2;
@@ -156,7 +154,6 @@
 	}
 
  
-
 	
 	팝업 버튼
 	.btn_box .btn_open {
@@ -170,18 +167,7 @@
 		text-align: center; 
 		box-sizing: border-box; 
 		
-	} */
+	} 
 	
-	/* .btn_box .btn_open p {
 
-		color: #fff; 
-			
-	}
 
-    /* 반응형 */
-    @media (max-width: 720px) {
-      .app { padding: 8px 10px; }
-      table.grid th, table.grid td { padding: 8px; font-size: 14px; }
-      .actions { justify-content: stretch; }
-      .btn { flex: 1; }
-    }
