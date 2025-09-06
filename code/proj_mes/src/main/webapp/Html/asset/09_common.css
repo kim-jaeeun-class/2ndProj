@@ -1,0 +1,254 @@
+/* 기본 색상 및 변수 */
+:root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #999;
+    --page-bg: #ffffff;
+    --radius: 7px;
+}
+
+/* body */
+body {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    position: relative;
+    overflow-x: hidden;
+    background-color: var(--page-bg);
+}
+
+/* wrap(모든 컨텐츠를 다 감싸는 부분) */
+.wrap {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 1280px;
+    margin: 10px auto;
+    overflow-x: hidden;
+}
+
+/* 버튼(공통 디자인) */
+.button {
+    width: 40%;
+    height: 40px;
+    max-width: 120px;
+    min-width: 100px;
+    border-radius: var(--radius);
+    border: none;
+    background-color: var(--button);
+    color: var(--button-text);
+    margin: 0 10px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* 테이블 설정 */
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
+}
+
+th {
+    background-color: var(--field-border);
+    height: 30px;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--button-text);
+}
+
+.table-view {
+    height: 500px;
+    overflow: auto;
+}
+
+/* wrap-filter(테이블 바로 위의 버튼 필터 영역) */
+.wrap-filter {
+    display: flex;
+    margin: 30px 50px;
+}
+
+.filter-btn {
+    margin: 0 5px;
+}
+
+/* wrap-tableBtn(테이블 바로 아래의 삭제, 등록 버튼 영역) */
+.wrap-tableBtn {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.delete, .delete-btn {
+    background-color: var(--border);
+    color: var(--text);
+}
+
+/* wrap-table (테이블과 테이블 하단 버튼 모두 감싸는 영역) */
+.wrap-table, .wrap-tableView {
+    margin: 30px 50px;
+}
+
+/* select, date 입력 */
+input[type="date"], select {
+    width: 60%;
+    max-width: 400px;
+    min-width: 150px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    font-family: 'Pretendard';
+    font-size: 1.1rem;
+}
+
+/* (공통 X)생산 실적 - 필터 영역 */
+.wrap-select {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 30px 50px;
+    display : flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.select-box {
+    display: flex;
+    gap: 30px;
+}
+.select-title {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.select-submit {
+    align-content: center;
+}
+
+/* 사이드 패널 */
+.panel {
+    position: fixed;
+    top: 0;
+    right: -800px;
+    width: 600px;
+    height: 100%;
+    background: #f9f9f9;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.panel.open {
+    right: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    float: right;
+    cursor: pointer;
+}
+
+/* form-group (사이드 패널 내부 입력 영역들) */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+
+.form-actions {
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* (공통 X)생산 계획 상단 필터 스타일 */
+.date-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    max-height: 60px;
+    background-color: var(--field-border);
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.date-filter .filter-btn,
+.date-filter .filter-date,
+.date-filter .filter-submit {
+    display: flex;
+    align-items: center;
+}
+
+.date-filter .filter-btn input,
+.date-filter .filter-submit button {
+    margin-right: 10px;
+}
+
+.date-filter .filter-date {
+    gap: 10px;
+}
+
+.date-filter input[type="date"] {
+    flex: 1;
+    min-width: 120px;
+    height: 35px;
+    border-radius: 5px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .wrap,
+    .wrap-filter,
+    .wrap-table,
+    .wrap-tableView {
+        margin: 10px;
+    }
+
+    .date-filter {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .date-filter .filter-btn,
+    .date-filter .filter-date,
+    .date-filter .filter-submit {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .date-filter .filter-date {
+        flex-direction: column;
+    }
+
+    .date-filter input[type="date"] {
+        width: 100%;
+    }
+}
