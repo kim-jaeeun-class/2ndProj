@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>마이 페이지</title>
+	<link rel="stylesheet" href="../asset/template.css">
+    <link rel="stylesheet" href="../asset/04_standard_list.css" />
+
+
+    <style>
+  dialog#partnerModal {
+    border: none; padding: 0; border-radius: 12px;
+    width: min(760px, 94vw); max-height: 86vh; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  dialog#partnerModal::backdrop { background: rgba(0,0,0,.45); }
+
+  .modal-card { display:flex; flex-direction:column; background:#fff; }
+  .modal-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 18px; border-bottom:1px solid #e5e5e5;
+  }
+  .modal-title { margin:0; font-size:16px; font-weight:700; }
+  .modal-close {
+    border:0; background:transparent; font-size:20px; line-height:1; cursor:pointer;
+  }
+  .modal-body { padding:16px 18px; overflow:auto; }
+  .modal-footer {
+    display:flex; justify-content:flex-end; gap:10px;
+    padding:12px 18px; border-top:1px solid #e5e5e5; background:#fafafa;
+  }
+
+  /* 폼 스타일 */
+  .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:14px 16px; }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field label { font-size:13px; font-weight:600; }
+  .input, select {
+    height:38px; border:1px solid #cfcfcf; border-radius:8px;
+    padding:8px 10px; font-size:14px; background:#fff;
+  }
+  .input:focus, select:focus { outline:2px solid #a4c3ff; border-color:#a4c3ff; }
+
+  .addr-row { display:grid; grid-template-columns: 1fr 120px; gap:10px; }
+  .addr-btn {
+    height:38px; border:1px solid #cfcfcf; background:#e9e9e9;
+    border-radius:8px; font-weight:700; cursor:pointer;
+  }
+
+  .btn { height:34px; padding:0 14px; border-radius:6px; border:1px solid #cfcfcf;
+         background:#f5f5f5; cursor:pointer; font-weight:600; }
+  .btn.primary { background:#e9e9e9; }
+
+</style>
+
+
+
+
+</head>
+
+<body>
+	<header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>마이 페이지</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+        <div class="table-wrap">
+    <table class="tables" >
+    <thead>
+        <tr>
+        <th>분류</th>
+        <th>거래처명</th>
+        <th>사업자번호</th>
+        <th>거래품목</th>
+        <th>담당자</th>
+        <th>연락번호</th>
+        <th>지역</th>
+        </tr>
+    </thead>
+    <tbody id="std-body">
+        <!-- 라인 표시용 더미 행(필요 시 서버 데이터로 대체) -->
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+
+    </tbody>
+
+
+
+    </table>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</div>
+    <div style = "display: flex; justify-content: end;">
+        <button class="btn" type="button" id="std-search_0" style = "margin-right : 15px" >뒤로가기</button>
+        <button class="btn" type="button" id="std-search_1" style = "margin-right : 5%">등록하기</button>
+        </div>
+
+
+
+<dialog id="partnerModal" aria-labelledby="pmTitle">
+  <div class="modal-card" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="pmTitle" class="modal-title">거래처(출고/발주)</h3>
+      <button class="modal-close" type="button" id="pmClose" aria-label="닫기">×</button>
+    </div>
+
+    <form id="partnerForm" class="modal-body" autocomplete="off">
+      <div class="grid">
+        <div class="field">
+          <label for="corpName">거래처명</label>
+          <input id="corpName" class="input" type="text" placeholder="예) 00유리" required />
+        </div>
+
+        <div class="field">
+          <label for="bizNo">사업자번호</label>
+          <input id="bizNo" class="input" type="text" inputmode="numeric" placeholder="012-34-56789" maxlength="12" />
+        </div>
+
+        <div class="field">
+          <label for="item">거래품목</label>
+          <select id="item">
+            <option value="">선택</option>
+            <option>유리</option><option>코팅액</option><option>기타</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="manager">담당자</label>
+          <input id="manager" class="input" type="text" placeholder="담당자" />
+        </div>
+
+        <div class="field">
+          <label for="tel">연락번호</label>
+          <input id="tel" class="input" type="tel" placeholder="010-5555-6666" maxlength="13" />
+        </div>
+
+        <div class="field">
+          <label for="region">지역</label>
+          <select id="region">
+            <option value="">선택</option>
+            <option>서울</option><option>경기</option><option>인천</option>
+            <option>부산</option><option>대구</option><option>광주</option>
+            <option>대전</option><option>울산</option><option>세종</option>
+            <option>강원</option><option>충북</option><option>충남</option>
+            <option>전북</option><option>전남</option><option>경북</option>
+            <option>경남</option><option>제주</option>
+          </select>
+        </div>
+
+        <div class="field" style="grid-column:1 / -1;">
+          <label for="addr">주소</label>
+          <div class="addr-row">
+            <input id="addr" class="input" type="text" placeholder="도로명/지번 주소" />
+            <button class="addr-btn" type="button" id="addrSearch">주소 검색</button>
+          </div>
+        </div>
+
+        <div class="field" style="grid-column:1 / -1;">
+          <label for="addr2">상세주소</label>
+          <input id="addr2" class="input" type="text" placeholder="상세주소" />
+        </div>
+      </div>
+    </form>
+
+    <div class="modal-footer">
+      <button type="button" class="btn" id="pmCancel">취소</button>
+      <button type="submit" form="partnerForm" class="btn primary" id="pmSave">저장</button>
+    </div>
+  </div>
+</dialog>
+<!-- 다음 우편번호 서비스 -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+  // 주소 검색 버튼
+  document.getElementById('addrSearch').addEventListener('click', execDaumPostcode);
+
+  function execDaumPostcode() {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        // 도로명/지번 선택 결과 처리
+        const selected = (data.userSelectedType === 'R') ? data.roadAddress : data.jibunAddress;
+
+        // ✅ 실제 모달의 id에 맞춰 값 채우기
+        const addrField   = document.getElementById('addr');   // 주소
+        const detailField = document.getElementById('addr2');  // 상세주소
+
+        if (addrField)   addrField.value = selected || data.address || '';
+        if (detailField) detailField.focus();
+
+        // 필요 시 우편번호도 쓰세요 (input을 추가해두었다면)
+        // document.getElementById('postcode').value = data.zonecode;
+      }
+    }).open(); // 팝업 방식
+  }
+
+  // 트리거: 등록하기 버튼(id="registBtn")에서 모달 열기
+  const partnerModal = document.getElementById('partnerModal');
+  const registBtn = document.getElementById('std-search_1');  // ← 페이지에 이 버튼이 있어야 합니다.
+  registBtn?.addEventListener('click', () => partnerModal.showModal());
+
+  // 닫기 버튼/취소
+  const closeModal = () => partnerModal.close();
+  document.getElementById('pmClose').addEventListener('click', closeModal);
+  document.getElementById('pmCancel').addEventListener('click', closeModal);
+
+  // 바깥 클릭 시 닫기
+  partnerModal.addEventListener('click', (e) => {
+    if (e.target === partnerModal) closeModal();
+  });
+
+  // 저장(샘플) – 실제 저장 로직으로 교체하세요.
+  document.getElementById('partnerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    // TODO: 폼 데이터 수집 후 서버에 전송
+    alert('저장되었습니다 (시뮬레이션)');
+    closeModal();
+  });
+
+  // 입력 보조: 사업자번호 3-2-5
+  const biz = document.getElementById('bizNo');
+  biz.addEventListener('input', () => {
+    let v = biz.value.replace(/[^0-9]/g,'').slice(0,10);
+    const p1=v.slice(0,3), p2=v.slice(3,5), p3=v.slice(5);
+    biz.value=[p1,p2,p3].filter(Boolean).join('-');
+  });
+
+  // 입력 보조: 전화번호 3-4-4(또는 02 지역번호 처리)
+  const tel = document.getElementById('tel');
+  tel.addEventListener('input', () => {
+    let v = tel.value.replace(/[^0-9]/g,'').slice(0,11);
+    if (v.startsWith('02')) {
+      const p1=v.slice(0,2), p2=v.length>9? v.slice(2,6):v.slice(2,5), p3=v.slice(p2.length+2);
+      tel.value=[p1,p2,p3].filter(Boolean).join('-');
+    } else {
+      const p1=v.slice(0,3), p2=v.slice(3,7), p3=v.slice(7);
+      tel.value=[p1,p2,p3].filter(Boolean).join('-');
+    }
+  });
+
+
+</script>
+
+
+
+
+</body>
+
+
+
+</html>
