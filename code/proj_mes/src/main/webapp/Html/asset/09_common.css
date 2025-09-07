@@ -207,6 +207,11 @@ table th:first-child, table td:first-child {
     overflow: auto;
 }
 
+/* (공통X) 생산 계획 - 모달 띄우기 전 tr */
+.data {
+    cursor: pointer;
+}
+
 /* wrap-filter(테이블 바로 위의 버튼 필터 영역) */
 .wrap-filter {
     display: flex;
@@ -299,6 +304,7 @@ input[type="date"], select {
 
 /* form-group (사이드 패널 내부 입력 영역들) */
 .form-group {
+    margin-top: 15px;
     margin-bottom: 15px;
 }
 
@@ -363,6 +369,27 @@ input[type="date"], select {
     background-color: #f0f0f0;
 }
 
+/* 사이드 라디오 묶음 영역 */
+.radio-block {
+    display: flex;
+    gap: 15px;
+}
+
+.radio-block label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: auto;
+    font-weight: normal;
+}
+
+input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+
 /* (공통 X)생산 계획 상단 필터 스타일 */
 .date-filter {
     display: flex;
@@ -418,9 +445,9 @@ input[type="date"], select {
 }
 
 .modal {
-    background: #fff;
+    background-color: #fff;
     padding: 20px;
-    width: 400px;
+    width: 500px;
     max-width: 90%;
     border-radius: var(--radius);
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -448,6 +475,23 @@ input[type="date"], select {
 .modal-search input[type="button"] {
     max-width: 100px;
     width: 20%;
+}
+
+/* (공통 X) 생산 계획 - 모달 테이블 */
+.modal-table-title {
+    background-color: var(--field-border);
+    width: 30%;
+    min-width: 200px;
+    font-weight: 700;
+    padding: 10px;
+}
+.modal-table-con {
+    width: 70%;
+    max-width: 400px;
+    padding: 10px;
+}
+.modal-table {
+    font-size: 1.1rem;
 }
 
 

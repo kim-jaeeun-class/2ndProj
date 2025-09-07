@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="../asset/font.css">
         <link rel="stylesheet" href="../asset/09_common.css">
     </head>
-    <body>
+    <body page="pro-plan">
         <header>
             <div class="corp">
                 <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
@@ -164,7 +164,7 @@
                         <th>비고</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr class = "data">
                             <td><input type="checkbox" value="전달값" name="변수명"></td>
                             <td>1</td>
                             <td>#생산계획번호</td>
@@ -217,11 +217,66 @@
                 <!-- 생각해보니 진행/불량률을 input로 넣으면 안 된다... -->
                 <div class="form-actions">
                     <input type = "button" class="button cancel reset" value="취소">
-                    <button type="submit" class="button">저장</button>
+                    <button type="submit" class="button panel-save">저장</button>
                 </div>
             </form>
         </div>
+        <!-- 생산 계획 모달 -->
+        <div class="modal-overlay">
+            <div class="modal">
+                <button class="modal-close">✕</button>
+                <h2>생산 계획 상세</h2>
+                <form class="wrap-table panel-table">
+                    <table class = "modal-table">
+                        <tr>
+                            <td class="modal-table-title">생산계획번호</td>
+                            <td class="modal-table-con">#생산계획번호</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">제품번호</td>
+                            <td class="modal-table-con">#품번</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">계획 수량</td>
+                            <td class="modal-table-con">#수량</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">진행 상태</td>
+                            <td class="modal-table-con">#상태(대기/진행중/완료)</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">계획 기간</td>
+                            <td class="modal-table-con">#기간</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">진행률</td>
+                            <td class="modal-table-con">#수치(%)</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">작업 공정</td>
+                            <td class="modal-table-con">#공정명</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">달성률</td>
+                            <td class="modal-table-con">#수치(%)</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">불량률</td>
+                            <td class="modal-table-con">#수치(%)</td>
+                        </tr>
+                        <tr>
+                            <td class="modal-table-title">비고</td>
+                            <td class="modal-table-con">#비고(공란 가능)</td>
+                        </tr>
+                    </table>
+                    <div class="wrap-tableBtn">
+                        <input type="button" class="button" value="수정">
+                        <input type="button" class="button delete" value="삭제">
+                    </div>
+                </form>
+            </div>
+        </div>
 
-        <script src="../asset/09_sidePanel.js"></script>
+        <script src="../asset/09_common.js"></script>
     </body>
 </html>
