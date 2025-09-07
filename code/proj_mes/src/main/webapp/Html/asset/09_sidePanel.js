@@ -1,7 +1,7 @@
-// 사이드 패널 열기/닫기 및 작업지시서 JS
+// 공통 JS : 사이드 패널, 모달, 테이블 삭제, 자동완성
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 등록 버튼 클릭 -> 패널 열기
+    // 공통 JS : 사이드 패널 열기/닫기
     const openBtns = document.querySelectorAll('.open-btn');
     const panel = document.querySelector('.panel');
     const closeBtn = panel.querySelector('.close-btn');
@@ -13,37 +13,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 패널 닫기 버튼
-    closeBtn.addEventListener('click', () => {
-        panel.classList.remove('open');
-    });
+    if (closeBtn) closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+    if (cancelBtn) cancelBtn.addEventListener('click', () => panel.classList.remove('open'));
 
-    cancelBtn.addEventListener('click', () => {
-        panel.classList.remove('open');
-    });
-
-    // 체크박스 전체 선택 기능 예시
+    // 공통 JS : 체크박스 전체 선택
     const selectAllCheckbox = document.querySelector('.select-all');
     if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', (e) => {
+        selectAllCheckbox.addEventListener('change', e => {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => cb.checked = e.target.checked);
         });
     }
 
-    // 삭제 버튼 기능 (메인 테이블)
-    const deleteBtns = document.querySelectorAll('.delete-btn, .delete');
-    deleteBtns.forEach(btn => {
+    // 공통 JS : 테이블 행 삭제 (메인 테이블 및 생산 실적 테이블)
+    const mainDeleteBtns = document.querySelectorAll('.wrap-table .delete-btn, .wrap-table .delete');
+    mainDeleteBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            const table = btn.closest('.wrap').querySelector('table');
+            const table = btn.closest('.wrap-table').querySelector('table');
             if (!table) return;
-
             const checked = table.querySelectorAll('tbody input[type="checkbox"]:checked');
             checked.forEach(cb => cb.closest('tr').remove());
         });
     });
 
-    // 작업지시서 - 납품처 input 자동완성 기능
+    // 공통 JS : 납품처 자동완성
     const clients = [
         { code: "C001", name: "삼성전자" },
         { code: "C002", name: "LG화학" },
@@ -85,23 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 품목 추가 모달
+    // 공통 JS : 품목 추가 모달
     const itemAddBtn = document.querySelector('.panel .button[value="품목 추가"]');
     const modalOverlay = document.querySelector('.modal-overlay');
     const modalCloseBtn = document.querySelector('.modal-close');
 
     if (itemAddBtn && modalOverlay && modalCloseBtn) {
-        // 모달 열기
         itemAddBtn.addEventListener('click', () => {
             modalOverlay.classList.add('active');
         });
 
-        // 모달 닫기 버튼
         modalCloseBtn.addEventListener('click', () => {
             modalOverlay.classList.remove('active');
         });
 
-        // 모달 외부 클릭 시 닫기
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 modalOverlay.classList.remove('active');
@@ -109,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 모달 내 전체 선택 해제
+    // 공통 JS : 모달 내 전체 선택 해제
     const modalResetBtn = document.querySelector('.modal .reset');
     if (modalResetBtn) {
         modalResetBtn.addEventListener('click', () => {
@@ -118,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 슬라이딩 영역(패널) 테이블
+    // 공통 JS : 슬라이딩 영역(패널) 테이블
     const panelTableBody = document.querySelector('.panel-table tbody');
 
-    // 모달 저장 -> 패널 테이블에 품목 추가 (중복 방지 포함)
+    // 공통 JS : 모달 저장 -> 패널 테이블에 품목 추가 (중복 방지)
     const modalSaveBtn = document.querySelector('.modal .save');
     if (modalSaveBtn && panelTableBody && modalOverlay) {
         modalSaveBtn.addEventListener('click', () => {
@@ -136,54 +126,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 const exists = Array.from(panelTableBody.children).some(tr => tr.children[2].textContent === code);
                 if (exists) return;
 
-                // 새로운 행 생성
                 const tr = document.createElement('tr');
 
-                // 체크박스
                 const tdCheckbox = document.createElement('td');
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 tdCheckbox.appendChild(checkbox);
                 tr.appendChild(tdCheckbox);
 
-                // 순번
                 const tdNo = document.createElement('td');
                 tdNo.textContent = panelTableBody.children.length + 1;
                 tr.appendChild(tdNo);
 
-                // 품목코드
                 const tdCode = document.createElement('td');
                 tdCode.textContent = code;
                 tr.appendChild(tdCode);
 
-                // 품목명
                 const tdName = document.createElement('td');
                 tdName.textContent = name;
                 tr.appendChild(tdName);
 
-                // 수량
                 const tdQty = document.createElement('td');
                 tdQty.textContent = '';
                 tr.appendChild(tdQty);
 
-                // 비고
                 const tdNote = document.createElement('td');
                 tdNote.textContent = '';
                 tr.appendChild(tdNote);
 
-                // 패널 테이블에 추가
                 panelTableBody.appendChild(tr);
             });
 
-            // 모달 닫기
             modalOverlay.classList.remove('active');
-
-            // 모달 체크박스 초기화
             checkedRows.forEach(cb => cb.checked = false);
         });
     }
 
-    // 패널 테이블 품목 삭제
+    // 공통 JS : 패널 테이블 품목 삭제
     const panelDeleteBtn = document.querySelector('.panel .delete');
     if (panelDeleteBtn) {
         panelDeleteBtn.addEventListener('click', () => {
