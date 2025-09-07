@@ -1,4 +1,3 @@
-// package Controller;
 package Controller;
 
 import java.io.IOException;
@@ -9,9 +8,15 @@ import javax.servlet.http.*;
 import Dto.Login_Dto;
 import Service.Login_Service;
 
-@WebServlet("/login") 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+@WebServlet("/login")
 public class LoginCtrl extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    // ✅ Logger 선언
+    private static final Logger log = LogManager.getLogger(LoginCtrl.class);
 
     private final Login_Service loginService = new Login_Service();
 
@@ -36,21 +41,27 @@ public class LoginCtrl extends HttpServlet {
 
         Login_Dto user = loginService.login(id, pw);
 
+//        // ✅ 로깅 테스트
+        log.info("✅ Log4j2 TXT 파일 테스트 - INFO");
+        log.warn("⚠️ 경고 로그 - WARN");
+//        log.error("❌ 에러 로그 - ERROR", new RuntimeException("boom"));
+//        일부로 에러를 발생시키는 방법
+
+        // (참고) 아래처럼 바디에 쓰면 이후 sendRedirect와 충돌할 수 있으니 테스트 후 지우세요.
+        // response.setContentType("text/plain; charset=UTF-8");
+        // response.getWriter().println("로그를 남겼어요. Tomcat logs/app.txt 확인!");
+
         if (user != null) {
-            // 로그인 성공
             HttpSession session = request.getSession(true);
             session.setAttribute("loginUser", user);
-            // (보안) 세션 고정화 방지 - 서블릿 3.1+
             try { request.changeSessionId(); } catch (Throwable ignore) {}
 
-            // 권한 분기 어떻게 할까
             if (user.getWorkerGrade() == 2) {
                 response.sendRedirect(request.getContextPath() + "/Html/02_main/mainpage.html");
             } else {
                 response.sendRedirect(request.getContextPath() + "/");
             }
         } else {
-            // 실패 시 정적 로그인 페이지로 되돌리기 (JSP 미사용 환경에서도 404 안 남)
             response.sendRedirect(request.getContextPath() + "/Html/01_login/login.html?error=1");
         }
     }
