@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>J2P4 :: 생산 실적</title>
+        <title>J2P4 :: 생산 계획</title>
         <link rel="stylesheet" href="../asset/font.css">
         <link rel="stylesheet" href="../asset/09_common.css">
     </head>
@@ -111,7 +111,7 @@
         </div>
 
         <div class="titleBox">
-            <span>생산 실적</span>
+            <span>생산 계획</span>
             <a href="../02_main/mainpage.html">
             <div class="toMainpage">
                 <img
@@ -123,79 +123,65 @@
                 </div>
             </a>
         </div>
-        <div class="wrap">
-            <!-- 필터 영역 -->
-            <form class="wrap-select">
-                <div class="select-box">
-                    <div class="select-con">
-                        <div class="select-title">작업 지시</div>
-                        <div class="select-drop">
-                            <select name="select-wo" class="select">
-                                <option value="전달값1" selected="selected">선택1</option>
-                                <option value="전달값2">선택2</option>
-                                <option value="전달값3">선택3</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="select-con">
-                        <div class="select-title">일자</div>
-                        <div class="select-drop">
-                            <input type="date">
-                        </div>
-                    </div>
-                    <div class="select-con">
-                        <div class="select-title">공정</div>
-                        <div class="select-drop">
-                            <select name="select-proc" class="select">
-                                <option value="전달값1" selected="selected">선택1</option>
-                                <option value="전달값2">선택2</option>
-                                <option value="전달값3">선택3</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="select-submit">
-                    <button type="button" class="button select-btn">조회</button>
-                </div>
-            </form>
+        <!-- 상단 필터 -->
+        <form class="date-filter">
+            <div class="filter-btn">
+                <input type="button" class="button" value="기간">
+                <input type="button" class="button" value="월별">
+            </div>
+            <div class="filter-date">
+                <input type="date">
+                <div>~</div>
+                <input type="date">
+            </div>
+            <div class="filter-submit">
+                <button type="button" class="button">조회</button>
+            </div>
+        </form>
 
+        <div class="wrap">
             <!-- 버튼 필터 -->
             <form class="wrap-filter">
-                <input type="button" class="button filter-btn" value="작업지시별">
+                <input type="button" class="button filter-btn" value="생산실적번호별">
                 <input type="button" class="button filter-btn" value="일자별">
-                <input type="button" class="button filter-btn" value="작업실적별">
-                <input type="button" class="button filter-btn" value="작업공정별">
             </form>
 
             <!-- 테이블 영역 -->
             <form class="wrap-table">
-                <div class="table-view">
-                    <table>
-                        <thead>
-                            <th></th>
-                            <th>작업지시번호</th>
-                            <th>지시 상태</th>
-                            <th>일자</th>
-                            <th>LOT 번호</th>
-                            <th>입고 형태</th>
-                            <th>출고 형태</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox" value="전달값" name="변수명"></td>
-                                <td>#번호</td>
-                                <td>#상태명</td>
-                                <td>#날짜</td>
-                                <td>#LOT번호</td>
-                                <td>#입고형태</td>
-                                <td>#출고형태</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
+                <table>
+                    <thead>
+                        <th></th>
+                        <th>순번</th>
+                        <th>생산계획번호</th>
+                        <th>제품 번호</th>
+                        <th>계획 수량</th>
+                        <th>진행 상태</th>
+                        <th>계획 기간</th>
+                        <th>진행률</th>
+                        <th>작업 공정</th>
+                        <th>달성률</th>
+                        <th>불량률</th>
+                        <th>비고</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" value="전달값" name="변수명"></td>
+                            <td>1</td>
+                            <td>#생산계획번호</td>
+                            <td>#제품번호</td>
+                            <td>#계획수량</td>
+                            <td>#진행상태</td>
+                            <td>#계획기간</td>
+                            <td>#진행률</td>
+                            <td>#작업공정</td>
+                            <td>#달성률</td>
+                            <td>#불량률</td>
+                            <td>#비고</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="wrap-tableBtn">
-                    <input type="button" class="button delete" value="삭제">
+                    <input type="button" class="button delete-btn" value="삭제">
                     <input type="button" class="button open-btn" value="등록">
                 </div>
             </form>
@@ -204,25 +190,32 @@
         <!-- 사이드 패널 -->
         <div class="panel">
             <button class="close-btn">✕</button>
-            <h2>생산 실적 현황 등록</h2>
+            <h2>생산 계획 등록</h2>
             <form>
                 <div class="form-group">
-                    <label>작업지시번호</label>
-                    <input type="text">
-                <div class="form-group">
-                    <label>지시 상태</label>
-                    <input type="text">
-                <div class="form-group">
-                    <label>LOT 번호</label>
-                    <input type="text">
-                <div class="form-group">
-                    <label>입고 형태</label>
-                    <input type="text">
-                <div class="form-group">
-                    <label>출고 형태</label>
+                    <label>생산계획번호</label>
                     <input type="text">
                 </div>
-                    <div class="form-actions">
+                <div class="form-group">
+                    <label>제품 번호</label>
+                    <input type="text">
+                </div>
+                <div class="form-group">
+                    <label>계획 수량</label>
+                    <input type="number">
+                </div>
+                <div class="form-group">
+                    <label>계획 기간</label>
+                    <input type="date">
+                    <input type="date">
+                </div>
+                <div class="form-group">
+                    <label>작업 공정</label>
+                    <!-- 여기 SELECT로 갈기-->
+                    <input type="text">
+                </div>
+                <!-- 생각해보니 진행/불량률을 input로 넣으면 안 된다... -->
+                <div class="form-actions">
                     <input type = "button" class="button cancel reset" value="취소">
                     <button type="submit" class="button">저장</button>
                 </div>
