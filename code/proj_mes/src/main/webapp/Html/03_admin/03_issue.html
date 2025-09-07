@@ -1,0 +1,128 @@
+<!-- 개선 사항 
+ 1: 체크 박스에 체크가 된 목록이 삽입, 삭제 되도록
+ 2 : 로그 형식을 구상할것
+  -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>이슈 처리</title>
+  <link rel="stylesheet" href="../asset/03_account_create.css" />
+  <link rel="stylesheet" href="../asset/03_issue.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+</head>
+<body>
+<main class="main">
+  <!-- 상단 탭 (같은 디자인) -->
+  <div class="tabs">
+    <button class="tab active" role="tab" aria-selected="true">이슈</button>
+    <button class="tab" role="tab" aria-selected="false">계정 관리</button>
+  </div>
+
+  <!-- 이슈 목록 카드 (같은 카드/테이블 구조) -->
+  <section class="card">
+    <header id="issue-title" class="card-header">이슈 처리</header>
+    <div class="card-body">
+      <div class="table-wrap" tabindex="0">
+        <table class="tables" id="issue-table">
+          <thead>
+            <tr>
+              <th scope="col"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
+              <th scope="col">문제</th>
+              <th scope="col">상세내역</th>
+              <th scope="col">상태</th>
+              <th scope="col">요청자</th>
+              <th scope="col">요청일</th>
+              <th scope="col">액션</th>
+            </tr>
+          </thead>
+          <tbody id="issue-tbody">
+            <!-- 예시 데이터 (원하시면 서버 데이터로 대체) -->
+            <tr>
+              <td><input type="checkbox" class="row-check" /></td>
+              <td>Line A scrap spike</td>
+              <td>재열 처리 원인 분석 필요</td>
+              <td><a href="#" class="status-link" data-status="open">open</a></td>
+              <td>품질보증팀</td>
+              <td>2025.08.30</td>
+              <td>
+                <button class="btn btn-approve" type="button">승인</button>
+                <button class="btn btn-delete" type="button" data-name="Line A scrap spike">삭제</button>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="row-check" /></td>
+              <td>공정 B 불량률 급증</td>
+              <td>설비 교정 및 파라미터 점검</td>
+              <td><a href="#" class="status-link" data-status="in_progress">open</a></td>
+              <td>생산기술팀</td>
+              <td>2025.08.29</td>
+              <td>
+                <button class="btn btn-approve" type="button">승인</button>
+                <button class="btn btn-delete" type="button" data-name="공정 B 불량률 급증">삭제</button>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="row-check" /></td>
+              <td>라인 C 안전센서 오류</td>
+              <td>교체 필요 여부 판단</td>
+              <td><a href="#" class="status-link" data-status="open">open</a></td>
+              <td>안전관리팀</td>
+              <td>2025.08.28</td>
+              <td>
+                <button class="btn btn-approve" type="button">승인</button>
+                <button class="btn btn-delete" type="button" data-name="라인 C 안전센서 오류">삭제</button>
+              </td>
+            </tr>
+            <!-- 필요 시 더 추가 -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 하단 액션 (같은 버튼 스타일) -->
+      <div class="actions">
+        <button class="btn" type="button" id="btn-add">문제추가</button>
+        <button class="btn" type="button" id="btn-bulk-approve" disabled>선택 승인</button>
+        <button class="btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
+      </div>
+
+      <!-- 페이징: 표 아래 ‘가운데’ 정렬 -->
+      <div class="actions" style="justify-content:center; gap:6px;">
+        <button class="btn page-prev" type="button">이전</button>
+        <button class="btn page-num is-active" type="button" data-page="1">1</button>
+        <button class="btn page-num" type="button" data-page="2">2</button>
+        <button class="btn page-num" type="button" data-page="3">3</button>
+        <button class="btn page-next" type="button">다음</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 모달 (같은 팝업 구조/클래스) -->
+  <div class="modal_bg" onclick="popClose();"></div>
+  <div class="modal_wrap">
+    <div class="modal_message"><span id="modal-target">선택한</span> 항목을 정말 삭제하시겠습니까?</div>
+    <div class="modal_actions" style="margin-top:10px; text-align:center;">
+      <button class="modal_close" id="modal-yes">예</button>
+      <button class="modal_close" onclick="popClose();">아니요</button>
+    </div>
+  </div>
+
+  <!-- 감사 로그 카드 (같은 구성) -->
+  <section class="card">
+    <header id="audit-title" class="card-header audit-header">감사 로그(Audit)</header>
+    <div class="card-body">
+      <textarea id="audit" class="audit-textarea"
+        placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+    </div>
+  </section>
+</main>
+
+<script src ="../asset/03_issue.js" ></script>
+</body>
+</html>

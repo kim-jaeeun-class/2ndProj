@@ -5,13 +5,13 @@
       --tab-active: #3d3d3d;        /* 활성 탭 */
       --tab-inactive: #e3e3e3;      /* 비활성 탭 */
       --tab-border: #a0a0a0;
-      --text: #2b2b2b;
+      --text: #222;
       --table-header: #eaf2ff;      /* 표 헤더 연한 파랑톤 */
       --table-line: #d8d8d8;        /* 표 보더 */
       --btn-bg: #e2e2e2;
       --btn-bg-hover: #d9d9d9;
       --btn-border: #9d9d9d;
-      --radius: 6px;
+      /* --radius: 6px; */
     }
 
 
