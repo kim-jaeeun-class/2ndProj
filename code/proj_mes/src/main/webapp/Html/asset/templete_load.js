@@ -97,12 +97,12 @@
 
 
     //이거는 탬플릿 안에 있는 js코드를 실행시키는 함수라고 하는데 필요없지만 뭔가 아까우니 주석처리  
-//   function executeScripts(scope) {
-//     scope.querySelectorAll("script").forEach((old) => {
-//       const s = document.createElement("script");
-//       for (const { name, value } of [...old.attributes]) s.setAttribute(name, value);
-//       s.textContent = old.textContent; // 인라인 스크립트
-//       old.replaceWith(s); // 교체하며 실행
-//     });
-//   }
+  function executeScripts(scope) {
+    scope.querySelectorAll("script").forEach((old) => {
+      const s = document.createElement("script");
+      for (const { name, value } of [...old.attributes]) s.setAttribute(name, value);
+      s.textContent = old.textContent; // 인라인 스크립트
+      old.replaceWith(s); // 교체하며 실행
+    });
+  }
 })();
