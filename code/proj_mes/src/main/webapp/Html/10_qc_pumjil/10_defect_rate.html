@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>불량률 현황</title>
 	<link rel="stylesheet" href="../asset/template.css">
-	<link rel="stylesheet" href="../asset/process_CUD.css">
+	<link rel="stylesheet" href="../asset/10_defect_rate.css">
 </head>
 <body>
 	<header>
@@ -87,16 +87,126 @@
 	</div>
 
 	<div class="wrap">
+        <div class="wrap">
         <div class="lookup">
-            일자 <input type="date">
-            공정명 <input type="text">
-            작업자 <input type="text">
+			<div class="lookup_left">
+				<select> <!-- 공정별 검색 -->
+					<option value="" disabled selected>공정별</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<!-- 일자별 검색 -->
+				일자 <input type="date">
+				<select> <!-- 품명 검색 -->
+					<option value="" disabled selected>품명</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+			</div>
+            <input type="text" placeholder="공정, 품명 검색...">
         </div>
 
-        <div style="height: 400px; border: 1px solid red;">
-            테이블 자리<br>
-            모달 필요한 페이지!!!!<br>
-        </div>
+		<div class="table-container">
+    		<table class="lot_tab">
+				<thead>
+					<tr>
+						<th>공정명</th>
+						<th>일자</th>
+						<th>품명</th>
+						<th>생산 수량</th>
+						<th>불량 수량</th>
+						<th>불량률</th>
+					</tr>		
+				</thead>
+				<tbody>
+					<tr>
+						<td>공정명1</td>
+						<td>일자1</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명2</td>
+						<td>일자2</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명3</td>
+						<td>일자3</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명4</td>
+						<td>일자4</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명5</td>
+						<td>일자5</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명6</td>
+						<td>일자6</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명7</td>
+						<td>일자7</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명8</td>
+						<td>일자8</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명9</td>
+						<td>일자9</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>총 생산 수량</td>
+						<td>총 불량 수량</td>
+						<td>총 불량률</td>
+					</tr>
+				</tfoot>
+			</table>
 	</div>
 </body>
 </html>

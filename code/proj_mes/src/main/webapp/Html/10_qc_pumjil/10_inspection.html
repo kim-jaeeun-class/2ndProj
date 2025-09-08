@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<title>품질 검사 입력</title>
 	<link rel="stylesheet" href="../asset/template.css">
-	<link rel="stylesheet" href="../asset/process_CUD.css">
+	<link rel="stylesheet" href="../asset/10_inspection.css">
 </head>
 <body>
 	<header>
@@ -87,21 +87,187 @@
 	</div>
 
 	<div class="wrap">
-        불량 처리 입력
+        <h2>불량 처리 입력</h2>
         <div class="lookup">
-            일자 <input type="date">
-            공정명 <input type="text">
-            작업자 <input type="text">
+            <div>일자 <input type="date"></div>
+            <div>공정명 <input type="text" id="searchProc"></div>
+            <div>작업자 <input type="text"></div>
         </div>
 
-        <div style="height: 400px; border: 1px solid red;">
-            테이블 자리<br>
-            모달 필요한 페이지!!!!<br>
+        <div class="table-container">
+    		<table class="insp_tab">
+				<thead>
+					<tr>
+						<th>선택</th>
+						<th>검사 방법</th>
+						<th>Lot 번호</th>
+						<th>품명</th>
+						<th>공정</th>
+						<th>양품 수량</th>
+						<th>불량 수량</th>
+						<th>불량명</th>
+						<th>비고</th>
+					</tr>		
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호1</td>
+						<td>품명</td>
+						<td>공정명1</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명1</td>
+						<td>비고1</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호1</td>
+						<td>품명</td>
+						<td>공정명1</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명2</td>
+						<td>비고2</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호3</td>
+						<td>품명</td>
+						<td>공정명3</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명3</td>
+						<td>비고3</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호4</td>
+						<td>품명</td>
+						<td>공정명4</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명4</td>
+						<td>비고1</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호5</td>
+						<td>품명</td>
+						<td>공정명5</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명5</td>
+						<td>비고5</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호6</td>
+						<td>품명</td>
+						<td>공정명6</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명6</td>
+						<td>비고6</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호7</td>
+						<td>품명</td>
+						<td>공정명7</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명7</td>
+						<td>비고7</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호8</td>
+						<td>품명</td>
+						<td>공정명8</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명8</td>
+						<td>비고8</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox"></td>
+						<td>전수/샘플/재검</td>
+						<td>Lot 번호9</td>
+						<td>품명</td>
+						<td>공정명9</td>
+						<td>양품 수량</td>
+						<td>불량 수량</td>
+						<td>불량명9</td>
+						<td>비고9</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="bottomBtn">
+			<input type="button" value="저장" class="saveBtn btn"></input>
+            <input type="button" value="삭제" class="deleteBtn btn"></input>
+		    <input type="button" value="초기화" class="resetBtn btn"></input>
+		</div>
 
-		    <input type="button" value="저장" class="saveBtn"></input>
-            <input type="button" value="삭제" class="deleteBtn"></input>
-		    <input type="button" value="초기화" class="resetBtn"></input>
-        </div>
+		<!-- 모달 -->
+		<div id="procModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h1>Lot 선택</h1>
+				<div class="dateLookup">
+					<div>
+						일자 <input type="date">
+					</div>
+					<input type="button" class="dateBtn btn" value="조회">
+				</div>
+				<table class="modalInfo">
+					<thead>
+						<tr>
+							<th>선택</th>
+							<th>공정명</th>
+							<th>LOT 번호</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>공정명1</td>
+							<td>LOT 번호1</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>공정명2</td>
+							<td>LOT 번호2</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>공정명3</td>
+							<td>LOT 번호3</td>
+						</tr>
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>공정명4</td>
+							<td>LOT 번호4</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btmBtn">
+					<input type="button" value="선택 해제" class="cancleBtn btn"></input>
+					<input type="button" value="저장" class="saveBtn2 btn"></input>
+				</div>
+			</div>
+		</div>
 	</div>
+	<!-- js 링크 -->
+	<script src="../asset/10_inspection.js"></script>
 </body>
 </html>

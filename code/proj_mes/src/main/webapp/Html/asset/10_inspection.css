@@ -14,20 +14,29 @@
     border: none;
 }
 
+/* 버튼 공통 양식*/
+.btn {
+    border-radius: var(--radius);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+}
+
 /* 조회 부분 */
 .lookup {
     border: none;
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between; /* 모든 자식 요소를 오른쪽으로 정렬 */
     align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
     font-weight: bold;
+    font-size: 1.1em;
+    border: 1px solid var(--border);
+    background-color: var(--field-border);
 }
 
-.lookup_left, .lookup_left > select {
-    font-size: 1.1em;
-}
 
 /* 테이블 부분 */
 .table-container {
@@ -38,32 +47,52 @@
 }
 
 /* 테이블 전체에 테두리 적용 */
-.lot_tab {
+.insp_tab {
     border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
     width: 100%; /* 테이블 너비를 꽉 채우도록 설정 (선택 사항) */
 }
 
 /* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
-.lot_tab th, .lot_tab td {
+.insp_tab th, .insp_tab td {
     border: 1px solid black; /* 1px 두께의 검은색 실선 테두리 */
     padding: 8px; /* 셀 내용과 테두리 사이의 여백 추가 */
     text-align: center; /* 텍스트 정렬 (선택 사항) */
 }
 
 /* thead 고정 */
-.lot_tab thead th {
+.insp_tab thead th {
     position: sticky;
     top: 0;  
     background: #999;
     z-index: 1;
 }
 
-/* lot 번호에 변화 주기 */
-.lot_tab td a {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
+
+/* 아래 버튼 3개 부분 */
+.bottomBtn {
+    display: flex; 
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 10px 10px 10px 0;
 }
+
+.saveBtn {
+    background-color: var(--border);
+    border: 1px solid var(--border);
+}
+
+.deleteBtn {
+    background-color: #FF0000;
+    border: 1px solid #FF0000;
+}
+
+.resetBtn  {
+    background-color: #000000;
+    border: 1px solid #000000;
+    color: #ffffff;
+}
+
 
 /* 기본 모달 스타일 */
 .modal {
@@ -81,14 +110,14 @@
     background: #fff;
     margin: 5% auto;
     padding: 20px;
-    width: 600px;
+    width: 400px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     position: relative; /* 기준점 */
 }
 
 .close {
-     position: absolute;
+    position: absolute;
     top: 10px;
     right: 15px;
     font-size: 22px;
@@ -96,26 +125,35 @@
     float: none; /* 기존 float 제거 */
 }
 
-.modal-content > h2 {
-    border: 1px solid var(--border);
-    text-align: center;
-}
-
-.modalInfo {
-    border: 1px solid var(--border);
-}
-
-.info2 {
-    border: 1px solid var(--border);
-    max-height: 400px;   /* 원하는 높이로 조정 가능 */
-    overflow-y: auto;    /* 세로 스크롤 자동 생성 */
-    margin-top: 15px;
+/* 모달 내 날짜 조회 */
+.dateLookup {
+    border: 2px solid #000000;
+    background-color: #999;
     padding: 10px;
-    background: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 모달 내 버튼 */
+.btmBtn {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.dateBtn, .saveBtn2 {
+    background-color: #000000;
+    border: 1px solid #000000;
+}
+
+.cancleBtn {
+    border: 1px solid #9aa0a6;
+    background-color: #9aa0a6;
 }
 
 /* 모달 내부 테이블 공통 스타일 */
 .modal-content table {
+    border: 1px solid var(--border);
     width: 100%;
     border-collapse: collapse;  /* 중복선 제거 */
     margin: 15px 0;
@@ -145,9 +183,5 @@
     padding-left: 12px;
 }
 
-/* 섹션 구분 제목 */
-.info2 h3 {
-    margin: 20px 0 10px;
-    font-size: 16px;
-    padding-left: 8px;
-}
+
+
