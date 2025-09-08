@@ -9,76 +9,78 @@
 
 <body>
     <header>
-        <div class="corp">
-            <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-            <h3>J2P4</h3>
+        <div class="top-header-section"> 
+            <div class="corp">
+                <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+                <h3>J2P4</h3>
+            </div>
+            <div class="search">
+                <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+            </div>
+            <div class="logout">
+                로그아웃
+            </div>
+            <div class="myIcon">
+                <a href="javascript:void(0);" id="myIconBtn">
+                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+                        style="background-color: #ffffff; border-radius: 100%;">
+                </a>
+                <ul class="subList">
+                    <li><a href="">하위메뉴1</a></li>
+                    <li><a href="">하위메뉴2</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="search">
-            <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-        </div>
-        <div class="logout">
-            로그아웃
-        </div>
-        <div class="myIcon">
-            <a href="javascript:void(0);" id="myIconBtn">
-                <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-                    style="background-color: #ffffff; border-radius: 100%;">
-            </a>
-            <ul class="subList">
-                <li><a href="">하위메뉴1</a></li>
-                <li><a href="">하위메뉴2</a></li>
+
+        <nav class="main-nav"> 
+            <ul class="mainList">
+                <li>기준 관리
+                    <ul class="subList">
+                        <li><a href="">기준 목록</a></li>
+                    </ul>
+                </li>
+                <li>공정 관리
+                    <ul class="subList">
+                        <li><a href="">공정 목록</a></li>
+                        <li><a href="">공정 등록/수정/삭제</a></li>
+                    </ul>
+                </li>
+                <li>BOM 관리
+                    <ul class="subList">
+                        <li><a href="">BOM 목록</a></li>
+                        <li><a href="">BOM 등록/수정/삭제</a></li>
+                    </ul>
+                </li>
+                <li>발주 관리
+                    <ul class="subList">
+                        <li><a href="">발주 목록</a></li>
+                    </ul>
+                </li>
+                <li>재고 관리
+                    <ul class="subList">
+                        <li><a href="">재고 목록</a></li>
+                        <li><a href="">재고 삭제</a></li>
+                    </ul>
+                </li>
+                <li>생산 관리
+                    <ul class="subList">
+                        <li><a href="">생산 계획</a></li>
+                        <li><a href="">생산 실적 현황</a></li>
+                    </ul>
+                </li>
+                <li>품질 관리
+                    <ul class="subList">
+                        <li><a href="">LOT 추적</a></li>
+                        <li><a href="">공정별 현황</a></li>
+                        <li><a href="">품질 검사 입력</a></li>
+                    </ul>
+                </li>
             </ul>
-        </div>
+        </nav>
     </header>
 
-    <div class="gnb">
-        <ul class="mainList">
-            <li>기준 관리
-                <ul class="subList">
-                    <li><a href="">기준 목록</a></li>
-                </ul>
-            </li>
-            <li>공정 관리
-                <ul class="subList">
-                    <li><a href="">공정 목록</a></li>
-                    <li><a href="">공정 등록/수정/삭제</a></li>
-                </ul>
-            </li>
-            <li>BOM 관리
-                <ul class="subList">
-                    <li><a href="">BOM 목록</a></li>
-                    <li><a href="">BOM 등록/수정/삭제</a></li>
-                </ul>
-            </li>
-            <li>발주 관리
-                <ul class="subList">
-                    <li><a href="">발주 목록</a></li>
-                </ul>
-            </li>
-            <li>재고 관리
-                <ul class="subList">
-                    <li><a href="">재고 목록</a></li>
-                    <li><a href="">재고 삭제</a></li>
-                </ul>
-            </li>
-            <li>생산 관리
-                <ul class="subList">
-                    <li><a href="">생산 계획</a></li>
-                    <li><a href="">생산 실적 현황</a></li>
-                </ul>
-            </li>
-            <li>품질 관리
-                <ul class="subList">
-                    <li><a href="">LOT 추적</a></li>
-                    <li><a href="">공정별 현황</a></li>
-                    <li><a href="">품질 검사 입력</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
     <div class="titleBox">
-        <span>마이 페이지</span>
+        <span>메인 페이지</span>
         <a href="">
             <div class="toMainpage">
                 <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
@@ -89,6 +91,15 @@
     </div>
 
     <div class="wrap">
+        <div class="main-content-header">
+            <h2>메인 페이지</h2>
+            <a href="" class="toMainpage">
+                <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+                    style="transform: scaleX(-1);">
+                메인 화면으로
+            </a>
+        </div>
+
         <div class="mainpage">
             <div class="top-section">
                 <div class="sandan">
@@ -108,10 +119,6 @@
                             <div class="dan">
                                 <span>누적 불량 수 ( 단위 : 개 )</span>
                                 <strong style="color: red;">291</strong>
-                            </div>
-                            <div class="dan">
-                                <span>현재 가동률 ( % )</span>
-                                <strong>97.4%</strong>
                             </div>
                         </div>
                     </div>
@@ -143,57 +150,18 @@
                     <div class="gongji">
                         <h3>공지 사항</h3>
                         <div class="an">
-                            <p><span style="color: rgb(99, 99, 99);">[안내]</span> <span style="color: blue;">2025년 하반기 생산 목표 공지</span></p>
-                            <p><span style="color: rgb(99, 99, 99);">[긴급]</span> <span style="color: red;">라인2 설비 점검 일정 변경</span></p>
-                            <p><span style="color: rgb(99, 99, 99);">[공유]</span> <span style="color: green">안전 수칙 교육 일정 안내</span></p>
+                            <p><span style="color: rgb(99, 99, 99);">[안내]</span> <span
+                                        style="color: rgb(0, 0, 0);">2025년 하반기 생산 목표 공지</span></p>
+                            <p><span style="color: rgb(99, 99, 99);">[긴급]</span> <span style="color: rgb(0, 0, 0);">라인2
+                                        설비 점검 일정 변경</span></p>
+                            <p><span style="color: rgb(99, 99, 99);">[공유]</span> <span style="color: rgb(0, 0, 0)">안전 수칙
+                                        교육 일정 안내</span></p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="bottom-section">
-                <div class="gadong">
-                    <h3>설비 가동 현황</h3>
-                    <div class="ga1">
-                        <div class="ga2">
-                            <div class="ga" style="background-color: rgb(11, 109, 11);">
-                                <strong>라인1</strong>
-                                <span>가동 중</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(184, 14, 14);">
-                                <strong>라인2</strong>
-                                <span>비가동</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(11, 109, 11);">
-                                <strong>라인3</strong>
-                                <span>가동 중</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(201, 201, 14);">
-                                <strong>라인4</strong>
-                                <span>대기중</span>
-                            </div>
-                        </div>
-                        <div class="ga2">
-                            <div class="ga" style="background-color: rgb(201, 201, 14);">
-                                <strong>라인5</strong>
-                                <span>대기중</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(11, 109, 11);">
-                                <strong>라인3</strong>
-                                <span>가동 중</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(201, 201, 14);">
-                                <strong>라인5</strong>
-                                <span>대기중</span>
-                            </div>
-                            <div class="ga" style="background-color: rgb(184, 14, 14);">
-                                <strong>라인2</strong>
-                                <span>비가동</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="jisi">
                     <h3>불량 현황 및 작업 지시</h3>
                     <div class="jisi-content">
@@ -211,16 +179,23 @@
                 <div class="gesi">
                     <h3>게시판</h3>
                     <div class="ge">
-                        <p><span style="color: rgb(99, 99, 99);">[공지]</span> <span style="color: #000000;">2025년 하반기 생산 목표 공지</span></p>
-                        <p><span style="color: rgb(99, 99, 99);">[공지]</span> <span style="color: #000000;">라인2 설비 점검 일정 변경</span></p>
-                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">MES 접속이 안되는데 어떻게...</span></p>
-                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">금일 생산량 목표 변경을 어떻게...</span></p>
-                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">불량 코드 정의가 궁금합니다.</span></p>
-                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">생산 라인에서 불량품이 발생하...</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[공지]</span> <span style="color: #000000;">2025년 하반기 생산
+                                목표 공지</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[공지]</span> <span style="color: #000000;">라인2 설비 점검 일정
+                                변경</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">MES 접속이 안되는데
+                                어떻게...</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">금일 생산량 목표 변경을
+                                어떻게...</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">불량 코드 정의가
+                                궁금합니다.</span></p>
+                        <p><span style="color: rgb(99, 99, 99);">[질문]</span> <span style="color: #000000;">생산 라인에서 불량품이
+                                발생하...</span></p>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 

@@ -1,71 +1,72 @@
 :root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #a4a5a7;
-    --page-bg: #ffffff;
-    --radius: 10px;
+    --primary-dark: #002a40;
+    --secondary-dark: #003751;
+    --main-bg: #eeeeee;
+    --light-accent: #cef0ff;
+    --text-color: #222;
+    --border-color: #9aa0a6;
+    --radius: 7px;
 }
 
 body {
-    font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
-        "Helvetica Neue", Arial, sans-serif;
+    font-family: 'Malgun Gothic', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--main-bg);
+    margin: 0; 
 }
 
-/* 헤더 부분 */
+/* 헤더 전체 (J2P4, 메뉴 모두 포함) */
 header {
-    background-color: #495057;
-    height: 50px;
-    border: 1px solid;
+    background: linear-gradient(to right, var(--primary-dark), var(--secondary-dark));
     color: white;
     font-size: 1rem;
     font-weight: bold;
     display: flex;
+    flex-direction: column;
+    padding: 0; 
+}
+
+/* 헤더 상단 섹션 (J2P4, 검색, 로그아웃, 마이아이콘) */
+header .top-header-section {
+    height: 50px;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
+    padding: 0 20px;
 }
 
 header .corp {
     display: flex;
     align-items: center;
-    padding-left: 10px;
     gap: 10px;
     font-size: 1.2rem;
 }
 
 header .search {
     margin-left: auto;
-    margin-right: 10px;
 }
 
 /* 회원 아이콘 부분*/
 header .myIcon {
     position: relative;
-    padding: 5px 10px 5px 0;
-
+    padding-right: 10px;
 }
 
 header ul.subList {
     display: none;
-    background-color: turquoise;
+    background-color: var(--secondary-dark);
     position: absolute;
     top: 100%;
-    /* 부모 요소(.myIcon) 바로 아래 */
     right: 0;
     list-style-type: none;
-    color: #333333;
+    color: var(--light-accent);
     font-weight: normal;
     flex-direction: column;
     justify-content: flex-start;
     z-index: 9999;
     min-width: 150px;
     margin: 0;
-    /* ul 기본 margin 제거 */
     padding: 0;
-    /* ul 기본 padding 제거 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* 마우스를 올리면 하위 메뉴 보이기 */
@@ -73,25 +74,27 @@ header .myIcon:hover .subList {
     display: flex;
 }
 
-
-/* GNB 부분 */
-.gnb {
-    background-color: white;
+/* 메인 네비게이션 (기존 GNB) */
+header .main-nav {
+    background: linear-gradient(to right, var(--secondary-dark), var(--primary-dark));
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.gnb ul {
+header .main-nav ul.mainList {
     list-style-type: none;
     display: flex;
     justify-content: space-evenly;
-    padding-left: 0;
+    padding: 0;
+    margin: 0;
 }
 
-.gnb ul.subList {
-    background-color: #495057;
-    color: white;
-    border-radius: 5%;
+header .main-nav ul.subList {
+    background-color: var(--primary-dark);
+    color: var(--light-accent);
+    border-radius: 5px;
     position: absolute;
     left: 0;
     display: none;
@@ -101,71 +104,78 @@ header .myIcon:hover .subList {
     justify-content: flex-start;
     z-index: 9999;
     min-width: 130px;
-}
-
-.gnb ul.mainList>li {
-    position: relative;
-    /* 하위 메뉴의 위치 기준이 됨 */
-    color: #333333;
-}
-
-.gnb ul.mainList>li:hover .subList {
-    display: flex;
-    /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
     margin-top: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.subList li {
-    padding: 2px 4px;
-    /* 위아래 2px, 좌우 12px 여백 */
-    margin: 1px 1px;
-    /* 위아래 간격 추가 */
+header .main-nav ul.mainList>li {
+    position: relative;
+    color: white;
 }
 
-/* a 링크 양식 지정 */
-a,
-a:link,
-a:visited {
+header .main-nav ul.mainList>li:hover .subList {
+    display: flex;
+}
+
+header .main-nav .subList li {
+    padding: 8px 12px;
+}
+
+header .main-nav a,
+header .main-nav a:link,
+header .main-nav a:visited {
     color: inherit;
     text-decoration: none;
 }
 
-/* 제목 부분 */
+/* 기존 .titleBox는 숨김 처리 */
 .titleBox {
-    background-color: var(--field-border);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.titleBox span {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
-}
-
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
+    display: none;
 }
 
 /* 메인 몸통 부분 */
 .wrap {
-    border-radius: 5px;
-    background-color: #e0e0e0cb;
+    border-radius: var(--radius);
+    background: transparent;
     width: 90%;
+    max-width: 1200px;
     margin: 10px auto;
-    padding: 10px;
+    padding: 20px;
 }
+
+/* 메인 페이지 제목을 wrap 안에 새로 추가 */
+.main-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.main-content-header h2 { 
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.main-content-header .toMainpage {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+.main-content-header .toMainpage img {
+    margin-top: 2px;
+}
+
 
 .mainpage {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
 }
 
@@ -173,150 +183,114 @@ a:visited {
 .top-section {
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 20px;
     width: 100%;
 }
 
 .sandan {
-    width: 60%;
-    border-radius: 5px;
+    flex-grow: 1.5; /* 너비를 1에서 1.5로 늘려 더 넓게 만듭니다. */
+    border-radius: var(--radius);
     background-color: white;
-    padding: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .right-column-top {
-    width: 40%;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
 .jaego,
 .gongji {
-    border-radius: 5px;
+    border-radius: var(--radius);
     background-color: white;
-    padding: 10px;
+    padding: 20px;
     height: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.jisi {
+    flex-grow: 2;
+    border-radius: var(--radius);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.gesi {
+    flex-grow: 1;
+    border-radius: var(--radius);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* 하단 섹션 - 설비 가동 현황, 불량 현황 및 작업 지시, 게시판 */
 .bottom-section {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
     padding-bottom: 20px;
 }
 
-.gadong,
-.jisi,
-.gesi {
-    width: 30%;
-    border-radius: 5px;
-    background-color: white;
-    padding: 10px;
-}
-
 /* 제목 부분 */
-h3,
+h3 {
+    margin: 0 0 7px 0;
+    font-size: 1.2em;
+}
 h4 {
-    margin: 0;
-    padding-left: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1.1em;
 }
 
-.sandan h3 {
-    margin-bottom: 20px;
-}
-.gadong h3 {
-    margin-bottom: 10px;
-}
-.jisi h3 {
-    margin-bottom: 10px;
-}
-.gesi h3 {
-    margin-bottom: 10px;
-}
-.jaego h3 {
-    margin-bottom: 10px;
-}
-.gongji h3 {
-    margin-bottom: 10px;
-}
-
-/* 생산 현황 */
+/* 생산 현황 내부 */
 .san1 {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 0 20px;
+    gap: 15px; /* 박스들 사이의 세로 간격 */
 }
 
 .san2 {
     display: flex;
-    justify-content: space-between;
+    gap: 15px; /* 박스들 사이의 가로 간격 */
 }
 
 .dan {
-    background-color: #e9e9e9;
+    background-color: var(--main-bg);
     border-radius: 5px;
-    width: 48%;
+    flex: 1; /* 박스들이 남은 공간을 균등하게 채우도록 변경 */
     display: flex;
     flex-direction: column;
+    justify-content: center; /* 내용을 세로 가운데 정렬 */
     text-align: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding: 15px 10px;
+    height: auto; /* 필요 없는 높이 제한 제거 */
 }
 
 .dan span {
-    font-size: smaller;
+    font-size: 0.9em;
+    font-weight: normal;
+    margin-bottom: 5px; /* 숫자와 제목 사이 간격 추가 */
 }
 
 .dan strong {
-    font-size: 1.5em;
+    font-size: 1.8em;
+    font-weight: bold;
 }
 
 .p {
     margin-top: 20px;
-    padding: 0 20px;
 }
 
 .pp img {
     width: 70%;
     height: auto;
-    margin-left: 15%;
-}
-
-/* 설비 가동 현황 */
-.ga1 {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 20px;
-}
-
-.ga2 {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.ga {
-    border-radius: 5px;
-    width: 45%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    color: white;
-    padding: 10px;
-}
-
-.ga span {
-    font-size: smaller;
-}
-
-.ga strong {
-    font-size: 1.1em;
+    margin: 0 auto;
+    display: block;
 }
 
 /* 재고 현황 */
@@ -324,39 +298,31 @@ h4 {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 0 20px;
 }
 
 .jae-item {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 10px;
 }
 
-.won {
-    background-color: blue;
+.won, .sang, .rang {
     width: 10px;
     height: 10px;
+    border-radius: 15%;
 }
 
-.sang {
-    background-color: green;
-    width: 10px;
-    height: 10px;
-}
-
-.rang {
-    background-color: red;
-    width: 10px;
-    height: 10px;
-}
+.won { background-color: blue; }
+.sang { background-color: green; }
+.rang { background-color: red; }
 
 /* 공지 사항 */
 .an {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 0 20px;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-color);
 }
 
 .an p {
@@ -364,48 +330,57 @@ h4 {
     font-size: 0.9em;
 }
 
+.an span {
+    color: var(--border-color);
+}
+
+.an p a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
 /* 불량 현황 및 작업 지시 */
 .jisi .jisi-content {
     display: flex;
-    justify-content: space-between; /* 두 개의 차트 영역을 양쪽으로 정렬 */
-    gap: 10px;
-    padding: 0 10px; /* 전체 .jisi 블록 내 여백 조정 */
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .jisi .ji-chart {
-    flex: 1; /* 가용한 공간을 균등하게 분배 */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center; /* 제목과 이미지를 중앙 정렬 */
+    align-items: center;
     padding: 10px 0;
-}
-
-.jisi .ji-chart h4 {
-    margin-bottom: 10px;
-    padding-left: 0; /* h4에 적용된 기본 padding 제거 */
-    text-align: center;
 }
 
 .jisi .ji-chart .u1 {
     width: 100%;
-    text-align: center; /* 이미지 중앙 정렬 */
+    text-align: center;
 }
 
 .jisi .ji-chart .u1 img {
-    width: 90%; /* 이미지 크기 조정 */
+    width: 90%;
     height: auto;
 }
-
 
 /* 게시판 */
 .ge {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 0 20px;
+    gap: 10px;
+    text-decoration: none;
 }
 
 .ge p {
     margin: 0;
     font-size: 0.9em;
+}
+
+.ge span {
+    color: var(--border-color);
+}
+.ge p a {
+    color: var(--text-color);
+    text-decoration: none;
 }
