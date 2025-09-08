@@ -492,7 +492,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const modalCells = modal.querySelectorAll('table tr td:nth-child(2)');
 
             // 체크박스(td[0])는 제외 → 번호부터 마지막까지 가져오기
-            const rowData = Array.from(row.querySelectorAll('td')).slice(1).map(td => td.textContent.trim());
+            const rowData = Array.from(row.querySelectorAll('td')).slice(2).map(td => td.textContent.trim());
 
             rowData.forEach((val, i) => {
                 if (modalCells[i]) modalCells[i].textContent = val;
