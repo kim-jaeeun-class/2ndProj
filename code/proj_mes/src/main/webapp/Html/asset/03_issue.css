@@ -22,11 +22,16 @@
   margin: 24px auto 56px;
 }
 
+.header{
+  border : 0;
+}
+
 /* 탭 */
 .tabs{
   display: flex;
   gap: 8px;
   padding: 6px 0 10px;
+  width : 100%;
 }
 .tab{
   border: 1px solid #a0a0a0;
@@ -55,6 +60,9 @@
   color: var(--text);                /* 템플릿과 충돌 방지 (흰 글씨 방지) */
   background: #f1f5f9;
   border-bottom: 1px solid var(--chrome-border);
+  border-left : 0;
+  border-top : 0;
+  border-right: 0;
 }
 .card-body{ 
   padding : 14px;

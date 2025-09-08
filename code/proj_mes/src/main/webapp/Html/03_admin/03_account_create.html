@@ -109,12 +109,15 @@
               <input id="name" name="name" type="text" required>
             </div>
           </div>
+          <br>
             <div class="row">
               <label for="rrn">주민번호</label>
               <div class="field">
-                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리-7자리" autocomplete="off">
+                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리" autocomplete="off" style = "width : 40%"> - 
+                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="7자리" autocomplete="off" style = "width : 40%">
               </div>
             </div>
+            <br>
             <div class="row"><label for="phone1">전화번호</label>
               <div class="field" style="display:flex;gap:6px;align-items:center">
                 <input id="phone1" type="tel" inputmode="numeric" maxlength="3" placeholder="010">
@@ -124,18 +127,21 @@
                 <input id="phone3" type="tel" inputmode="numeric" maxlength="4">
               </div>
             </div>
+            <br>
             <div class="row"><label for="password">PW</label>
               <div class="field pw-wrap">
                 <input id="password" name="password" type="password" autocomplete="new-password" required>
                 <span class="pw-toggle" data-target="password">보기</span>
               </div>
             </div>
+            <br>
             <div class="row"><label for="password_confirm">PW 확인</label>
               <div class="field pw-wrap">
                 <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required>
                 <span class="pw-toggle" data-target="password_confirm">보기</span>
               </div>
             </div>
+            <br>
             <div class="hint" id="pwHint" hidden aria-live="polite"></div>
 
             <div class="row inline"><label for="email_id">E-mail</label>
@@ -154,19 +160,23 @@
                 <input id="custom_domain" type="text" placeholder="도메인 직접 입력" style="display:none">
               </div>
             </div>
-
+            <br>
             <div class="row"><label for="address">주소</label>
               <div class="field" style="display:flex;gap:8px;align-items:center">
                 <input id="address" name="address" type="text" placeholder="주소를 입력해주세요" readonly>
                 <button class="btn secondary" type="button" id="addrSearch">검색</button>
               </div>
             </div>
+            <br>
             <div class="row"><label for="detail_address">상세 주소</label><div class="field"><input id="detail_address" name="detail_address" type="text" placeholder="상세 주소를 입력해주세요"></div></div>
 
-
+            <br>
             
-            <div class="row"><label for="dept">부서</label><div class="field"><input id="dept" name="dept" type="text"></div></div>
-            <div class="row"><label for="position">직급</label><div class="field"><input id="position" name="position" type="text"></div></div>
+            <div class="row"><label for="dept">부서</label><div class="field"><input id="dept" name="dept" type="text" style = "width : 40%"></div></div>
+            <br>
+            <div class="row"><label for="position">직급</label><div class="field"><input id="position" name="position" type="text" style = "width : 40%"></div></div>
+            <br>
+
             <div class="row"><label for="birth">생년월일</label><div class="field"><input id="birth" name="birth" type="date" required></div></div>
 
           

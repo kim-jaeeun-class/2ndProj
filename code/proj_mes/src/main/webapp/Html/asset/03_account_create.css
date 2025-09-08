@@ -69,10 +69,14 @@
         align-items:center;
         border:1px solid var(--line);
         border-radius:4px;overflow:hidden
+
     }
 
     .row > label{background:#cfe0ff;font-weight:600;padding:10px 12px}
-
+    .field{
+      height : 100%;
+      border-bottom :1px solid var(--btn-border);
+    }
     .row.inline .field{display:flex;gap:6px;align-items:center}
     .row.inline select, .row.inline input[type="text"]{max-width:180px}
     .row .field .btn{
@@ -92,8 +96,20 @@
     border-color:#96b3e6;
     box-shadow:0 0 0 3px rgba(150,179,230,.25);
   }
-    input[type="text"],input[type="password"],input[type="date"],input[type="tel"],select{width:100%;padding:8px;border:1px solid var(--line);border-radius:4px;outline:none}
-    input[readonly]{background:#f9fafb}
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="tel"],
+    select{
+      width:100%;
+      padding:8px;
+      border:1px solid var(--table-line);
+      border-radius:4px;
+      outline:none;
+      height : 100%;
+      /* background:#6cd687 */
+    }
+    /* input[readonly]{background:#6cd687} */
 
     .hint{
       font-size:12px;
@@ -151,7 +167,8 @@
       13px;color:
       var(--muted)
     }
-
+  
+  
 
     /* ============================
    페이지 폭/정렬 오버라이드 (template.css 수정 없이)
