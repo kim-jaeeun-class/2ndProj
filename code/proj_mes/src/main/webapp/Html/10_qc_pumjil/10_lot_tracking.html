@@ -3,91 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Lot 추적 관리</title>
-	<link rel="stylesheet" href="../asset/template.css">
 	<link rel="stylesheet" href="../asset/10_lot_tracking.css">
+    <script src="../asset/template_load.js"></script>
+	<script src="../asset/10_lot_tracking.js"></script>
 </head>
 <body>
-	<header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
-
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-	<div class="titleBox">
-		<span>Lot 추적 관리</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
+	<header></header>
+	<div class="gnb"></div>
+	<div class="titleBox"></div>
 
 	<div class="wrap">
-        <div class="lookup">
+		<div class="lookup">
 			<div class="lookup_left">
 				<select> <!-- 공정별 검색 -->
 					<option value="" disabled selected>공정별</option>
@@ -106,11 +32,14 @@
 					<option>4</option>
 				</select>
 			</div>
-            <input type="text" placeholder="공정, 품명 검색...">
-        </div>
+			<div>
+				<input type="text" placeholder="공정, 품명 검색...">
+				<input type="button" value="검색">
+			</div>
+		</div>
 
 		<div class="table-container">
-    		<table class="lot_tab">
+			<table class="lot_tab">
 				<thead>
 					<tr>
 						<th>Lot 번호</th>
@@ -196,120 +125,118 @@
 					</tr>
 				</tbody>
 			</table>
-			<!-- 모달 -->
-  			<div id="lotModal" class="modal">
-    			<div class="modal-content">
-					<span class="close">&times;</span>
-					<h2>Lot 상세 내역</h2>
-					<table class="modalInfo">
-						<tr>
-							<td>LOT 번호</td>
-							<td>LOT 번호1</td>
-						</tr>
-						<tr>
-							<td>품명</td>
-							<td>품명1</td>
-						</tr>
-						<tr>
-							<td>현 공정</td>
-							<td>공정1</td>
-						</tr>
-						<tr>
-							<td>가공 일자</td>
-							<td>가공 일자1</td>
-						</tr>
+		</div>
+		<!-- 모달 -->
+		<div id="lotModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<h2>Lot 상세 내역</h2>
+				<table class="modalInfo">
+					<tr>
+						<td>LOT 번호</td>
+						<td>LOT 번호1</td>
+					</tr>
+					<tr>
+						<td>품명</td>
+						<td>품명1</td>
+					</tr>
+					<tr>
+						<td>현 공정</td>
+						<td>공정1</td>
+					</tr>
+					<tr>
+						<td>가공 일자</td>
+						<td>가공 일자1</td>
+					</tr>
+				</table>
+				<div class="info2">
+					<h3>공정 이력</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>공정명</th>
+								<th>시작 시간</th>
+								<th>종료 시간</th>
+								<th>작업자</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>공정명1</td>
+								<td>시작 시간</td>
+								<td>종료 시간</td>
+								<td>작업자1</td>
+							</tr>
+							<tr>
+								<td>공정명2</td>
+								<td>시작 시간</td>
+								<td>종료 시간</td>
+								<td>작업자2</td>
+							</tr>
+							<tr>
+								<td>공정명2</td>
+								<td>시작 시간</td>
+								<td>종료 시간</td>
+								<td>작업자3</td>
+							</tr>
+							<tr>
+								<td>공정명4</td>
+								<td>시작 시간</td>
+								<td>종료 시간</td>
+								<td>작업자4</td>
+							</tr>
+						</tbody>
 					</table>
-					<div class="info2">
-						<h3>공정 이력</h3>
-						<table>
-							<thead>
-								<tr>
-									<th>공정명</th>
-									<th>시작 시간</th>
-									<th>종료 시간</th>
-									<th>작업자</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>공정명1</td>
-									<td>시작 시간</td>
-									<td>종료 시간</td>
-									<td>작업자1</td>
-								</tr>
-								<tr>
-									<td>공정명2</td>
-									<td>시작 시간</td>
-									<td>종료 시간</td>
-									<td>작업자2</td>
-								</tr>
-								<tr>
-									<td>공정명2</td>
-									<td>시작 시간</td>
-									<td>종료 시간</td>
-									<td>작업자3</td>
-								</tr>
-								<tr>
-									<td>공정명4</td>
-									<td>시작 시간</td>
-									<td>종료 시간</td>
-									<td>작업자4</td>
-								</tr>
-							</tbody>
-						</table>
-						<h3>검사 결과</h3>
-						<table>
-							<thead>
-								<tr>
-									<th>공정명</th>
-									<th>검사 유형</th>
-									<th>불량 유형</th>
-									<th>개수</th>
-									<th>검사자</th>
-									<th>검사 시간</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>공정명1</td>
-									<td>재검/전수/샘플</td>
-									<td>불량명1</td>
-									<td>개수</td>
-									<td>작업자1</td>
-									<td>검사 종료 시간</td>
-								</tr>
-								<tr>
-									<td>공정명2</td>
-									<td>재검/전수/샘플</td>
-									<td>불량명2</td>
-									<td>개수</td>
-									<td>작업자2</td>
-									<td>검사 종료 시간</td>
-								</tr>
-								<tr>
-									<td>공정명3</td>
-									<td>재검/전수/샘플</td>
-									<td>불량명3</td>
-									<td>개수</td>
-									<td>작업자3</td>
-									<td>검사 종료 시간</td>
-								</tr>
-								<tr>
-									<td>공정명4</td>
-									<td>재검/전수/샘플</td>
-									<td>불량명4</td>
-									<td>개수</td>
-									<td>작업자4</td>
-									<td>검사 종료 시간</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-    			</div>
-  			</div>
-        </div>
+					<h3>검사 결과</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>공정명</th>
+								<th>검사 유형</th>
+								<th>불량 유형</th>
+								<th>개수</th>
+								<th>검사자</th>
+								<th>검사 시간</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>공정명1</td>
+								<td>재검/전수/샘플</td>
+								<td>불량명1</td>
+								<td>개수</td>
+								<td>작업자1</td>
+								<td>검사 종료 시간</td>
+							</tr>
+							<tr>
+								<td>공정명2</td>
+								<td>재검/전수/샘플</td>
+								<td>불량명2</td>
+								<td>개수</td>
+								<td>작업자2</td>
+								<td>검사 종료 시간</td>
+							</tr>
+							<tr>
+								<td>공정명3</td>
+								<td>재검/전수/샘플</td>
+								<td>불량명3</td>
+								<td>개수</td>
+								<td>작업자3</td>
+								<td>검사 종료 시간</td>
+							</tr>
+							<tr>
+								<td>공정명4</td>
+								<td>재검/전수/샘플</td>
+								<td>불량명4</td>
+								<td>개수</td>
+								<td>작업자4</td>
+								<td>검사 종료 시간</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!-- js 링크 -->
-	<script src="../asset/10_lot_tracking.js"></script>
 </body>
 </html>

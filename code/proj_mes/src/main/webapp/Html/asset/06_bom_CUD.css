@@ -11,7 +11,7 @@
 /* ///////////////////////////////// */
 
 .wrap {
-    border: none;
+    border: 1px solid var(--border);
 }
 
 /* 버튼 공통 양식*/
@@ -26,8 +26,9 @@
 /* 조회 부분 */
 .lookup {
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 12px;
-    margin: 20px auto;
+    margin: 30px;
     display: flex;
     justify-content: space-evenly; /* 모든 자식 요소를 오른쪽으로 정렬 */
     align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
@@ -41,10 +42,11 @@
 
 /* 테이블 부분 */
 .table-container {
+    border: 1px solid var(--border);
     height: 400px; /* 고정된 세로 높이 설정 */
     overflow-y: auto;
+    margin: 30px 30px 0px 30px;
     position: relative;
-    border: 1px solid var(--border);
 }
 
 /* 테이블 전체에 테두리 적용 */
@@ -70,11 +72,13 @@
 
 /* itembtnDiv 부분 */
 .itembtnDiv {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin: 0px 30px;
+    padding: 10px;
     display: flex; 
     justify-content: flex-end;
     gap: 15px;
-    padding: 10px;
-    border: 1px solid var(--border);
 }
 
 .addItemBtn {
@@ -92,7 +96,7 @@
     display: flex; 
     justify-content: flex-end;
     gap: 15px;
-    margin-top: 20px;
+    margin: 30px;
     padding: 10px 10px 10px 0;
 }
 

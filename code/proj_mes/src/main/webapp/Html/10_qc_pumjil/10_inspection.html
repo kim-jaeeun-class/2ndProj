@@ -3,88 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>품질 검사 입력</title>
-	<link rel="stylesheet" href="../asset/template.css">
 	<link rel="stylesheet" href="../asset/10_inspection.css">
+	<script src ="../asset/template_load.js" ></script>
+	<script src="../asset/10_inspection.js"></script>
 </head>
 <body>
-	<header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
-
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-	<div class="titleBox">
-		<span>품질 검사 입력</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
+	<header></header>
+	<div class="gnb"></div>
+	<div class="titleBox"></div>
 
 	<div class="wrap">
         <h2>불량 처리 입력</h2>
@@ -98,7 +24,7 @@
     		<table class="insp_tab">
 				<thead>
 					<tr>
-						<th>선택</th>
+						<th><input type="checkbox" id="allCheck"></th> <!-- 전체 선택 기능 -->
 						<th>검사 방법</th>
 						<th>Lot 번호</th>
 						<th>품명</th>
@@ -111,111 +37,22 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="checkbox"></td>
+						<td>ex)</td>
 						<td>전수/샘플/재검</td>
-						<td>Lot 번호1</td>
+						<td>Lot 번호</td>
 						<td>품명</td>
-						<td>공정명1</td>
+						<td>공정명</td>
 						<td>양품 수량</td>
 						<td>불량 수량</td>
-						<td>불량명1</td>
-						<td>비고1</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호1</td>
-						<td>품명</td>
-						<td>공정명1</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명2</td>
-						<td>비고2</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호3</td>
-						<td>품명</td>
-						<td>공정명3</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명3</td>
-						<td>비고3</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호4</td>
-						<td>품명</td>
-						<td>공정명4</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명4</td>
-						<td>비고1</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호5</td>
-						<td>품명</td>
-						<td>공정명5</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명5</td>
-						<td>비고5</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호6</td>
-						<td>품명</td>
-						<td>공정명6</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명6</td>
-						<td>비고6</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호7</td>
-						<td>품명</td>
-						<td>공정명7</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명7</td>
-						<td>비고7</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호8</td>
-						<td>품명</td>
-						<td>공정명8</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명8</td>
-						<td>비고8</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>전수/샘플/재검</td>
-						<td>Lot 번호9</td>
-						<td>품명</td>
-						<td>공정명9</td>
-						<td>양품 수량</td>
-						<td>불량 수량</td>
-						<td>불량명9</td>
-						<td>비고9</td>
+						<td>불량명</td>
+						<td>비고</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="bottomBtn">
-			<input type="button" value="저장" class="saveBtn btn"></input>
             <input type="button" value="삭제" class="deleteBtn btn"></input>
-		    <input type="button" value="초기화" class="resetBtn btn"></input>
+			<input type="button" value="저장" class="saveBtn btn"></input>
 		</div>
 
 		<!-- 모달 -->
@@ -235,6 +72,7 @@
 							<th>선택</th>
 							<th>공정명</th>
 							<th>LOT 번호</th>
+							<th>품명</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -242,21 +80,25 @@
 							<td><input type="checkbox"></td>
 							<td>공정명1</td>
 							<td>LOT 번호1</td>
+							<td>품명 1</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox"></td>
 							<td>공정명2</td>
 							<td>LOT 번호2</td>
+							<td>품명 2</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox"></td>
 							<td>공정명3</td>
 							<td>LOT 번호3</td>
+							<td>품명 3</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox"></td>
 							<td>공정명4</td>
 							<td>LOT 번호4</td>
+							<td>품명 4</td>
 						</tr>
 					</tbody>
 				</table>
@@ -267,7 +109,5 @@
 			</div>
 		</div>
 	</div>
-	<!-- js 링크 -->
-	<script src="../asset/10_inspection.js"></script>
 </body>
 </html>

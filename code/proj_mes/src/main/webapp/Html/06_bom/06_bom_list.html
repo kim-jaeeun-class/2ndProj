@@ -5,6 +5,7 @@
 	<title>BOM 목록</title>
 	<link rel="stylesheet" href="../asset/template.css">
 	<link rel="stylesheet" href="../asset/06_bom_list.css">
+	<script src ="../asset/template_load.js" ></script>
 </head>
 <body>
 	<header>
@@ -88,10 +89,6 @@
 	</div>
 
 	<div class="wrap">
-		<div class="btnDiv">
-			<input type="button" value="신규" class="newBOMBtn btn"></input>
-		</div>
-		
 		<div class="lookup">
 			<div class="lookup_left">
 				품목 코드
@@ -113,7 +110,10 @@
 					<option>6</option>
 				</select>
 			</div>
-			<input type="button" value="조회" class="lookupBtn btn"></input>
+			<div class="btnDiv">
+				<input type="button" value="조회" class="lookupBtn btn"></input>
+				<input type="button" value="신규" class="newBOMBtn btn"></input>
+			</div>
 		</div>
 
 		<div class="table-container">

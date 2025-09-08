@@ -11,7 +11,8 @@
 /* ///////////////////////////////// */
 
 .wrap {
-    border: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 
 /* 버튼 양식*/
@@ -23,27 +24,14 @@
     padding: 5px 15px;
 }
 
-.newBOMBtn {
-    background-color: #0EB4FC;
-    border: 1px solid #0EB4FC;
-    margin:5px;
-}
-
-.btnDiv {
-    display: flex; 
-    justify-content: flex-end;
-}
-
-
-
 /* 조회 부분 */
 .lookup {
     border: 1px solid var(--border);
-    padding: 5px;
-    margin-bottom: 10px;
+    border-radius: var(--radius);
+    margin: 30px;
     display: flex;
-    justify-content: space-between; /* 모든 자식 요소를 오른쪽으로 정렬 */
-    align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
+    justify-content: space-between; 
+    align-items: center; 
 }
 
 .lookup_left {
@@ -55,23 +43,37 @@
     font-size: 1.1em;
 }
 
+.btnDiv {
+    display: flex; 
+    justify-content: flex-end;
+}
+
 .lookupBtn {
     background-color: #000000;
     border: 1px solid #000000;
+    margin: 5px;
+}
+
+.newBOMBtn {
+    background-color: #0EB4FC;
+    border: 1px solid #0EB4FC;
+    margin:5px;
 }
 
 /* 테이블 부분 */
 .table-container {
-    height: 400px; /* 고정된 세로 높이 설정 */
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    height: 500px; /* 고정된 세로 높이 설정 */
     overflow-y: auto;
     position: relative;
-    border: 1px solid var(--border);
+    margin: 30px;
 }
 
 /* 테이블 전체에 테두리 적용 */
 .bom_tab {
     border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
-    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 (선택 사항) */
+    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 */
 }
 
 /* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
@@ -105,7 +107,7 @@
 .bottomBtn {
     display: flex; 
     justify-content: flex-end;
-    padding: 10px 0;
+    margin: 10px 30px 30px 30px;
 }
 
 .updateBOMBtn {

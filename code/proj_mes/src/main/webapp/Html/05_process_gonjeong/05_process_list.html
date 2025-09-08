@@ -3,116 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>공정 목록</title>
-	<link rel="stylesheet" href="../asset/template.css">
 	<link rel="stylesheet" href="../asset/05_process_list.css">
+	<script src ="../asset/template_load.js" ></script>
+	<script src ="../asset/05_process_list.js" ></script>
 </head>
 <body>
-	<header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
+	<header></header>
+	<div class="gnb"></div>
+	<div class="titleBox"></div>
 
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-	<div class="titleBox">
-		<span>공정 목록</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
-
-	<div class="wrap">
-		<div class="btnDiv">
-			<input type="button" value="신규" class="newProcessBtn btn"></input>
-			<input type="button" value="수정" class="updateProcessBtn btn"></input>
-		</div>
-		
+	<div class="wrap">		
 		<div class="lookup">
 			<div class="lookup_left">
 				담당 부서
 				<select>
-					<option value="" selected>1</option>
-					<option value="">2</option>
-					<option value="">3</option>
+					<option value="부서1" selected>부서1</option>
+					<option value="부서2">부서2</option>
+					<option value="부서3">부서3</option>
 					<option value="">4</option>
 					<option value="">5</option>
 					<option value="">6</option>
-				</select>
-				공정 ID
-				<select>
-					<option value="" selected>1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-					<option value="">4</option>
-					<option value="">5</option>
-					<option value="">6</option>
-				</select>
+				</select>&nbsp;
 				공정명
 				<select>
 					<option value="" selected>1</option>
@@ -121,14 +32,27 @@
 					<option value="">4</option>
 					<option value="">5</option>
 					<option value="">6</option>
-				</select>
+				</select>&nbsp;
+				공정 ID
+				<select>
+					<option value="" selected>1</option>
+					<option value="">2</option>
+					<option value="">3</option>
+					<option value="">4</option>
+					<option value="">5</option>
+					<option value="">6</option>
+				</select>&nbsp;
 				설비 사용 여부
 				<select>
 					<option value="1" selected>사용</option>
 					<option value="0">비사용</option>
 				</select>
 			</div>
-			<input type="button" value="조회" class="lookupBtn btn"></input>
+			<div class="btnDiv">
+				<input type="button" value="조회" class="lookupBtn btn"></input>
+				<input type="button" value="수정" class="updateProcessBtn btn"></input>
+				<input type="button" value="신규" class="newProcessBtn btn"></input>
+			</div>
 		</div>
 		<div class="table-container">
 			<table class="proc_tab">

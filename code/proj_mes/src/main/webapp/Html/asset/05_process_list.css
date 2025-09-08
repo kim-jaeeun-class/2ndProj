@@ -11,7 +11,7 @@
 /* ///////////////////////////////// */
 
 .wrap {
-    border: none;
+    border: 1px solid var(--border);
 }
 
 /* 버튼 양식*/
@@ -23,31 +23,15 @@
     padding: 5px 15px;
 }
 
-.newProcessBtn {
-    background-color: #000000;
-    border: 1px solid #000000;
-    margin:5px;
-}
-
-.updateProcessBtn {
-    background-color: var(--button);
-    border: 1px solid var(--button);
-    margin:5px;
-}
-
-.btnDiv {
-    display: flex; 
-    justify-content: flex-end;
-}
-
 /* 조회 부분 */
 .lookup {
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 5px;
-    margin-bottom: 10px;
+    margin: 10px 30px;
     display: flex;
-    justify-content: space-between; /* 모든 자식 요소를 오른쪽으로 정렬 */
-    align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
+    justify-content: space-between; 
+    align-items: center; 
     gap: 15px;
 }
 
@@ -60,29 +44,43 @@
     font-size: 1.1em;
 }
 
-.lookupBtn {
+.btnDiv {
+    display: flex; 
+    justify-content: flex-end;
+    margin: 10px 30px;
+    gap: 10px;
+}
+
+.lookupBtn, .newProcessBtn {
     background-color: #000000;
     border: 1px solid #000000;
 }
 
+.updateProcessBtn {
+    background-color: var(--button);
+    border: 1px solid var(--button);
+}
+
 /* 테이블 부분 */
 .table-container {
+    border: 1px solid var(--border);
     height: 400px; /* 고정된 세로 높이 설정 */
     overflow: auto; /* 내용이 넘칠 때 스크롤바가 생기도록 설정 */
-    border: 1px solid var(--border);
+    margin: 30px;
+    display: none; /* 처음에는 숨김 */
 }
 
 /* 테이블 전체에 테두리 적용 */
 .proc_tab {
     border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
-    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 (선택 사항) */
+    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 */
 }
 
 /* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
 .proc_tab th, .proc_tab td {
-    border: 1px solid black; /* 1px 두께의 검은색 실선 테두리 */
-    padding: 8px; /* 셀 내용과 테두리 사이의 여백 추가 */
-    text-align: center; /* 텍스트 정렬 (선택 사항) */
+    border: 1px solid black; 
+    padding: 8px; 
+    text-align: center; 
 }
 
 .proc_tab > thead {

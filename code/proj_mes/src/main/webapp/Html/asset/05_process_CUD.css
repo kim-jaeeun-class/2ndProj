@@ -6,12 +6,13 @@
     --button-text: #fff;
     --field-border: #999;
     --page-bg: #ffffff;
-    --radius: 10px;
+    --radius: 7px;
 }
 /* ///////////////////////////////// */
 
 .wrap {
-    border: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 
 input[type="text"], select {
@@ -45,8 +46,9 @@ input[type="text"], select {
 /* 조회 부분 */
 .lookup {
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 30px;
     display: flex;
     justify-content: space-between;
     font-weight: bold;
@@ -56,7 +58,9 @@ input[type="text"], select {
 /* 공정 정보 입력 부분 */
 .processInfo {
     border: 1px solid var(--border);
+    border-radius: var(--radius);
     height: 400px; 
+    margin: 30px;
 }
 
 .processInfo > span {
@@ -77,5 +81,5 @@ input[type="text"], select {
     display: flex; 
     justify-content: flex-end;
     gap: 15px;
-    padding: 10px 15px 0 0;
+    padding: 30px;
 }
