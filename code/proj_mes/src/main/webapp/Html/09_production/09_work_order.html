@@ -6,133 +6,31 @@
         <title>J2P4 :: 작업 지시서</title>
         <link rel="stylesheet" href="../asset/font.css">
         <link rel="stylesheet" href="../asset/09_common.css">
+        <script src ="../asset/template_load.js" ></script>
     </head>
     <body page="wo">
-        <header>
-            <div class="corp">
-                <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-                    <h3>J2P4</h3>
-            </div>
-            <div class="search">
-                <img
-                    src="https://i.postimg.cc/9QcMwQym/magnifier-white.png"
-                    width="30px"
-                    alt="검색용 아이콘"></div>
-            <div class="logout">
-                로그아웃
-            </div>
-            <div class="myIcon">
-                <a href="javascript:void(0);" id="myIconBtn">
-                <img
-                    src="https://i.postimg.cc/zfVqTbvr/user.png"
-                    width="35px"
-                    alt="마이페이지 아이콘"
-                    style="background-color: #ffffff; border-radius: 100%;"></a>
-                <ul class="subList">
-                    <li>
-                        <a href="">하위메뉴1</a>
-                    </li>
-                    <li>
-                        <a href="">하위메뉴2</a>
-                    </li>
-                </ul>
-            </div>
-        </header>
-        <div class="gnb">
-            <ul class="mainList">
-                <li>기준 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">기준 목록</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>공정 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">공정 목록</a>
-                        </li>
-                        <li>
-                            <a href="">공정 등록/수정/삭제</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>BOM 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">BOM 목록</a>
-                        </li>
-                        <li>
-                            <a href="">BOM 등록/수정/삭제</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>발주 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">발주 목록</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>재고 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">재고 목록</a>
-                        </li>
-                        <li>
-                            <a href="">재고 삭제</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>생산 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">생산 계획</a>
-                        </li>
-                        <li>
-                            <a href="">생산 실적 현황</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>품질 관리
-                    <ul class="subList">
-                        <li>
-                            <a href="">LOT 추적</a>
-                        </li>
-                        <li>
-                            <a href="">공정별 현황</a>
-                        </li>
-                        <li>
-                            <a href="">품질 검사 입력</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="titleBox">
-            <span>작업 지시서</span>
-            <a href="../02_main/mainpage.html">
-            <div class="toMainpage">
-                <img
-                    src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png"
-                    width="13px"
-                    alt="메인 화면으로 가는 화살표"
-                    style="transform: scaleX(-1);">
-                    메인 화면으로
-                </div>
-            </a>
-        </div>
+        <header></header>
+        <div class="gnb"></div>
+        <div class="titleBox"></div>
         <div class="wrap">
-            <form class="wrap-filter">
-                <input type="button" class="button filter-btn" value="전체">
-                <input type="button" class="button filter-btn" value="결제중">
-                <input type="button" class="button filter-btn" value="미확인">
-                <input type="button" class="button filter-btn" value="확인">
-                <input type="button" class="button filter-btn" value="진행중">
-                <input type="button" class="button filter-btn" value="완료">
-            </form>
-
+            <div class="wrap-select">
+                <form class="date-filter">
+                    <div class="select-con">
+                        <div class="select-title">정렬 기준</div>
+                        <select name="align" class="select select-drop">
+                            <option value="전달값1" selected="selected">전체</option>
+                            <option value="전달값2">결제중</option>
+                            <option value="전달값3">미확인</option>
+                            <option value="전달값4">확인</option>
+                            <option value="전달값5">진행중</option>
+                            <option value="전달값6">완료</option>
+                        </select>
+                    </div>
+                    <div class="filter-submit">
+                        <button type="button" class="button">조회</button>
+                    </div>
+                </form>
+            </div>
             <form class="wrap-table">
                 <div class="table-view">
                     <table>
@@ -352,6 +250,10 @@
                     <label>지시일</label>
                     <input type="date" name="order-date">
                 </div>
+                <div class="form-group">
+                    <label>작업지시NO.</label>
+                    <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
+                </div>
                 <div class="form-group autocomplete-wrap">
                     <label>납품처</label>
                     <input type="text" name = "client-code" class="autocomplete" placeholder="납품처 코드 입력">
@@ -363,16 +265,12 @@
                     <input type="text" name = "person" placeholder="담당자명 입력">
                 </div>
                 <div class="form-group">
-                    <label>납기일자</label>
+                    <label>납기일</label>
                     <input type="date" name="give-date">
                 </div>
                 <div class="form-group">
                     <label>첨부</label>
                     <input type = "file" name = "변수명">
-                </div>
-                <div class="form-group">
-                    <label>작업지시NO.</label>
-                    <input type="number" placeholder="작업지시 번호 입력">
                 </div>
                 <div class ="form-group">
                     <div class = "wrap-table panel-table">
@@ -380,26 +278,28 @@
                             <input type="button" class="button" value="품목 추가">
                             <input type="button" class="button delete" value="품목 삭제">                       
                         </div>
-                        <table>
-                            <thead>
-                                <th></th>
-                                <th>순번</th>
-                                <th>품목코드</th>
-                                <th>품목명</th>
-                                <th>수량</th>
-                                <th>비고</th>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" value="전달값" name="변수명"></td>
-                                    <td>1</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>                
+                        <div class = "panel-table-wrap">
+                            <table>
+                                <thead>
+                                    <th></th>
+                                    <th>순번</th>
+                                    <th>품목코드</th>
+                                    <th>품목명</th>
+                                    <th>수량</th>
+                                    <th>비고</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="checkbox" value="전달값" name="변수명"></td>
+                                        <td>1</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>  
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -436,10 +336,10 @@
                         <input type="text">
                         <input type="button" value="검색">
                     </div>
-                    <div class="wrap-tableBtn">
+                    <!-- <div class="wrap-tableBtn">
                         <input type="button" class="button reset" value="선택 해제">
                         <button type="button" class="button save">저장</button>
-                    </div>
+                    </div> -->
                 </form>
             </div>
         </div>
