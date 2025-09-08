@@ -1,20 +1,19 @@
 package Controller;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import Dto.Login_Dto;
+import Dto.Account_DTO;
+import Service.Account_Service;
 
-/**
- * Servlet implementation class AccountManageCtrl
- */
 @WebServlet("/AccountManage")
 public class AccountManageCtrl extends HttpServlet {
+  private final Account_Service service = new Account_Service();
+
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -26,32 +25,30 @@ public class AccountManageCtrl extends HttpServlet {
       response.sendRedirect(request.getContextPath() + "/login");
       return;
     }
-    
     boolean isAdmin = (loginUser.getWorkerGrade() == 0);
     if (!isAdmin) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
 
-    // (A) forward 사용 시: CSS가 절대경로면 정상 로드
-    request.getRequestDispatcher("/Html/03_admin/03_account_manage.html")
-           .forward(request, response);
+    try {
+      String q = request.getParameter("q");
+      List<Account_DTO> accounts = (q == null || q.trim().isEmpty())
+          ? service.listAll()
+          : service.search(q.trim());
+      request.setAttribute("accounts", accounts);
+    } catch (Exception e) {
+      throw new ServletException(e);
+    }
 
-    // (B) 상대경로 CSS를 유지하고 싶다면 redirect 사용
-    // response.sendRedirect(request.getContextPath() + "/Html/03_admin/03_account_manage.html");
+
+    request.getRequestDispatcher("/Html/03_admin/03_account_manage.jsp")
+           .forward(request, response);
   }
 
-
-
-//		/proj_mes/Html/03_admin/03_account_manage.html
-	
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    doGet(request, response);
+  }
 }
