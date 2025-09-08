@@ -123,28 +123,31 @@
                 </div>
             </a>
         </div>
-        <!-- 상단 필터 -->
-        <form class="date-filter">
-            <div class="filter-btn">
-                <input type="button" class="button" value="기간">
-                <input type="button" class="button" value="월별">
-            </div>
-            <div class="filter-date">
-                <input type="date">
-                <div>~</div>
-                <input type="date">
-            </div>
-            <div class="filter-submit">
-                <button type="button" class="button">조회</button>
-            </div>
-        </form>
+
 
         <div class="wrap">
-            <!-- 버튼 필터 -->
-            <form class="wrap-filter">
-                <input type="button" class="button filter-btn" value="생산실적번호별">
-                <input type="button" class="button filter-btn" value="일자별">
-            </form>
+            <div class="wrap-select">
+                <form class="date-filter">
+                    <div class="select-con">
+                        <div class="select-title">작업 지시</div>
+                        <div class="filter-date select-drop">
+                            <input type="date">
+                            <div>~</div>
+                            <input type="date">
+                        </div>                        
+                    </div>
+                    <div class="select-con">
+                        <div class="select-title">정렬 기준</div>
+                        <select name="align" class="select select-drop">
+                            <option value="전달값1" selected="selected">생산실적번호별</option>
+                            <option value="전달값2">일자별</option>
+                        </select>
+                    </div>
+                    <div class="filter-submit">
+                        <button type="button" class="button">조회</button>
+                    </div>
+                </form>
+            </div>
             <!-- 테이블 영역 -->
             <form class="wrap-table">
                 <div class = "table-view">
