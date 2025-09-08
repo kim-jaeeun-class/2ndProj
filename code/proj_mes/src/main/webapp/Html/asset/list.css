@@ -1,0 +1,39 @@
+.top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.box{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.period {
+    border: 1px solid grey;
+    background-color: grey;
+}
+.month {
+    border: 1px solid black;
+}
+.table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+.center {
+    text-align: center;
+}
+.bottom {
+position: absolute;
+text-align: center;
+transform: translateX(-50%);
+bottom: 20px;
+left: 50%;
+display: flex;
+gap: 10px;
+}

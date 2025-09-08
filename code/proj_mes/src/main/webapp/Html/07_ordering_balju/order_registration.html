@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="asset/registration.css">
+    <script src="/2nd_proj/html/asset/order_resistration.js"></script>
+</head>
+<body>
+    <div class="main">
+        <div class="box header_row">
+            <div>발주 기본정보</div>
+            <div class="box hide">
+                <span>진행상태</span>
+                <div>승인대기</div>
+            </div>
+            <input type="hidden" id="order_state" value="0">
+            <div class="action">
+                <button id="save" type="button">임시저장</button>
+                <button id="approve" type="submit">승인 요청</button>
+                <button id="recall" type="button">회수</button>
+            </div>
+        </div>
+        <div class="box">
+            <div class="item">
+                <div>발주 번호</div>
+                <input id="order_num" class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>발주 날짜</div>
+                <input class="main_input" type="date">
+            </div>
+            <div class="item">
+                <div>부서</div>
+                <input id="dept_input" class="main_input" type="text" placeholder="부서를 선택하세요">
+            </div>
+            <div class="item">
+                <div>담당자</div>
+                <input id="name_input" class="main_input" type="text">
+            </div>
+        </div>
+        <div class="box">
+            <div class="item">
+                <div>거래처</div>
+                <input id="client_input" class="main_input" type="text" placeholder="거래처를 선택하세요">
+            </div>
+            <div class="item">
+                <div>거래처 사업자번호</div>
+                <input id="business_input" class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>거래처 연락번호</div>
+                <input id="number_input" class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>납기일</div>
+                <input class="main_input" type="date">
+            </div>
+        </div>
+        <div class="note box">
+            <div class="item">
+                <div>비고</div>
+                <input class="note_input" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <div class="box header_list">
+            <div>발주 상세(품목)</div>
+            <div class="list_action">
+                <button type="button">삭제</button>
+                <button type="submit">추가</button>
+            </div>
+        </div>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox">
+                    </th>
+                    <th>NO</th>
+                    <th>품목</th>
+                    <th>수량</th>
+                    <th>단가</th>
+                    <th>합계</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>휴먼 유리</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>500,000</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>500,000</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="bottom">
+        <button type="button">목록</button>
+    </div>
+    <div id="dept_modal" class="modal hide">
+        <div class="search">
+            <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
+            <button class="m_button" type="button">검색</button>
+        </div>
+        <div class="table_box">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>부서번호</th>
+                        <th>부서명</th>
+                        <th>사원번호</th>
+                        <th>이름</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    <tr>
+                        <td>
+                            <input type="radio" name="dept">
+                        </td>
+                        <td>DFF5555</td>
+                        <td>생산5팀</td>
+                        <td>FF4561</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dept">
+                        </td>
+                        <td>DFF5555</td>
+                        <td>생산5팀</td>
+                        <td>FF4561</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dept">
+                        </td>
+                        <td>DFF5555</td>
+                        <td>생산5팀</td>
+                        <td>FF4561</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dept">
+                        </td>
+                        <td>DFF5555</td>
+                        <td>생산5팀</td>
+                        <td>FF4561</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="dept">
+                        </td>
+                        <td>DFF5555</td>
+                        <td>생산5팀</td>
+                        <td>FF4561</td>
+                        <td>나사원</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bottom">
+            <button class="cancel m_button" type="button">취소</button>
+            <button class="confirm m_button" type="button">확인</button>
+        </div>
+    </div>
+    <div id="client_modal" class="modal hide">
+        <div class="search">
+            <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
+            <button class="m_button" type="button">검색</button>
+        </div>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>거래처 코드</th>
+                    <th>거래처명</th>
+                    <th>사업자번호</th>
+                    <th>연락처</th>
+                    <th>담당자</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <tr>
+                    <td>
+                        <input type="radio" name="client">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="client">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="client">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="client">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="client">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bottom">
+            <button class="cancel m_button" type="button">취소</button>
+            <button class="confirm m_button" type="button">확인</button>
+        </div>
+    </div>
+    <div id="item_modal" class="modal hide">
+        <div class="search">
+            <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
+            <button class="m_button" type="button">검색</button>
+        </div>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>유형</th>
+                    <th>단가</th>
+                </tr>
+            </thead>
+            <tbody class="list">
+                <tr>
+                    <td>
+                        <input type="radio" name="item">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>원재료</td>
+                    <td>50,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="item">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>교육유리</td>
+                    <td>원재료</td>
+                    <td>50,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="item">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>아이폰17</td>
+                    <td>완제품</td>
+                    <td>1,000,000</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bottom">
+            <button class="cancel m_button" type="button">취소</button>
+            <button class="confirm m_button" type="button">추가</button>
+        </div>
+    </div>
+</body>
+</html>
