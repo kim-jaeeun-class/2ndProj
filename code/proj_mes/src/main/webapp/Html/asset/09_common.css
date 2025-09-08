@@ -238,6 +238,14 @@ table th:first-child, table td:first-child {
     margin: 30px 50px;
 }
 
+.wrap-table table td {
+    max-width: 150px;      /* 원하는 크기 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
 /* select, date 입력 */
 input[type="date"], select {
     width: 60%;

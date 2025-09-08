@@ -48,7 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // 작업 지시서 페이지 기능
     // ===============================
     const initWorkOrder = () => {
+
+        // ===============================
         // 납품처 자동완성
+        // ===============================
         const clients = [
             { code: "C001", name: "삼성전자" },
             { code: "C002", name: "LG화학" },
@@ -87,7 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
+        // ===============================
         // 품목 추가 모달
+        // ===============================
         const itemAddBtn = document.querySelector('.panel .button[value="품목 추가"]');
         const modalOverlay = document.querySelector('.modal-overlay');
         const modalCloseBtn = document.querySelector('.modal-close');
@@ -142,9 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     tdName.textContent = name;
                     tr.appendChild(tdName);
 
-                    // ===============================
-                    // 수량 / 비고 추가 (빈칸)
-                    // ===============================
+                    // 수량 / 비고 (빈칸)
                     const tdQty = document.createElement('td');
                     tdQty.textContent = '';
                     tr.appendChild(tdQty);
@@ -160,7 +163,143 @@ document.addEventListener("DOMContentLoaded", () => {
                 checkedRows.forEach(cb => cb.checked = false);
             });
         }
+
+        // ===============================
+        // 슬라이딩 입력 → 메인 테이블 추가
+        // ===============================
+        const panelForm = document.querySelector('.panel form');
+        const mainTable = document.querySelector('.wrap-table tbody');
+        const panel = document.querySelector('.panel');
+        const saveBtn = document.querySelector('.panel .panel-save');
+
+        if (saveBtn && mainTable && panelForm) {
+            saveBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // -------------------------------
+                // 입력값 수집
+                // -------------------------------
+                const orderDate = panelForm.querySelector('input[name="order-date"]').value;
+                const clientCode = panelForm.querySelector('input[name="client-code"]').value;
+                const clientName = panelForm.querySelector('input[name="client-name"]').value;
+                const person = panelForm.querySelector('input[name="person"]').value;
+                const giveDate = panelForm.querySelector('input[name="give-date"]').value;
+                const orderNo = panelForm.querySelector('input[type="number"]').value;
+
+                const panelItems = panelForm.querySelectorAll('.panel-table tbody tr');
+
+                // 품목명, 지시수량 총합 계산
+                let itemNames = [];
+                let totalQty = 0;
+                panelItems.forEach(row => {
+                    const name = row.children[3].textContent.trim();
+                    const qty = parseInt(row.children[4].textContent.trim()) || 0;
+
+                    if (name) itemNames.push(name);
+                    totalQty += qty;
+                });
+
+                const date = new Date().toISOString().split('T')[0]; // 오늘 날짜
+
+                // -------------------------------
+                // 행 생성
+                // -------------------------------
+                const tr = document.createElement('tr');
+                tr.classList.add('data');
+
+                // 체크박스
+                const tdCheckbox = document.createElement('td');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                tdCheckbox.appendChild(checkbox);
+                tr.appendChild(tdCheckbox);
+
+                // 작업지시번호
+                const tdWoNo = document.createElement('td');
+                tdWoNo.textContent = `${orderDate.replace(/-/g,'')}-${orderNo}`;
+                tr.appendChild(tdWoNo);
+
+                // 일자
+                const tdDate = document.createElement('td');
+                tdDate.textContent = date;
+                tr.appendChild(tdDate);
+
+                // 거래처명
+                const tdClient = document.createElement('td');
+                tdClient.textContent = clientName;
+                tr.appendChild(tdClient);
+
+                // 담당자명
+                const tdPerson = document.createElement('td');
+                tdPerson.textContent = person;
+                tr.appendChild(tdPerson);
+
+                // 납기일자
+                const tdGive = document.createElement('td');
+                tdGive.textContent = giveDate;
+                tr.appendChild(tdGive);
+
+                // 품목명
+                const tdItems = document.createElement('td');
+                tdItems.textContent = itemNames.join(', ');
+                tr.appendChild(tdItems);
+
+                // 지시수량
+                const tdOrderQty = document.createElement('td');
+                tdOrderQty.textContent = totalQty;
+                tr.appendChild(tdOrderQty);
+
+                // 생산수량 (빈칸)
+                tr.appendChild(document.createElement('td'));
+
+                // 진행상태 (빈칸)
+                tr.appendChild(document.createElement('td'));
+
+                // 인쇄 버튼
+                const tdPrint = document.createElement('td');
+                const printBtn = document.createElement('button');
+                printBtn.textContent = '인쇄';
+                printBtn.addEventListener('click', () => window.print());
+                tdPrint.appendChild(printBtn);
+                tr.appendChild(tdPrint);
+
+                // -------------------------------
+                // 행 추가 및 패널 닫기/리셋
+                // -------------------------------
+                mainTable.appendChild(tr);
+                panel.classList.remove('open');
+                panelForm.reset();
+            });
+        }
+
+        // ===============================
+        // 메인 테이블 클릭 → 상세 모달 열기
+        // ===============================
+        if (mainTable && modalOverlay) {
+            mainTable.addEventListener('click', (e) => {
+                const row = e.target.closest('tr.data');
+                if (!row) return;
+
+                const modal = modalOverlay.querySelector('.modal');
+                const modalCells = modal.querySelectorAll('table tr td:nth-child(2)');
+
+                const rowData = Array.from(row.querySelectorAll('td')).slice(1).map(td => td.textContent.trim());
+                rowData.forEach((val, i) => {
+                    if (modalCells[i]) modalCells[i].textContent = val;
+                });
+
+                modalOverlay.classList.add('active');
+            });
+
+            modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+                modalOverlay.classList.remove('active');
+            });
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+            });
+        }
     };
+
 
     // ===============================
     // 생산 실적 페이지 기능
@@ -251,126 +390,124 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-
-
-    
-
     // ===============================
-    // 생산 계획 -> 분리중!!
+    // 생산 계획
     // ===============================
     const initProduction = () => {
-        const panelForm = document.querySelector('.panel form');
-        const mainTable = document.querySelector('.wrap-table tbody');
-        const panel = document.querySelector('.panel');
-        const saveBtn = document.querySelector('.panel .save');
-        
-            if (saveBtn && mainTable && panelForm) {
-            saveBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // 입력 값 모음
-                const proPlanNo = panelForm.querySelector('input[name="pro-plan-no"]').value;
-                const itemNo = panelForm.querySelector('input[name="item-no"]').value;
-                const planAmount = panelForm.querySelector('input[name="plan-amount"]').value;
-                const planStart = panelForm.querySelector('input[name="plan-start"]').value;
-                const planEnd = panelForm.querySelector('input[name="plan-end"]').value;
-                const workSeq = panelForm.querySelector('select[name="work-seq"]').value;
-                const bigo = panelForm.querySelector('input[name="bigo"]').value;
-
-                // 행 생성
-                const tr = document.createElement('tr');
-
-                const tdCheckbox = document.createElement('td');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                tdCheckbox.appendChild(checkbox);
-                tr.appendChild(tdCheckbox);
-
-                // 여기 번호 행 추가는 맞는데 숫자 테이블과 자동으로 연동되도록 해야 함. 위부터 1, 2, 3...
-                const No = document.createElement('td');
-                tdNo.textContent = No;
-                tr.appendChild(tdNo);
-
-                const planNo = document.createElement('td');
-                tdPN.textContent = proPlanNo;
-                tr.appendChild(planNo);
-
-                // 계획 기간, 진행률, 작업 공정, 달성률, 불량률, 비고
-                const itemNum = document.createElement('td');
-                tdIN.textContent = itemNo;
-                tr.appendChild(itemNum);
-
-                // 계획 수량
-                const planAM = document.createElement('td');
-                tdPA.textContent = planAmount;
-                tr.appendChild(planAM);
-
-                // 진행 상태는 추후 db로 연동
-                const ingStat = document.createElement('td');
-                tr.appendChild(ingStat);
-
-                // 계획 기간 : startDate(0000 - 00 - 00 형), endDate가 'startDate ~ endDate 형태로 표시되어야 함'
-                const planDate = document.createElement('td');
-                tr.appendChild(planDate);
-
-                // 진행률도 추후 db로 연동
-                const ingPer = document.createElement('td');
-                tr.appendChild(ingPer);
-
-                // 작업 공정
-                const workPro = document.createElement('td');
-                tdWP.textContent = workSeq;
-                tr.appendChild(workPro);
-
-                // 달성률 추후 db 연동
-                const achiPer = document.createElement('td');
-                tr.appendChild(achiPer);
-
-                // 불량률 추후 db 연동
-                const bugPer = document.createElement('td');
-                tr.appendChild(bugPer);
-
-                // 비고 추후 db 연동
-                const bigoT = document.createElement('td');
-                tdB.textContent = bigo;
-                tr.appendChild(bigoT);
-
-
+    const panelForm = document.querySelector('.panel form');
+    const mainTable = document.querySelector('.wrap-table tbody');
+    const panel = document.querySelector('.panel');
+    const saveBtn = document.querySelector('.panel .panel-save'); // ← panel-save 클래스 맞춰 수정
+    
+    if (saveBtn && mainTable && panelForm) {
+        saveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             
-            })
-        }
+            // 입력 값 모음
+            const proPlanNo = panelForm.querySelector('input[name="pro-plan-no"]').value;
+            const itemNo = panelForm.querySelector('input[name="item-no"]').value;
+            const planAmount = panelForm.querySelector('input[name="plan-amount"]').value;
+            const planStart = panelForm.querySelector('input[name="plan-start"]').value;
+            const planEnd = panelForm.querySelector('input[name="plan-end"]').value;
+            const workSeq = panelForm.querySelector('select[name="work-seq"]').value;
+            const bigo = panelForm.querySelector('input[name="bigo"]').value;
 
-        // 메인 테이블 행 클릭 -> 상세 모달 열기
-        const modalOverlay = document.querySelector('.modal-overlay');
+            // 행 생성
+            const tr = document.createElement('tr');
+            tr.classList.add('data'); // 모달 연동용 클래스
 
-        if(mainTable && modalOverlay) {
-        mainTable.querySelectorAll('tr.data').forEach(row => {
-            row.addEventListener('click', () => {
-                const modal = modalOverlay.querySelector('.modal');
-                const modalCells = modal.querySelectorAll('table tr td:nth-child(2)');
+            // 체크박스
+            const tdCheckbox = document.createElement('td');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            tdCheckbox.appendChild(checkbox);
+            tr.appendChild(tdCheckbox);
 
-                const rowData = Array.from(row.children).slice(1).map(td => td.textContent); 
-                // slice(1) -> 첫 번째 체크박스 제외
+            // 순번 (행 개수 + 1)
+            const tdNo = document.createElement('td');
+            tdNo.textContent = mainTable.querySelectorAll('tr').length + 1;
+            tr.appendChild(tdNo);
 
-                // modalCells 순서대로 데이터 채우기
-                rowData.forEach((val, i) => {
-                    if(modalCells[i]) modalCells[i].textContent = val;
-                });
+            // 생산계획번호
+            const tdPN = document.createElement('td');
+            tdPN.textContent = proPlanNo;
+            tr.appendChild(tdPN);
 
-                modalOverlay.classList.add('active');
+            // 제품번호
+            const tdIN = document.createElement('td');
+            tdIN.textContent = itemNo;
+            tr.appendChild(tdIN);
+
+            // 계획 수량
+            const tdPA = document.createElement('td');
+            tdPA.textContent = planAmount;
+            tr.appendChild(tdPA);
+
+            // 진행 상태 (빈 칸)
+            tr.appendChild(document.createElement('td'));
+
+            // 계획 기간
+            const tdDate = document.createElement('td');
+            if (planStart && planEnd) {
+                tdDate.textContent = `${planStart} ~ ${planEnd}`;
+            }
+            tr.appendChild(tdDate);
+
+            // 진행률 (빈 칸)
+            tr.appendChild(document.createElement('td'));
+
+            // 작업 공정
+            const tdWP = document.createElement('td');
+            tdWP.textContent = workSeq;
+            tr.appendChild(tdWP);
+
+            // 달성률 (빈 칸)
+            tr.appendChild(document.createElement('td'));
+
+            // 불량률 (빈 칸)
+            tr.appendChild(document.createElement('td'));
+
+            // 비고
+            const tdB = document.createElement('td');
+            tdB.textContent = bigo;
+            tr.appendChild(tdB);
+
+            // 행 추가
+            mainTable.appendChild(tr);
+
+            // 패널 닫기 및 리셋
+            panel.classList.remove('open');
+            panelForm.reset();
+        });
+    }
+
+    // 메인 테이블 행 클릭 -> 상세 모달 열기
+    const modalOverlay = document.querySelector('.modal-overlay');
+    if (mainTable && modalOverlay) {
+        mainTable.addEventListener('click', (e) => {
+            const row = e.target.closest('tr.data');
+            if (!row) return;
+
+            const modal = modalOverlay.querySelector('.modal');
+            const modalCells = modal.querySelectorAll('table tr td:nth-child(2)');
+
+            // 체크박스(td[0])는 제외 → 번호부터 마지막까지 가져오기
+            const rowData = Array.from(row.querySelectorAll('td')).slice(1).map(td => td.textContent.trim());
+
+            rowData.forEach((val, i) => {
+                if (modalCells[i]) modalCells[i].textContent = val;
             });
+
+            modalOverlay.classList.add('active');
         });
 
-        // 모달 닫기
         modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
             modalOverlay.classList.remove('active');
         });
-
-        // 모달 외부 클릭 시 닫기
         modalOverlay.addEventListener('click', (e) => {
-            if(e.target === modalOverlay) modalOverlay.classList.remove('active');
+            if (e.target === modalOverlay) modalOverlay.classList.remove('active');
         });
-        }
+    }
 
     };
 
