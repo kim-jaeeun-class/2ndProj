@@ -45,7 +45,6 @@ header .search {
 header .myIcon {
     position: relative;
     padding: 5px 10px 5px 0;
-    
 }
 
 header ul.subList {
@@ -69,7 +68,6 @@ header ul.subList {
 header .myIcon:hover .subList {
     display: flex;
 }
-
 
 /* GNB 부분 */
 .gnb {
@@ -105,7 +103,7 @@ header .myIcon:hover .subList {
 }
 .gnb ul.mainList > li:hover .subList {
     display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
-    margin-top: 5px;
+    margin-top: 0px;
 }
 
 .subList li {

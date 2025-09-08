@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Lot 추적 관리</title>
+	<link rel="stylesheet" href="../asset/template.css">
+	<link rel="stylesheet" href="../asset/10_lot_tracking.css">
+</head>
+<body>
+	<header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>Lot 추적 관리</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+        <div class="lookup">
+			<div class="lookup_left">
+				<select> <!-- 공정별 검색 -->
+					<option value="" disabled selected>공정별</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<select> <!-- 일자별 검색 -->
+					<option value="" disabled selected>일자별</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<select> <!-- 품명 검색 -->
+					<option value="" disabled selected>품명</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+			</div>
+            <input type="text" placeholder="공정, 품명 검색...">
+        </div>
+
+		<div class="table-container">
+    		<table class="lot_tab">
+				<thead>
+					<tr>
+						<th>Lot 번호</th>
+						<th>품명</th>
+						<th>공정</th>
+						<th>가공 일자</th>
+						<th>수량</th>
+						<th>품질 상태</th>
+					</tr>		
+				</thead>
+				<tbody>
+					<tr>
+						<td>Lot 번호1</td>
+						<td>품명1</td>
+						<td>공정1</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호2</td>
+						<td>품명2</td>
+						<td>공정2</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호3</td>
+						<td>품명3</td>
+						<td>공정3</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호4</td>
+						<td>품명4</td>
+						<td>공정4</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호5</td>
+						<td>품명5</td>
+						<td>공정5</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호6</td>
+						<td>품명6</td>
+						<td>공정6</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호7</td>
+						<td>품명7</td>
+						<td>공정7</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호8</td>
+						<td>품명8</td>
+						<td>공정8</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+					<tr>
+						<td>Lot 번호9</td>
+						<td>품명9</td>
+						<td>공정9</td>
+						<td>가공 일자</td>
+						<td>수량</td>
+						<td>양품/불량/가공중</td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+	</div>
+</body>
+</html>

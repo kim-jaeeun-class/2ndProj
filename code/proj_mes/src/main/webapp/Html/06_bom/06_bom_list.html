@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<title>공정 목록</title>
+	<title>BOM 목록</title>
 	<link rel="stylesheet" href="../asset/template.css">
-	<link rel="stylesheet" href="../asset/process_list.css">
+	<link rel="stylesheet" href="../asset/06_bom_list.css">
 </head>
 <body>
 	<header>
@@ -77,7 +77,7 @@
 	</div>
 
 	<div class="titleBox">
-		<span>공정 목록</span>
+		<span>BOM 목록</span>
 		<a href="">
 			<div class="toMainpage">
 				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
@@ -89,154 +89,147 @@
 
 	<div class="wrap">
 		<div class="btnDiv">
-			<input type="button" value="신규" class="newProcessBtn btn"></input>
-			<input type="button" value="수정" class="updateProcessBtn btn"></input>
+			<input type="button" value="신규" class="newBOMBtn btn"></input>
 		</div>
 		
 		<div class="lookup">
 			<div class="lookup_left">
-				담당 부서
+				품목 코드
 				<select>
-					<option value="" selected>1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-					<option value="">4</option>
-					<option value="">5</option>
-					<option value="">6</option>
+					<option selected>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
 				</select>
-				공정 ID
+				품목명
 				<select>
-					<option value="" selected>1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-					<option value="">4</option>
-					<option value="">5</option>
-					<option value="">6</option>
-				</select>
-				공정명
-				<select>
-					<option value="" selected>1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-					<option value="">4</option>
-					<option value="">5</option>
-					<option value="">6</option>
-				</select>
-				설비 사용 여부
-				<select>
-					<option value="1" selected>사용</option>
-					<option value="0">비사용</option>
+					<option selected>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
 				</select>
 			</div>
 			<input type="button" value="조회" class="lookupBtn btn"></input>
 		</div>
+
 		<div class="table-container">
-			<table class="proc_tab">
+    		<div class="writer">
+				작성자 :
+				<input type="text" value="작성자 이름" readonly>
+			</div>
+    		<table class="bom_tab">
 				<thead>
 					<tr>
-						<th>순번</th>
-						<th>선택</th>
-						<th>공정 ID</th>
-						<th>공정명</th>
-						<th>담당 부서</th>
-						<th>담당자</th>
-						<th>설비 사용</th>
-						<th>검사 여부</th>
+						<th>No.</th>
+						<th>원재료명</th>
+						<th>용도</th>
+						<th>자재 코드</th>
+						<th>단가</th>
+						<th>단위</th>
+						<th>소요량</th>
+						<th>입고처</th>
 					</tr>		
 				</thead>
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td><input type="checkbox"></td>
-						<td>공정 ID</td>
-						<td>공정명</td>
-						<td>담당 부서 명</td>
-						<td>담담자 명</td>
-						<td>사용 / 비사용</td>
-						<td>검사 / 비검사</td>
+						<td>원재료명</td>
+						<td>용도</td>
+						<td>자재 코드</td>
+						<td>단가</td>
+						<td>단위</td>
+						<td>EA</td>
+						<td>입고처</td>
 					</tr>
 					<tr>
 						<td>2</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>3</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>4</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>5</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>6</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>7</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>8</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 					<tr>
 						<td>9</td>
-						<td><input type="checkbox"></td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
 						<td>더미</td>
+						<td>EA</td>
 						<td>더미</td>
 					</tr>
 				</tbody>
 			</table>
+        </div>
+		<div class="bottomBtn">
+			<input type="button" value="수정" class="updateBOMBtn btn"></input>
 		</div>
 	</div>
 </body>
