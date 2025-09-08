@@ -1,96 +1,83 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-	<meta charset="UTF-8">
-	<title>계정 생성 페이지</title>
-	<link rel="stylesheet" href="../asset/template.css">
-	<link rel="stylesheet" href="../asset/03_account_create.css">
+  <meta charset="UTF-8" />
+  <title>계정 생성 페이지</title>
+  <link rel="stylesheet" href="/proj_mes/Html/asset/template.css" />
+  <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" />
 </head>
-
 <body>
-	<header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
+  <header>
+    <div class="corp">
+      <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40" alt="회사 로고" />
+      <h3>J2P4</h3>
+    </div>
+    <div class="search">
+      <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30" alt="검색용 아이콘" />
+    </div>
+    <div class="logout">로그아웃</div>
+    <div class="myIcon">
+      <a href="javascript:void(0);" id="myIconBtn">
+        <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35" alt="마이페이지 아이콘" style="background:#fff;border-radius:100%;" />
+      </a>
+      <ul class="subList">
+        <li><a href="">하위메뉴1</a></li>
+        <li><a href="">하위메뉴2</a></li>
+      </ul>
+    </div>
+  </header>
 
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+  <div class="gnb">
+    <ul class="mainList">
+      <li>기준 관리
+        <ul class="subList"><li><a href="">기준 목록</a></li></ul>
+      </li>
+      <li>공정 관리
+        <ul class="subList">
+          <li><a href="">공정 목록</a></li>
+          <li><a href="">공정 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>BOM 관리
+        <ul class="subList">
+          <li><a href="">BOM 목록</a></li>
+          <li><a href="">BOM 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>발주 관리
+        <ul class="subList"><li><a href="">발주 목록</a></li></ul>
+      </li>
+      <li>재고 관리
+        <ul class="subList">
+          <li><a href="">재고 목록</a></li>
+          <li><a href="">재고 삭제</a></li>
+        </ul>
+      </li>
+      <li>생산 관리
+        <ul class="subList">
+          <li><a href="">생산 계획</a></li>
+          <li><a href="">생산 실적 현황</a></li>
+        </ul>
+      </li>
+      <li>품질 관리
+        <ul class="subList">
+          <li><a href="">LOT 추적</a></li>
+          <li><a href="">공정별 현황</a></li>
+          <li><a href="">품질 검사 입력</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
-	<div class="titleBox">
-		<span>마이 페이지</span>
-		<a href=""> 
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
-
-
-
+  <div class="titleBox">
+    <span>계정 생성</span>
+    <a href="">
+      <div class="toMainpage">
+        <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13" alt="메인 화면으로" style="transform:scaleX(-1);" />
+        메인 화면으로
+      </div>
+    </a>
+  </div>
 
   <div class="wrap">
     <div class="tabs">
@@ -100,88 +87,133 @@
 
     <section class="card">
       <div class="title">계정생성</div>
-      <form class="form" id="signupForm" novalidate>
 
-          <!-- 왼쪽 컬럼 -->
-          <div class="left">
-            <div class="row"><label for="name">이름</label>
-              <div class="field">
-              <input id="name" name="name" type="text" required>
+      <!-- ✅ 서버로 제출: action + method 지정 -->
+      <form class="form" id="signupForm" action="/proj_mes/AccountCreate" method="post" autocomplete="off" novalidate>
+        <div class="left">
+
+          <!-- ✅ 사번 -->
+          <div class="row">
+            <label for="worker_id">사번</label>
+            <div class="field">
+              <input id="worker_id" name="worker_id" type="text" required />
             </div>
           </div>
-          <br>
-            <div class="row">
-              <label for="rrn">주민번호</label>
-              <div class="field">
-                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="6자리" autocomplete="off" style = "width : 40%"> - 
-                <input id="rrn" name="rrn" type="text" inputmode="numeric" placeholder="7자리" autocomplete="off" style = "width : 40%">
-              </div>
-            </div>
-            <br>
-            <div class="row"><label for="phone1">전화번호</label>
-              <div class="field" style="display:flex;gap:6px;align-items:center">
-                <input id="phone1" type="tel" inputmode="numeric" maxlength="3" placeholder="010">
-                <span>-</span>
-                <input id="phone2" type="tel" inputmode="numeric" maxlength="4">
-                <span>-</span>
-                <input id="phone3" type="tel" inputmode="numeric" maxlength="4">
-              </div>
-            </div>
-            <br>
-            <div class="row"><label for="password">PW</label>
-              <div class="field pw-wrap">
-                <input id="password" name="password" type="password" autocomplete="new-password" required>
-                <span class="pw-toggle" data-target="password">보기</span>
-              </div>
-            </div>
-            <br>
-            <div class="row"><label for="password_confirm">PW 확인</label>
-              <div class="field pw-wrap">
-                <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required>
-                <span class="pw-toggle" data-target="password_confirm">보기</span>
-              </div>
-            </div>
-            <br>
-            <div class="hint" id="pwHint" hidden aria-live="polite"></div>
+          <br />
 
-            <div class="row inline"><label for="email_id">E-mail</label>
-              <div class="field">
-                <input id="email_id" name="email_id" type="text" placeholder="아이디" required>
-                <span>@</span>
-                <select id="email_domain" name="email_domain" required>
-                  <option value="">선택</option>
-                  <option value="gmail.com">gmail.com</option>
-                  <option value="naver.com">naver.com</option>
-                  <option value="daum.net">daum.net</option>
-                  <option value="hanmail.net">hanmail.net</option>
-                  <option value="kakao.com">kakao.com</option>
-                  <option value="custom">직접입력</option>
-                </select>
-                <input id="custom_domain" type="text" placeholder="도메인 직접 입력" style="display:none">
-              </div>
+          <!-- ✅ 이름 -->
+          <div class="row">
+            <label for="worker_name">이름</label>
+            <div class="field">
+              <input id="worker_name" name="worker_name" type="text" required />
             </div>
-            <br>
-            <div class="row"><label for="address">주소</label>
-              <div class="field" style="display:flex;gap:8px;align-items:center">
-                <input id="address" name="address" type="text" placeholder="주소를 입력해주세요" readonly>
-                <button class="btn secondary" type="button" id="addrSearch">검색</button>
-              </div>
+          </div>
+          <br />
+
+          <!-- ✅ 주민번호(6+7) -->
+          <div class="row">
+            <label for="rrn1">주민번호</label>
+            <div class="field">
+              <input id="rrn1" name="rrn1" type="text" inputmode="numeric" maxlength="6" placeholder="6자리" autocomplete="off" style="width:40%" />
+              &nbsp;-&nbsp;
+              <input id="rrn2" name="rrn2" type="text" inputmode="numeric" maxlength="7" placeholder="7자리" autocomplete="off" style="width:40%" />
             </div>
-            <br>
-            <div class="row"><label for="detail_address">상세 주소</label><div class="field"><input id="detail_address" name="detail_address" type="text" placeholder="상세 주소를 입력해주세요"></div></div>
+          </div>
+          <br />
 
-            <br>
-            
-            <div class="row"><label for="dept">부서</label><div class="field"><input id="dept" name="dept" type="text" style = "width : 40%"></div></div>
-            <br>
-            <div class="row"><label for="position">직급</label><div class="field"><input id="position" name="position" type="text" style = "width : 40%"></div></div>
-            <br>
+          <!-- ✅ 전화번호(3칸) -->
+          <div class="row">
+            <label>전화번호</label>
+            <div class="field" style="display:flex;gap:6px;align-items:center">
+              <input id="phone1" name="phone1" type="tel" inputmode="numeric" maxlength="3" placeholder="010" />
+              <span>-</span>
+              <input id="phone2" name="phone2" type="tel" inputmode="numeric" maxlength="4" />
+              <span>-</span>
+              <input id="phone3" name="phone3" type="tel" inputmode="numeric" maxlength="4" />
+            </div>
+          </div>
+          <br />
 
-            <div class="row"><label for="birth">생년월일</label><div class="field"><input id="birth" name="birth" type="date" required></div></div>
+          <!-- ✅ 비밀번호 / 확인 -->
+          <div class="row">
+            <label for="worker_pw">PW</label>
+            <div class="field pw-wrap">
+              <input id="worker_pw" name="worker_pw" type="password" autocomplete="new-password" required />
+              <span class="pw-toggle" data-target="worker_pw">보기</span>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <label for="password_confirm">PW 확인</label>
+            <div class="field pw-wrap">
+              <input id="password_confirm" name="password_confirm" type="password" autocomplete="new-password" required />
+              <span class="pw-toggle" data-target="password_confirm">보기</span>
+            </div>
+          </div>
+          <br />
+          <div class="hint" id="pwHint" hidden aria-live="polite"></div>
 
-          
+          <!-- ✅ 이메일 (id + 도메인) -->
+          <div class="row inline">
+            <label for="email_id">E-mail</label>
+            <div class="field">
+              <input id="email_id" name="email_id" type="text" placeholder="아이디" required />
+              <span>@</span>
+              <select id="email_domain" name="email_domain" required>
+                <option value="">선택</option>
+                <option value="gmail.com">gmail.com</option>
+                <option value="naver.com">naver.com</option>
+                <option value="daum.net">daum.net</option>
+                <option value="hanmail.net">hanmail.net</option>
+                <option value="kakao.com">kakao.com</option>
+                <option value="custom">직접입력</option>
+              </select>
+              <input id="custom_domain" name="custom_domain" type="text" placeholder="도메인 직접 입력" style="display:none" />
+            </div>
+          </div>
+          <br />
+
+          <!-- 주소(서버 전송은 안 씀) -->
+          <div class="row">
+            <label for="address">주소</label>
+            <div class="field" style="display:flex;gap:8px;align-items:center">
+              <input id="address" name="address" type="text" placeholder="주소를 입력해주세요" readonly />
+              <button class="btn secondary" type="button" id="addrSearch">검색</button>
+            </div>
+          </div>
+          <br />
+          <div class="row">
+            <label for="detail_address">상세 주소</label>
+            <div class="field">
+              <input id="detail_address" name="detail_address" type="text" placeholder="상세 주소를 입력해주세요" />
+            </div>
+          </div>
+          <br />
+
+          <!-- ✅ 부서ID / 직급 / 권한 -->
+          <div class="row">
+            <label for="dapart_ID2">부서ID</label>
+            <div class="field"><input id="dapart_ID2" name="dapart_ID2" type="text" style="width:40%" /></div>
+          </div>
+          <br />
+          <div class="row">
+            <label for="worker_grade">직급(숫자)</label>
+            <div class="field"><input id="worker_grade" name="worker_grade" type="number" value="0" style="width:40%" /></div>
+          </div>
+          <br />
+          <div class="row">
+            <label for="worker_cando">권한(숫자)</label>
+            <div class="field"><input id="worker_cando" name="worker_cando" type="number" value="0" style="width:40%" /></div>
+          </div>
+          <br />
+
+          <!-- 생년월일(서버 전송은 안 씀) -->
+          <div class="row">
+            <label for="birth">생년월일</label>
+            <div class="field"><input id="birth" name="birth" type="date" required /></div>
+          </div>
+
         </div>
-
 
         <div class="actions">
           <a class="btn secondary" href="#" onclick="history.back();return false;">뒤로 가기</a>
@@ -190,7 +222,6 @@
       </form>
     </section>
 
-    <!-- 감사 로그 -->
     <section class="card audit">
       <div class="title">감사 로그(Audit)</div>
       <div class="body">
@@ -198,10 +229,6 @@
       </div>
     </section>
   </div>
-
-
-
-
 
   <!-- 다음 우편번호 서비스 -->
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -220,7 +247,7 @@
     });
 
     // 비밀번호 강도 및 확인
-    const pw = document.getElementById('password');
+    const pw = document.getElementById('worker_pw');
     const pw2 = document.getElementById('password_confirm');
     const pwHint = document.getElementById('pwHint');
 
@@ -230,7 +257,7 @@
       const lower = /[a-z]/.test(v);
       const num = /[0-9]/.test(v);
       const sp = /[^A-Za-z0-9]/.test(v);
-      const repeat = /(.)\1{2,}/.test(v); // 같은 문자 3회 이상
+      const repeat = /(.)\1{2,}/.test(v);
       const seq = /(012|123|234|345|456|567|678|789|abcd|bcde|cdef|defg)/i.test(v);
       if (!len) return '최소 8자 이상 입력하세요.';
       if (!(upper && lower)) return '영문 대소문자를 포함하세요.';
@@ -239,16 +266,12 @@
       if (repeat || seq) return '연속/반복되는 패턴은 금지됩니다.';
       return '';
     }
-
     function updateHint(){
       const v = pw.value;
       const msg = v ? checkStrength(v) : '';
       pwHint.textContent = msg;
-
-      // 입력 중이고 에러 메시지가 있을 때만 보이게
       pwHint.hidden = !v || msg === '';
     }
-
     pw.addEventListener('input', updateHint);
     pw.addEventListener('blur', () => { if (!pw.value) pwHint.hidden = true; });
 
@@ -256,7 +279,7 @@
     document.querySelectorAll('.pw-toggle').forEach(el=>{
       el.addEventListener('click', ()=>{
         const target = document.getElementById(el.dataset.target);
-        const type = target.getAttribute('type') === 'password' ? 'text':'password';
+        const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
         target.setAttribute('type', type);
         el.textContent = type === 'password' ? '보기' : '숨기기';
       });
@@ -269,69 +292,24 @@
     });
 
     // 주소 검색
-    document.getElementById('addrSearch').addEventListener('click', execDaumPostcode);
-    function execDaumPostcode(){
+    document.getElementById('addrSearch').addEventListener('click', ()=>{
       new daum.Postcode({
         oncomplete: function(data) {
           document.getElementById('address').value = data.address;
           document.getElementById('detail_address').focus();
         }
       }).open();
-    }
+    });
 
-    // 폼 제출
+    // ✅ 폼 제출: 검증 실패시에만 전송 취소
     const form = document.getElementById('signupForm');
-    const audit = document.getElementById('auditLog');
     form.addEventListener('submit', (e)=>{
-      e.preventDefault();
       updateHint();
-      const pwMsg = checkStrength(pw.value);
-      if (pwMsg){
-        alert('비밀번호 조건을 확인해주세요.');
-        return;
-      }
-      if (pw.value !== pw2.value){
-        alert('비밀번호가 일치하지 않습니다.');
-        return;
-      }
-
-      const email = (() => {
-        const id = document.getElementById('email_id').value.trim();
-        const dom = emailDomain.value === 'custom' ? customDomain.value.trim() : emailDomain.value;
-        return id && dom ? `${id}@${dom}` : '';
-      })();
-
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        rrn: document.getElementById('rrn').value.trim(),
-        phone: [document.getElementById('phone1').value, document.getElementById('phone2').value, document.getElementById('phone3').value].join('-'),
-        email,
-        dept: document.getElementById('dept').value.trim(),
-        position: document.getElementById('position').value.trim(),
-        birth: document.getElementById('birth').value,
-        address: document.getElementById('address').value,
-        detail: document.getElementById('detail_address').value
-      };
-
-      // 실제 전송 대신 감사 로그에 남김 (데모)
-      const now = new Date().toLocaleString();
-      audit.value = `[${now}] 계정 생성 시도 : ${payload.name}/${payload.email}/${payload.phone}\n` + audit.value;
-      alert('계정 생성 요청이 접수되었습니다.');
-      form.reset();
-      pwHint.textContent='';
-      customDomain.style.display='none';
+      const msg = checkStrength(pw.value);
+      if (msg) { e.preventDefault(); alert('비밀번호 조건을 확인해주세요.'); return; }
+      if (pw.value !== pw2.value){ e.preventDefault(); alert('비밀번호가 일치하지 않습니다.'); return; }
+      // 통과 시 e.preventDefault() 호출하지 않음 → 서버로 POST 전송
     });
   </script>
-
-
-
-
-
-
-
-
-
-
 </body>
-
 </html>
