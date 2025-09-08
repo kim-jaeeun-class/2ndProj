@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+ 
+  <title>자유게시판 - 게시글 보기</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+  font-family: '맑은 고딕', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 40px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+/* 헤더 */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.board-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.main-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+/* 게시글 정보 */
+.post-info {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f7f7f7;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.post-meta {
+  font-size: 13px;
+  color: #555;
+}
+
+/* 본문 */
+.post-content {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: #f2f2f2;
+  min-height: 300px;
+  margin-bottom: 30px;
+}
+
+.post-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #000;
+}
+
+/* 하단 버튼 */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 8px 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+.btn.gray {
+  background-color: #999;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+@media screen and (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
+
+  .container {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    box-shadow: none;
+  }
+
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .post-title {
+    font-size: 16px;
+  }
+
+  .post-meta {
+    font-size: 12px;
+  }
+
+  .post-content {
+    font-size: 14px;
+    padding: 15px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 헤더 -->
+    <header>
+      <div class="header-top">
+        <h1 class="board-title">자유게시판</h1>
+        <a href="#" class="main-link">메인 화면으로</a>
+      </div>
+    </header>
+
+    <!-- 게시글 상단 정보 -->
+    <section class="post-info">
+      <div class="post-title">
+        <strong>[자유]</strong> 요즘 스마트폰 개조에 빠졌어요
+      </div>
+      <div class="post-meta">
+        작성자: 고현지 | 작성 시간: 2024-12-13 13:45
+      </div>
+    </section>
+
+    <!-- 게시글 본문 -->
+    <section id="postContent" class="post-content">
+      <p>요즘 스마트폰 개조에 빠졌습니다!<br>
+        스마트폰 개조가 너무 재밌네요~~<br><br>
+      </p>
+    </section>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="button-group">
+      <button id ="editBtn" class="btn black"> 수정 </button>
+      <a href="Noticeboard.html" class="btn gray">목록보기</a>
+        <div class="nav-buttons">
+          <button id="prevBtn" class="btn">이전 글</button>
+          <button id="nextBtn" class="btn">다음 글 ▼</button>
+</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const editBtn = document.getElementById("editBtn");
+  const postContent = document.getElementById("postContent");
+
+  let isEditing = false;
+
+  editBtn.addEventListener("click", () => {
+    if (!isEditing) {
+      // 수정 모드로 변경
+      const originalText = postContent.innerText.trim();
+
+      postContent.innerHTML = `
+        <textarea id="editArea" style="width: 100%; height: 250px;">${originalText}</textarea>
+      `;
+
+      editBtn.textContent = "저장";
+      isEditing = true;
+    } else {
+      // 저장 모드 - 텍스트 적용
+      const newText = document.getElementById("editArea").value;
+
+      // 줄바꿈 <br> 처리
+      const formattedText = newText.replace(/\n/g, "<br>");
+
+      postContent.innerHTML = `<p>${formattedText}</p>`;
+      editBtn.textContent = "수정";
+      isEditing = false;
+    }
+  });
+
+  // 예시 게시글 목록 (실제로는 서버에서 받아오거나 URL로 파악)
+  const postList = [
+    { id: 1, url: "post1.html" },
+    { id: 2, url: "post2.html" },
+    { id: 3, url: "post3.html" }
+  ];
+
+  // 현재 게시글의 ID (예: 2번 글을 보고 있다고 가정)
+  const currentPostId = 2;
+
+  const currentIndex = postList.findIndex(post => post.id === currentPostId);
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+
+  // 이전 글 버튼
+  prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) {
+      const prevPost = postList[currentIndex - 1];
+      window.location.href = prevPost.url;
+    } else {
+      alert("이전 글이 없습니다.");
+    }
+  });
+
+  // 다음 글 버튼
+  nextBtn.addEventListener("click", () => {
+    if (currentIndex < postList.length - 1) {
+      const nextPost = postList[currentIndex + 1];
+      window.location.href = nextPost.url;
+    } else {
+      alert("다음 글이 없습니다.");
+    }
+  });
+</script>
+</body>
+</html>
