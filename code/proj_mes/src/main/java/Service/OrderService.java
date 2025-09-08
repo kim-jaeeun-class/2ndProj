@@ -1,8 +1,8 @@
-package service;
+package Service;
 
 import java.util.List;
 
-import dao.OrderDAO;
+import Dao.OrderDAO;
 
 public class OrderService {
 
