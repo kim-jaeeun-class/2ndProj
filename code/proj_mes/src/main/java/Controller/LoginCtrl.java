@@ -42,8 +42,8 @@ public class LoginCtrl extends HttpServlet {
         Login_Dto user = loginService.login(id, pw);
 
 //        // 로깅 테스트
-        log.info("Log4j2 TXT 파일 테스트 - INFO");
-        log.warn("경고 로그 - WARN");
+        log.info("login id = " + id);
+//        log.warn("경고 로그 - WARN");
 //        log.error("에러 로그 - ERROR", new RuntimeException("boom"));
 //        일부로 에러를 발생시키는 방법
 
