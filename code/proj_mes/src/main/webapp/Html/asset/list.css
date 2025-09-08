@@ -225,17 +225,6 @@ a, a:link, a:visited {
     cursor: pointer;
 }
 
-/* 반응형 */
-@media (max-width: 768px) {
-    .filter {
-        justify-content: space-between;
-    }
-    .date_filter {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-}
 .order_filter {
     display: flex;
     justify-content: space-between;
@@ -324,13 +313,24 @@ a, a:link, a:visited {
 }
 .order_row_1,
 .order_row_2 {
-    width: 30px;
+    width: 20px;
+}
+.order_row_0 {
+    width: 50px;
 }
 .order_row_3,
 .order_row_4 {
     width: 100px;
 }
-
+/*
+.order_row_5,
+.order_row_6 {
+    width: 60px;
+}
+.order_row_7,
+.order_row_8 {
+    width: 70px;
+} */
 
 
 /* 1) 스크롤 영역: 내부 스크롤 + 스크롤바 공간 예약 */
@@ -359,7 +359,7 @@ a, a:link, a:visited {
 }
 /* 3) 셀 기본 패딩/라인 */
 .tables th, .tables td {
-  padding: 10px 12px;
+  padding: 5px 5px;
   border: 1px solid #000000;
 }
 
