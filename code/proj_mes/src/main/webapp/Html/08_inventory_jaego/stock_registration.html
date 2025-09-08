@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/asset/registration.css">
+</head>
+<body>
+    <div class="main">
+        <div class="action">
+            <button type="submit">승인 요청</button>
+        </div>
+        <div class="box">
+            <div class="item">
+                <div> 대분류 </div>
+                <select>
+                    <option>전체</option>
+                    <option>유리</option>
+                    <option>화학 강화제</option>
+                    <option>코팅</option>
+                    <option>완제품</option>
+                    <option>소모품</option>
+                </select>
+            </div>
+            <div class="item">
+                <div> 중분류 </div>
+                <select>
+                    <option>전체</option>
+                    <option>LCD</option>
+                    <option>OLED</option>
+                    <option>AMOLED</option>
+                    <option>질산칼륨</option>
+                    <option>질산나트륨</option>
+                    <option>불소중합체</option>
+                    <option>산화티타늄</option>
+                    <option>산화지르코늄</option>
+                    <option>핸드폰</option>
+                    <option>닌텐도</option>
+                    <option>네비게이션</option>
+                    <option>스티로폼</option>
+                    <option>비닐</option>
+                </select>
+            </div>
+            <div class="item">
+                <div> 소분류 </div>
+                <select>
+                    <option>전체</option>
+                    <option>0.3mm</option>
+                    <option>0.5mm</option>
+                    <option>0.7mm</option>
+                    <option>50kg</option>
+                    <option>70kg</option>
+                    <option>갤럭시S23</option>
+                    <option>아이폰17</option>
+                    <option>닌텐도3D</option>
+                    <option>닌텐도Lite</option>
+                    <option>5인치</option>
+                    <option>7인치</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>L</option>
+                    <option>10M</option>
+                    <option>30M</option>
+                </select>
+            </div>
+            <div class="item">
+                <div>등록날짜</div>
+                <input class="main_input" type="date">
+            </div>
+        </div>
+        <div class="box">
+            <div class="item">
+                <div>품목코드</div>
+                <input class="main_input" type="text" placeholder="품목을 선택하세요">
+            </div>
+            <div class="item">
+                <div>품목명/모델명</div>
+                <input class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div> 구분 </div>
+                <select>
+                    <option>전체</option>
+                    <option>완제품</option>
+                    <option>원재료</option>
+                    <option>소모품</option>
+                    <option>폐기</option>
+                </select>
+            </div>
+            <div class="item">
+                <div>위치</div>
+                <input class="main_input" type="text">
+            </div>
+        </div>
+        <div class="box">
+            <div class="item">
+                <div>LOT번호</div>
+                <input class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>수량</div>
+                <input class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>단가</div>
+                <input class="main_input" type="text">
+            </div>
+            <div class="item">
+                <div>합계</div>
+                <input class="main_input" type="text">
+            </div>
+        </div>
+        <div class="note box">
+            <div class="item">
+                <div>비고</div>
+                <input class="note_input" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="list hide">
+        <div class="header_list">재고 이동현황</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>LOT번호</th>
+                    <th>이전 위치</th>
+                    <th>현 위치</th>
+                    <th>이동사유</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AAA1564</td>
+                    <td>TA-1</td>
+                    <td>TA-2</td>
+                    <td>출고</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="bottom">
+        <button type="button">목록</button>
+    </div>
+    <div class="modal hide">
+        <div class="search">
+            <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
+            <button class="m_button" type="button">검색</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>LOT번호</th>
+                    <th>품목코드</th>
+                    <th>품목명/모델명</th>
+                    <th>단가</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>AAA1564</td>
+                    <td>PSF156322254</td>
+                    <td>아이폰17</td>
+                    <td>1,000,000</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bottom">
+            <button type="button">취소</button>
+            <button type="submit">확인</button>
+        </div>
+    </div>
+    <div class="modal hide">
+        <div class="search">
+            <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
+            <button class="m_button" type="button">검색</button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>거래처 코드</th>
+                    <th>거래처명</th>
+                    <th>사업자번호</th>
+                    <th>연락처</th>
+                    <th>담당자</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>SDF4435</td>
+                    <td>휴먼유리</td>
+                    <td>12-345-67890</td>
+                    <td>010-1234-5678</td>
+                    <td>나사원</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bottom">
+            <button class="m_button" type="button">취소</button>
+            <button class="m_button" type="submit">확인</button>
+        </div>
+    </div>
+</body>
+</html>

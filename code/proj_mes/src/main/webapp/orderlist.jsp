@@ -115,26 +115,22 @@
         </div>
         <button type="submit"> 조회 </button>
     </div>
-    <div class="bottom">
-        <button type="submit">삭제</button>
-        <button type="submit">추가</button>
-    </div>
-    <div class="center">
-        <table border="1" class="table">
+    <div class="table-wrap center" tabindex="0">
+        <table class="tables">
             <thead>
                 <tr>
-                    <th>
+                    <th scope="col">
                         <input type="checkbox">
                     </th>
-                    <th>NO</th>
-                    <th>날짜</th>
-                    <th>발주번호</th>
-                    <th>부서</th>
-                    <th>사원이름</th>
-                    <th>총 수량</th>
-                    <th>총 금액</th>
-                    <th>진행상태</th>
-                    <th></th>
+                    <th scope="col">NO</th>
+                    <th scope="col">날짜</th>
+                    <th scope="col">발주번호</th>
+                    <th scope="col">부서</th>
+                    <th scope="col">사원이름</th>
+                    <th scope="col">총 수량</th>
+                    <th scope="col">총 금액</th>
+                    <th scope="col">진행상태</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -143,7 +139,7 @@
                         <input type="checkbox">
                     </td>
                     <td>1</td>
-                    <td>20250820</td>
+                    <td>2025-08-20</td>
                     <td>PSF156322254</td>
                     <td>생산2팀</td>
                     <td>홍길동</td>
@@ -170,9 +166,142 @@
                         <button type="button">회수</button>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>1</td>
+                    <td>2025-08-20</td>
+                    <td>PSF156322254</td>
+                    <td>생산2팀</td>
+                    <td>홍길동</td>
+                    <td>5</td>
+                    <td>100,000</td>
+                    <td>승인대기</td>
+                    <td>
+                        <button type="button">회수</button>
+                    </td>
+                </tr>
+                
             </tbody>
         </table>
     </div>
+</div>
+<div class="bottom">
+    <button type="submit">삭제</button>
+    <button type="submit">추가</button>
 </div>
 
 </body>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="asset/registration.css">
+    <link rel="stylesheet" href="/asset/registration.css">
     <script src="/2nd_proj/html/asset/order_resistration.js"></script>
 </head>
 <body>
@@ -73,40 +73,42 @@
                 <button type="submit">추가</button>
             </div>
         </div>
-        <table border="1" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox">
-                    </th>
-                    <th>NO</th>
-                    <th>품목</th>
-                    <th>수량</th>
-                    <th>단가</th>
-                    <th>합계</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="checkbox">
-                    </td>
-                    <td>1</td>
-                    <td>휴먼 유리</td>
-                    <td>5</td>
-                    <td>100,000</td>
-                    <td>500,000</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">Total</td>
-                    <td>5</td>
-                    <td>100,000</td>
-                    <td>500,000</td>
-                </tr>
-            </tfoot>
-        </table>
+        <div class="table-wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox">
+                        </th>
+                        <th>NO</th>
+                        <th>품목</th>
+                        <th>수량</th>
+                        <th>단가</th>
+                        <th>합계</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                        <td>1</td>
+                        <td>휴먼 유리</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td>500,000</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td>500,000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
     <div class="bottom">
         <button type="button">목록</button>
@@ -116,8 +118,8 @@
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
-        <div class="table_box">
-            <table class="table">
+        <div class="table_box table-wrap" tabindex="0">
+            <table class="tables">
                 <thead>
                     <tr>
                         <th></th>
@@ -186,70 +188,72 @@
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
-        <table border="1" class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>거래처 코드</th>
-                    <th>거래처명</th>
-                    <th>사업자번호</th>
-                    <th>연락처</th>
-                    <th>담당자</th>
-                </tr>
-            </thead>
-            <tbody class="list">
-                <tr>
-                    <td>
-                        <input type="radio" name="client">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="client">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="client">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="client">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="client">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>거래처 코드</th>
+                        <th>거래처명</th>
+                        <th>사업자번호</th>
+                        <th>연락처</th>
+                        <th>담당자</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    <tr>
+                        <td>
+                            <input type="radio" name="client">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>12-345-67890</td>
+                        <td>010-1234-5678</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="client">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>12-345-67890</td>
+                        <td>010-1234-5678</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="client">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>12-345-67890</td>
+                        <td>010-1234-5678</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="client">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>12-345-67890</td>
+                        <td>010-1234-5678</td>
+                        <td>나사원</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="client">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>12-345-67890</td>
+                        <td>010-1234-5678</td>
+                        <td>나사원</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="bottom">
             <button class="cancel m_button" type="button">취소</button>
             <button class="confirm m_button" type="button">확인</button>
@@ -260,46 +264,48 @@
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
-        <table border="1" class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>품목코드</th>
-                    <th>품목명</th>
-                    <th>유형</th>
-                    <th>단가</th>
-                </tr>
-            </thead>
-            <tbody class="list">
-                <tr>
-                    <td>
-                        <input type="radio" name="item">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>원재료</td>
-                    <td>50,000</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="item">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>교육유리</td>
-                    <td>원재료</td>
-                    <td>50,000</td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="radio" name="item">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>아이폰17</td>
-                    <td>완제품</td>
-                    <td>1,000,000</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>품목코드</th>
+                        <th>품목명</th>
+                        <th>유형</th>
+                        <th>단가</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>원재료</td>
+                        <td>50,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>교육유리</td>
+                        <td>원재료</td>
+                        <td>50,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="bottom">
             <button class="cancel m_button" type="button">취소</button>
             <button class="confirm m_button" type="button">추가</button>
