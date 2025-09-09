@@ -388,21 +388,41 @@ a, a:link, a:visited {
       <div class="post-meta">작성자: 고현지 | 작성 시간: 2024-12-15 17:30</div>
     </div>
 
-    <div class="editor-toolbar">
-      <button type="button">사진</button>
-      <button type="button">링크</button>
-      <button type="button">인용</button>
-      <button type="button">표</button>
-      <button type="button">굵게</button>
-      <button type="button">기울임</button>
-      <button type="button">밑줄</button>
-      <button type="button">취소선</button>
-      <button type="button">글머리</button>
-    </div>
+  <div class="editor-toolbar">
+  <button type="button" id="insertImageBtn"disabled >사진</button>
+  <button type="button" id="insertScheduleBtn" disabled>일정</button>
 
-    <textarea class="post-content" placeholder="본문을 입력하세요...">2층 휴게실에서 휴대폰 주우신 분 계신가요?
-아무리 찾아도 안보입니다 ㅠㅠ
-혹시 찾으시면 010-****-****으로 연락 주세요!</textarea>
+
+   <select id="fontSelect" disabled>
+    <option value="">기본서체</option>
+    <option value="Gulim">굴림</option>
+    <option value="Malgun Gothic">맑은 고딕</option>
+    <option value="Dotum">돋움</option>
+    <option value="Arial">Arial</option>
+    <option value="Courier New">Courier New</option>
+  </select>
+
+  <!-- ✅ 드롭다운: 글자크기 -->
+  <select id="fontSizeSelect" disabled>
+    <option value="">글자크기</option>
+    <option value="1">1 (매우 작음)</option>
+    <option value="2">2</option>
+    <option value="3">3 (기본)</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7 (가장 큼)</option>
+  </select>
+  <button type="button" id="addTableBtn" disabled>표</button>
+  <button type="button" id="deleteTableBtn" disabled>표 삭제</button>
+</div>
+
+
+    <div class="post-content" contenteditable="true" id="editor">
+  2층 휴게실에서 휴대폰 주우신 분 계신가요?<br>
+  아무리 찾아도 안보입니다 ㅠㅠ<br>
+  혹시 찾으시면 010-****-****으로 연락 주세요!
+</div>
 
     <div class="file-upload">
       <label for="file">첨부파일</label>
@@ -416,42 +436,173 @@ a, a:link, a:visited {
     </div>
   </div>
   <script>
+(() => {
+  const editor = document.getElementById("editor");
   const editBtn = document.getElementById("editBtn");
-const deleteBtn = document.getElementById("deleteBtn");
-const postContent = document.querySelector(".post-content");
-const container = document.querySelector(".container");
 
-let isEditing = false;
+  // 편집 도구 버튼 ID 목록
+  const controlIds = [
+    "insertImageBtn",
+    "insertScheduleBtn",
+    "fontSelect",
+    "fontSizeSelect",
+    "addTableBtn",
+    "deleteTableBtn"
+  ];
+  const controls = controlIds.map(id => document.getElementById(id));
 
-// 초기엔 읽기 전용
-postContent.setAttribute("readonly", "readonly");
+  // 편집 가능 상태 설정 함수 (토글)
+  const setEditingEnabled = (enabled) => {
+    editor.contentEditable = enabled.toString();
+    controls.forEach(ctrl => ctrl.disabled = !enabled);
+    editBtn.textContent = enabled ? "수정 중" : "수정";
+  };
 
-editBtn.addEventListener("click", () => {
-  if (!isEditing) {
-    // 수정 모드 시작
-    postContent.removeAttribute("readonly");
-    postContent.focus();
-    editBtn.textContent = "저장";
-    isEditing = true;
-  } else {
-    // 저장 모드 (수정 완료)
-    postContent.setAttribute("readonly", "readonly");
-    editBtn.textContent = "수정";
-    isEditing = false;
+  let selectedTable = null;
 
-    // 서버 저장 등 필요한 작업 (여기선 콘솔 출력)
-    console.log("저장된 내용:", postContent.value);
-    alert("수정 내용이 저장되었습니다.");
-  }
-});
+  // 수정 버튼 클릭 시 편집 모드 토글
+  editBtn.addEventListener("click", () => {
+    setEditingEnabled(!editor.isContentEditable);
+  });
 
-deleteBtn.addEventListener("click", () => {
-  const confirmed = confirm("정말 삭제하시겠습니까?");
-  if (confirmed) {
-    container.remove();
-    alert("게시글이 삭제되었습니다.");
-  }
-});
+  // 표 삽입
+  const addTableBtn = document.getElementById("addTableBtn");
+  addTableBtn.addEventListener("click", () => {
+    const tableHTML = `
+      <table border="1" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+        <tr><th>항목</th><th>내용</th></tr>
+        <tr><td>예시1</td><td>내용1</td></tr>
+        <tr><td>예시2</td><td>내용2</td></tr>
+      </table>
+    `;
+    editor.insertAdjacentHTML('beforeend', tableHTML);
+  });
+
+  // 표 선택 (클릭한 표 강조)
+  editor.addEventListener("click", (e) => {
+    const clickedTable = e.target.closest("table");
+    if (clickedTable) {
+      if (selectedTable && selectedTable !== clickedTable) {
+        selectedTable.style.border = "1px solid black";
+      }
+      selectedTable = clickedTable;
+      selectedTable.style.border = "2px solid red";
+    } else if (selectedTable) {
+      selectedTable.style.border = "1px solid black";
+      selectedTable = null;
+    }
+  });
+
+  // 표 삭제
+  const deleteTableBtn = document.getElementById("deleteTableBtn");
+  deleteTableBtn.addEventListener("click", () => {
+    if (selectedTable) {
+      selectedTable.remove();
+      selectedTable = null;
+    } else {
+      alert("삭제할 표를 클릭해 선택하세요.");
+    }
+  });
+
+  // 이미지 삽입
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+
+  const insertImageBtn = document.getElementById("insertImageBtn");
+  insertImageBtn.addEventListener("click", () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.execCommand('insertImage', false, e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    fileInput.value = ''; // 초기화
+  });
+
+  // 일정 삽입 (일정 버튼 바로 밑에 달력 input 띄우기)
+  const insertScheduleBtn = document.getElementById("insertScheduleBtn");
+  insertScheduleBtn.addEventListener("click", () => {
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+
+    Object.assign(dateInput.style, {
+      position: 'fixed',
+      zIndex: '10000',
+      fontSize: '16px',
+      transform: 'none'
+    });
+
+    document.body.appendChild(dateInput);
+
+    // 일정 버튼 위치 기준으로 달력 위치 지정
+    const btnRect = insertScheduleBtn.getBoundingClientRect();
+    const top = btnRect.bottom + window.scrollY;
+    const left = btnRect.left + window.scrollX;
+
+    dateInput.style.top = `${top}px`;
+    dateInput.style.left = `${left}px`;
+
+    dateInput.focus();
+
+    dateInput.addEventListener('change', () => {
+      const selectedDate = dateInput.value;
+      if (selectedDate) {
+        const formattedDate = new Date(selectedDate).toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'short'
+        });
+
+        editor.focus();
+
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+
+        const textNode = document.createTextNode(`🗓️ ${formattedDate} `);
+        range.insertNode(textNode);
+
+        range.setStartAfter(textNode);
+        range.setEndAfter(textNode);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+      document.body.removeChild(dateInput);
+    });
+  });
+
+  // 폰트 변경
+  const fontSelect = document.getElementById("fontSelect");
+  fontSelect.addEventListener("change", function () {
+    if (this.value) {
+      document.execCommand("fontName", false, this.value);
+    }
+    this.selectedIndex = 0;
+  });
+
+  // 글자 크기 변경
+  const fontSizeSelect = document.getElementById("fontSizeSelect");
+  fontSizeSelect.addEventListener("change", function () {
+    if (this.value) {
+      document.execCommand("fontSize", false, this.value);
+    }
+    this.selectedIndex = 0;
+  });
+
+  // 초기 상태: 편집 불가
+  setEditingEnabled(false);
+})();
+
+
 </script>
 </body>
 </html>
