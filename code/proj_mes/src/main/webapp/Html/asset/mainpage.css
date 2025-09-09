@@ -1,17 +1,23 @@
 :root {
+    --radius: 7px;
     --primary-dark: #002a40;
     --secondary-dark: #003751;
     --main-bg: #eeeeee;
+    --hover-bg: #cccccc;
     --light-accent: #cef0ff;
     --text-color: #222;
     --border-color: #9aa0a6;
-    --radius: 7px;
+    --blue-color: #007bff;
+    --green-color: #28a745;
+    --red-color: #dc3545;
+    --yallow-color: #ffc107;
+    --gray-color: #6c757d;
 }
 
 body {
     font-family: 'Malgun Gothic', 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--main-bg);
-    margin: 0; 
+    margin: 0;
 }
 
 /* 헤더 전체 (J2P4, 메뉴 모두 포함) */
@@ -22,7 +28,7 @@ header {
     font-weight: bold;
     display: flex;
     flex-direction: column;
-    padding: 0; 
+    padding: 0;
 }
 
 /* 헤더 상단 섹션 (J2P4, 검색, 로그아웃, 마이아이콘) */
@@ -39,6 +45,11 @@ header .corp {
     align-items: center;
     gap: 10px;
     font-size: 1.2rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+header .corp:hover {
+    transform: scale(1.05);
 }
 
 header .search {
@@ -51,8 +62,9 @@ header .myIcon {
     padding-right: 10px;
 }
 
-header ul.subList {
-    display: none;
+/* 마이아이콘 하위메뉴 스타일 - 사진과 동일하게 즉시 표시 */
+header .myIcon ul.subList {
+    display: none; /* 기본적으로 숨김 */
     background-color: var(--secondary-dark);
     position: absolute;
     top: 100%;
@@ -69,12 +81,12 @@ header ul.subList {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* 마우스를 올리면 하위 메뉴 보이기 */
+/* 마이아이콘에 마우스를 올리면 하위 메뉴 보이기 */
 header .myIcon:hover .subList {
-    display: flex;
+    display: flex; /* 마우스 올리면 즉시 보임 */
 }
 
-/* 메인 네비게이션 (기존 GNB) */
+/* 메인 네비게이션 (GNB) */
 header .main-nav {
     background: linear-gradient(to right, var(--secondary-dark), var(--primary-dark));
     font-weight: bold;
@@ -91,34 +103,48 @@ header .main-nav ul.mainList {
     margin: 0;
 }
 
+header .main-nav ul.mainList > li {
+    position: relative;
+    color: white;
+}
+
+/* 메인 메뉴 하위 메뉴 스타일 (부드러운 효과) */
 header .main-nav ul.subList {
     background-color: var(--primary-dark);
     color: var(--light-accent);
     border-radius: 5px;
     position: absolute;
     left: 0;
-    display: none;
     font-weight: normal;
     font-size: medium;
     flex-direction: column;
     justify-content: flex-start;
     z-index: 9999;
-    min-width: 130px;
+    min-width: 160px;
     margin-top: 5px;
+    padding: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(-10px);
+    visibility: hidden;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
 }
 
-header .main-nav ul.mainList>li {
-    position: relative;
-    color: white;
+/* 마우스를 올리면 메인 메뉴 하위 메뉴 보이기 */
+header .main-nav ul.mainList > li:hover .subList {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
 }
 
-header .main-nav ul.mainList>li:hover .subList {
-    display: flex;
-}
-
+/* 하위 메뉴 아이템 */
 header .main-nav .subList li {
     padding: 8px 12px;
+}
+
+header .main-nav .subList li:hover {
+    background-color: var(--secondary-dark);
+    border-radius: 5px;
 }
 
 header .main-nav a,
@@ -153,7 +179,7 @@ header .main-nav a:visited {
     border-bottom: 1px solid var(--border-color);
 }
 
-.main-content-header h2 { 
+.main-content-header h2 {
     font-size: 1.4rem;
     font-weight: bold;
     color: var(--text-color);
@@ -167,10 +193,10 @@ header .main-nav a:visited {
     gap: 5px;
     text-decoration: none;
 }
+
 .main-content-header .toMainpage img {
     margin-top: 2px;
 }
-
 
 .mainpage {
     display: flex;
@@ -188,7 +214,7 @@ header .main-nav a:visited {
 }
 
 .sandan {
-    flex-grow: 1.5; /* 너비를 1에서 1.5로 늘려 더 넓게 만듭니다. */
+    flex-grow: 1.5;
     border-radius: var(--radius);
     background-color: white;
     padding: 20px;
@@ -241,6 +267,7 @@ h3 {
     margin: 0 0 7px 0;
     font-size: 1.2em;
 }
+
 h4 {
     margin-bottom: 10px;
     text-align: center;
@@ -248,33 +275,37 @@ h4 {
 }
 
 /* 생산 현황 내부 */
+.san1 .dan:hover {
+    background-color: var(--hover-bg);
+}
+
 .san1 {
     display: flex;
     flex-direction: column;
-    gap: 15px; /* 박스들 사이의 세로 간격 */
+    gap: 15px;
 }
 
 .san2 {
     display: flex;
-    gap: 15px; /* 박스들 사이의 가로 간격 */
+    gap: 15px;
 }
 
 .dan {
     background-color: var(--main-bg);
     border-radius: 5px;
-    flex: 1; /* 박스들이 남은 공간을 균등하게 채우도록 변경 */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* 내용을 세로 가운데 정렬 */
+    justify-content: center;
     text-align: center;
     padding: 15px 10px;
-    height: auto; /* 필요 없는 높이 제한 제거 */
+    height: auto;
 }
 
 .dan span {
     font-size: 0.9em;
     font-weight: normal;
-    margin-bottom: 5px; /* 숫자와 제목 사이 간격 추가 */
+    margin-bottom: 5px;
 }
 
 .dan strong {
@@ -282,7 +313,8 @@ h4 {
     font-weight: bold;
 }
 
-.p {
+/* 생산 현황 이미지 */
+/* .p {
     margin-top: 20px;
 }
 
@@ -291,7 +323,7 @@ h4 {
     height: auto;
     margin: 0 auto;
     display: block;
-}
+} */
 
 /* 재고 현황 */
 .jae {
@@ -306,15 +338,25 @@ h4 {
     gap: 10px;
 }
 
-.won, .sang, .rang {
+.won,
+.sang,
+.rang {
     width: 10px;
     height: 10px;
     border-radius: 15%;
 }
 
-.won { background-color: blue; }
-.sang { background-color: green; }
-.rang { background-color: red; }
+.won {
+background-color: var(--blue-color);
+}
+
+.sang {
+    background-color: var(--green-color);
+}
+
+.rang {
+    background-color: var(--red-color);
+}
 
 /* 공지 사항 */
 .an {
@@ -325,9 +367,16 @@ h4 {
     color: var(--text-color);
 }
 
+.an p:hover {
+    background-color: var(--hover-bg);
+}
+
 .an p {
     margin: 0;
     font-size: 0.9em;
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    padding: 10px;
 }
 
 .an span {
@@ -372,14 +421,22 @@ h4 {
     text-decoration: none;
 }
 
+.ge p:hover {
+    background-color: var(--hover-bg);
+}
+
 .ge p {
     margin: 0;
     font-size: 0.9em;
+    background-color: var(--main-bg);
+    border-radius: 5px;
+    padding: 10px;
 }
 
 .ge span {
     color: var(--border-color);
 }
+
 .ge p a {
     color: var(--text-color);
     text-decoration: none;
