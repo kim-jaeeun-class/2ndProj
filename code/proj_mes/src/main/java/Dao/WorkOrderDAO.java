@@ -32,6 +32,8 @@ public class WorkOrderDAO {
 	}
 	
 	// 전체 조회
+	// TODO : 전체 조회할 때 실제 화면 기준 거래처명도 필요한데 join 조건 어떻게 줄지, 테이블에 연결할 속성 없는데 FK라 치고 넣어버려야 하는지 고민.
+	//		  우선 지금은 작업 지시서 테이블의 모든 컬럼 조회 기준으로 진행함
 	public List<WorkOrderDTO> selectAllWO() {
 		List<WorkOrderDTO> listAll = new ArrayList<WorkOrderDTO>();
 		
@@ -75,7 +77,8 @@ public class WorkOrderDAO {
 	}
 	
 	// 필터링 조회 : 미진행/진행/완료(결제중, 미확인은 어디서 확인해야 하나...)
-	public List<WorkOrderDTO> selectOrderWO() {
+	// 그냥 결제중 미확인을 안 넣으면 해결? 되지 않는지?? 편하게 살자
+	public List<WorkOrderDTO> selectOrderWO(String woPS) {
 		List<WorkOrderDTO> listFilter = new ArrayList<WorkOrderDTO>();
 		
 		try {
@@ -91,9 +94,9 @@ public class WorkOrderDAO {
 			// 여기부터가 좀... 아닌 것 같은데.
 			// 기존 전체 조회에서는 if문 안에 new WorkOrderDTO()를 넣었는데,
 			// 이렇게 빼도 되나? -> 안 된다 진짜...
-			// TODO : setString이 고민...
+			// setString이 고민... -> 해결함... 애초에 입력 받아야 하는데 ()를 왜 비웠냐
 			
-			ps.setString(1, WorkOrderDTO.getWoPS());
+			ps.setString(1, woPS);
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -136,7 +139,7 @@ public class WorkOrderDAO {
 			
 			String query = "select "
 					+ "		item_code, item_name, item_bigo, "
-					+ "		item_type, item_unit, item_price\r\n"
+					+ "		item_type, item_unit, item_price"
 					+ "		from item;";
 			PreparedStatement ps = conn.prepareStatement(query);
 			
@@ -145,14 +148,11 @@ public class WorkOrderDAO {
 			while(rs.next()) {
 				WorkOrderDTO dto = new WorkOrderDTO();
 				
-				dto.setWoNum(rs.getInt("wo_num"));
-				dto.setWoDate(rs.getDate("wo_date"));
-				dto.setWoDuedate(rs.getDate("wo_duedate"));
-				dto.setWoPQ(rs.getInt("wo_pq"));
-				dto.setWoAQ(rs.getInt("wo_aq"));
-				dto.setWoPS(rs.getString("wo_ps"));
-				dto.setWorkerID(rs.getString("worker_id"));
-				dto.setItemCode(rs.getString("item_code"));
+				dto.setItemName(rs.getString("item_name"));
+				dto.setItemBigo(rs.getString("item_bigo"));
+				dto.setItemType(rs.getInt("item_type"));
+				dto.setItemUnit(rs.getInt("item_unit"));
+				dto.setItemPrice(rs.getString("item_price"));
 				
 				list.add(dto);
 			}
@@ -174,7 +174,7 @@ public class WorkOrderDAO {
 	// 등록
 	//	- 입력되는 값
 	//		+ 지시일, 작업지시NO, 납품처, 담당자, 납기일, 첨부, 품목(품목 테이블과 join)
-    // 		+ 품목 목록을 봐야 하니 품목 테이블 join도 필요할 듯
+    // 		TODO + 품목 목록을 봐야 하니 품목 테이블 join도 필요할 듯
 	public int insertEmp(WorkOrderDTO workOrderDTO) {
 		
 		int result = -1;

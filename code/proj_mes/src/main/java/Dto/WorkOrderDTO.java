@@ -15,12 +15,16 @@ public class WorkOrderDTO {
 	private String workerID; // 사번 : FK
 	private String itemCode; // 품목 코드 : FK
 	
-	// 품목 조회용
+	// 품목 조회용 : 품목 테이블 영역
 	private String itemName; 
 	private String itemBigo;
 	private int itemType;
 	private int itemUnit;
-	private 
+	private String itemPrice;
+	
+	// 거래처 조회용 : clientname이 전체 조회에 있어서
+	private String clientName;
+	
 	public int getWoNum() {
 		return woNum;
 	}
@@ -70,11 +74,47 @@ public class WorkOrderDTO {
 		this.itemCode = itemCode;
 	}
 	
+	
+	
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+	public String getItemBigo() {
+		return itemBigo;
+	}
+	public void setItemBigo(String itemBigo) {
+		this.itemBigo = itemBigo;
+	}
+	public int getItemType() {
+		return itemType;
+	}
+	public void setItemType(int itemType) {
+		this.itemType = itemType;
+	}
+	public int getItemUnit() {
+		return itemUnit;
+	}
+	public void setItemUnit(int itemUnit) {
+		this.itemUnit = itemUnit;
+	}
+	public String getItemPrice() {
+		return itemPrice;
+	}
+	public void setItemPrice(String itemPrice) {
+		this.itemPrice = itemPrice;
+	}
 	@Override
 	public String toString() {
 		return "WorkOrderDTO [woNum=" + woNum + ", woDate=" + woDate + ", woDuedate=" + woDuedate + ", woPQ=" + woPQ
-				+ ", woAQ=" + woAQ + ", woPS=" + woPS + ", workerID=" + workerID + ", itemCode=" + itemCode + "]";
+				+ ", woAQ=" + woAQ + ", woPS=" + woPS + ", workerID=" + workerID + ", itemCode=" + itemCode
+				+ ", itemName=" + itemName + ", itemBigo=" + itemBigo + ", itemType=" + itemType + ", itemUnit="
+				+ itemUnit + ", itemPrice=" + itemPrice + "]";
 	}
+
+	
 	
 	
 }
