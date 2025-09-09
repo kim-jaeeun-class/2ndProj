@@ -19,6 +19,8 @@
     const mappings = [
       ["header", "header"],
       [".gnb", ".gnb"],
+      [".titleBox", ".titleBox"],
+
     ];
 
     for (const [fromSel, toSel] of mappings) {
