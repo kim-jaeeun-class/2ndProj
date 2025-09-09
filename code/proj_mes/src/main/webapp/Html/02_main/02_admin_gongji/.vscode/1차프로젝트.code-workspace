@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "1차프로젝트",
+			"path": "D:/workspace/1차프로젝트"
+		},
+		{
+			"name": "Html",
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "1차프로젝트"
+	}
+}

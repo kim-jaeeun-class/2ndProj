@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지 사항</title>
+    <link rel="stylesheet" href="Gongjiboard.css" />
+    <style>
+        :root {
+            --border: #9aa0a6;
+            --text: #222;
+            --muted: #666;
+            --button: #5a5a5a;
+            --button-text: #fff;
+            --field-border: #a4a5a7;
+            --page-bg: #ffffff;
+            --radius: 10px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
+                "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 헤더 부분 */
+        header {
+            background-color: #495057;
+            height : 50px;
+            border: 1px solid;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header .corp {
+            display: flex;
+            align-items: center;  
+            padding-left: 10px;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        header .search {
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        /* 회원 아이콘 부분*/
+        header .myIcon {
+            position: relative;
+            padding: 5px 10px 5px 0;
+        }
+
+        header ul.subList {
+            display: none;
+            background-color: turquoise;
+            position: absolute;
+            top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
+            right: 0;
+            list-style-type: none;
+            color: #333333;
+            font-weight: normal;
+            flex-direction: column;  
+            justify-content: flex-start;  
+            z-index: 9999;  
+            min-width: 150px;  
+            margin: 0; /* ul 기본 margin 제거 */
+            padding: 0; /* ul 기본 padding 제거 */
+        }
+
+        /* 마우스를 올리면 하위 메뉴 보이기 */
+        header .myIcon:hover .subList {
+            display: flex;
+        }
+
+        /* GNB 부분 */
+        .gnb {
+            background-color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .gnb ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-evenly;
+            padding-left: 0;
+        }
+
+        .gnb ul.subList {
+            background-color: #495057;
+            color: white;
+            border-radius: 5%;
+            position: absolute;
+            left: 0;
+            display: none;
+            font-weight: normal;
+            font-size: medium;
+            flex-direction: column;  
+            justify-content: flex-start;  
+            z-index: 9999;  
+            min-width: 130px;  
+        }
+        .gnb ul.mainList > li {
+            position: relative; /* 하위 메뉴의 위치 기준이 됨 */
+            color: #333333;
+        }
+        .gnb ul.mainList > li:hover .subList {
+            display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
+            margin-top: 0px;
+        }
+
+        .subList li {
+            padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
+            margin: 1px 1px;  /* 위아래 간격 추가 */
+        }
+
+        /* a 링크 양식 지정 */
+        a, a:link, a:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 제목 부분 */
+        .titleBox {
+            background-color: var(--field-border);
+            height: 25px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .titleBox span {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-left: 10px;
+            color: #333333;
+        }
+
+        .toMainpage {
+            color: var(--button);
+            margin-right: 10px;
+        }
+
+        /* 메인 몸통 부분 */
+        .wrap {
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background-color: #ffffff;
+            width: 90%;
+            margin: 10px auto;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            /* 여기에 모바일 스타일 넣으시면 됩니다 */
+        }
+        body {
+            font-family : "맑은 고딕", sans-serif;
+            background-color: #f5f5f5;
+            margin:0;
+            padding: 0;
+        }
+
+        .container {
+            width : 900px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow : 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        header {
+            display : flex;
+            justify-content : space-between;
+            align-items : center;
+            margin-bottom : 20px;
+        }
+        /* 헤더 영역: 한 줄에 좌우 배치 */
+        .header-top {
+            display: flex;
+            justify-content: space-between; /* 좌우 정렬 */
+            align-items: center;
+            width:100%;
+        }
+        /* 제목 스타일 */
+        .board-title {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        /* 링크 스타일 */
+        .main-link {
+            font-size: 14px;
+            text-decoration: none;
+            color: #333;
+        }
+        header h1 {
+            margin : 0;
+            font-size : 24px;
+        }
+        .search-area {
+            display: flex;
+            justify-content: flex-end;  /* 오른쪽 정렬 */
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 10px;              
+        }
+        .search-area select,
+        .search-area input {
+            padding: 5px;
+        }
+        .main-link {
+            font-size : 14px;
+            color : #555;
+            text-decoration : none;
+        }
+        table {
+            width : 100% ;
+            border-collapse : collapse;
+        }
+        thead {
+            background-color : #e0e0e0;
+        }
+        th,td {
+            padding : 12px;
+            text-align : center;
+            border-bottom : 1px solid #ddd;
+        }
+        td:nth-child(2) {
+            text-align : left;
+        }
+
+        .pagination {
+            text-align : center;
+            margin : 20px 0;
+        }
+
+        .pagination span {
+            margin : 0 5px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .button-area {
+            text-align : right;
+        }
+        .button-area button {
+            padding: 8px 16px;
+            background-color: #333;
+            color : white ;
+            border : none;
+            cursor : pointer;
+        }
+        .button-area button:hover {
+            background-color: #555;
+        }
+        /* 검색 조건 위치 맞추기 */
+        .search-area-outside {
+            display: flex;
+            flex-direction: row;     /* ➤ 가로 정렬 */
+            align-items: center;     /* ➤ 세로 정렬 맞춤 */
+            gap: 10px;               /* ➤ 요소 간 여백 */
+            margin-bottom: 10px;
+            /* 💡 수정된 부분 */
+            margin-left: auto;
+            /* 가운데 정렬 */
+            width: fit-content;    /* 내용에 맞게 줄어듦 */
+
+            white-space: nowrap;
+        /* 입력 스타일 */
+        }
+        .search-area-outside select,
+        .search-area-outside input {
+            padding: 5px;
+        }
+        .write-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .write-button:hover {
+            background-color: #555;
+        }
+        #search-button {
+            padding: 5px 12px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #search-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>공지 사항</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+	</div>
+    <div class = "container">
+        <div class="search-area-outside">
+            <label for="search-select">검색조건</label>
+            <select id="search-select">
+              <option>제목</option>
+              <option>내용</option>
+            </select>
+            <input type="text" id="search-input" placeholder="검색할 내용을 입력하세요" />
+            <button id="search-button">검색</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>유형</th>
+                    <th>제목</th>
+                    <th>담당부서</th>
+                    <th>등록일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+        </div>
+      
+        <div class = "button-area">
+            <a href="Gongjiboard.html" class="write-button"> 글쓰기</a>
+        </div>
+    </div>
+<script>
+    // 게시글 데이터 배열 (예시)
+    const posts = [
+        { "type": "[안내]", "title": "2025년 하반기 생산 목표 공지", "dept": "생산관리팀", "date": "2024-12-13", "views": 13 },
+        { "type": "[긴급]", "title": "라인2 설비 점검 일정 변경", "dept": "시설관리팀", "date": "2024-12-13", "views": 13 },
+        { "type": "[공유]", "title": "안전 수칙 교육 일정 및 내용 안내", "dept": "안전보건팀", "date": "2024-12-13", "views": 24 },
+        { "type": "[안내]", "title": "MES 시스템 정기 점검 안내", "dept": "IT운영팀", "date": "2024-12-13", "views": 24 },
+        { "type": "[경영]", "title": "신규 프로젝트 기획안 공모", "dept": "기획팀", "date": "2024-12-12", "views": 35 },
+        { "type": "[긴급]", "title": "전사 비상훈련 실시 안내", "dept": "총무팀", "date": "2024-12-11", "views": 41 },
+        { "type": "[안내]", "title": "사내 복지제도 변경 사항", "dept": "인사팀", "date": "2024-12-10", "views": 55 },
+        { "type": "[공유]", "title": "영업팀 2024년 4분기 실적 보고", "dept": "영업팀", "date": "2024-12-09", "views": 68 },
+        { "type": "[경영]", "title": "2025년도 사업 계획 확정 공고", "dept": "경영관리팀", "date": "2024-12-08", "views": 72 },
+        { "type": "[안내]", "title": "재무팀 월말 결산 일정 안내", "dept": "재무회계팀", "date": "2024-12-07", "views": 81 },
+        { "type": "[기술]", "title": "제품 품질 개선을 위한 회의록", "dept": "품질관리팀", "date": "2024-12-06", "views": 90 },
+        { "type": "[안내]", "title": "2024년 연차 사용 권장 안내", "dept": "인사팀", "date": "2024-12-05", "views": 105 },
+        { "type": "[공유]", "title": "신입사원 교육 프로그램 결과 보고", "dept": "교육팀", "date": "2024-12-04", "views": 110 },
+        { "type": "[긴급]", "title": "서버 긴급 패치 작업 공지", "dept": "IT운영팀", "date": "2024-12-03", "views": 122 },
+        { "type": "[경영]", "title": "신규 거래처 발굴 성과 보고", "dept": "영업팀", "date": "2024-12-02", "views": 130 },
+        { "type": "[기술]", "title": "생산 라인 효율성 증대 방안", "dept": "생산기술팀", "date": "2024-12-01", "views": 145 },
+        { "type": "[안내]", "title": "2025년 조직 개편안 사전 공지", "dept": "경영관리팀", "date": "2024-11-30", "views": 150 },
+        { "type": "[공유]", "title": "분기별 재고 현황 보고서", "dept": "자재관리팀", "date": "2024-11-29", "views": 162 },
+        { "type": "[긴급]", "title": "사내 망 보안 강화 안내", "dept": "IT보안팀", "date": "2024-11-28", "views": 178 },
+        { "type": "[기술]", "title": "품질 관리 자동화 솔루션 도입", "dept": "품질관리팀", "date": "2024-11-27", "views": 185 },
+        { "type": "[공유]", "title": "신제품 출시 기념 워크숍 개최", "dept": "마케팅팀", "date": "2024-11-26", "views": 191 },
+        { "type": "[안내]", "title": "연말정산 서류 제출 기한 안내", "dept": "재무회계팀", "date": "2024-11-25", "views": 204 },
+        { "type": "[경영]", "title": "경영진 정기 회의 결과 보고", "dept": "경영관리팀", "date": "2024-11-24", "views": 213 },
+        { "type": "[기술]", "title": "신규 생산 설비 도입 설명회", "dept": "생산기술팀", "date": "2024-11-23", "views": 220 },
+        { "type": "[안내]", "title": "워크숍 참가자 명단 확정 공지", "dept": "인사팀", "date": "2024-11-22", "views": 234 },
+        { "type": "[긴급]", "title": "전력 시스템 점검에 따른 작업 중단", "dept": "시설관리팀", "date": "2024-11-21", "views": 240 },
+        { "type": "[공유]", "title": "영업팀 주간 실적 및 목표 공유", "dept": "영업팀", "date": "2024-11-20", "views": 251 },
+        { "type": "[기술]", "title": "불량 원인 분석 및 개선 방안", "dept": "품질관리팀", "date": "2024-11-19", "views": 265 },
+        { "type": "[안내]", "title": "MES 사용 매뉴얼 업데이트", "dept": "IT운영팀", "date": "2024-11-18", "views": 272 },
+        { "type": "[경영]", "title": "해외 시장 진출 계획 발표", "dept": "기획팀", "date": "2024-11-17", "views": 288 },
+        { "type": "[공유]", "title": "사내 동호회 활동 지원 안내", "dept": "총무팀", "date": "2024-11-16", "views": 301 },
+        { "type": "[안내]", "title": "개인 정보 보호 교육 의무 이수", "dept": "정보보안팀", "date": "2024-11-15", "views": 310 },
+        { "type": "[긴급]", "title": "원자재 입고 지연에 따른 공지", "dept": "자재관리팀", "date": "2024-11-14", "views": 325 },
+        { "type": "[기술]", "title": "로봇 자동화 시스템 도입 검토", "dept": "생산기술팀", "date": "2024-11-13", "views": 331 },
+        { "type": "[경영]", "title": "경영 목표 달성 인센티브 지급", "dept": "인사팀", "date": "2024-11-12", "views": 340 },
+        { "type": "[안내]", "title": "사내식당 메뉴 및 운영 시간 변경", "dept": "총무팀", "date": "2024-11-11", "views": 354 },
+        { "type": "[공유]", "title": "신규 고객사 계약 체결 소식", "dept": "영업팀", "date": "2024-11-10", "views": 366 },
+        { "type": "[기술]", "title": "데이터 분석 시스템 구축 완료", "dept": "IT운영팀", "date": "2024-11-09", "views": 375 },
+        { "type": "[안내]", "title": "정기 건강검진 신청 안내", "dept": "안전보건팀", "date": "2024-11-08", "views": 382 },
+        { "type": "[긴급]", "title": "화재 경보 오작동에 대한 안내", "dept": "시설관리팀", "date": "2024-11-07", "views": 390 },
+        { "type": "[경영]", "title": "경쟁사 동향 분석 보고서", "dept": "기획팀", "date": "2024-11-06", "views": 401 },
+        { "type": "[안내]", "title": "사내 도서관 신규 도서 입고", "dept": "총무팀", "date": "2024-11-05", "views": 415 },
+        { "type": "[공유]", "title": "친환경 생산 공법 도입 성과", "dept": "생산기술팀", "date": "2024-11-04", "views": 420 },
+        { "type": "[기술]", "title": "특허 출원 진행 상황", "dept": "연구개발팀", "date": "2024-11-03", "views": 435 },
+        { "type": "[안내]", "title": "장기 근속자 포상 신청", "dept": "인사팀", "date": "2024-11-02", "views": 444 },
+        { "type": "[긴급]", "title": "긴급 소방 훈련 및 대피 안내", "dept": "안전보건팀", "date": "2024-11-01", "views": 450 },
+        { "type": "[경영]", "title": "분기별 재무 성과 발표", "dept": "재무회계팀", "date": "2024-10-31", "views": 465 },
+        { "type": "[공유]", "title": "고객 만족도 조사 결과", "dept": "마케팅팀", "date": "2024-10-30", "views": 472 },
+        { "type": "[기술]", "title": "생산 설비 유지보수 계획", "dept": "생산기술팀", "date": "2024-10-29", "views": 481 },
+        { "type": "[안내]", "title": "2025년도 예산 편성 지침", "dept": "기획팀", "date": "2024-10-28", "views": 490 },
+        { "type": "[긴급]", "title": "네트워크 장애 발생에 따른 공지", "dept": "IT운영팀", "date": "2024-10-27", "views": 500 },
+        { "type": "[경영]", "title": "주주총회 개최 안내", "dept": "경영관리팀", "date": "2024-10-26", "views": 511 },
+        { "type": "[기술]", "title": "새로운 생산 공정 도입", "dept": "연구개발팀", "date": "2024-10-25", "views": 520 },
+        { "type": "[공유]", "title": "부서별 목표 달성 현황", "dept": "인사팀", "date": "2024-10-24", "views": 535 },
+        { "type": "[안내]", "title": "사내 규정 개정 안내", "dept": "총무팀", "date": "2024-10-23", "views": 540 },
+        { "type": "[긴급]", "title": "태풍 대비 시설물 점검", "dept": "시설관리팀", "date": "2024-10-22", "views": 551 },
+        { "type": "[경영]", "title": "시장 분석 리포트 공유", "dept": "마케팅팀", "date": "2024-10-21", "views": 560 },
+        { "type": "[기술]", "title": "생산성 향상 제안 공모", "dept": "생산관리팀", "date": "2024-10-20", "views": 575 },
+        { "type": "[안내]", "title": "정기 회식비 정산 안내", "dept": "재무회계팀", "date": "2024-10-19", "views": 580 },
+        { "type": "[공유]", "title": "분기별 우수 사원 선정", "dept": "인사팀", "date": "2024-10-18", "views": 592 }
+    ];
+
+    const postsPerPage = 10; // 한 페이지에 보여줄 글 개수
+    let currentPage = 1;
+
+    function renderTable(page) {
+        currentPage = page;
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = ""; // 기존 내용 지우기
+
+        // 보여줄 글 범위 계산
+        const start = (page - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        const pagePosts = posts.slice(start, end);
+
+        // 글을 tbody에 추가
+        pagePosts.forEach(post => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${post.type}</td>
+                <td><a href="Gongjiboardafter.html">${post.title}</a></td>
+                <td>${post.dept}</td>
+                <td>${post.date}</td>
+                <td>${post.views}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        updatePagination();
+    }
+
+    function updatePagination() {
+        const pagination = document.querySelector('.pagination');
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(posts.length / postsPerPage);
+
+        for(let i = 1; i <= totalPages; i++) {
+            const span = document.createElement('span');
+            span.textContent = i;
+            if(i === currentPage) {
+                span.style.fontWeight = "bold"; // 현재 페이지 강조
+            }
+            span.style.cursor = "pointer";
+            span.addEventListener("click", () => renderTable(i));
+            pagination.appendChild(span);
+        }
+    }
+
+    // 초기 렌더링
+    renderTable(1);
+
+    // 검색 버튼 클릭 시 필터링
+    document.getElementById('search-button').addEventListener('click', function () {
+        const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+        const criteria = document.getElementById('search-select').value;
+
+        const filteredPosts = posts.filter(post => {
+            if (criteria === "제목") {
+                return post.title.toLowerCase().includes(keyword);
+            } else if (criteria === "내용") {
+                // 현재 post에 내용은 없으므로 title로 대체
+                return post.title.toLowerCase().includes(keyword);
+            }
+            return true;
+        });
+
+        renderFilteredTable(filteredPosts);
+    });
+
+    // 검색 결과로 테이블 렌더링하는 함수
+    function renderFilteredTable(filtered) {
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = "";
+
+        const limited = filtered.slice(0, postsPerPage);
+        limited.forEach(post => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${post.type}</td>
+                <td><a href="Gongjiboardafter.html">${post.title}</a></td>
+                <td>${post.dept}</td>
+                <td>${post.date}</td>
+                <td>${post.views}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // 검색 결과에 대한 페이지네이션 제거
+        document.querySelector('.pagination').innerHTML = "";
+    }
+</script>
+</body>
+</html>
