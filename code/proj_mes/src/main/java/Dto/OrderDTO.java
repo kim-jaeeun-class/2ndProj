@@ -4,14 +4,14 @@ import java.sql.Date;
 
 public class OrderDTO {
 
-	private String order_key;
-	private String order_number;
-	private Date order_date;
-	private Date order_pay;
-	private int order_state;
-	private String client_id;
-	private String worker_id;
-	private String dapart_ID2;
+	private String order_key;		// 발주키
+	private String order_number;	// 발주번호
+	private Date order_date;		// 발주날짜
+	private Date order_pay;			// 결제일
+	private int order_state;		// 진행 상태
+	private String client_id;		// 거래처ID
+	private String worker_id;		// 사번
+	private String dapart_ID2;		// 부서ID
 	
 	
 	public String getOrder_key() {

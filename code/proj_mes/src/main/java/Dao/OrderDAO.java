@@ -11,14 +11,15 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import Dto.OrderDTO;
+import emp.dto.EmpDTO;
 
 
 
 public class OrderDAO {
 
 	// DB 접속 메소드
-	private Connection getCon() {
-		Connection con = null;
+	private Connection getConn() {
+		Connection conn = null;
 		
 		try {
 			
@@ -27,13 +28,13 @@ public class OrderDAO {
 			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
 			
 			// DB 접속
-			con = dataFactory.getConnection();
+			conn = dataFactory.getConnection();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return con;
+		return conn;
 	}
 
 
@@ -45,7 +46,7 @@ public class OrderDAO {
 		try {
 			
 			// DB 접속
-			Connection con = getCon();
+			Connection con = getConn();
 			
 			// SQL 준비
 			String query = " select * from orders";
@@ -85,7 +86,7 @@ public class OrderDAO {
 		try {
 				
 			// DB 접속
-			Connection conn = getCon();
+			Connection conn = getConn();
 			
 			// SQL 준비
 			String query = " select * from orders";
@@ -123,6 +124,147 @@ public class OrderDAO {
 		
 	}
 	
-	
+	// delete
+		public int deleteEmp(OrderDTO orderDTO) {
+			
+			int result = -1;
+			
+			try {
+				
+				// DB 접속
+				Connection conn = getConn();
+				
+				// SQL 준비
+				String query = " delete orders";
+					   query += " where order_number = ?";
+			   
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setString(1, orderDTO.getOrder_number());
+				
+				// SQL 실행
+				result = ps.executeUpdate();
+			
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		// insert
+		public int insertEmp(OrderDTO orderDTO) {
+			
+			int result = -1;
+			
+			try {
+				
+				// DB 접속
+				Connection conn = getConn();
+				
+				// SQL 준비
+				String query = " insert into emp3 (empno,ename, job, mgr, hiredate, sal, comm, deptno)";
+					   query += " values(?, ?, ?, ?, ?, ?, ?, ?)";
+				
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setInt(1, empDTO.getEmpno());
+				ps.setString(2, empDTO.getEname());
+				ps.setString(3, empDTO.getJob());
+				ps.setInt(4, empDTO.getMgr());
+				ps.setDate(5, empDTO.getHiredate());
+				ps.setInt(6, empDTO.getSal());
+				ps.setInt(7, empDTO.getComm());
+				ps.setInt(8, empDTO.getDeptno());
+				
+				// SQL 실행
+				result = ps.executeUpdate();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		// update
+		public int updateEmp(OrderDTO orderDTO) {
+			
+			int result = -1;
+			
+			try {
+				
+				// DB 접속
+				Connection conn = getConn();
+				
+				// SQL 준비
+				String query = " update emp3";
+				query += " set ename = ?, ";
+				query += "     job = ?, ";
+				query += "     mgr = ?, ";
+				query += "     hiredate = ?, ";
+				query += "     sal = ?, ";
+				query += "     comm = ?, ";
+				query += "     deptno = ?";
+				query += " where empno = ?";
+				
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setString(1, empDTO.getEname());
+				ps.setString(2, empDTO.getJob());
+				ps.setInt(3, empDTO.getMgr());
+				ps.setDate(4, empDTO.getHiredate());
+				ps.setInt(5, empDTO.getSal());
+				ps.setInt(6, empDTO.getComm());
+				ps.setInt(7, empDTO.getDeptno());
+				ps.setInt(8, empDTO.getEmpno());
+				
+				// SQL 실행
+				result = ps.executeUpdate();
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		
+		public EmpDTO login(OrderDTO orderDTO) {
+			
+			EmpDTO resultDTO = null;
+			
+			try {
+				
+				// DB 접속
+				Connection conn = getConn();
+				
+				// SQL 준비
+				String query = " select ename, empno, job from emp3";
+					   query += " where ename = ? and empno= ?";
+					   
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setString(1, empDTO.getEname());
+				ps.setInt(2, empDTO.getEmpno());
+				
+				// SQL 실행
+				ResultSet rs = ps.executeQuery();
+				
+				if(rs.next()) {
+
+					// resultDTO가 null로 되어있어서 new 해줘야함
+					resultDTO = new EmpDTO();
+					
+					int empno = rs.getInt("empno");
+					resultDTO.setEmpno(empno);
+					
+					resultDTO.setEname(rs.getString("ename"));
+					resultDTO.setJob(rs.getString("job"));
+				
+				}
+				
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return resultDTO;
+		}
 	
 }

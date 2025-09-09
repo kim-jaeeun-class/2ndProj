@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/asset/registration.css">
     <script src ="/asset/template_load.js" ></script>
+    <link rel="stylesheet" href="/asset/registration.css">
     <script src="/asset/08_stock_registration.js"></script>
 </head>
 <body>
@@ -29,60 +29,16 @@
             </div>
             <div class="box">
                 <div class="item">
-                    <div> 대분류 </div>
-                    <select>
-                        <option>전체</option>
-                        <option>유리</option>
-                        <option>화학 강화제</option>
-                        <option>코팅</option>
-                        <option>완제품</option>
-                        <option>소모품</option>
-                    </select>
-                </div>
-                <div class="item">
-                    <div> 중분류 </div>
-                    <select>
-                        <option>전체</option>
-                        <option>LCD</option>
-                        <option>OLED</option>
-                        <option>AMOLED</option>
-                        <option>질산칼륨</option>
-                        <option>질산나트륨</option>
-                        <option>불소중합체</option>
-                        <option>산화티타늄</option>
-                        <option>산화지르코늄</option>
-                        <option>핸드폰</option>
-                        <option>닌텐도</option>
-                        <option>네비게이션</option>
-                        <option>스티로폼</option>
-                        <option>비닐</option>
-                    </select>
-                </div>
-                <div class="item">
-                    <div> 소분류 </div>
-                    <select>
-                        <option>전체</option>
-                        <option>0.3mm</option>
-                        <option>0.5mm</option>
-                        <option>0.7mm</option>
-                        <option>50kg</option>
-                        <option>70kg</option>
-                        <option>갤럭시S23</option>
-                        <option>아이폰17</option>
-                        <option>3D</option>
-                        <option>Lite</option>
-                        <option>5인치</option>
-                        <option>7인치</option>
-                        <option>S</option>
-                        <option>M</option>
-                        <option>L</option>
-                        <option>10M</option>
-                        <option>30M</option>
-                    </select>
-                </div>
-                <div class="item">
                     <div>등록날짜</div>
                     <input class="main_input" type="date">
+                </div>
+                <div class="item">
+                    <div>LOT번호</div>
+                    <input class="main_input" type="text">
+                </div>
+                <div class="item">
+                    <div>위치</div>
+                    <input class="main_input" type="text">
                 </div>
             </div>
             <div class="box">
@@ -104,16 +60,9 @@
                         <option>폐기</option>
                     </select>
                 </div>
-                <div class="item">
-                    <div>위치</div>
-                    <input class="main_input" type="text">
-                </div>
             </div>
             <div class="box">
-                <div class="item">
-                    <div>LOT번호</div>
-                    <input class="main_input" type="text">
-                </div>
+                
                 <div class="item">
                     <div>수량</div>
                     <input class="main_input qty_input" type="text">
@@ -161,7 +110,7 @@
             <a href="/08_inventory_jaego/stock_list.html"><button type="button">목록</button></a>
         </div>
         <div class="item_modal hide">
-            <div class="search">
+            <div class="moda_search">
                 <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
                 <button class="m_button" type="button">검색</button>
             </div>
@@ -196,7 +145,7 @@
         </div>
         
         <div id="item_modal" class="modal hide">
-            <div class="search">
+            <div class="modal_search">
                 <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
                 <button class="m_button" type="button">검색</button>
             </div>
