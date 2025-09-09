@@ -12,13 +12,14 @@ import Dto.Login_Dto;
 
 @WebServlet("/mainpage")
 public class MainCtrl extends HttpServlet {
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    HttpSession s = request.getSession(false);
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {HttpSession s = request.getSession(false);
+    
     Login_Dto loginUser = (s != null) ? (Login_Dto) s.getAttribute("loginUser") : null;
-
+    
+    
+//   만일 로그인 세션이 없는경우 로그인 페이지로 넘어가게
     if (loginUser == null) {
       response.sendRedirect(request.getContextPath() + "/login");
       return;
@@ -28,7 +29,6 @@ public class MainCtrl extends HttpServlet {
     request.setAttribute("workerId", loginUser.getWorkerId());
     request.setAttribute("workerGrade", loginUser.getWorkerGrade());
 
-    // forward: (CSS 상대경로가 깨지면 redirect로 바꾸거나, 절대경로/<base> 적용)
     request.getRequestDispatcher("/Html/02_main/mainpage.html")
            .forward(request, response);
   }
