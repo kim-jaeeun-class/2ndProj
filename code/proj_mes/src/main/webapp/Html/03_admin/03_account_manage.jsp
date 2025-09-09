@@ -114,7 +114,9 @@
 		
 		  <div style="margin-left:auto; display:flex; gap:8px;">
 		    <!--계정생성 버튼 -->
-		    <a class="btn" href="${pageContext.request.contextPath}/AccountCreate">계정생성</a>
+		    <a href="${pageContext.request.contextPath}/AccountCreate">
+		    <button class = "btn" type = "button">계정생성</button>
+		    </a>
 		    <button id="btnAskDelete" class="btn" type="button">선택 삭제</button>
 		  </div>
 		</div>
@@ -175,7 +177,7 @@
         <label style="display:block; margin-bottom:8px;">
           부서ID
           <input id="editDept" type="text" placeholder="예: D001"
-                 style="width:100%; padding:6px 8px; margin-top:4px;">
+                 style="width:90%; padding:6px 8px; margin: 0 auto ;">
         </label>
         <label style="display:block; margin-bottom:12px;">
           권한
