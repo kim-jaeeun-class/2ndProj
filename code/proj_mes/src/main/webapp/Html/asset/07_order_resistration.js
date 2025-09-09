@@ -154,6 +154,7 @@ function filterTableRows(tableList, query) {
     }
 }
 
+
 function bindOrderReg() {
     const stateInput = document.querySelector('#order_state'); 
     const saveBtn = document.querySelector('#save');

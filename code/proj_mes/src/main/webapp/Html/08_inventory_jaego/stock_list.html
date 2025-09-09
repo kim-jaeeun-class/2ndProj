@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src ="/asset/template_load.js" ></script>
     <link rel="stylesheet" href="/asset/list.css">
+    <script src ="/asset/08_stock_list.js" ></script>
 </head>
 <body>
+    <header></header>
+    <div class="gnb"></div>
+    <div class="titleBox">
+		<span>재고 목록</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
     <div class="main">
         <div class="box filter">
                 <div class="box">
                     <div> 대분류 </div>
-                    <select>
+                    <select class="big">
                         <option>전체</option>
                         <option>유리</option>
                         <option>화학 강화제</option>
@@ -23,7 +37,7 @@
                 </div>
                 <div class="box">
                     <div> 중분류 </div>
-                    <select>
+                    <select class="middle">
                         <option>전체</option>
                         <option>LCD</option>
                         <option>OLED</option>
@@ -42,7 +56,7 @@
                 </div>
                 <div class="box">
                     <div> 소분류 </div>
-                    <select>
+                    <select class="small">
                         <option>전체</option>
                         <option>0.3mm</option>
                         <option>0.5mm</option>
@@ -64,10 +78,11 @@
                 </div>
                 <div class="box">
                     <div> 구분 </div>
-                    <select>
+                    <select class="type">
                         <option>전체</option>
                         <option>완제품</option>
                         <option>원재료</option>
+                        <option>반제품</option>
                         <option>소모품</option>
                         <option>폐기</option>
                     </select>
@@ -76,10 +91,9 @@
             <div class="box date_filter">
                 <div class="date box">
                     <div class="period"> 기간 </div>
-                    <div class="month"> 월별 </div>
-                    <input type="date">
+                    <input type="date" id="start_date">
                     <span>~</span>
-                    <input type="date">
+                    <input type="date" id="end_date">
                 </div>
                 <div>
                     <button type="submit"> 조회 </button>
@@ -213,6 +227,50 @@
                     <td>500</td>
                     <td>1,000,000</td>
                 </tr>
+                <tr>
+                    <td>2</td>
+                    <td>20250820</td>
+                    <td>CHCH0001</td>
+                    <td>아이폰17</td>
+                    <td>TA-1</td>
+                    <td>AAA1580</td>
+                    <td>불량</td>
+                    <td>500</td>
+                    <td>1,000,000</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>20250820</td>
+                    <td>CHCH0001</td>
+                    <td>아이폰17</td>
+                    <td>TA-1</td>
+                    <td>AAA1580</td>
+                    <td>불량</td>
+                    <td>500</td>
+                    <td>1,000,000</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>20250820</td>
+                    <td>CHCH0001</td>
+                    <td>아이폰17</td>
+                    <td>TA-1</td>
+                    <td>AAA1580</td>
+                    <td>불량</td>
+                    <td>500</td>
+                    <td>1,000,000</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>20250820</td>
+                    <td>CHCH0001</td>
+                    <td>아이폰17</td>
+                    <td>TA-1</td>
+                    <td>AAA1580</td>
+                    <td>불량</td>
+                    <td>500</td>
+                    <td>1,000,000</td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -224,7 +282,7 @@
         </table>
     </div>
     <div class="action">
-        <button type="submit">추가</button>
+        <a href="/08_inventory_jaego/stock_registration.html"><button type="submit">추가</button></a>
     </div>
 </body>
 </html>

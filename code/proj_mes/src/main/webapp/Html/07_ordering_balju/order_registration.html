@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/asset/registration.css">
+    <script src ="../asset/template_load.js" ></script>
     <script src="/asset/07_order_resistration.js"></script>
 </head>
 <body>
     <div class="main">
         <div class="box header_row">
             <div>발주 기본정보</div>
-            <div class="box hide">
+            <div class="state box hide">
                 <span>진행상태</span>
                 <div>승인대기</div>
             </div>
@@ -101,7 +102,7 @@
         </div>
     </div>
     <div class="bottom">
-        <button type="button">목록</button>
+        <a href="/07_ordering_balju/order_list.html"><button type="button">목록</button></a>
     </div>
     <div id="dept_modal" class="modal hide">
         <div class="search">

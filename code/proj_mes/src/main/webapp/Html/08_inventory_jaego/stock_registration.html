@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/asset/registration.css">
+    <script src ="../asset/template_load.js" ></script>
+    <script src="/asset/08_stock_registration.js"></script>
 </head>
 <body>
     <div class="main">
-        <div class="action">
-            <button type="submit">승인 요청</button>
+        <div class="action approve">
+            <button type="submit" class="stock_approve">승인 요청</button>
+            <button type="button">등록</button>
         </div>
         <div class="box">
             <div class="item">
@@ -53,8 +56,8 @@
                     <option>70kg</option>
                     <option>갤럭시S23</option>
                     <option>아이폰17</option>
-                    <option>닌텐도3D</option>
-                    <option>닌텐도Lite</option>
+                    <option>3D</option>
+                    <option>Lite</option>
                     <option>5인치</option>
                     <option>7인치</option>
                     <option>S</option>
@@ -72,19 +75,19 @@
         <div class="box">
             <div class="item">
                 <div>품목코드</div>
-                <input class="main_input" type="text" placeholder="품목을 선택하세요">
+                <input class="main_input item_input" type="text" placeholder="품목을 선택하세요">
             </div>
             <div class="item">
                 <div>품목명/모델명</div>
-                <input class="main_input" type="text">
+                <input class="main_input itemName_input" type="text" readonly>
             </div>
             <div class="item">
                 <div> 구분 </div>
                 <select>
                     <option>전체</option>
-                    <option>완제품</option>
                     <option>원재료</option>
-                    <option>소모품</option>
+                    <option>양산</option>
+                    <option>반제품</option>
                     <option>폐기</option>
                 </select>
             </div>
@@ -100,15 +103,15 @@
             </div>
             <div class="item">
                 <div>수량</div>
-                <input class="main_input" type="text">
+                <input class="main_input qty_input" type="text">
             </div>
             <div class="item">
                 <div>단가</div>
-                <input class="main_input" type="text">
+                <input class="main_input unitPrice_input" type="text" readonly>
             </div>
             <div class="item">
                 <div>합계</div>
-                <input class="main_input" type="text">
+                <input class="main_input total_input" type="text" readonly>
             </div>
         </div>
         <div class="note box">
@@ -120,92 +123,169 @@
     </div>
     <div class="list hide">
         <div class="header_list">재고 이동현황</div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>LOT번호</th>
-                    <th>이전 위치</th>
-                    <th>현 위치</th>
-                    <th>이동사유</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>AAA1564</td>
-                    <td>TA-1</td>
-                    <td>TA-2</td>
-                    <td>출고</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table_wrap_detail" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th>LOT번호</th>
+                        <th>이전 위치</th>
+                        <th>현 위치</th>
+                        <th>이동사유</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AAA1564</td>
+                        <td>TA-1</td>
+                        <td>TA-2</td>
+                        <td>출고</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="bottom">
-        <button type="button">목록</button>
+        <a href="/08_inventory_jaego/stock_list.html"><button type="button">목록</button></a>
     </div>
-    <div class="modal hide">
+    <div class="item_modal hide">
         <div class="search">
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>LOT번호</th>
-                    <th>품목코드</th>
-                    <th>품목명/모델명</th>
-                    <th>단가</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="checkbox">
-                    </td>
-                    <td>AAA1564</td>
-                    <td>PSF156322254</td>
-                    <td>아이폰17</td>
-                    <td>1,000,000</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table_wrap_detail" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>LOT번호</th>
+                        <th>품목코드</th>
+                        <th>품목명/모델명</th>
+                        <th>단가</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="checkbox">
+                        </td>
+                        <td>AAA1564</td>
+                        <td>PSF156322254</td>
+                        <td>아이폰17</td>
+                        <td>1,000,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="bottom">
             <button type="button">취소</button>
             <button type="submit">확인</button>
         </div>
     </div>
-    <div class="modal hide">
+    
+    <div id="item_modal" class="modal hide">
         <div class="search">
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>거래처 코드</th>
-                    <th>거래처명</th>
-                    <th>사업자번호</th>
-                    <th>연락처</th>
-                    <th>담당자</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="checkbox">
-                    </td>
-                    <td>SDF4435</td>
-                    <td>휴먼유리</td>
-                    <td>12-345-67890</td>
-                    <td>010-1234-5678</td>
-                    <td>나사원</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table_wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>품목코드</th>
+                        <th>품목명</th>
+                        <th>유형</th>
+                        <th>단가</th>
+                    </tr>
+                </thead>
+                <tbody class="list">
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>휴먼유리</td>
+                        <td>원재료</td>
+                        <td>50,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>교육유리</td>
+                        <td>원재료</td>
+                        <td>50,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="item">
+                        </td>
+                        <td>SDF4435</td>
+                        <td>아이폰17</td>
+                        <td>완제품</td>
+                        <td>1,000,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="bottom">
-            <button class="m_button" type="button">취소</button>
-            <button class="m_button" type="submit">확인</button>
+            <button class="cancel m_button" type="button">취소</button>
+            <button class="confirm m_button" type="button">추가</button>
         </div>
     </div>
 </body>

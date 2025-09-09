@@ -32,6 +32,9 @@
         font-weight: 800;
         font-size: 18px;
     }
+    .approve {
+        text-align: right;
+    }
 
     .action button {
         height: 32px;
@@ -48,6 +51,7 @@
         color: #fff; 
         border-color: #5b5f66;
     }
+
     /* 4칸 */
     .item {
         flex: 1 1 calc(25% - 18px); 
@@ -62,7 +66,7 @@
         flex: 1 1 calc(20% - 18px); 
         min-width: 180px; 
     }
-    
+    .main select,
     .main_input {
         width: 100%;
         height: 40px;
@@ -128,6 +132,7 @@
         table-layout: fixed;          /* 열폭 고정으로 어긋남 방지 */
         border-collapse: collapse;
         border-spacing: 0;
+        margin: 0 auto;
     }
 
     /* 1) 스크롤 영역: 내부 스크롤 + 스크롤바 공간 예약 */
@@ -144,9 +149,11 @@
         /* scrollbar-gutter: stable both-edges; 없어도 될듯 */
     }
     .table_wrap_detail{
-        max-height: 360px;         /* 필요시 조절 */
+        max-height: 300px;         /* 필요시 조절 */
         overflow: auto;
         position: relative;
+        width: 90%;
+        margin: 0 auto;
     }
     .tables tfoot tr{
         position: sticky;
@@ -188,13 +195,16 @@
     }
 
     /* 4) 커스텀 스크롤바 */
+    .table_wrap_detail::-webkit-scrollbar,
     .table_wrap::-webkit-scrollbar { 
         width: 10px;
         height: 10px; 
     }
+    .table_wrap_detail::-webkit-scrollbar-track,
     .table_wrap::-webkit-scrollbar-track { 
         background: #f1f1f1; 
     }
+    .table_wrap_detail::-webkit-scrollbar-thumb,
     .table_wrap::-webkit-scrollbar-thumb {
         background: #c1c1c1; 
         border-radius: 10px; 

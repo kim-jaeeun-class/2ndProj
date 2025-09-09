@@ -313,14 +313,14 @@ a, a:link, a:visited {
 }
 .order_row_1,
 .order_row_2 {
-    width: 20px;
+    width: 30px;
 }
 .order_row_0 {
     width: 50px;
 }
 .order_row_3,
 .order_row_4 {
-    width: 100px;
+    width: 110px;
 }
 /*
 .order_row_5,
@@ -332,7 +332,16 @@ a, a:link, a:visited {
     width: 70px;
 } */
 
-
+.tables tfoot tr{
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    z-index: 1;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.08);
+}
+.tables tfoot td{ 
+    background: inherit; 
+}
 /* 1) 스크롤 영역: 내부 스크롤 + 스크롤바 공간 예약 */
 .table-wrap {
   max-height: 500px;            /* 필요시 값 조정 */
