@@ -11,7 +11,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import Dto.OrderDTO;
-import emp.dto.EmpDTO;
 
 
 
@@ -125,146 +124,106 @@ public class OrderDAO {
 	}
 	
 	// delete
-		public int deleteEmp(OrderDTO orderDTO) {
+	public int deleteOrder(OrderDTO orderDTO) {
+		
+		int result = -1;
+		
+		try {
 			
-			int result = -1;
+			// DB 접속
+			Connection conn = getConn();
 			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " delete orders";
-					   query += " where order_number = ?";
-			   
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, orderDTO.getOrder_number());
-				
-				// SQL 실행
-				result = ps.executeUpdate();
+			// SQL 준비
+			String query = " delete orders";
+				   query += " where order_number = ?";
+		   
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, orderDTO.getOrder_number());
 			
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
+			// SQL 실행
+			result = ps.executeUpdate();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		// insert
-		public int insertEmp(OrderDTO orderDTO) {
-			
-			int result = -1;
-			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " insert into emp3 (empno,ename, job, mgr, hiredate, sal, comm, deptno)";
-					   query += " values(?, ?, ?, ?, ?, ?, ?, ?)";
-				
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setInt(1, empDTO.getEmpno());
-				ps.setString(2, empDTO.getEname());
-				ps.setString(3, empDTO.getJob());
-				ps.setInt(4, empDTO.getMgr());
-				ps.setDate(5, empDTO.getHiredate());
-				ps.setInt(6, empDTO.getSal());
-				ps.setInt(7, empDTO.getComm());
-				ps.setInt(8, empDTO.getDeptno());
-				
-				// SQL 실행
-				result = ps.executeUpdate();
-				
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
-		}
-		
-		// update
-		public int updateEmp(OrderDTO orderDTO) {
-			
-			int result = -1;
-			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " update emp3";
-				query += " set ename = ?, ";
-				query += "     job = ?, ";
-				query += "     mgr = ?, ";
-				query += "     hiredate = ?, ";
-				query += "     sal = ?, ";
-				query += "     comm = ?, ";
-				query += "     deptno = ?";
-				query += " where empno = ?";
-				
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, empDTO.getEname());
-				ps.setString(2, empDTO.getJob());
-				ps.setInt(3, empDTO.getMgr());
-				ps.setDate(4, empDTO.getHiredate());
-				ps.setInt(5, empDTO.getSal());
-				ps.setInt(6, empDTO.getComm());
-				ps.setInt(7, empDTO.getDeptno());
-				ps.setInt(8, empDTO.getEmpno());
-				
-				// SQL 실행
-				result = ps.executeUpdate();
-				
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
-		}
-		
-		
-		public EmpDTO login(OrderDTO orderDTO) {
-			
-			EmpDTO resultDTO = null;
-			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " select ename, empno, job from emp3";
-					   query += " where ename = ? and empno= ?";
-					   
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, empDTO.getEname());
-				ps.setInt(2, empDTO.getEmpno());
-				
-				// SQL 실행
-				ResultSet rs = ps.executeQuery();
-				
-				if(rs.next()) {
-
-					// resultDTO가 null로 되어있어서 new 해줘야함
-					resultDTO = new EmpDTO();
-					
-					int empno = rs.getInt("empno");
-					resultDTO.setEmpno(empno);
-					
-					resultDTO.setEname(rs.getString("ename"));
-					resultDTO.setJob(rs.getString("job"));
-				
-				}
-				
-				
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			return resultDTO;
-		}
+		return result;
+	}
 	
+	// insert
+	public int insertOrder(OrderDTO orderDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " insert into orders (order_key,order_number, order_date, order_pay, order_state, client_id, worker_id, dapart_ID2)";
+				   query += " values(?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, orderDTO.getOrder_key());
+			ps.setString(2, orderDTO.getOrder_number());
+			ps.setDate(3, orderDTO.getOrder_date());
+			ps.setDate(4, orderDTO.getOrder_pay());
+			ps.setInt(5, orderDTO.getOrder_state());
+			ps.setString(6, orderDTO.getClient_id());
+			ps.setString(7, orderDTO.getWorker_id());
+			ps.setString(8, orderDTO.getDapart_ID2());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// update
+	public int updateOrder(OrderDTO orderDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " update orders";
+			query += " set order_key = ?, ";
+			query += "     order_date = ?, ";
+			query += "     order_pay = ?, ";
+			query += "     order_state = ?, ";
+			query += "     client_id = ?, ";
+			query += "     worker_id = ?";
+			query += "     dapart_ID2 = ?";
+			query += " where order_number = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, orderDTO.getOrder_key());
+			ps.setDate(2, orderDTO.getOrder_date());
+			ps.setDate(3, orderDTO.getOrder_pay());
+			ps.setInt(4, orderDTO.getOrder_state());
+			ps.setString(5, orderDTO.getClient_id());
+			ps.setString(6, orderDTO.getWorker_id());
+			ps.setString(7, orderDTO.getDapart_ID2());
+			ps.setString(8, orderDTO.getOrder_number());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+		
+				
 }

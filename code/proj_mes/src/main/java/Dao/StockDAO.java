@@ -86,7 +86,7 @@ public class StockDAO {
 			
 			// SQL 준비
 			String query = " select * from stock";
-				   query += " where order_number = ?";
+				   query += " where stock_id = ?";
 				   
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, stockDTO.getStock_id());
@@ -116,5 +116,101 @@ public class StockDAO {
 		
 		return resultDTO;
 		
+	}
+	
+	// delete
+	public int deleteStock(StockDTO stockDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " delete stock";
+				   query += " where stock_id = ?";
+		   
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, stockDTO.getStock_id());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// insert
+	public int insertStock(StockDTO stockDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " insert into stock (stock_id, stock_date, stock_loc, stock_div, stock_number, item_code)";
+				   query += " values(?, ?, ?, ?, ?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, stockDTO.getStock_id());
+			ps.setDate(2, stockDTO.getStock_date());
+			ps.setInt(3, stockDTO.getStock_loc());
+			ps.setInt(4, stockDTO.getStock_div());
+			ps.setInt(5, stockDTO.getStock_number());
+			ps.setString(6, stockDTO.getItem_code());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// update
+	public int updateStock(StockDTO stockDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " update stock";
+			query += " set stock_date = ?, ";
+			query += "     stock_loc = ?, ";
+			query += "     stock_div = ?, ";
+			query += "     stock_number = ?, ";
+			query += "     item_code = ?, ";
+			query += " where stock_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setDate(1, stockDTO.getStock_date());
+			ps.setInt(2, stockDTO.getStock_loc());
+			ps.setInt(3, stockDTO.getStock_div());
+			ps.setInt(4, stockDTO.getStock_number());
+			ps.setString(5, stockDTO.getItem_code());
+			ps.setString(6, stockDTO.getStock_id());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }
