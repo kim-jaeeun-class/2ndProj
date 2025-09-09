@@ -184,7 +184,7 @@ public class Account_DAO {
         Account_DTO w = new Account_DTO();
         w.setWorkerId(rs.getString("worker_id"));
         w.setWorkerName(rs.getString("worker_name"));
-        w.setWorkerGrade(rs.getInt("worker_grade")); // NUMBER → int
+        w.setWorkerGrade(rs.getInt("worker_grade")); 
         w.setWorkerEmail(rs.getString("worker_email"));
         w.setWorkerPhone(rs.getString("worker_phone"));
         w.setWorkerBacode(rs.getString("worker_bacode"));

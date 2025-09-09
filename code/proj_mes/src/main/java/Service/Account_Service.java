@@ -13,12 +13,12 @@ public class Account_Service {
 
 
     public void create(Account_DTO dto, String rawPw, String rrnPlain) throws Exception {
-        // 1) 기본 검증
+        // 1 기본 검증
         if (isBlank(dto.getWorkerId()))   throw new IllegalArgumentException("사번(worker_id)은 필수입니다.");
         if (isBlank(dto.getWorkerName())) throw new IllegalArgumentException("이름(worker_name)은 필수입니다.");
         if (isBlank(rawPw))               throw new IllegalArgumentException("비밀번호는 필수입니다.");
 
-        // 2) 주민번호 암호화(AES-GCM) — 저장할 경우에만
+        // 2 주민번호 암호화(AES-GCM) — 저장할 경우에만
         if (!isBlank(rrnPlain)) {
             String onlyNum = rrnPlain.replaceAll("\\D", "");
             if (!onlyNum.matches("^\\d{13}$"))
@@ -28,8 +28,8 @@ public class Account_Service {
         } else {
             dto.setWorkerBacode(null);
         }
-
-        // 3) 이메일/전화 간단 검증
+        // 이중으로 하는게 좋으려나...? 의미 없나?
+        // 3 이메일/전화 간단 검증
         if (!isBlank(dto.getWorkerEmail()) &&
             !dto.getWorkerEmail().matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"))
             throw new IllegalArgumentException("이메일 형식이 올바르지 않습니다.");
@@ -46,16 +46,16 @@ public class Account_Service {
             }
         }
 
-        // 4) 중복 체크
+        // 4 중복 체크
         if (dao.existsById(dto.getWorkerId()))
             throw new IllegalStateException("이미 존재하는 사번입니다.");
         if (!isBlank(dto.getWorkerEmail()) && dao.existsByEmail(dto.getWorkerEmail()))
             throw new IllegalStateException("이미 사용 중인 이메일입니다.");
 
-        // 5) 비밀번호 해시(PBKDF2)
+        // 5 비밀번호 해시(PBKDF2)
         dto.setWorkerPwHash(PasswordUtil.hash(rawPw));
 
-        // 6) INSERT
+        // 6 INSERT
         int rows = dao.insert(dto);
         if (rows != 1) throw new IllegalStateException("계정 생성에 실패했습니다.");
     }

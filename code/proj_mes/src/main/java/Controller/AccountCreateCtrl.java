@@ -31,7 +31,7 @@ public class AccountCreateCtrl extends HttpServlet {
                .forward(request, response);
     }
 
-    // 폼 제출 처리 (POST) → 성공 시 PRG로 리스트/관리 페이지 이동
+    // 폼 제출 처리 (POST)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

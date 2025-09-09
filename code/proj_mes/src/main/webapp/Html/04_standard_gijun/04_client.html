@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>거래처 관리</title>
-	<link rel="stylesheet" href="../asset/template.css">
-  <link rel="stylesheet" href = "../asset/04_client.css"></link>
-  <link rel="stylesheet" href="../asset/04_standard_list.css" />
-  <script src ="../asset/template_load.js" ></script>
+	<link rel="stylesheet" href="/proj_mes/Html/asset/template.css">
+  <link rel="stylesheet" href = "/proj_mes/Html/asset/04_client.css"></link>
+  <link rel="stylesheet" href="/proj_mes/Html/asset/04_standard_list.css" />
+  <script src ="/proj_mes/Html/asset/template_load.js" ></script>
 
 
   <!-- 다음 우편번호 서비스 -->
@@ -70,18 +70,6 @@
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	</div>
     <div style = "display: flex; justify-content: end;">
         <button class="btn" type="button" id="std-search_0" style = "margin-right : 15px" >뒤로가기</button>
@@ -126,19 +114,24 @@
           <label for="tel">연락번호</label>
           <input id="tel" class="input" type="tel" placeholder="010-5555-6666" maxlength="13" />
         </div>
-
-        <div class="field">
-          <label for="region">지역</label>
-          <select id="region">
-            <option value="">선택</option>
-            <option>서울</option><option>경기</option><option>인천</option>
-            <option>부산</option><option>대구</option><option>광주</option>
-            <option>대전</option><option>울산</option><option>세종</option>
-            <option>강원</option><option>충북</option><option>충남</option>
-            <option>전북</option><option>전남</option><option>경북</option>
-            <option>경남</option><option>제주</option>
-          </select>
-        </div>
+        
+        
+        
+        
+        
+<!-- 보아하니 이녀석은 필요없다 -->
+<!--         <div class="field"> -->
+<!--           <label for="region">지역</label> -->
+<!--           <select id="region"> -->
+<!--             <option value="">선택</option> -->
+<!--             <option>서울</option><option>경기</option><option>인천</option> -->
+<!--             <option>부산</option><option>대구</option><option>광주</option> -->
+<!--             <option>대전</option><option>울산</option><option>세종</option> -->
+<!--             <option>강원</option><option>충북</option><option>충남</option> -->
+<!--             <option>전북</option><option>전남</option><option>경북</option> -->
+<!--             <option>경남</option><option>제주</option> -->
+<!--           </select> -->
+<!--         </div> -->
 
         <div class="field" style="grid-column:1 / -1;">
           <label for="addr">주소</label>
@@ -162,7 +155,16 @@
   </div>
 </dialog>
 
-<script src = "../asset/04_client.js"></script>
+<!-- css가 아주 가끔 안먹는 이유를 보아하니 이녀석이 조금 늦게 나오면 되겠구나 -->
+ <script>
+    const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+    (async () => {
+      await sleep(1000); // 1초 대기
+      document.getElementById('msg').style.display = 'block';
+    })();
+  </script>
+<script src = "/proj_mes/Html/asset/04_client.js"></script>
 
 
 

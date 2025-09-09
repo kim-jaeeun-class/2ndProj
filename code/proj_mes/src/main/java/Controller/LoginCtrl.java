@@ -39,11 +39,12 @@ public class LoginCtrl extends HttpServlet {
             try { request.changeSessionId(); } catch (Throwable ignore) {}
             log.info("[LOGIN] success id={}, grade={}", user.getWorkerId(), user.getWorkerGrade());
 
-            // 등급에 맞는 첫 화면(서블릿으로 라우팅 권장)
+            //첫 화면
             response.sendRedirect(request.getContextPath() + "/mainpage");
         } else {
             log.info("[LOGIN] fail id={}", id);
             response.sendRedirect(request.getContextPath() + "/Html/01_login/login.html?error=1");
         }
+//        로그를 어떤 형식오로 저장해야 할까??
     }
 }

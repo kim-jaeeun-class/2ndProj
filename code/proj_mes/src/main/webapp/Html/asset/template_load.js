@@ -19,7 +19,7 @@
     const mappings = [
       ["header", "header"],
       [".gnb", ".gnb"],
-      [".titleBox", ".titleBox"],
+      
 
     ];
 
