@@ -125,4 +125,118 @@ public class WorkOrderDAO {
 		return listFilter;
 		
 	}
+	
+	// 조회
+	// 품목 목록 확인용!
+	public List<WorkOrderDTO> selectItemWO() {
+		List<WorkOrderDTO> list = new ArrayList<WorkOrderDTO>();
+		
+		try {
+			Connection conn = getConn();
+			
+			String query = "select "
+					+ "		item_code, item_name, item_bigo, "
+					+ "		item_type, item_unit, item_price\r\n"
+					+ "		from item;";
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				WorkOrderDTO dto = new WorkOrderDTO();
+				
+				dto.setWoNum(rs.getInt("wo_num"));
+				dto.setWoDate(rs.getDate("wo_date"));
+				dto.setWoDuedate(rs.getDate("wo_duedate"));
+				dto.setWoPQ(rs.getInt("wo_pq"));
+				dto.setWoAQ(rs.getInt("wo_aq"));
+				dto.setWoPS(rs.getString("wo_ps"));
+				dto.setWorkerID(rs.getString("worker_id"));
+				dto.setItemCode(rs.getString("item_code"));
+				
+				list.add(dto);
+			}
+			
+			rs.close();
+			ps.close();
+			conn.close();
+			
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+		
+	}
+	
+	
+	// 등록
+	//	- 입력되는 값
+	//		+ 지시일, 작업지시NO, 납품처, 담당자, 납기일, 첨부, 품목(품목 테이블과 join)
+    // 		+ 품목 목록을 봐야 하니 품목 테이블 join도 필요할 듯
+	public int insertEmp(WorkOrderDTO workOrderDTO) {
+		
+		int result = -1;
+		try {
+			// DB 접속 : 상단에서 생성해둠
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = "INSERT INTO WORK_ORDER"
+					+ "     (wo_num, wo_date, wo_duedate, wo_pq,"
+					+ "		wo_aq, worker_id, item_code)"
+					+ "	    VALUES"
+					+ "     (?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = conn.prepareStatement(query);
+
+			ps.setInt(1, workOrderDTO.getWoNum());
+			ps.setDate(2, workOrderDTO.getWoDate());
+			ps.setDate(3, workOrderDTO.getWoDuedate());
+			ps.setInt(4, workOrderDTO.getWoPQ());
+			ps.setInt(5, workOrderDTO.getWoAQ());
+			ps.setString(6, workOrderDTO.getWorkerID());
+			ps.setString(7, workOrderDTO.getItemCode());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// 삭제(다중 삭제도 가능)
+	public int deleteWO(WorkOrderDTO workOrderDTO) {
+		
+		int result = -1;
+		try {
+			// DB 접속 : 상단에서 생성해둠
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = "delete from work_order "
+						 + "where wo_num = ? and wo_date = ?";
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setInt(1, workOrderDTO.getWoNum());
+			ps.setDate(2, workOrderDTO.getWoDate());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

@@ -14,6 +14,13 @@ public class WorkOrderDTO {
 	private String woPS;	// 진행 상태
 	private String workerID; // 사번 : FK
 	private String itemCode; // 품목 코드 : FK
+	
+	// 품목 조회용
+	private String itemName; 
+	private String itemBigo;
+	private int itemType;
+	private int itemUnit;
+	private 
 	public int getWoNum() {
 		return woNum;
 	}
