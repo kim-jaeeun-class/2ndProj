@@ -1,7 +1,7 @@
 /* header-gnb-titlebox-loader.js */
 (async function () {
   // 외부 HTML 경로를 네 파일 위치로 변경
-  const TEMPLATE_URL = "../00_template/template.html";
+  const TEMPLATE_URL = "/proj_mes/Html/00_template/template.html";
 
   try {
     const res = await fetch(TEMPLATE_URL, { credentials: "same-origin" });
@@ -19,7 +19,6 @@
     const mappings = [
       ["header", "header"],
       [".gnb", ".gnb"],
-      [".titleBox", ".titleBox"],
     ];
 
     for (const [fromSel, toSel] of mappings) {
