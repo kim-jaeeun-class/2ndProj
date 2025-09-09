@@ -24,7 +24,7 @@ public class Account_DAO {
     public boolean existsById(String workerId) throws SQLException {
         final String sql = "SELECT 1 FROM worker WHERE worker_id = ?";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, workerId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
@@ -35,7 +35,7 @@ public class Account_DAO {
     public boolean existsByEmail(String email) throws SQLException {
         final String sql = "SELECT 1 FROM worker WHERE worker_email = ?";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
@@ -50,7 +50,7 @@ public class Account_DAO {
             " worker_bacode, worker_cando, worker_pw, dapart_ID2) " +
             "VALUES (?,?,?,?,?,?,?,?,?)";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             int i = 1;
             ps.setString(i++, d.getWorkerId());
             ps.setString(i++, d.getWorkerName());
@@ -147,7 +147,7 @@ public class Account_DAO {
     public int updateDeptAndRole(String workerId, String dapartId2, String workerCando) throws SQLException {
         final String sql = "UPDATE worker SET dapart_ID2=?, worker_cando=? WHERE worker_id=?";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, dapartId2);
             ps.setString(2, workerCando);
             ps.setString(3, workerId);
@@ -160,7 +160,7 @@ public class Account_DAO {
         final String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
         final String sql = "UPDATE worker SET worker_cando=? WHERE worker_id IN (" + placeholders + ")";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             int idx = 1; ps.setString(idx++, role);
             for (String id : ids) ps.setString(idx++, id);
             return ps.executeUpdate();
@@ -172,7 +172,7 @@ public class Account_DAO {
         final String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
         final String sql = "DELETE FROM worker WHERE worker_id IN (" + placeholders + ")";
         try (Connection con = ds.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+            PreparedStatement ps = con.prepareStatement(sql)) {
             int idx = 1;
             for (String id : ids) ps.setString(idx++, id);
             return ps.executeUpdate();

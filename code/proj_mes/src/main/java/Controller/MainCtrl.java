@@ -25,7 +25,6 @@ public class MainCtrl extends HttpServlet {
       return;
     }
 
-    // 필요시 뷰에서 쓰도록 내려주기
     request.setAttribute("workerId", loginUser.getWorkerId());
     request.setAttribute("workerGrade", loginUser.getWorkerGrade());
 

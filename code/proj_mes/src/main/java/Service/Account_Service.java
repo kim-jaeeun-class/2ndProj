@@ -60,35 +60,35 @@ public class Account_Service {
         if (rows != 1) throw new IllegalStateException("계정 생성에 실패했습니다.");
     }
 
-    private static boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
-
-
-    public List<Account_DTO> listAll() throws SQLException { return dao.findAll(); }
-
-    public List<Account_DTO> search(String q) throws SQLException {
-        return (q == null || q.isBlank()) ? dao.findAll() : dao.search(q);
-    }
-
-    public Optional<Account_DTO> get(String workerId) throws SQLException {
-        return dao.findById(workerId);
-    }
-
-    public void updateDeptAndRole(String workerId, String dapartId2, String workerCando) throws SQLException {
-        if (isBlank(workerId))   throw new IllegalArgumentException("사번은 필수입니다.");
-        if (isBlank(dapartId2))  throw new IllegalArgumentException("부서ID는 필수입니다.");
-        if (isBlank(workerCando))throw new IllegalArgumentException("권한은 필수입니다.");
-        int n = dao.updateDeptAndRole(workerId, dapartId2, workerCando);
-        if (n != 1) throw new IllegalStateException("수정 대상이 없거나 수정 실패");
-    }
-
-    public int updateRoleBulk(List<String> ids, String role) throws SQLException {
-        if (ids == null || ids.isEmpty()) return 0;
-        if (isBlank(role)) throw new IllegalArgumentException("권한은 필수입니다.");
-        return dao.updateRoleBulk(ids, role);
-    }
-
-    public int deleteByIds(List<String> ids) throws SQLException {
-        if (ids == null || ids.isEmpty()) return 0;
-        return dao.deleteByIds(ids);
-    }
+	    private static boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
+	
+	
+	    public List<Account_DTO> listAll() throws SQLException { return dao.findAll(); }
+	
+	    public List<Account_DTO> search(String q) throws SQLException {
+	        return (q == null || q.isBlank()) ? dao.findAll() : dao.search(q);
+	    }
+	
+	    public Optional<Account_DTO> get(String workerId) throws SQLException {
+	        return dao.findById(workerId);
+	    }
+	
+	    public void updateDeptAndRole(String workerId, String dapartId2, String workerCando) throws SQLException {
+	        if (isBlank(workerId))   throw new IllegalArgumentException("사번은 필수입니다.");
+	        if (isBlank(dapartId2))  throw new IllegalArgumentException("부서ID는 필수입니다.");
+	        if (isBlank(workerCando))throw new IllegalArgumentException("권한은 필수입니다.");
+	        int n = dao.updateDeptAndRole(workerId, dapartId2, workerCando);
+	        if (n != 1) throw new IllegalStateException("수정 대상이 없거나 수정 실패");
+	    }
+	
+	    public int updateRoleBulk(List<String> ids, String role) throws SQLException {
+	        if (ids == null || ids.isEmpty()) return 0;
+	        if (isBlank(role)) throw new IllegalArgumentException("권한은 필수입니다.");
+	        return dao.updateRoleBulk(ids, role);
+	    }
+	
+	    public int deleteByIds(List<String> ids) throws SQLException {
+	        if (ids == null || ids.isEmpty()) return 0;
+	        return dao.deleteByIds(ids);
+	    }
 }

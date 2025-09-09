@@ -136,6 +136,8 @@ public class OrderDAO {
 			// SQL 준비
 			String query = " delete orders";
 				   query += " where order_number = ?";
+				   //where is from????????????
+				   
 		   
 			PreparedStatement ps = conn.prepareStatement(query);
 			ps.setString(1, orderDTO.getOrder_number());
@@ -201,6 +203,8 @@ public class OrderDAO {
 			query += "     order_pay = ?, ";
 			query += "     order_state = ?, ";
 			query += "     client_id = ?, ";
+			
+			//where is ,?????
 			query += "     worker_id = ?";
 			query += "     dapart_ID2 = ?";
 			query += " where order_number = ?";
