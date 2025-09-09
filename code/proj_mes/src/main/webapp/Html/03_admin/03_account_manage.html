@@ -4,8 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>계정 관리 페이지</title>
-	<link rel="stylesheet" href="../asset/template.css">
-    <link rel="stylesheet" href="../asset/03_account_manage.css">
+	<link rel="stylesheet" href="/proj_mes/Html/asset/template.css">
+    <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_manage.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -103,34 +103,31 @@
 		<!-- 탬플릿의 헤더와 css가 겹쳐서 흰색글씨로 나타남 수정 -->
     	<div id="acc-title" class="card-header">계정목록</div>
     	<div class="card-body">
-        <div class="table-wrap" tabindex="0">
-          <table class="tables">
-            <thead>
-              <tr>
-                <th scope="col">사번</th>
-                <th scope="col">이름</th>
-                <th scope="col">부서</th>
-                <th scope="col">직급</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 비어 있는 행(그리드 라인 표현용). 필요 시 동적 데이터로 대체하세요. -->
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-              <tr><td>&nbsp;</td><td></td><td></td><td></td></tr>
-            </tbody>
-          </table>
-        </div>
+		<div class="table-wrap" tabindex="0">
+		  <table class="tables" id="accountTable">
+		    <thead>
+		      <tr>
+		        <th style="width:44px; text-align:center;">
+		          <input type="checkbox" id="selectAll">
+		        </th>
+		        <th scope="col">사번</th>
+		        <th scope="col">이름</th>
+		        <th scope="col">부서</th>
+		        <th scope="col">권한</th>
+		        <th scope="col" style="width:90px;">액션</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+
+
+
+		    </tbody>
+		  </table>
+		</div>
         <div class="actions">	            
             <!--팝업 오픈 버튼-->
 
-            <button class="btn" type="button">계정생성</button>
+            <a href = "/proj_mes/AccountCreate"><button class="btn" type="button">계정생성</button></a>
 
 
           <a href="#" class="btn_open" onClick="javascript:popOpen();">
@@ -142,13 +139,17 @@
 
 
   <!-- 모달팝업 -->
-    <div class="modal_bg" onClick="javascript:popClose();"></div>
-    <div class="modal_wrap">
-      ~~~님의 계정을 정말 삭제 하시겠습니까?
-      <br>
-      <button class="modal_close" onClick="javascript:popClose();">예</button>
-      <button class="modal_close" onClick="javascript:popClose();">아니요</button>   
-    </div>
+		<div class="modal_bg" id="deleteModalBg" style="display:none;"></div>
+		<div class="modal_wrap" id="deleteModal" style="display:none;">
+		  <div style="font-weight:700; margin-bottom:8px;">선택한 계정을 삭제할까요?</div>
+		  <div id="deleteModalText" style="margin-bottom:12px; line-height:1.5;">
+		    <!-- 선택된 사번들이 여기 표시됨 -->
+		  </div>
+		  <div style="display:flex; gap:8px; justify-content:flex-end;">
+		    <button class="modal_close" id="btnConfirmDelete" type="button">예, 삭제</button>
+		    <button class="modal_close" id="btnCancelDelete" type="button">아니요</button>
+		  </div>
+		</div>
     <!-- // 모달팝업 -->
 
     <!-- 감사 로그 카드 -->

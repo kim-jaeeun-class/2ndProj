@@ -7,17 +7,13 @@ import javax.servlet.http.*;
 
 import Dto.Login_Dto;
 import Service.Login_Service;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @WebServlet("/login")
 public class LoginCtrl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    // Logger 선언
     private static final Logger log = LogManager.getLogger(LoginCtrl.class);
-
     private final Login_Service loginService = new Login_Service();
 
     @Override
@@ -31,35 +27,22 @@ public class LoginCtrl extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        System.out.println("Login Ctrl POST");
-
         String id = request.getParameter("userid");
         String pw = request.getParameter("password");
-
-        System.out.println("userid = " + id);
-        System.out.println("password = " + pw);
+        log.info("[LOGIN] try id={}", id);
 
         Login_Dto user = loginService.login(id, pw);
-
-//        // 로깅 테스트
-        log.info("login id = " + id);
-//        log.warn("경고 로그 - WARN");
-//        log.error("에러 로그 - ERROR", new RuntimeException("boom"));
-//        일부로 에러를 발생시키는 방법
-
-
 
         if (user != null) {
             HttpSession session = request.getSession(true);
             session.setAttribute("loginUser", user);
             try { request.changeSessionId(); } catch (Throwable ignore) {}
+            log.info("[LOGIN] success id={}, grade={}", user.getWorkerId(), user.getWorkerGrade());
 
-            if (user.getWorkerGrade() == 2) {
-                response.sendRedirect(request.getContextPath() + "/Html/02_main/mainpage.html");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/");
-            }
+            // 등급에 맞는 첫 화면(서블릿으로 라우팅 권장)
+            response.sendRedirect(request.getContextPath() + "/mainpage");
         } else {
+            log.info("[LOGIN] fail id={}", id);
             response.sendRedirect(request.getContextPath() + "/Html/01_login/login.html?error=1");
         }
     }

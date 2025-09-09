@@ -9,10 +9,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>이슈 처리</title>
-  <link rel="stylesheet" href="../asset/03_account_create.css" />
-  <link rel="stylesheet" href="../asset/03_issue.css">
+  <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" />
+  <link rel="stylesheet" href="/proj_mes/Html/asset/03_issue.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src ="../asset/template_load.js" ></script>
+  <script src ="/proj_mes/Html/asset/template_load.js" ></script>
 
 
 
@@ -39,12 +39,12 @@
           <thead>
             <tr>
               <th scope="col"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
-              <th scope="col">문제</th>
-              <th scope="col">상세내역</th>
-              <th scope="col">상태</th>
+              <th scope="col">유형</th>
+              <th scope="col">키값</th>
+              <th scope="col">처리상태</th>
               <th scope="col">요청자</th>
               <th scope="col">요청일</th>
-              <th scope="col">액션</th>
+              <th scope="col">처리</th>
             </tr>
           </thead>
           <tbody id="issue-tbody">
@@ -70,7 +70,7 @@
               <td>2025.08.29</td>
               <td>
                 <button class="btn btn-approve" type="button">승인</button>
-                <button class="btn btn-delete" type="button" data-name="공정 B 불량률 급증">삭제</button>
+                <button class="btn btn-delete" type="button">삭제</button>
               </td>
             </tr>
             <tr>
@@ -97,15 +97,7 @@
         <button class="btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
       </div>
 
-      <!-- 페이징: 표 아래 ‘가운데’ 정렬 -->
-      <div class="actions" style="justify-content:center; gap:6px;">
-        <button class="btn page-prev" type="button">이전</button>
-        <button class="btn page-num is-active" type="button" data-page="1">1</button>
-        <button class="btn page-num" type="button" data-page="2">2</button>
-        <button class="btn page-num" type="button" data-page="3">3</button>
-        <button class="btn page-next" type="button">다음</button>
-      </div>
-    </div>
+
   </section>
 
   <!-- 모달 (같은 팝업 구조/클래스) -->
@@ -129,6 +121,6 @@
 </main>
 </div>
 
-<script src ="../asset/03_issue.js" ></script>
+<script src ="/proj_mes/Html/asset/03_issue.js" ></script>
 </body>
 </html>

@@ -6,6 +6,161 @@
     <title>자유게시판</title>
     <link rel="stylesheet" href="Noticeboard.css" />
     <style>
+      :root {
+    --border: #9aa0a6;
+    --text: #222;
+    --muted: #666;
+    --button: #5a5a5a;
+    --button-text: #fff;
+    --field-border: #a4a5a7;
+    --page-bg: #ffffff;
+    --radius: 10px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
+        "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 헤더 부분 */
+header {
+    background-color: #495057;
+    height : 50px;
+    border: 1px solid;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header .corp {
+    display: flex;
+    align-items: center; 
+    padding-left: 10px;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+header .search {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+/* 회원 아이콘 부분*/
+header .myIcon {
+    position: relative;
+    padding: 5px 10px 5px 0;
+}
+
+header ul.subList {
+    display: none;
+    background-color: turquoise;
+    position: absolute;
+    top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
+    right: 0;
+    list-style-type: none;
+    color: #333333;
+    font-weight: normal;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    z-index: 9999; 
+    min-width: 150px; 
+    margin: 0; /* ul 기본 margin 제거 */
+    padding: 0; /* ul 기본 padding 제거 */
+}
+
+/* 마우스를 올리면 하위 메뉴 보이기 */
+header .myIcon:hover .subList {
+    display: flex;
+}
+
+/* GNB 부분 */
+.gnb {
+    background-color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.gnb ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    padding-left: 0;
+}
+
+.gnb ul.subList {
+    background-color: #495057;
+    color: white;
+    border-radius: 5%;
+    position: absolute;
+    left: 0;
+    display: none;
+    font-weight: normal;
+    font-size: medium;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    z-index: 9999; 
+    min-width: 130px; 
+}
+.gnb ul.mainList > li {
+    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
+    color: #333333;
+}
+.gnb ul.mainList > li:hover .subList {
+    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
+    margin-top: 0px;
+}
+
+.subList li {
+    padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
+    margin: 1px 1px;  /* 위아래 간격 추가 */
+}
+
+/* a 링크 양식 지정 */
+a, a:link, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 제목 부분 */
+.titleBox {
+    background-color: var(--field-border);
+    height: 25px;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.titleBox span {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #333333;
+}
+
+.toMainpage {
+    color: var(--button);
+    margin-right: 10px;
+}
+
+/* 메인 몸통 부분 */
+.wrap {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: 90%;
+    margin: 10px auto;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    /* 여기에 모바일 스타일 넣으시면 됩니다 */
+}
         body {
     font-family : "맑은 고딕", sans-serif;
     background-color: #f5f5f5;
@@ -109,14 +264,17 @@ td:nth-child(2) {
 }
 /* 검색 조건 위치 맞추기 */
 .search-area-outside {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+   display: flex;
+  flex-direction: row;    /* ➤ 가로 정렬 */
+  align-items: center;    /* ➤ 세로 정렬 맞춤 */
+  gap: 10px;              /* ➤ 요소 간 여백 */
   margin-bottom: 10px;
- /* ✅ 담당부서 열 기준으로 margin-left 조정 (수동으로 맞춰야 함) */
-  margin-left: 600px;  /* 필요에 따라 조절 */
-}
+   /* 💡 수정된 부분 */
+  margin-left: auto;
+   /* 가운데 정렬 */
+  width: fit-content;   /* 내용에 맞게 줄어듦 */
 
+  white-space: nowrap;
 /* 입력 스타일 */
 .search-area-outside select,
 .search-area-outside input {
@@ -134,19 +292,107 @@ td:nth-child(2) {
 .write-button:hover {
   background-color: #555;
 }
+#search-button {
+  padding: 5px 12px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background-color: #555;
+}
 
 
 
     </style>
 </head>
 <body>
+  <header>
+		<div class="corp">
+			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+			<h3>J2P4</h3>
+		</div>
+		<div class="search">
+			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
+		</div>
+		<div class="logout">
+			로그아웃
+		</div>
+		<div class="myIcon">
+			<a href="javascript:void(0);" id="myIconBtn">
+				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+					style="background-color: #ffffff; border-radius: 100%;">
+			</a>
+			<ul class="subList">
+				<li><a href="">하위메뉴1</a></li>
+				<li><a href="">하위메뉴2</a></li>
+			</ul>
+		</div>
+	</header>
+
+	<div class="gnb">
+		<ul class="mainList">
+			<li>기준 관리
+				<ul class="subList">
+					<li><a href="">기준 목록</a></li>
+				</ul>
+			</li>
+			<li>공정 관리
+				<ul class="subList">
+					<li><a href="">공정 목록</a></li>
+					<li><a href="">공정 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>BOM 관리
+				<ul class="subList">
+					<li><a href="">BOM 목록</a></li>
+					<li><a href="">BOM 등록/수정/삭제</a></li>
+				</ul>
+			</li>
+			<li>발주 관리
+				<ul class="subList">
+					<li><a href="">발주 목록</a></li>
+				</ul>
+			</li>
+			<li>재고 관리
+				<ul class="subList">
+					<li><a href="">재고 목록</a></li>
+					<li><a href="">재고 삭제</a></li>
+				</ul>
+			</li>
+			<li>생산 관리
+				<ul class="subList">
+					<li><a href="">생산 계획</a></li>
+					<li><a href="">생산 실적 현황</a></li>
+				</ul>
+			</li>
+			<li>품질 관리
+				<ul class="subList">
+					<li><a href="">LOT 추적</a></li>
+					<li><a href="">공정별 현황</a></li>
+					<li><a href="">품질 검사 입력</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div class="titleBox">
+		<span>자유게시판</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+
+	<div class="wrap">
+	</div>
     <div class = "container">
-        <header>
-            <div class="header-top">
-            <h1>자유게시판</h1>
         
-            <a href="#" class="main-link"> 메인 화면으로</a>
-        </header>
 
           <div class="search-area-outside">
     <label for="search-select">검색조건</label>
@@ -154,7 +400,8 @@ td:nth-child(2) {
       <option>제목</option>
       <option>내용</option>
     </select>
-    <input type="text" placeholder="검색할 내용을 입력하세요" />
+    <input type="text" id="search-input" placeholder="검색할 내용을 입력하세요" />
+    <button id="search-button">검색</button> <!-- ✅ 추가된 버튼 -->
   </div>
         
         <table>
@@ -270,6 +517,50 @@ function updatePagination() {
 
 // 초기 렌더링
 renderTable(1);
+  // 기존 posts 데이터와 renderTable 함수는 유지
+
+  // 검색 버튼 클릭 시 필터링
+  document.getElementById('search-button').addEventListener('click', function () {
+    const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+    const criteria = document.getElementById('search-select').value;
+
+    const filteredPosts = posts.filter(post => {
+      if (criteria === "제목") {
+        return post.title.toLowerCase().includes(keyword);
+      } else if (criteria === "내용") {
+        // 현재 post에 내용은 없으므로 title로 대체
+        return post.title.toLowerCase().includes(keyword);
+      }
+      return true;
+    });
+
+    renderFilteredTable(filteredPosts);
+  });
+
+  // 검색 결과로 테이블 렌더링하는 함수
+  function renderFilteredTable(filtered) {
+    const tbody = document.querySelector('tbody');
+    tbody.innerHTML = "";
+
+    const limited = filtered.slice(0, postsPerPage);
+    limited.forEach(post => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${post.type}</td>
+        <td>${post.title}</td>
+        <td>${post.dept}</td>
+        <td>${post.date}</td>
+        <td>${post.views}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // 검색 결과에 대한 페이지네이션 제거 (필요 시 구현 가능)
+    document.querySelector('.pagination').innerHTML = "";
+  }
 </script>
 </body>
+
+
+
 </html>

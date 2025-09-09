@@ -16,7 +16,7 @@
     .box {
         display: flex;
         flex-wrap: wrap;
-        gap: 14px 18px;
+        gap: 14px 20px;
         align-items: flex-start;
         margin: 10px 0;
         justify-content: space-between;
@@ -31,6 +31,9 @@
     .header_row div:first-child {
         font-weight: 800;
         font-size: 18px;
+    }
+    .approve {
+        text-align: right;
     }
 
     .action button {
@@ -49,20 +52,21 @@
         border-color: #5b5f66;
     }
 
+    /* 4칸 */
     .item {
         flex: 1 1 calc(25% - 18px); 
-        min-width: 230px;  
+        min-width: 180px;  
     }
     .item > div:first-child {
-        font-weight: 700;
+        font-weight: bold;
         margin-bottom: 6px;
     }
-
+    /* 5칸 */
     .item_5 {
         flex: 1 1 calc(20% - 18px); 
-        min-width: 230px; 
+        min-width: 180px; 
     }
-    
+    .main select,
     .main_input {
         width: 100%;
         height: 40px;
@@ -122,24 +126,98 @@
     }
 
     
-    .table {
-        width: 90%;
-        margin: 0 auto 22px;
+    /* 0) 테이블 기본 */
+    .tables {
+        width: 100%;
+        table-layout: fixed;          /* 열폭 고정으로 어긋남 방지 */
         border-collapse: collapse;
-        text-align: center;
+        border-spacing: 0;
+        margin: 0 auto;
+    }
+
+    /* 1) 스크롤 영역: 내부 스크롤 + 스크롤바 공간 예약 */
+    .table_wrap {
+        max-height: 500px;            /* 필요시 값 조정 */
+        overflow: auto;               /* 내부 스크롤 */
+        min-height: 300px;                /* flex 컨텍스트에서 필수 */
+        width: 90%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-clip: padding-box; /* 라운드 안쪽 잘림 방지 */
+        margin: 0 auto;
+        /* 크롬/엣지 등: 스크롤바 공간을 미리 확보(헤더/열정렬 어긋남 방지) */
+        /* scrollbar-gutter: stable both-edges; 없어도 될듯 */
+    }
+    .table_wrap_detail{
+        max-height: 300px;         /* 필요시 조절 */
+        overflow: auto;
+        position: relative;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .tables tfoot tr{
+        position: sticky;
+        bottom: 0;
         background: #fff;
+        z-index: 1;
+        box-shadow: 0 -1px 0 rgba(0,0,0,0.08);
     }
-    .table th, .table td {
-        border: 2px solid #2f2f2f;
-        padding: 8px;
+    .tables tfoot td{ 
+        background: inherit; 
     }
-    .table thead th
-    .table tfoot td {
-        background-color: #f0f0f0;  
-        font-weight: bold;
+    .modal .table_wrap {
+        max-height: 300px;            /* 필요시 값 조정 */
+        overflow: auto;               /* 내부 스크롤 */
+        min-height: 200px;                /* flex 컨텍스트에서 필수 */
+        width: 90%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-clip: padding-box; /* 라운드 안쪽 잘림 방지 */
+        margin: 0 auto;
+        /* 크롬/엣지 등: 스크롤바 공간을 미리 확보(헤더/열정렬 어긋남 방지) */
+        /* scrollbar-gutter: stable both-edges; 없어도 될듯 */
     }
-    .table tbody td { 
-        height: 40px; 
+
+    /* 2) 헤더 고정 */
+    .tables thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #eef5ff;     
+    }
+    .tables tbody {
+        text-align: center;
+    }
+    /* 3) 셀 기본 패딩/라인 */
+    .tables th, .tables td {
+        padding: 10px 12px;
+        border: 1px solid black;
+    }
+
+    /* 4) 커스텀 스크롤바 */
+    .table_wrap_detail::-webkit-scrollbar,
+    .table_wrap::-webkit-scrollbar { 
+        width: 10px;
+        height: 10px; 
+    }
+    .table_wrap_detail::-webkit-scrollbar-track,
+    .table_wrap::-webkit-scrollbar-track { 
+        background: #f1f1f1; 
+    }
+    .table_wrap_detail::-webkit-scrollbar-thumb,
+    .table_wrap::-webkit-scrollbar-thumb {
+        background: #c1c1c1; 
+        border-radius: 10px; 
+        border: 2px solid #f1f1f1;
+    }
+
+    #client_modal .row_1{
+        width: 50px;
+    }
+    #client_modal .row_2,
+    #client_modal .row_3,
+    #client_modal .row_4{
+        width: 100px;
     }
 
     .bottom {
@@ -172,7 +250,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         width: 600px;
-        height: 400px;
+        height: 500px;
         padding: 16px;
         display: flex;
         flex-direction: column;
@@ -184,6 +262,7 @@
         text-align: center;
         margin: 16px auto 0;
     }
+    .m_quantity,
     .m_search {
         width: 80%;
         height: 36px;
@@ -200,6 +279,9 @@
         background: #fff;
         outline: 0;
     }
+    .bottom_input{
+        text-align: center;
+    }
     .m_button {
         width: 65px;
         height: 36px;
@@ -210,17 +292,22 @@
         font-weight: 700;
         cursor: pointer;
     }
-    .modal .table { 
-        width: 100%; 
-        margin: 6px auto; 
-    }
+    
 
-    @media (max-width: 1200px) {
-        .item { min-width: 240px; }
+    @media screen and (min-width: 1024px) {
+        .item { 
+            min-width: 200px; 
+        }
+       
     }
-    @media (max-width: 820px) {
-        .item { flex: 1 1 calc(50% - 18px); }
+    /* 768px ~ 1024px */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        .item { 
+            flex: 1 1 calc(50% - 18px); 
+        }
     }
-    @media (max-width: 520px) {
+    /* 481px ~ 767px */
+    @media screen and (min-width: 481px) and (max-width: 767px) {
         .item { flex: 1 1 100%; }             
     }
+    /* ~ 480px */

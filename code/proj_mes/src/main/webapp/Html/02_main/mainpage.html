@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>마이 페이지</title>
-    <link rel="stylesheet" href="../asset/mainpage.css">
+    <link rel="stylesheet" href="/proj_mes/Html/asset/mainpage.css">
 </head>
 
 <body>
@@ -25,8 +25,11 @@
                     <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘" style="background-color: #ffffff; border-radius: 100%;">
                 </a>
                 <ul class="subList">
-                    <li><a href="">하위메뉴1</a></li>
-                    <li><a href="">하위메뉴2</a></li>
+<!--                 그럼 여기서 권한에 따라 선택이 가능 불가능이 나뉘어야 함 grade == 0 -->
+                    <li><a href="/proj_mes/AccountManage">계정관리</a></li>
+                    <!--  서블릿 생성 -> jsp 링크 경로 수정 -->
+                    
+                    <li><a href="/proj_mes/IssueCtrl">이슈관리</a></li>
                 </ul>
             </div>
         </div>
@@ -35,7 +38,7 @@
             <ul class="mainList">
                 <li>기준 관리
                     <ul class="subList">
-                        <li><a href="">기준 목록</a></li>
+                        <li><a href="/proj_mes/StandardList">기준 목록</a></li>
                     </ul>
                 </li>
                 <li>공정 관리
@@ -122,7 +125,7 @@
                     </div>
                     <!-- <div class="p">
                         <div class="pp">
-                            <img src="표.png" alt="생산 현황 표">
+                            <img src="/proj_mes/Html/02_main/표.png" alt="생산 현황 표">
                         </div>
                     </div> -->
                 </div>
@@ -164,6 +167,7 @@
                     <div class="jisi-content">
                         <div class="ji-chart">
                             <h4>불량 유형</h4>
+<<<<<<< HEAD
                             <br>
                             <!-- <div class="u1"><img src="불량 유형.png" alt="불량 유형"></div> -->
                         </div>
@@ -171,6 +175,13 @@
                             <h4>작업 지시 진행률</h4>
                             <br>
                             <!-- <div class="u1"><img src="작업 지시.png" alt="작업 지시 진행률"></div> -->
+=======
+                            <div class="u1"><img src="/proj_mes/Html/02_main/불량 유형.png" alt="불량 유형"></div>
+                        </div>
+                        <div class="ji-chart">
+                            <h4>작업 지시 진행률</h4>
+                            <div class="u1"><img src="/proj_mes/Html/02_main/작업 지시.png" alt="작업 지시 진행률"></div>
+>>>>>>> 6ae00d98b3e15a0d578131f23318ae232db73163
                         </div>
                     </div>
                 </div>

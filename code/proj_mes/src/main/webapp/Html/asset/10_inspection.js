@@ -1,8 +1,10 @@
-window.onload = function() {
-    init(); 
-}
+document.addEventListener('DOMContentLoaded', init);
 
 function init() {
+
+    const inspTabBody = document.querySelector('.insp_tab tbody');
+    const saveBtn = document.querySelector('.saveBtn');
+    const workerInput = document.getElementById('workerInput');
 
     /* 테이블 항목 전체 선택 */
     const allCheck = document.getElementById("allCheck");
@@ -21,7 +23,7 @@ function init() {
         });
     });
 
-    // 삭제 버튼 클릭 시 체크된 행 삭제
+    /* 삭제 버튼 클릭 시 체크된 행 삭제 */
     const deleteBtn = document.querySelector('.deleteBtn');
 
     deleteBtn.addEventListener('click', function() {
@@ -40,10 +42,16 @@ function init() {
         allCheck.checked = false;
     });
 
-    /* 모달  */
+
+    /* 모달 */
     const modal = document.getElementById("procModal");
     const searchProc = document.getElementById("searchProc");
     const closeBtn = document.querySelector(".close");
+    const dateBtn = document.querySelector('.dateBtn');
+    const modalInfo = document.querySelector('.modalInfo');
+    const btmBtn = document.querySelector('.btmBtn');
+    const cancelBtn = document.querySelector('.cancleBtn'); // 선택 해제 버튼
+    const saveBtn2 = document.querySelector('.saveBtn2'); // 모달 내 저장 버튼
 
     // 클릭하면 모달 열기
     searchProc.onclick = function(e) {
@@ -57,13 +65,8 @@ function init() {
     }
 
     // 모달 내 상세 내용을 '조회' 버튼을 눌러야지만 보이게
-    const dateBtn = document.querySelector('.dateBtn');
-    const modalInfo = document.querySelector('.modalInfo');
-    const btmBtn = document.querySelector('.btmBtn');
-
     dateBtn.addEventListener('click', function() {
         const dateInput = document.querySelector('.dateLookup input[type="date"]');
-
         if (!dateInput.value) {
             alert("날짜를 선택해주세요.");
             return;
@@ -74,18 +77,12 @@ function init() {
         btmBtn.style.display = 'flex';     // 버튼은 flex로 정렬
     });
 
-    // 선택 해제 버튼
-    const cancelBtn = document.querySelector('.cancleBtn');
-
+    // 선택 해제
     cancelBtn.addEventListener('click', function() {
         const checkboxes = modalInfo.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => cb.checked = false);
     });
 
-    // 모달 내 '저장' 버튼
-    const saveBtn2 = document.querySelector('.saveBtn2'); // 모달 저장 버튼
-    const inspTabBody = document.querySelector('.insp_tab tbody');
-    
     // 모달 내 '저장' 버튼 클릭 시 선택된 행 가져오기 및 테이블 insp_tab에 추가
     saveBtn2.addEventListener('click', function() {
         // 모달에서 체크된 행만 선택
@@ -130,5 +127,49 @@ function init() {
         modalInfo.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
         btmBtn.style.display = 'none';
         modalInfo.style.display = 'none';
+    });
+
+
+
+    /* 불량 입력이 없거나 작업자 입력안하면 저장 안 되게 */
+    saveBtn.addEventListener('click', function() {
+        let messages = [];
+
+        // 1️⃣ 작업자 입력 체크
+        if (!workerInput.value.trim()) {
+            messages.push("작업자를 입력하세요.");
+        }
+
+        // 2️⃣ 테이블 실제 데이터 있는지 확인 (첫 번째 행 제외, 체크박스와 비고 제외)
+        const dataRows = Array.from(inspTabBody.rows).slice(1).filter(row => {
+            const lotNum = row.cells[2].textContent.trim();
+            const productName = row.cells[3].textContent.trim();
+            const procName = row.cells[4].textContent.trim();
+            // LOT, 품명, 공정 중 하나라도 값이 있으면 데이터 존재
+            return lotNum !== "" || productName !== "" || procName !== "";
+        });
+
+        if (dataRows.length === 0) {
+            messages.push("불량 사항을 입력하세요.");
+        } else {
+            // 3️⃣ 양품 수량 체크
+            dataRows.forEach((row, index) => {
+                const goodQty = row.cells[5].querySelector('input')?.value;
+
+                if (goodQty === "" || Number(goodQty) < 0) {
+                    messages.push(`행 ${index + 2}: 양품 수량을 0 이상 입력하세요.`);
+                }
+            });
+        }
+
+
+        // 조건 중 하나라도 만족하지 않으면 alert
+        if (messages.length > 0) {
+            alert(messages.join("\n"));
+            return; // 저장 중단
+        }
+
+        // 모든 조건 통과 시 저장
+        alert("저장이 완료되었습니다");
     });
 }

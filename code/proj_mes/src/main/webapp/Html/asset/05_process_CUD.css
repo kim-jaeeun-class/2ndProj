@@ -53,6 +53,7 @@ input[type="text"], select {
     justify-content: space-between;
     font-weight: bold;
     font-size: 1.2rem;
+    display: none;
 }
 
 /* 공정 정보 입력 부분 */
@@ -81,5 +82,5 @@ input[type="text"], select {
     display: flex; 
     justify-content: flex-end;
     gap: 15px;
-    padding: 30px;
+    padding: 0 30px 30px 0;
 }

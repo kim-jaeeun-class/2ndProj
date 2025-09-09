@@ -1,106 +1,80 @@
-// package Dao;
 package Dao;
 
-import java.sql.*;
-import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.sql.*;
 
-import Dto.Login_Dto;
-
+/**
+ * 로그인에 필요한 최소 컬럼만 조회/갱신하는 DAO.
+ * JNDI DataSource 이름은 "java:comp/env/jdbc/oracle" 을 사용합니다.
+ */
 public class Login_Dao {
+    private final DataSource ds;
 
-    private Connection getConn() throws Exception {
-        Context ctx = new InitialContext();
-        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/oracle");
-        return ds.getConnection();
+    public Login_Dao() {
+        try {
+            this.ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/oracle");
+        } catch (NamingException e) {
+            throw new RuntimeException("DataSource lookup failed: jdbc/oracle", e);
+        }
     }
 
-    public Login_Dto findByIdAndPw(String id, String pw) {
-        String inId = id == null ? null : id.trim();
-        String inPw = pw == null ? null : pw.trim();
-
-        String sqlMain =
-            "SELECT WORKER_ID, WORKER_GRADE " +
-            "  FROM WORKER " +
-            " WHERE WORKER_ID = ? " +
-            "   AND WORKER_PW  = ?";
-
-        // 진단용: ID 존재 여부/공백 여부 확인
-        String sqlCheckId =
-            "SELECT TO_CHAR(WORKER_ID) wid, LENGTH(WORKER_PW) pw_len, " +
-            "       CASE WHEN WORKER_PW IS NULL THEN 'Y' ELSE 'N' END pw_is_null " +
-            "  FROM WORKER WHERE TO_CHAR(WORKER_ID) = ?";
-
-        // 진단용: 공백/타입 이슈 회피(성능↓이므로 임시)
-        String sqlFallback =
-            "SELECT WORKER_ID, WORKER_GRADE " +
-            "  FROM WORKER " +
-            " WHERE TO_CHAR(WORKER_ID) = ? " +
-            "   AND TRIM(WORKER_PW)    = ?";
-
-        try (Connection con = getConn()) {
-
-            // 0) 접속 DB/스키마 확인
-            try (Statement st = con.createStatement();
-                 ResultSet env = st.executeQuery(
-                   "SELECT SYS_CONTEXT('USERENV','DB_NAME') db, " +
-                   "       SYS_CONTEXT('USERENV','CURRENT_SCHEMA') sch FROM dual")) {
-                if (env.next()) {
-                    System.out.println("[LOGIN] DB=" + env.getString("db") +
-                                       ", SCHEMA=" + env.getString("sch"));
-                }
+    /**
+     * 아이디로 인증에 필요한 행을 조회합니다.
+     * @param workerId 사용자 ID
+     * @return 없으면 null
+     */
+    public AuthRow findAuthById(String workerId) throws SQLException {
+        final String sql =
+            "SELECT worker_id, worker_grade, worker_pw, worker_cando " +
+            "  FROM worker " +
+            " WHERE worker_id = ?";
+        try (Connection con = ds.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, workerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return null;
+                AuthRow r = new AuthRow();
+                r.setWorkerId(rs.getString("worker_id"));
+                r.setWorkerGrade(rs.getInt("worker_grade"));
+                r.setPwHash(rs.getString("worker_pw"));        // 해시 또는 평문(특정 계정)
+                r.setWorkerCando(rs.getString("worker_cando"));
+                return r;
             }
-
-            // 1) 정상 경로 시도
-            try (PreparedStatement ps = con.prepareStatement(sqlMain)) {
-                ps.setString(1, inId);
-                ps.setString(2, inPw);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        return new Login_Dto(rs.getString("WORKER_ID"), rs.getInt("WORKER_GRADE"));
-                    }
-                }
-            }
-
-            // 2) 진단: ID는 있는가?
-            boolean idExists = false;
-            try (PreparedStatement ps = con.prepareStatement(sqlCheckId)) {
-                ps.setString(1, inId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        idExists = true;
-                        System.out.println("[LOGIN] ID exists: " + rs.getString("wid") +
-                                           ", PW length in DB=" + rs.getInt("pw_len") +
-                                           ", PW is null? " + rs.getString("pw_is_null"));
-                    } else {
-                        System.out.println("[LOGIN] ID NOT FOUND by TO_CHAR match: " + inId);
-                    }
-                }
-            }
-
-            // 3) 진단/임시 우회: 타입/공백 이슈 확인
-            try (PreparedStatement ps = con.prepareStatement(sqlFallback)) {
-                ps.setString(1, inId);
-                ps.setString(2, inPw);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        System.out.println("[LOGIN] FALLBACK matched (type/whitespace issue suspected)");
-                        return new Login_Dto(rs.getString("WORKER_ID"), rs.getInt("WORKER_GRADE"));
-                    }
-                }
-            }
-
-            if (!idExists) {
-                System.out.println("[LOGIN] 결과: 아이디가 DB에 없음");
-            } else {
-                System.out.println("[LOGIN] 결과: 아이디는 있으나 비밀번호 불일치 (또는 공백/타입 문제)");
-            }
-
-        } catch (Exception e) {
-            // 운영에선 로거 사용 권장
-            e.printStackTrace();
         }
-        return null;
+    }
+
+    /**
+     * 비밀번호 해시를 갱신합니다(정책 업그레이드 시 사용).
+     */
+    public int updatePasswordHash(String workerId, String newHash) throws SQLException {
+        final String sql = "UPDATE worker SET worker_pw = ? WHERE worker_id = ?";
+        try (Connection con = ds.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, newHash);
+            ps.setString(2, workerId);
+            return ps.executeUpdate();
+        }
+    }
+
+    /** 조회용 DTO */
+    public static class AuthRow {
+        private String workerId;
+        private int workerGrade;
+        private String pwHash;
+        private String workerCando;
+
+        public String getWorkerId() { return workerId; }
+        public void setWorkerId(String workerId) { this.workerId = workerId; }
+
+        public int getWorkerGrade() { return workerGrade; }
+        public void setWorkerGrade(int workerGrade) { this.workerGrade = workerGrade; }
+
+        public String getPwHash() { return pwHash; }
+        public void setPwHash(String pwHash) { this.pwHash = pwHash; }
+
+        public String getWorkerCando() { return workerCando; }
+        public void setWorkerCando(String workerCando) { this.workerCando = workerCando; }
     }
 }

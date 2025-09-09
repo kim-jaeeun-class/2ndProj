@@ -28,7 +28,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 5px;
-    margin: 10px 30px;
+    margin: 30px;
     display: flex;
     justify-content: space-between; 
     align-items: center; 

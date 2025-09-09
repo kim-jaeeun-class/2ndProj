@@ -151,38 +151,256 @@ a, a:link, a:visited {
     margin: 10px auto;
 }
 
-
-
-.top {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
+/* body 시작 */
+/* 필터 적용부분 */
+.main {
+    width: 90%;
+    margin: 16px auto;
+    padding: 14px 10px;
+    border: 1px solid #2f2f2f;
+    border-radius: 10px;
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* 두 줄로 배치 */
+    gap: 14px; /* 줄 간격 */
 }
-.box{
+
+/* select 필터 줄 */
+.filter {
+    display: flex;
+    flex-wrap: wrap; /* 화면 줄어들면 자동 줄바꿈 */
+    gap: 12px 18px;  /* 위아래 12px / 좌우 18px */
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+}
+
+.filter select {
+    min-width: 140px;
+    height: 36px;
+    padding: 4px 10px;
+    border: 1px solid #9aa3af;
+    border-radius: 6px;
+    background: #fff;
+}
+
+/* 기간 필터 */
+.date_filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #ddd; /* 시각적으로 두 줄 구분 */
+}
+
+.date_filter .date {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.date_filter input[type="date"] {
+    width: 200px;
+    height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #9aa3af;
+    border-radius: 6px;
+}
+
+/* 조회 버튼 */
+.date_filter button {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 8px;
+    border: 1px solid #666;
+    background: #7a7d81;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.order_filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.order_filter .order_date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}          
+.order_filter input[type="date"] {
+    width: 180px;
+    height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #9aa3af;
+    border-radius: 6px;
+}      
+.order_period {
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 7px;
+    width: 70px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+}                
+.order_month {
+    border: 1px solid black;
+    border-radius: 7px;
+    width: 70px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    margin-right: 20px;
+}
+.state select{
+    min-width: 140px;
+    height: 36px;
+    padding: 4px 10px;
+    border: 1px solid #9aa3af;
+    border-radius: 6px;
+    background: #fff;
+}
+.order_filter button {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 8px;
+    border: 1px solid #666;
+    background: #7a7d81;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
 }
 .period {
     border: 1px solid grey;
     background-color: grey;
+    border-radius: 7px;
+    width: 70px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
 }
 .month {
     border: 1px solid black;
+    border-radius: 7px;
+    width: 70px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    margin-right: 50px;
 }
-.table {
-    border-collapse: collapse;
-    margin: 0 auto;
+/* 0) 테이블 기본 */
+.tables {
+  width: 100%;
+  table-layout: fixed;          /* 열폭 고정으로 어긋남 방지 */
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 auto;
+  text-align: center;
 }
-.center {
+.row_1,
+.row_5,
+.row_7 {
+    width: 40px;
+}
+.order_row_1,
+.order_row_2 {
+    width: 30px;
+}
+.order_row_0 {
+    width: 50px;
+}
+.order_row_3,
+.order_row_4 {
+    width: 110px;
+}
+/*
+.order_row_5,
+.order_row_6 {
+    width: 60px;
+}
+.order_row_7,
+.order_row_8 {
+    width: 70px;
+} */
+
+.tables tfoot tr{
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    z-index: 1;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.08);
+}
+.tables tfoot td{ 
+    background: inherit; 
+}
+/* 1) 스크롤 영역: 내부 스크롤 + 스크롤바 공간 예약 */
+.table-wrap {
+  max-height: 500px;            /* 필요시 값 조정 */
+  overflow: auto;               /* 내부 스크롤 */
+  min-height: 300px;                /* flex 컨텍스트에서 필수 */
+  width: 90%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-clip: padding-box; /* 라운드 안쪽 잘림 방지 */
+  margin: 0 auto;
+  /* 크롬/엣지 등: 스크롤바 공간을 미리 확보(헤더/열정렬 어긋남 방지) */
+  /* scrollbar-gutter: stable both-edges; 없어도 될듯 */
+}
+
+/* 2) 헤더 고정 */
+.tables thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #eef5ff;     
+}
+.tables tbody {
     text-align: center;
 }
+/* 3) 셀 기본 패딩/라인 */
+.tables th, .tables td {
+  padding: 5px 5px;
+  border: 1px solid #000000;
+}
+
+/* 4) 커스텀 스크롤바 (질문에 주신 것 유지) */
+.table-wrap::-webkit-scrollbar { 
+    width: 10px;
+    height: 10px; 
+}
+.table-wrap::-webkit-scrollbar-track { 
+    background: #f1f1f1; 
+}
+.table-wrap::-webkit-scrollbar-thumb {
+    background: #c1c1c1; 
+    border-radius: 10px; 
+    border: 2px solid #f1f1f1;
+}
+.action {
+    text-align: right;
+    margin: 30px 60px;
+}
+.action button {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #888;
+    background: #f0f0f0;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+
 
 /* 모바일 반응형 */
 @media (max-width: 768px) {
