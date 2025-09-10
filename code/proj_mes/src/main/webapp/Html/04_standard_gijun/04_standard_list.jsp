@@ -130,7 +130,7 @@
 //         location.href = '/proj_mes/Html/04_standard_gijun/create_' + encodeURIComponent(cat) + '.jsp';
         if(cat == "발주"){
         	cat = "orderRegistration";
-        	location.href = '/proj_mes/WEB=INF/' + encodeURIComponent(cat) + '.jsp';        	
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';        	
         }
 
       });
