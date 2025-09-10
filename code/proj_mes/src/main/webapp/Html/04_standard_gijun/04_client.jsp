@@ -60,8 +60,7 @@
                   <td><c:out value="${row.business_number}" /></td>
                   <td><c:out value="${row.business_item}" /></td>
                   <td><c:out value="${row.client_address}" /></td>
-                  <!-- DTO는 input_division, DB는 INOUT_DIVISION -->
-                  <td><c:out value="${row.input_division}" /></td>
+                  <td><c:out value="${row.inout_division}" /></td>
                   <td><c:out value="${row.worker_id}" /></td>
                 </tr>
               </c:forEach>
@@ -184,7 +183,6 @@
     });
   </script>
 
-  <!-- 기타 페이지 스크립트 (필요 시) -->
   <script src="<c:url value='/Html/asset/04_client.js' />"></script>
 </body>
 </html>

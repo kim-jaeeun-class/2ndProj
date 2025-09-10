@@ -1,44 +1,41 @@
 package Dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import Dto.ClientDTO;
-import Dto.ItemDTO;
 
 public class ClientDAO {
-	// DB 접속 메소드
-	private Connection getConn() {
-		Connection conn = null;
-		
-		try {
-			
-			Context ctx = new InitialContext();
-			
-			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
-			
-			// DB 접속
-			conn = dataFactory.getConnection();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return conn;
-	}
 
-    
-    
-	 /** 전체 조회 */
+
+    private Connection getConn() throws Exception {
+  
+    		Connection conn = null;
+    		
+    		try {
+    			
+    			Context ctx = new InitialContext();
+    			
+    			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
+    			
+    			// DB 접속
+    			conn = dataFactory.getConnection();
+    			
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+    		
+    		return conn;
+    	
+
+    }
+
+    /** 전체 조회 */
     public List<ClientDTO> selectAll() {
         final String sql =
             "SELECT CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
@@ -75,31 +72,21 @@ public class ClientDAO {
         return list;
     }
 
-    /** 등록 */
+
+    /** 등록 (시퀀스 없음, CLIENT_ID VARCHAR2(20) 제약 → 20자 PK 생성) */
     public int insert(ClientDTO d) {
-        // ▶ 시퀀스 사용 버전 (CLIENT_SEQ 존재 가정)
         final String sql =
             "INSERT INTO CLIENT ( " +
             "  CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
             "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
             ") VALUES ( " +
-            "  CLIENT_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ? " +
+            "  SUBSTR(RAWTOHEX(SYS_GUID()), 1, 20), ?, ?, ?, ?, ?, ?, ? " +
             ")";
-
-        /* ▶ 시퀀스가 없다면 아래 주석 버전으로 교체 (CLIENT_ID는 트리거/IDENTITY로 생성된다고 가정)
-        final String sql =
-            "INSERT INTO CLIENT ( " +
-            "  CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
-            "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
-            ") VALUES ( ?, ?, ?, ?, ?, ?, ? )";
-        */
 
         try (Connection con = getConn();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             int i = 1;
-            // 시퀀스 버전: 1~7번 파라미터
-            // (시퀀스 미사용 버전이라면 i=1부터 동일 순서로 7개 세팅)
             ps.setString(i++, d.getClient_name());
             ps.setString(i++, d.getClient_phone());
             ps.setString(i++, d.getBusiness_number());
@@ -118,21 +105,4 @@ public class ClientDAO {
             return 0;
         }
     }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-    
-    
-    
-    
-
 }

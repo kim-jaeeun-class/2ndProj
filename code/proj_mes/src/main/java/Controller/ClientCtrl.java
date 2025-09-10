@@ -26,30 +26,30 @@ public class ClientCtrl extends HttpServlet {
         List<ClientDTO> list = clientService.getAllItem();
         System.out.println("[ClientCtrl] clients size = " + (list == null ? "null" : list.size()));
         request.setAttribute("clients", list);
-        request.getRequestDispatcher("/Html/04_standard_gijun/04_client.jsp").forward(request, response);
+        request.getRequestDispatcher("/Html/04_standard_gijun/04_client.jsp")
+               .forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String op = request.getParameter("op");
 
+        String op = request.getParameter("op");
         if ("insert".equalsIgnoreCase(op)) {
             ClientDTO d = new ClientDTO();
             d.setClient_name(request.getParameter("client_name"));
             d.setClient_phone(request.getParameter("client_phone"));
             d.setBusiness_number(request.getParameter("business_number"));
             d.setBusiness_item(request.getParameter("business_item"));
-            d.setClient_address(request.getParameter("client_address"));   // hidden으로 합쳐진 주소
-            // DB 컬럼은 INOUT_DIVISION, DTO는 input_division
-            d.setInout_division(Integer.parseInt(request.getParameter("inout_division")));
+            d.setClient_address(request.getParameter("client_address"));   // hidden(주소 합본)
+            d.setInout_division(request.getParameter("inout_division"));  // DB: INOUT_DIVISION
             d.setWorker_id(request.getParameter("worker_id"));
 
             int ins = clientService.insert(d);
             System.out.println("[ClientCtrl] insert result = " + ins);
 
-            // PRG 패턴
+            // PRG
             response.sendRedirect(request.getContextPath() + "/Client");
             return;
         }
