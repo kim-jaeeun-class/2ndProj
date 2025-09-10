@@ -8,6 +8,7 @@
     --field-border: #999;
     --page-bg: #ffffff;
     --radius: 7px;
+    --nav-color: #003751;
 }
 
 * { 
@@ -155,13 +156,30 @@ body {
     overflow-x: hidden;
     background-color: var(--page-bg);
 }
+/* sidenwrap : 사이드바와 wrap 모두 감싸는 부분*/
+.sidenwrap {
+    display: flex;
+}
+/* side : 사이드바 영역 */
+.side {
+    width: 15%;
+    background-color: var(--nav-color);
+}
+.side-menu {
+    border-bottom: 1px solid var(--border);
+    color: var(--button-text);
+    font-weight: 600;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
 
-/* wrap(모든 컨텐츠를 다 감싸는 부분) */
+/* wrap(사이드 제외 모든 컨텐츠(모달이나 슬라이딩 제외)를 다 감싸는 부분) */
 .wrap {
     border: 1px solid var(--border);
     border-radius: 5px;
     background-color: #ffffff;
-    width: 90%;
+    width: 80%;
     max-width: 1280px;
     margin: 10px auto;
     overflow-x: hidden;
@@ -307,8 +325,8 @@ input[type="date"], select {
 .panel {
     position: fixed;
     top: 0;
-    right: -800px;
-    width: 600px;
+    right: -90%;
+    width: 85%;
     height: 100%;
     background: #f9f9f9;
     box-shadow: -2px 0 6px rgba(0,0,0,0.2);

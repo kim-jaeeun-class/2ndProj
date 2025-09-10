@@ -10,10 +10,79 @@
         <link rel="stylesheet" href="../asset/font.css">
         <link rel="stylesheet" href="../asset/09_common.css">
         <script src ="../asset/template_load.js" ></script>
-    </head>
-    <body page="wo">
-        <header></header>
-        <div class="gnb"></div>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 동적 차트를 위한 Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* 차트 캔버스의 최대 높이 설정 */
+        canvas {
+            max-height: 200px;
+        }
+
+        .header-bg {
+            background-color: #002a40;
+        }
+
+        .nav-bg {
+            background-color: #003751;
+        }
+
+        .mainList, #noticeContent, #boardContent {
+            cursor: pointer;
+        }
+        
+        /* 메인 내비게이션 목록의 호버 배경색을 파란색으로 변경하여 글씨가 잘 보이게 수정 */
+        .mainList li:hover {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800" page="wo">
+
+    <!-- 헤더 섹션 -->
+    <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
+    <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
+        <div class="flex items-center space-x-2">
+            <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
+            <h3 class="text-xl font-bold">J2P4</h3>
+        </div>
+        <div class="flex items-center space-x-4 sm:space-x-8">
+            <div class="search cursor-pointer">
+                <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
+            </div>
+            <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
+                <form id="logoutForm" method="post" style="display:none"></form>
+				<a href="#" id="logoutLink">로그아웃</a>
+            </div>
+            <div class="myIcon relative">
+                <a href="javascript:void(0);" id="myIconBtn">
+                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 내비게이션 -->
+    <!-- Tailwind 클래스 대신 직접 정의한 nav-bg 클래스 적용 -->
+    <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
+        <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+        </ul>
+    </nav>
         <div class="titleBox">
             <span>작업 지시서</span>
             <a href="../02_main/mainpage.html">
