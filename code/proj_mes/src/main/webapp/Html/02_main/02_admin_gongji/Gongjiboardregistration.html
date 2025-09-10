@@ -1,181 +1,166 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>자유게시판 수정/등록</title>
+  <title>공지 사항 등록</title>
   <style>
     :root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #a4a5a7;
-    --page-bg: #ffffff;
-    --radius: 10px;
-}
+      --border: #9aa0a6;
+      --text: #222;
+      --muted: #666;
+      --button: #5a5a5a;
+      --button-text: #fff;
+      --field-border: #a4a5a7;
+      --page-bg: #ffffff;
+      --radius: 10px;
+    }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
         "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
         "Helvetica Neue", Arial, sans-serif;
-}
-
-/* 헤더 부분 */
-header {
-    background-color: #495057;
-    height : 50px;
-    border: 1px solid;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-header .corp {
-    display: flex;
-    align-items: center; 
-    padding-left: 10px;
-    gap: 10px;
-    font-size: 1.2rem;
-}
-
-header .search {
-    margin-left: auto;
-    margin-right: 10px;
-}
-
-/* 회원 아이콘 부분*/
-header .myIcon {
-    position: relative;
-    padding: 5px 10px 5px 0;
-}
-
-header ul.subList {
-    display: none;
-    background-color: turquoise;
-    position: absolute;
-    top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
-    right: 0;
-    list-style-type: none;
-    color: #333333;
-    font-weight: normal;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 150px; 
-    margin: 0; /* ul 기본 margin 제거 */
-    padding: 0; /* ul 기본 padding 제거 */
-}
-
-/* 마우스를 올리면 하위 메뉴 보이기 */
-header .myIcon:hover .subList {
-    display: flex;
-}
-
-/* GNB 부분 */
-.gnb {
-    background-color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.gnb ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-evenly;
-    padding-left: 0;
-}
-
-.gnb ul.subList {
-    background-color: #495057;
-    color: white;
-    border-radius: 5%;
-    position: absolute;
-    left: 0;
-    display: none;
-    font-weight: normal;
-    font-size: medium;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 130px; 
-}
-.gnb ul.mainList > li {
-    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
-    color: #333333;
-}
-.gnb ul.mainList > li:hover .subList {
-    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
-    margin-top: 0px;
-}
-
-.subList li {
-    padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
-    margin: 1px 1px;  /* 위아래 간격 추가 */
-}
-
-/* a 링크 양식 지정 */
-a, a:link, a:visited {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* 제목 부분 */
-.titleBox {
-    background-color: var(--field-border);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.titleBox span {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
-}
-
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
-}
-
-/* 메인 몸통 부분 */
-.wrap {
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background-color: #ffffff;
-    width: 90%;
-    margin: 10px auto;
-}
-
-/* 모바일 반응형 */
-@media (max-width: 768px) {
-    /* 여기에 모바일 스타일 넣으시면 됩니다 */
-}
-    body {
-      font-family: '맑은 고딕', sans-serif;
       background-color: #f9f9f9;
       margin: 0;
       padding: 40px;
     }
 
+    /* 헤더 */
+    header {
+      background-color: #495057;
+      height: 50px;
+      border: 1px solid;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    header .corp {
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      gap: 10px;
+      font-size: 1.2rem;
+    }
+
+    header .search {
+      margin-left: auto;
+      margin-right: 10px;
+    }
+
+    header .myIcon {
+      position: relative;
+      padding: 5px 10px 5px 0;
+    }
+
+    header ul.subList {
+      display: none;
+      background-color: turquoise;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      list-style-type: none;
+      color: #333333;
+      font-weight: normal;
+      flex-direction: column;
+      justify-content: flex-start;
+      z-index: 9999;
+      min-width: 150px;
+      margin: 0;
+      padding: 0;
+    }
+
+    header .myIcon:hover .subList {
+      display: flex;
+    }
+
+    /* GNB */
+    .gnb {
+      background-color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .gnb ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: space-evenly;
+      padding-left: 0;
+    }
+
+    .gnb ul.subList {
+      background-color: #495057;
+      color: white;
+      border-radius: 5%;
+      position: absolute;
+      left: 0;
+      display: none;
+      font-weight: normal;
+      font-size: medium;
+      flex-direction: column;
+      justify-content: flex-start;
+      z-index: 9999;
+      min-width: 130px;
+    }
+
+    .gnb ul.mainList>li {
+      position: relative;
+      color: #333333;
+    }
+
+    .gnb ul.mainList>li:hover .subList {
+      display: flex;
+      margin-top: 0px;
+    }
+
+    .subList li {
+      padding: 2px 4px;
+      margin: 1px 1px;
+    }
+
+    a,
+    a:link,
+    a:visited {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* 제목 */
+    .titleBox {
+      background-color: var(--field-border);
+      height: 25px;
+      margin: 0 auto;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .titleBox span {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-left: 10px;
+      color: #333333;
+    }
+
+    .toMainpage {
+      color: var(--button);
+      margin-right: 10px;
+    }
+
+    /* 컨테이너 */
     .container {
       max-width: 800px;
-      margin: 0 auto;
+      margin: 20px auto;
       background: white;
       padding: 20px;
       border: 1px solid #ccc;
     }
 
-    /* 헤더 */
     .header-top {
       display: flex;
       justify-content: space-between;
@@ -195,7 +180,6 @@ a, a:link, a:visited {
       font-size: 14px;
     }
 
-    /* 게시글 정보 */
     .post-info {
       border: 1px solid #ccc;
       padding: 15px;
@@ -214,7 +198,6 @@ a, a:link, a:visited {
       color: #555;
     }
 
-    /* 본문 에디터 */
     .editor-toolbar {
       margin-bottom: 10px;
       border: 1px solid #ccc;
@@ -251,7 +234,6 @@ a, a:link, a:visited {
       font-family: '맑은 고딕', sans-serif;
     }
 
-    /* 첨부파일 */
     .file-upload {
       margin-bottom: 30px;
     }
@@ -267,7 +249,6 @@ a, a:link, a:visited {
       width: 100%;
     }
 
-    /* 하단 버튼 */
     .button-group {
       display: flex;
       justify-content: flex-end;
@@ -294,93 +275,88 @@ a, a:link, a:visited {
     }
   </style>
 </head>
+
 <body>
   <header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
+    <div class="corp">
+      <img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
+      <h3>J2P4</h3>
+    </div>
+    <div class="search">
+      <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색 아이콘">
+    </div>
+    <div class="logout">로그아웃</div>
+    <div class="myIcon">
+      <a href="javascript:void(0);" id="myIconBtn">
+        <img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
+          style="background-color: #ffffff; border-radius: 100%;">
+      </a>
+      <ul class="subList">
+        <li><a href="">하위메뉴1</a></li>
+        <li><a href="">하위메뉴2</a></li>
+      </ul>
+    </div>
+  </header>
 
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+  <div class="gnb">
+    <ul class="mainList">
+      <li>기준 관리
+        <ul class="subList">
+          <li><a href="">기준 목록</a></li>
+        </ul>
+      </li>
+      <li>공정 관리
+        <ul class="subList">
+          <li><a href="">공정 목록</a></li>
+          <li><a href="">공정 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>BOM 관리
+        <ul class="subList">
+          <li><a href="">BOM 목록</a></li>
+          <li><a href="">BOM 등록/수정/삭제</a></li>
+        </ul>
+      </li>
+      <li>발주 관리
+        <ul class="subList">
+          <li><a href="">발주 목록</a></li>
+        </ul>
+      </li>
+      <li>재고 관리
+        <ul class="subList">
+          <li><a href="">재고 목록</a></li>
+          <li><a href="">재고 삭제</a></li>
+        </ul>
+      </li>
+      <li>생산 관리
+        <ul class="subList">
+          <li><a href="">생산 계획</a></li>
+          <li><a href="">생산 실적 현황</a></li>
+        </ul>
+      </li>
+      <li>품질 관리
+        <ul class="subList">
+          <li><a href="">LOT 추적</a></li>
+          <li><a href="">공정별 현황</a></li>
+          <li><a href="">품질 검사 입력</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 
-	<div class="titleBox">
-		<span>자유게시판</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
+  <div class="titleBox">
+    <span>공지 사항</span>
+    <a href="">
+      <div class="toMainpage">
+        <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인으로"
+          style="transform: scaleX(-1);">
+        <a href="mainpage.html" class="mainpage.html">메인 화면으로</a>
+      </div>
+    </a>
+  </div>
 
-	<div class="wrap">
-	</div>
   <div class="container">
     <div class="header-top">
-      <h1 class="board-title"></h1>
-      <a href="#" class="main-link"></a>
     </div>
 
     <div class="post-info">
@@ -388,7 +364,7 @@ a, a:link, a:visited {
       <div class="post-meta">작성자: 안전보건팀 | 작성 시간: 2024-12-13 17:30</div>
     </div>
 
-    <div class="editor-toolbar">
+    <!-- <div class="editor-toolbar">
       <button type="button">사진</button>
       <button type="button">링크</button>
       <button type="button">인용</button>
@@ -398,7 +374,7 @@ a, a:link, a:visited {
       <button type="button">밑줄</button>
       <button type="button">취소선</button>
       <button type="button">글머리</button>
-    </div>
+    </div> -->
 
     <textarea class="post-content" placeholder="본문을 입력하세요...">안녕하세요. 안전보건팀입니다.
 안전 수칙 교육 일정 및 내용을 아래와 같이 공유합니다.
@@ -411,48 +387,71 @@ a, a:link, a:visited {
     </div>
 
     <div class="button-group">
-     <button id="editBtn" class="btn gray">수정</button>
-    <button id="deleteBtn" class="btn gray">삭제</button>
-    <button class="btn">등록</button>
+      <!-- <button id="editBtn" class="btn gray">수정</button>
+      <button id="deleteBtn" class="btn gray">삭제</button> -->
+      <button id="registerBtn" class="btn">등록</button>
     </div>
   </div>
+
   <script>
-  const editBtn = document.getElementById("editBtn");
-const deleteBtn = document.getElementById("deleteBtn");
-const postContent = document.querySelector(".post-content");
-const container = document.querySelector(".container");
+    const editBtn = document.getElementById("editBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const postContent = document.querySelector(".post-content");
+    const container = document.querySelector(".container");
 
-let isEditing = false;
+    let isEditing = false;
 
-// 초기엔 읽기 전용
-postContent.setAttribute("readonly", "readonly");
-
-editBtn.addEventListener("click", () => {
-  if (!isEditing) {
-    // 수정 모드 시작
-    postContent.removeAttribute("readonly");
-    postContent.focus();
-    editBtn.textContent = "저장";
-    isEditing = true;
-  } else {
-    // 저장 모드 (수정 완료)
+    
+    // 초기엔 읽기 전용
     postContent.setAttribute("readonly", "readonly");
-    editBtn.textContent = "수정";
-    isEditing = false;
 
-    // 서버 저장 등 필요한 작업 (여기선 콘솔 출력)
-    console.log("저장된 내용:", postContent.value);
-    alert("수정 내용이 저장되었습니다.");
-  }
-});
+    // if (editBtn) {
+    //   editBtn.addEventListener("click", () => {
+    //     if (!isEditing) {
+    //       postContent.removeAttribute("readonly");
+    //       postContent.focus();
+    //       editBtn.textContent = "저장";
+    //       isEditing = true;
+    //     } else {
+    //       postContent.setAttribute("readonly", "readonly");
+    //       editBtn.textContent = "수정";
+    //       isEditing = false;
+    //       console.log("저장된 내용:", postContent.value);
+    //       alert("수정 내용이 저장되었습니다.");
+    //     }
+    //   });
+    // }
 
-deleteBtn.addEventListener("click", () => {
-  const confirmed = confirm("정말 삭제하시겠습니까?");
-  if (confirmed) {
-    container.remove();
-    alert("게시글이 삭제되었습니다.");
-  }
-});
-</script>
+    // if (deleteBtn) {
+    //   deleteBtn.addEventListener("click", () => {
+    //     const confirmed = confirm("정말 삭제하시겠습니까?");
+    //     if (confirmed) {
+    //       container.remove();
+    //       alert("게시글이 삭제되었습니다.");
+    //     }
+    //   });
+    // }
+
+    if (registerBtn) {
+      registerBtn.addEventListener("click", () => {
+        const confirmed = confirm("등록하시겠습니까?");
+        if (confirmed) {
+          console.log("등록된 내용:", postContent.value);
+          alert("게시글이 등록되었습니다.");
+
+          // 두 번째 확인창
+          const goList = confirm("목록으로 이동하시겠습니까?");
+          if (goList) {
+            location.href = "Gongjiboard.html";  // 확인 시 목록으로 이동
+          } else {
+            // 취소 시 그냥 현재 페이지 유지
+            return;
+          }
+        }
+      });
+    }
+  </script>
 </body>
+
 </html>
