@@ -2,11 +2,11 @@ package Dto;
 
 public class ItemDTO {
 
-	private String item_code;
-	private String item_name;
-	private String item_bigo;
-	private int item_type;
-	private String item_price;
+	private String item_code;	// 품목 코드
+	private String item_name;	// 품목명
+	private String item_bigo;	// 비고
+	private int item_type;		// 유형 
+	private String item_price;	// 단가
 	
 	
 	public String getItem_code() {

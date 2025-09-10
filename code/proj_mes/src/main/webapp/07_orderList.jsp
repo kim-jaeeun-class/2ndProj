@@ -69,11 +69,31 @@
                     </tr>
                 </thead>
                 <tbody class="tables_body">
+                	<c:forEach var="order" items="${list}">
+						<tr>
+							<td><c:out value="${order.ename}" /></td>
+							<td><c:out value="${emp.empno}" /></td>
+							<td><c:out value="${emp.job}" /></td>
+							<td>
+			 					<c:choose>
+									<c:when test="${emp.job == 'PRESIDENT' }">
+										관리자
+									</c:when>
+									<c:when test="${emp.job == 'CLERK' }">
+										비회원
+									</c:when>
+									<c:otherwise>
+										일반회원
+									</c:otherwise>
+								</c:choose>
+							</td>
+						</tr>
+					</c:forEach>
                     <tr>
                         <td>
                             <input type="checkbox" class="row_check">
                         </td>
-                        <td>1</td>
+                        <td><c:out value="${emp.ename}" /></td>
                         <td class="row_date">2025-08-20</td>
                         <td>PS20250801</td>
                         <td>생산2팀</td>
