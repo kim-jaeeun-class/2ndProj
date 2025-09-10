@@ -28,30 +28,24 @@
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 5px;
-    margin: 30px;
+    margin: 10px 30px;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-around; 
     align-items: center; 
     gap: 15px;
-}
-
-.lookup_left {
-    margin-left: 10px;
     font-weight: bold;
 }
 
-.lookup_left, .lookup_left> select {
+
+.lookup > select {
     font-size: 1.1em;
 }
 
+/* btnDiv 부분 */
 .btnDiv {
-    display: flex; 
-    justify-content: flex-end;
-    margin: 10px 30px;
-    gap: 10px;
+	margin: 10px 30px;
 }
-
-.lookupBtn, .newProcessBtn {
+.newProcessBtn {
     background-color: #000000;
     border: 1px solid #000000;
 }
@@ -61,12 +55,13 @@
     border: 1px solid var(--button);
 }
 
+
 /* 테이블 부분 */
 .table-container {
     border: 1px solid var(--border);
     height: 400px; /* 고정된 세로 높이 설정 */
     overflow: auto; /* 내용이 넘칠 때 스크롤바가 생기도록 설정 */
-    margin: 30px;
+    margin: 10px 30px;
     display: none; /* 처음에는 숨김 */
 }
 

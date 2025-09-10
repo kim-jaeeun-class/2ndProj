@@ -45,7 +45,7 @@
     border: 1px solid var(--border);
     height: 400px; /* 고정된 세로 높이 설정 */
     overflow-y: auto;
-    margin: 30px 30px 0px 30px;
+    margin: 10px 30px 0px 30px;
     position: relative;
 }
 

@@ -27,36 +27,43 @@
 	<div class="wrap">
 		<form id="processForm" action="process" method="get">
 			<div class="lookup">
-				<div class="lookup_left">
-					담당 부서
+				<div>
+					품목코드&nbsp;
+					<select name="itemCode" onchange="this.form.submit()">
+						<option value="">전체</option>
+						<c:forEach var="itemCode" items="${itemCodes}">
+							<option value="${itemCode}" <c:if test="${selectedItemCode eq itemCode}">selected</c:if>>
+								<c:out value="${itemCode}" />
+							</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div>	
+					부서&nbsp;
 					<select name="departLevel" onchange="this.form.submit()">
 						<option value="">전체</option>
 						<c:forEach var="departLevel" items="${departLevels}">
-							<option value="${departLevel}" <c:if test="${selectedDepart eq departLevel}">selected</c:if>>
-								<c:out value="${departLevel}" />
-							</option>
-						</c:forEach>
-					</select>&nbsp;
-					공정명
-					<select name="procName">
-						<option value="">전체</option>
-						<!-- 담당 부서 선택 시 페이지가 새로 로드되므로, 여기서는 모든 공정 목록을 미리 보여주는 방식이 비효율적입니다. -->
-						<!-- 따라서 부서 선택 후 조회 버튼을 누르는 방식으로 로직을 변경합니다. -->
-						<c:if test="${not empty processes}">
-							<c:forEach var="proc" items="${processes}">
-								<option value="${proc.proc_name}">
-									<c:out value="${proc.proc_name}" />
-								</option>
-							</c:forEach>
-						</c:if>
+				           	<option value="${departLevel}" <c:if test="${selectedDepart eq departLevel}">selected</c:if>>
+				                <c:out value="${departLevel}" />
+				           	</option>
+				       	</c:forEach>
 					</select>
 				</div>
-				<div class="btnDiv">
-					<!-- 조회 버튼 클릭 시 폼 제출 -->
-					<input type="submit" value="조회" class="lookupBtn btn"></input>
-					<input type="button" value="수정" class="updateProcessBtn btn"></input>
-					<input type="button" value="신규" class="newProcessBtn btn"></input>
+				<div>
+					공정명&nbsp;
+				    <select name="procName" onchange="this.form.submit()">
+						<option value="">전체</option>
+						<c:forEach var="procName" items="${procNames}">
+				            <option value="${procName}" <c:if test="${selectedProcName eq procName}">selected</c:if>>
+				                <c:out value="${procName}" />
+				            </option>
+				        </c:forEach>
+					</select>
 				</div>
+			</div>
+			<div class="btnDiv">
+				<input type="button" value="수정" class="updateProcessBtn btn"></input>
+				<input type="button" value="신규" class="newProcessBtn btn"></input>
 			</div>
 		</form>
 		
@@ -67,27 +74,32 @@
 						<th>선택</th>
 						<th>순번</th>
 						<th>공정 ID</th>
+						<th>품목 코드</th>
 						<th>공정명</th>
-						<th>담당 부서</th>
-						<th>담당자</th>
-						<th>검사 여부</th>
+						<th>부서</th>
+						<th>공정 설명</th>
+						<th>이미지</th>
 					</tr>		
 				</thead>
 				<tbody>
-					<!-- JSTL을 사용해 공정 목록 동적으로 출력 -->
 					<c:if test="${empty processes}">
-						<tr><td colspan="7">조회된 공정 정보가 없습니다.</td></tr>
+						<tr><td colspan="8">조회된 공정 정보가 없습니다.</td></tr>
 					</c:if>
 					<c:if test="${not empty processes}">
 						<c:forEach var="proc" items="${processes}" varStatus="status">
 							<tr>
-								<td><input type="checkbox"></td>
+								<td><input type="radio" name="selectedProcId" value="${proc.proc_id}"></td>
 								<td><c:out value="${status.count}" /></td>
-								<td><c:out value="${proc.proc_id}" /></td>
-								<td><c:out value="${proc.proc_name}" /></td>
-								<td><c:out value="${proc.depart_level}" /></td>
-								<td><c:out value="${proc.proc_info}" /></td> <%-- 담당자 정보가 없어서 proc_info로 대체함 --%>
-								<td><c:out value="${proc.process_check eq 1 ? '검사' : '비검사'}" /></td>
+								<td class="procIdCell"><c:out value="${proc.proc_id}" /></td>
+								<td><c:out value="${proc.item_code}" /></td>
+								<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
+								<td class="departLevelCell"><c:out value="${proc.depart_level}" /></td>
+								<td class="procInfoCell"><c:out value="${proc.proc_info}" /></td>
+								<td>
+								    <c:if test="${not empty proc.proc_img}">
+								        <img src="${pageContext.request.contextPath}/${proc.proc_img}" alt="공정 이미지" style="width: 50px; height: 50px;">
+								    </c:if>
+								</td>
 							</tr>
 						</c:forEach>
 					</c:if>

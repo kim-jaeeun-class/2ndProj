@@ -53,11 +53,9 @@ input[type="text"], select {
     justify-content: space-between;
     font-weight: bold;
     font-size: 1.2rem;
-    display: none;
 }
 
 /* 공정 정보 입력 부분 */
-
 .wrap > span {
     display: block;
     margin: 0px 30px;
@@ -85,6 +83,12 @@ input[type="text"], select {
 	border: 1px solid var(--border);
     border-radius: var(--radius);
     margin: 30px;
+}
+
+.imgDiv img {
+  max-width: 100%; 
+  max-height: 200px; 
+  object-fit: contain;
 }
 
 
