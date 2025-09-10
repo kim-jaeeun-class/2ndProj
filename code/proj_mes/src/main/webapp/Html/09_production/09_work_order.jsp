@@ -109,6 +109,10 @@
                     <input type="date" name="give-date">
                 </div>
                 <div class="form-group">
+                    <label>지시 수량</label>
+                    <input type="number" name="order-amount" min="1" placeholder="지시 수량 입력">
+                </div>
+                <div class="form-group">
                     <label>첨부</label>
                     <input type = "file" name = "변수명">
                 </div>
@@ -125,14 +129,12 @@
                                     <th>순번</th>
                                     <th>품목코드</th>
                                     <th>품목명</th>
-                                    <th>수량</th>
                                     <th>비고</th>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td><input type="checkbox" value="전달값" name="변수명"></td>
                                         <td>1</td>
-                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
