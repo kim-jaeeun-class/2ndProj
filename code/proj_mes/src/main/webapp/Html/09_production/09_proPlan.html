@@ -99,10 +99,12 @@
         </div>
         <div class="sidenwrap">
             <div class="side">
-                <div class="side-menu">생산 계획</div>
-                <div class="side-menu">작업 지시서</div>
+                <!-- a 링크 나중에 달기 -->
+                <a href=""><div class="side-menu">생산 계획</div></a>
+                <a href=""><div class="side-menu">작업 지시서</div></a>
             </div>
             <div class="wrap">
+                <!-- 여기 왜 sts에서 조건 wrap css가 안 먹냐? -->
                 <div class="wrap-select">
                     <form class="date-filter">
                         <div class="select-con">
@@ -131,14 +133,11 @@
                         <table>
                             <thead>
                                 <th></th>
-                                <th>순번</th>
                                 <th>생산계획번호</th>
                                 <th>제품 번호</th>
                                 <th>계획 수량</th>
-                                <th>진행 상태</th>
                                 <th>계획 기간</th>
                                 <th>진행률</th>
-                                <th>작업 공정</th>
                                 <th>달성률</th>
                                 <th>불량률</th>
                                 <th>비고</th>
@@ -146,14 +145,11 @@
                             <tbody>
                                 <tr class = "data">
                                     <td><input type="checkbox" value="전달값" name="변수명"></td>
-                                    <td>1</td>
                                     <td>#생산계획번호</td>
                                     <td>#제품번호</td>
                                     <td>#계획수량</td>
-                                    <td>#진행상태</td>
                                     <td>#계획기간</td>
                                     <td>#진행률</td>
-                                    <td>#작업공정</td>
                                     <td>#달성률</td>
                                     <td>#불량률</td>
                                     <td>#비고</td>
@@ -170,15 +166,11 @@
         </div>
 
 
-        <!-- 사이드 패널 -->
+        <!-- 사이드 패널 : 입력란 좀 안 비어보이게(버튼은 조금 내리고), 품번 서치 가능하게 -->
         <div class="panel">
             <button class="close-btn">✕</button>
             <h2>생산 계획 등록</h2>
             <form>
-                <div class="form-group">
-                    <label>생산계획번호</label>
-                    <input type="text" name = "pro-plan-no">
-                </div>
                 <div class="form-group">
                     <label>제품 번호</label>
                     <input type="text" name = "item-no">
@@ -193,40 +185,7 @@
                     <input type="date" name="plan-start">
                     <div class="label-child">종료일</div>
                     <input type="date" name="plan-end">
-                </div>
-                <div class="form-group">
-                    <label>작업 공정</label>
-                    <select name="work-seq" size="1">
-                        <option value = "전달값1" selected>공정 1</option>
-                        <option value = "전달값2">공정 2</option>
-                        <option value = "전달값3">공정 3</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>진행 상태</label>
-                    <div class = "radio-block">
-                        <label><input type = "radio" name = "pro-perf-stat" value="1" selected>대기</label>
-                        <label><input type = "radio" name = "pro-perf-stat" value="2">진행</label>
-                        <label><input type = "radio" name = "pro-perf-stat" value="3">홀드</label>
-                        <label><input type = "radio" name = "pro-perf-stat" value="4">완료</label>               
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>입고 형태</label>
-                    <div class = "radio-block">
-                        <label><input type = "radio" name = "in-form" value="1">정상</label>
-                        <label><input type = "radio" name = "in-form" value="2">재가공</label>                        
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>출고 형태</label>
-                    <div class = "radio-block">
-                        <label><input type = "radio" name = "out-form" value="1">양산</label>
-                        <label><input type = "radio" name = "out-form" value="2">개발</label>
-                        <label><input type = "radio" name = "out-form" value="3">평가</label>
-                        <label><input type = "radio" name = "out-form" value="4">폐기</label>                        
-                    </div>
-                </div>                
+                </div>             
                 <div class="form-group">
                     <label>비고</label>
                     <input type="text" name = "bigo">
@@ -254,20 +213,8 @@
                             <td class="modal-table-con">#품번</td>
                         </tr>
                         <tr>
-                            <td class="modal-table-title">입고 형태</td>
-                            <td class="modal-table-con">#입고 형태</td>
-                        </tr>
-                        <tr>
-                            <td class="modal-table-title">출고 형태</td>
-                            <td class="modal-table-con">#출고 형태</td>
-                        </tr>
-                        <tr>
                             <td class="modal-table-title">계획 수량</td>
                             <td class="modal-table-con">#수량</td>
-                        </tr>
-                        <tr>
-                            <td class="modal-table-title">진행 상태</td>
-                            <td class="modal-table-con">#상태(대기/진행중/완료)</td>
                         </tr>
                         <tr>
                             <td class="modal-table-title">계획 기간</td>
@@ -276,10 +223,6 @@
                         <tr>
                             <td class="modal-table-title">진행률</td>
                             <td class="modal-table-con">#수치(%)</td>
-                        </tr>
-                        <tr>
-                            <td class="modal-table-title">작업 공정</td>
-                            <td class="modal-table-con">#공정명</td>
                         </tr>
                         <tr>
                             <td class="modal-table-title">달성률</td>
@@ -293,6 +236,22 @@
                             <td class="modal-table-title">비고</td>
                             <td class="modal-table-con">#비고(공란 가능)</td>
                         </tr>
+                    </table>
+                    <table class="item-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">작업지시번호</th>
+                                <th>지시일</th>
+                                <th style="width: 15%;">지시수량</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                     </table>
                     <div class="wrap-tableBtn">
                         <input type="button" class="button" value="수정">

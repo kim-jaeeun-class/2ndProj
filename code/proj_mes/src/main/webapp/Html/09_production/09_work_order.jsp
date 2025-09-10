@@ -93,62 +93,69 @@
                 </div>
             </a>            
         </div>
-        <div class="wrap">
-            <div class="wrap-select">
-                <form class="date-filter" action="workorder">
-                    <div class="select-con">
-                        <div class="select-title">정렬 기준</div>
-                        <select name="stat" class="select select-drop">
-                            <option value="전달값1" selected="selected">전체</option>
-                            <option value="전달값2">미진행</option>
-                            <option value="전달값3">진행</option>
-                            <option value="전달값4">완료</option>
-                        </select>
-                    </div>
-                    <div class="filter-submit">
-                        <button type="button" class="button">조회</button>
-                    </div>
-                </form>
+        <div class="sidenwrap">
+            <div class="side">
+                <!-- a 링크 나중에 달기 -->
+                <a href="">
+                    <div class="side-menu">생산 계획</div>
+                </a>
+                <a href="">
+                    <div class="side-menu">작업 지시서</div>
+                </a>
             </div>
-            <form class="wrap-table">
-                <div class="table-view">
-                    <table>
-                        <thead>
-                            <th></th>
-                            <th>작업지시번호</th>
-                            <th>일자</th>
-                            <th>거래처명</th>
-                            <th>담당자명</th>
-                            <th>납기일자</th>
-                            <th>품목명</th>
-                            <th>지시수량</th>
-                            <th>생산수량</th>
-                            <th>진행상태</th>
-                            <th>인쇄</th>
-                        </thead>
-                        <tbody>
-                        	<!-- DTO에 있는 거 wo라고 이름 지어서 꺼내는 것!!! -->
-                        	<!-- 근데 지금 client 테이블 조인을... 내일 얘기하자 -->
-	                        <c:forEach var="wo" items="${list}">
-	                            <tr>
-	                            	<!-- 구분용으로 date, num 다 넣음 -->
-	                                <td><input type="checkbox" value="${wo.woDate}-${wo.woNum}" name="chk"></td>
-	                                <td>${wo.woNum}</td>
-	                                <td>${wo.woDate}</td>
-	                                <td>${wo.clientName}</td>
-	                                <td>${wo.workerID}</td>
-	                                <td>${wo.woDuedate}</td>
-	                                <td>${wo.itemName}</td>
-	                                <td>${wo.woPQ}</td>
-	                                <td>${wo.woAQ}</td>
-	                                <td>${wo.woPS}</td>
-	                                <td><button type="button">인쇄</button></td>
-	                            </tr>
-	                        </c:forEach>
-                        </tbody>
-                    </table>
+            <div class="wrap">
+                <div class="wrap-select">
+                    <form class="date-filter" action="workorder">
+                        <div class="select-con">
+                            <div class="select-title">정렬 기준</div>
+                            <select name="stat" class="select select-drop">
+                                <option value="전달값1" selected="selected">전체</option>
+                                <option value="전달값2">미진행</option>
+                                <option value="전달값3">진행</option>
+                                <option value="전달값4">완료</option>
+                            </select>
+                        </div>
+                        <div class="filter-submit">
+                            <button type="button" class="button">조회</button>
+                        </div>
+                    </form>
                 </div>
-
+                <form class="wrap-table">
+                    <div class="table-view">
+                        <table>
+                            <thead>
+                                <th></th>
+                                <th>작업지시번호</th>
+                                <th>지시일</th>
+                                <th>담당자명</th>
+                                <th>납기일자</th>
+                                <th>품목명</th>
+                                <th>지시수량</th>
+                                <th>생산수량</th>
+                                <th>인쇄</th>
+                            </thead>
+                            <tbody>
+                                <!-- DTO에 있는 거 wo라고 이름 지어서 꺼내는 것!!! -->
+                                <!-- 근데 지금 client 테이블 조인을... 내일 얘기하자 -->
+                                <c:forEach var="wo" items="${list}">
+                                    <tr>
+                                        <!-- 구분용으로 date, num 다 넣음 -->
+                                        <td><input type="checkbox" value="${wo.woDate}-${wo.woNum}" name="chk"></td>
+                                        <td>${wo.woNum}</td>
+                                        <td>${wo.woDate}</td>
+                                        <td>${wo.workerID}</td>
+                                        <td>${wo.woDuedate}</td>
+                                        <td>${wo.itemName}</td>
+                                        <td>${wo.woPQ}</td>
+                                        <td>${wo.woAQ}</td>
+                                        <td>
+                                            <button type="button">인쇄</button>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
                 <div class="wrap-tableBtn">
                     <input type="button" class="button delete-btn" value="삭제">
                     <input type="button" class="button open-btn" value="등록">
@@ -162,28 +169,24 @@
             <h2>작업 지시서 등록</h2>
             <form>
                 <div class="form-group">
-                    <label>지시일</label>
-                    <input type="date" name="order-date">
-                </div>
-                <div class="form-group">
                     <label>작업지시NO.</label>
                     <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
                 </div>
                 <div class="form-group">
-                    <label>담당자</label>
-                    <input type="text" name = "person" placeholder="담당자명 입력">
+                    <label>지시일</label>
+                    <input type="date" name="order-date">
                 </div>
                 <div class="form-group">
                     <label>납기일</label>
                     <input type="date" name="give-date">
                 </div>
                 <div class="form-group">
-                    <label>지시 수량</label>
-                    <input type="number" name="order-amount" min="1" placeholder="지시 수량 입력">
+                    <label>담당자</label>
+                    <input type="text" name = "person" placeholder="담당자명 입력">
                 </div>
                 <div class="form-group">
-                    <label>첨부</label>
-                    <input type = "file" name = "변수명">
+                    <label>지시 수량</label>
+                    <input type="number" name="order-amount" min="1" placeholder="지시 수량 입력">
                 </div>
                 <div class ="form-group">
                     <div class = "wrap-table panel-table">
@@ -194,16 +197,12 @@
                         <div class = "panel-table-wrap">
                             <table>
                                 <thead>
-                                    <th></th>
-                                    <th>순번</th>
                                     <th>품목코드</th>
                                     <th>품목명</th>
-                                    <th>비고</th>
+                                    <th>수량</th>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><input type="checkbox" value="전달값" name="변수명"></td>
-                                        <td>1</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
