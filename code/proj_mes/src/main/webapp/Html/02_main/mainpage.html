@@ -54,7 +54,6 @@
     <!-- 헤더 섹션 -->
     <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
     <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
-        <!-- <header> -->
         <div class="flex items-center space-x-2">
             <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
             <h3 class="text-xl font-bold">J2P4</h3>
@@ -64,22 +63,32 @@
                 <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
             </div>
             <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
-                로그아웃
+                <form method="post" action="/../logout">
+                    <button type="submit">로그아웃</button>
+                </form>
             </div>
+
+            <!-- 사람 아이콘 + 드롭다운 -->
             <div class="myIcon relative">
-                <a href="javascript:void(0);" id="myIconBtn">
+                <button id="myIconBtn" class="focus:outline-none" aria-haspopup="true" aria-expanded="false">
                     <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
-                </a>
+                </button>
+
+                <!-- 드롭다운 메뉴 -->
+                <div id="userMenu"
+                    class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-lg border hidden z-50">
+                    <a href="/proj_mes/AccountManage">계정관리</a><br>
+                    <a href="/proj_mes/IssueCtrl">이슈처리</a>
+                </div>
             </div>
         </div>
     </header>
 
     <!-- 메인 내비게이션 -->
-    <!-- Tailwind 클래스 대신 직접 정의한 nav-bg 클래스 적용 -->
     <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/StandardCtrl">기준 관리</a></li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/process">공정 관리</a></li>
             <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
             <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
             <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
@@ -101,7 +110,6 @@
             <!-- 왼쪽 패널 (넓게) -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- 상단 왼쪽 섹션: 생산 현황 -->
-                <!-- 상단에 파란색 테두리를 추가하고, 내부 항목들은 원래대로 유지 -->
                 <div class="bg-white p-6 rounded-xl shadow-xl space-y-4">
                     <h3 class="text-xl font-semibold mb-2">생산 현황</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -121,18 +129,15 @@
                 </div>
 
                 <!-- 하단 왼쪽 섹션: 불량 현황 및 작업 지시 -->
-                <!-- shadow-xl 클래스로 그림자 과 강하게  -->
                 <div class="bg-white p-6 rounded-xl shadow-xl space-y-4">
                     <h3 class="text-xl font-semibold mb-2">불량 현황 및 작업 지시</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <h4 class="text-lg font-medium mb-2">불량 유형</h4>
-                            <!-- 불량 유형 차트 -->
                             <canvas id="defectChart" class="w-full h-48"></canvas>
                         </div>
                         <div>
                             <h4 class="text-lg font-medium mb-2">작업 지시 진행률</h4>
-                            <!-- 작업 지시 진행률 차트 -->
                             <canvas id="workOrderChart" class="w-full h-48"></canvas>
                         </div>
                     </div>
@@ -142,10 +147,8 @@
             <!-- 오른쪽 패널 (좁게) -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- 상단 오른쪽 섹션: 재고 현황 -->
-                <!-- shadow-xl 클래스로 그림자 효과를 더 강하게 만듭니다. -->
                 <div class="bg-white p-6 rounded-xl shadow-xl flex-1">
                     <h3 class="text-xl font-semibold mb-2">재고 현황</h3>
-                    <!-- 재고 현황 차트 -->
                     <canvas id="inventoryChart" class="w-full h-40"></canvas>
                 </div>
 
@@ -178,37 +181,53 @@
         </div>
     </div>
 
-    <!-- Chart.js 초기화 및 탭 로직을 위한 JavaScript -->
+    <!-- Chart.js 초기화 및 탭/드롭다운 로직 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 탭 전환 로직
+            /* ---------- 탭 전환 ---------- */
             const noticeTab = document.getElementById('noticeTab');
             const boardTab = document.getElementById('boardTab');
             const noticeContent = document.getElementById('noticeContent');
             const boardContent = document.getElementById('boardContent');
 
             function activateTab(tab, content) {
-                // 모든 탭 비활성화
                 noticeTab.classList.remove('border-blue-600', 'text-blue-600');
                 boardTab.classList.remove('border-blue-600', 'text-blue-600');
-                
-                // 모든 콘텐츠 숨기기
                 noticeContent.classList.add('hidden');
                 boardContent.classList.add('hidden');
-
-                // 선택된 탭 활성화 및 콘텐츠 보이기
                 tab.classList.add('border-blue-600', 'text-blue-600');
                 content.classList.remove('hidden');
             }
 
-            // 초기 상태는 공지 사항 탭으로 설정
+            // 초기 상태는 공지 사항 탭
             activateTab(noticeTab, noticeContent);
 
-            // 이벤트 리스너 추가
             noticeTab.addEventListener('click', () => activateTab(noticeTab, noticeContent));
             boardTab.addEventListener('click', () => activateTab(boardTab, boardContent));
 
-            // Chart.js 초기화
+            /* ---------- 사람 아이콘 드롭다운 ---------- */
+            const myIconBtn = document.getElementById('myIconBtn');
+            const userMenu  = document.getElementById('userMenu');
+
+            function closeUserMenu() {
+                userMenu.classList.add('hidden');
+                myIconBtn.setAttribute('aria-expanded', 'false');
+            }
+
+            myIconBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userMenu.classList.toggle('hidden');
+                myIconBtn.setAttribute('aria-expanded',
+                    userMenu.classList.contains('hidden') ? 'false' : 'true');
+            });
+
+            userMenu.addEventListener('click', (e) => e.stopPropagation());
+            document.addEventListener('click', closeUserMenu);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeUserMenu();
+            });
+
+            /* ---------- Chart.js ---------- */
             // 재고 현황 (Inventory Status) - 원형 차트
             const invCtx = document.getElementById('inventoryChart').getContext('2d');
             new Chart(invCtx, {
@@ -217,11 +236,7 @@
                     labels: ['원자재', '상품', '불량'],
                     datasets: [{
                         data: [350, 450, 200], // 예시 데이터
-                        backgroundColor: [
-                            '#3b82f6', // blue-500
-                            '#22c55e', // green-500
-                            '#ef4444' // red-500
-                        ],
+                        backgroundColor: ['#3b82f6', '#22c55e', '#ef4444'],
                         hoverOffset: 4,
                     }]
                 },
@@ -230,19 +245,11 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                boxWidth: 20,
-                                padding: 20,
-                                font: {
-                                    size: 12
-                                }
-                            }
+                            labels: { boxWidth: 20, padding: 20, font: { size: 12 } }
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(tooltipItem) {
-                                    return tooltipItem.label + ': ' + tooltipItem.raw + '개';
-                                }
+                                label: (t) => t.label + ': ' + t.raw + '개'
                             }
                         }
                     }
@@ -257,11 +264,7 @@
                     labels: ['기스', '파손', '오염'],
                     datasets: [{
                         data: [120, 80, 91], // 예시 데이터
-                        backgroundColor: [
-                            '#f97316', // orange-500
-                            '#dc2626', // red-600
-                            '#2563eb'  // blue-600
-                        ],
+                        backgroundColor: ['#f97316', '#dc2626', '#2563eb'],
                         hoverOffset: 4
                     }]
                 },
@@ -270,13 +273,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                boxWidth: 20,
-                                padding: 20,
-                                font: {
-                                    size: 12
-                                }
-                            }
+                            labels: { boxWidth: 20, padding: 20, font: { size: 12 } }
                         }
                     }
                 }
@@ -291,25 +288,13 @@
                     datasets: [{
                         label: '작업 지시 수',
                         data: [75, 10, 150], // 예시 데이터
-                        backgroundColor: [
-                            '#f59e0b', // yellow-500
-                            '#6b7280', // gray-500
-                            '#10b981'  // emerald-500
-                        ]
+                        backgroundColor: ['#f59e0b', '#6b7280', '#10b981']
                     }]
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
+                    scales: { y: { beginAtZero: true } },
+                    plugins: { legend: { display: false } }
                 }
             });
         });
