@@ -7,7 +7,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>기준 목록</title>
-  <link rel="stylesheet" href="/proj_mes/Html/asset/template.css" />
+  <link rel="stylesheet" href="/proj_mes/Html/asset/mainpage.css" />
   <link rel="stylesheet" href="/proj_mes/Html/asset/04_standard_list.css" />
   <script src="/proj_mes/Html/asset/template_load.js"></script>
 </head>
