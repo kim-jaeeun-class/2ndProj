@@ -1,0 +1,152 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>재고목록</title>
+<script src ="./Html/asset/template_load.js" ></script>
+<link rel="stylesheet" href="./Html/asset/list.css">
+<script src ="./Html/asset/08_stock_list.js" ></script>
+</head>
+<body>
+	<header></header>
+    <div class="gnb"></div>
+    <div class="titleBox">
+		<span>재고 목록</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+    <div class="wrap">
+        <div class="main">
+            <div class="box filter">
+                    <div class="box">
+                        <div> 대분류 </div>
+                        <select class="big">
+                            <option>전체</option>
+                            <option>유리</option>
+                            <option>화학 강화제</option>
+                            <option>코팅</option>
+                            <option>완제품</option>
+                            <option>반제품</option>
+                            <option>소모품</option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <div> 중분류 </div>
+                        <select class="middle">
+                            <option>전체</option>
+                            <option>LCD</option>
+                            <option>OLED</option>
+                            <option>AMOLED</option>
+                            <option>질산칼륨</option>
+                            <option>질산나트륨</option>
+                            <option>불소중합체</option>
+                            <option>산화티타늄</option>
+                            <option>산화지르코늄</option>
+                            <option>핸드폰</option>
+                            <option>닌텐도</option>
+                            <option>네비게이션</option>
+                            <option>스티로폼</option>
+                            <option>비닐</option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <div> 소분류 </div>
+                        <select class="small">
+                            <option>전체</option>
+                            <option>0.3mm</option>
+                            <option>0.5mm</option>
+                            <option>0.7mm</option>
+                            <option>50kg</option>
+                            <option>70kg</option>
+                            <option>갤럭시S23</option>
+                            <option>아이폰17</option>
+                            <option>닌텐도3D</option>
+                            <option>닌텐도Lite</option>
+                            <option>5인치</option>
+                            <option>7인치</option>
+                            <option>S</option>
+                            <option>M</option>
+                            <option>L</option>
+                            <option>10M</option>
+                            <option>30M</option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <div> 구분 </div>
+                        <select class="type">
+                            <option>전체</option>
+                            <option>완제품</option>
+                            <option>원재료</option>
+                            <option>반제품</option>
+                            <option>소모품</option>
+                            <option>폐기</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="box date_filter">
+                    <div class="date box">
+                        <div class="period"> 기간 </div>
+                        <input type="date" id="start_date">
+                        <span>~</span>
+                        <input type="date" id="end_date">
+                    </div>
+                    <div>
+                        <button type="submit"> 조회 </button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th class="row_1">NO</th>
+                        <th class="row_2">등록날짜</th>
+                        <th class="row_6">LOT번호</th>
+                        <th class="row_3">품목코드</th>
+                        <th class="row_4">품목명/모델명</th>
+                        <th class="row_5">위치</th>
+                        <th class="row_7">구분</th>
+                        <th class="row_8">수량</th>
+                        <th class="row_9">단가</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>20250820</td>
+                        <td>AAA1564</td>
+                        <td>CHCH0001</td>
+                        <td>아이폰17</td>
+                        <td>TA-1</td>
+                        <td>양품</td>
+                        <td>500</td>
+                        <td>1,000,000</td>
+                    </tr>
+                    
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="7">Total</td>
+                        <td>500</td>
+                        <td>5,000,000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="action">
+            <a href="/08_inventory_jaego/stock_registration.html"><button type="submit">추가</button></a>
+        </div>
+    </div>
+</body>
+</html>

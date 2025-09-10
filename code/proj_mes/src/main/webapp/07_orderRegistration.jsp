@@ -1,18 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>    
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/asset/registration.css">
-    <script src ="/asset/template_load.js"></script>
-    <script src="/asset/07_order_resistration.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="./Html/asset/registration.css">
+<script src ="./Html/asset/template_load.js"></script>
+<script src="./Html/asset/07_order_resistration.js"></script>
 </head>
 <body>
-    <header></header>
+	<header></header>
     <div class="gnb"></div>
     <div class="titleBox">
-		<span>발주 등록</span>
+		<span>발주등록</span>
 		<a href="">
 			<div class="toMainpage">
 				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
@@ -115,11 +120,11 @@
             </div>
         </div>
         <div class="bottom">
-            <a href="/07_ordering_balju/order_list.html"><button type="button">목록</button></a>
+            <a href="/07_order_list.html"><button type="button">목록</button></a>
         </div>
     </div>
     <div id="dept_modal" class="modal hide">
-        <div class="modal_search">
+        <div class="search">
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
@@ -225,7 +230,7 @@
         </div>
     </div>
     <div id="client_modal" class="modal hide">
-        <div class="modal_search">
+        <div class="search">
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>
@@ -331,7 +336,7 @@
         </div>
     </div>
     <div id="item_modal" class="modal hide">
-        <div class="modal_search">
+        <div class="search">
             <input type="text" class="m_search" placeholder="검색내용을 입력하세요">
             <button class="m_button" type="button">검색</button>
         </div>

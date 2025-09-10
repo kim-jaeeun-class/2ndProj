@@ -129,7 +129,7 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " delete stock";
+			String query = " delete from stock";
 				   query += " where stock_id = ?";
 		   
 			PreparedStatement ps = conn.prepareStatement(query);
@@ -188,7 +188,7 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " update stock";
+			String query = " update from stock";
 			query += " set stock_date = ?, ";
 			query += "     stock_loc = ?, ";
 			query += "     stock_div = ?, ";

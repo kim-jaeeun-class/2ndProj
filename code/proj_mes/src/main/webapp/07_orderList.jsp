@@ -1,0 +1,193 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>발주목록</title>
+<link rel="stylesheet" href="./Html/asset/list.css">
+<script src ="./Html/asset/template_load.js"></script>
+<script src="./Html/asset/07_order_list.js"></script>
+</head>
+<body>
+	<header></header>
+    <div class="gnb"></div>
+    <div class="titleBox">
+		<span>발주 목록</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
+    <div class="wrap">
+        <div class="main">
+            <div class="box order_filter">
+                <div class="order_date box">
+                    <div class="order_period"> 기간 </div>
+                        <input type="date" id="start_date">
+                        <span>~</span>
+                        <input type="date" id="end_date">
+                    </div>
+                    <div class="box state">
+                        <div> 진행상태 </div>
+                        <select id="state_select">
+                            <option>전체</option>
+                            <option>임시저장</option>
+                            <option>승인</option>
+                            <option>승인 대기</option>
+                            <option>반려</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="submit" id="filter_btn"> 조회 </button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrap" tabindex="0">
+            <table class="tables">
+                <thead>
+                    <tr>
+                        <th class="order_row_1">
+                            <input type="checkbox">
+                        </th>
+                        <th class="order_row_2">NO</th>
+                        <th class="order_row_3">날짜</th>
+                        <th class="order_row_4">발주번호</th>
+                        <th class="order_row_5">부서</th>
+                        <th class="order_row_6">담당자</th>
+                        <th class="order_row_7">총 수량</th>
+                        <th class="order_row_8">총 금액</th>
+                        <th class="order_row_9">진행상태</th>
+                        <th class="order_row_0"></th>
+                    </tr>
+                </thead>
+                <tbody class="tables_body">
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">승인대기</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">승인대기</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">승인대기</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">승인대기</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">임시저장</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">승인</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="row_check">
+                        </td>
+                        <td>1</td>
+                        <td class="row_date">2025-08-20</td>
+                        <td>PS20250801</td>
+                        <td>생산2팀</td>
+                        <td>홍길동</td>
+                        <td>5</td>
+                        <td>100,000</td>
+                        <td class="row_state">반려</td>
+                        <td>
+                            <button type="button" class="recall">회수</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="action">
+            <button type="submit" class="delete">삭제</button>
+            <a href="/07_orderRegistration.html"><button type="submit" class="add">추가</button></a>
+        </div>
+    </div>
+</body>
+</html>
