@@ -14,20 +14,20 @@ public class StockService {
 		return stockDAO.selectAll();
 	}
 	
-	public StockDTO getOneEmp(StockDTO stockDTO) {
+	public StockDTO getOneStock(StockDTO stockDTO) {
 		StockDTO dto = stockDAO.selectOneStock(stockDTO);
 		return dto; 
 	}
 	
-	public int removeEmp(StockDTO stockDTO) {
+	public int removeStock(StockDTO stockDTO) {
 		return stockDAO.deleteStock(stockDTO);
 	}
 	
-	public int addEmp(StockDTO stockDTO) {
+	public int addStock(StockDTO stockDTO) {
 		return stockDAO.insertStock(stockDTO);
 	}
 	
-	public int editEmp(StockDTO stockDTO) {
+	public int editStock(StockDTO stockDTO) {
 		return stockDAO.updateStock(stockDTO);
 	}
 }
