@@ -13,6 +13,11 @@ public class ProPlanDTO {
 	private int defectRate;		// 불량률
 	private String bigo;		// 비고
 	private String itemCode;	// 품목 코드 : FK
+	
+	// 기존 생산 실적에 있던 것 옮겨와야 해서(옮겨온 내용들 적기)
+	private String cs_intype;	// 입고 형태
+	private String cs_outtype;	// 출고 형태
+	
 	public String getCpID() {
 		return cpID;
 	}
@@ -73,11 +78,26 @@ public class ProPlanDTO {
 	public void setItemCode(String itemCode) {
 		this.itemCode = itemCode;
 	}
+	
+	
+	public String getCs_intype() {
+		return cs_intype;
+	}
+	public void setCs_intype(String cs_intype) {
+		this.cs_intype = cs_intype;
+	}
+	public String getCs_outtype() {
+		return cs_outtype;
+	}
+	public void setCs_outtype(String cs_outtype) {
+		this.cs_outtype = cs_outtype;
+	}
 	@Override
 	public String toString() {
 		return "ProPlanDTO [cpID=" + cpID + ", cpCount=" + cpCount + ", cpStat=" + cpStat + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", cpRate=" + cpRate + ", successRate=" + successRate + ", defectRate="
-				+ defectRate + ", bigo=" + bigo + ", itemCode=" + itemCode + "]";
+				+ defectRate + ", bigo=" + bigo + ", itemCode=" + itemCode + ", cs_intype=" + cs_intype
+				+ ", cs_outtype=" + cs_outtype + "]";
 	}
 	
 	

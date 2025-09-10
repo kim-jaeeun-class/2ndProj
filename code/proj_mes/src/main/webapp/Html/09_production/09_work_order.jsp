@@ -100,12 +100,6 @@
                     <label>작업지시NO.</label>
                     <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
                 </div>
-                <div class="form-group autocomplete-wrap">
-                    <label>납품처</label>
-                    <input type="text" name = "client-code" class="autocomplete" placeholder="납품처 코드 입력">
-                    <div class="suggestions"></div>
-                    <input type="text" name="client-name" class="client-name" placeholder="납품처명 입력" style="margin-top: 5px;">
-                </div>
                 <div class="form-group">
                     <label>담당자</label>
                     <input type="text" name = "person" placeholder="담당자명 입력">
@@ -160,7 +154,7 @@
                 <h2>품목 추가</h2>
                 <form class="modal-form">
                     <div class ="form-group">
-                        <div class = "wrap-table panel-table">
+                        <div class = "wrap-table panel-table" style="height: 400px;">
                             <table>
                                 <thead>
                                     <th></th>
