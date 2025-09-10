@@ -8,11 +8,11 @@ function init() {
 
 	// 수정 버튼을 누르면 <공정 등록/수정/삭제> 페이지로 이동
 	updateProcessBtn.addEventListener('click', function(){
-		window.open("./05_process_CUD.html?mode=update", "_blank");
+		window.open("./05_process_CUD.jsp?mode=update", "_blank");
 	})
 
 	// 신규 버튼을 누르면 <공정 등록/수정/삭제> 페이지로 이동
 	newProcessBtn.addEventListener('click', function(){
-		window.open("./05_process_CUD.html?mode=new", "_blank");
+		window.open("./05_process_CUD.jsp?mode=new", "_blank");
 	})
 }

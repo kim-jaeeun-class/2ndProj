@@ -6,9 +6,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>공정 목록</title>
-	<link rel="stylesheet" href="../asset/05_process_list.css">
-	<script src ="../asset/template_load.js" ></script>
-	<script src ="../asset/05_process_list.js" ></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/05_process_list.css">
+	<script src ="${pageContext.request.contextPath}/Html/asset/template_load.js" ></script>
+	<script src ="${pageContext.request.contextPath}/Html/asset/05_process_list.js" ></script>
 </head>
 <body>
 	<header></header>

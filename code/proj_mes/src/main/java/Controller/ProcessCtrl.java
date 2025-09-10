@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/process")
-public class ProcessController extends HttpServlet {
+public class ProcessCtrl extends HttpServlet {
     private ProcessService processService = new ProcessService();
 
     // GET 요청을 처리하는 메서드
@@ -22,6 +22,7 @@ public class ProcessController extends HttpServlet {
         
         // 1. 모든 부서 목록을 가져와 request에 저장 (초기 드롭다운을 채우기 위함)
         List<String> departLevels = processService.getUniqueDepartLevels();
+        System.out.println("departLevels실행" );
         request.setAttribute("departLevels", departLevels);
 
         // 2. 부서가 선택되었으면, 해당 부서의 공정 목록을 가져옴
@@ -30,9 +31,9 @@ public class ProcessController extends HttpServlet {
             request.setAttribute("processes", processes);
             request.setAttribute("selectedDepart", departLevel); // 선택된 부서 값을 JSP에 전달
         }
-        
+
         // 3. JSP 페이지로 포워딩하여 결과를 렌더링
-        RequestDispatcher dispatcher = request.getRequestDispatcher("05_process_list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/Html/05_process_gongjeong/05_process_list.jsp");
         dispatcher.forward(request, response);
     }
 }

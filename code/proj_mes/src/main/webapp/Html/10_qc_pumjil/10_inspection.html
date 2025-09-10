@@ -3,21 +3,59 @@
 <head>
 	<meta charset="UTF-8">
 	<title>품질 검사 입력</title>
-	<link rel="stylesheet" href="../asset/10_inspection.css">
-	<script src ="../asset/template_load.js" ></script>
-	<script src="../asset/10_inspection.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/10_inspection.css">
+	<script src ="${pageContext.request.contextPath}/Html/asset/template_load.js" ></script>
+	<script src="${pageContext.request.contextPath}/Html/asset/10_inspection.js"></script>
 </head>
 <body>
 	<header></header>
 	<div class="gnb"></div>
-	<div class="titleBox"></div>
+	<div class="titleBox">
+		<span>품질 검사 입력</span>
+		<a href="">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
+					style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
 
 	<div class="wrap">
-        <h2>불량 처리 입력</h2>
-        <div class="lookup">
-            <div>일자 <input type="date"></div>
-            <div>공정명 <input type="text" id="searchProc"></div>
-            <div>작업자 <input type="text" id="workerInput"></div>
+        
+        <div class="topBox">
+			<div class="row">
+				<h2>불량 처리 입력</h2>
+			</div>
+			<div class="row">
+				<div class="item">
+					<div>검사 이력 코드</div> 
+					<div>검사 이력 코드 자동으로 DB에</div>
+				</div>
+				<div class="item">
+					<div>일자</div>
+					<div>오늘 날짜</div>
+				</div>
+				<div class="item">
+					<div>현재 공정</div>
+					<div>공정 선택 modal</div>
+				</div>
+				<div class="item">
+					<div>작업자</div>
+					<input type="text" id="workerInput">
+				</div>
+			</div>
+			<div class="row">
+				<div class="item">
+					<div>전체 수량</div>
+					<input type="number" id="total">
+				</div> 
+				<div class="item">
+					<div>불량 입력</div>
+					<input type="text" id="defectiveInput">
+				</div>
+			</div>
+			 
         </div>
 
         <div class="table-container">

@@ -24,7 +24,9 @@ public class ProcessDAO {
 			Context ctx = new InitialContext();
 			DataSource dataFactory = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle");
 			conn = dataFactory.getConnection();
+			System.out.println("데이터베이스 연결 성공");
 		} catch (Exception e) {
+			System.err.println("데이터베이스 연결 실패");
 			e.printStackTrace();
 		}
 		return conn;

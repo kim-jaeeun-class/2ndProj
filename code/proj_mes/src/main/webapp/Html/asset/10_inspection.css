@@ -29,18 +29,18 @@
 }
 
 /* 조회 부분 */
-.lookup {
+.topBox {
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background-color: var(--field-border);
     margin: 30px;
-    padding: 10px;
+    padding: 14px 16px;
+}  
+
+.topBox > .row {
     display: flex;
     justify-content: space-between; /* 모든 자식 요소를 오른쪽으로 정렬 */
     align-items: center; /* 텍스트와 드롭다운 박스의 높이를 맞추어 수평 정렬 */
-    font-weight: bold;
-    font-size: 1.1em;
-}  
+}
 
 /* 테이블 부분 */
 .table-container {
