@@ -1,3 +1,7 @@
+/* 차트 캔버스 최대 높이 */
+canvas {
+    max-height: 200px;
+}
 :root {
     --radius: 7px;
     --primary-dark: #002a40;
@@ -7,437 +11,51 @@
     --light-accent: #cef0ff;
     --text-color: #222;
     --border-color: #9aa0a6;
-    --blue-color: #007bff;
-    --green-color: #28a745;
-    --red-color: #dc3545;
+    --blue-color: #3b82f6;
+    --green-color: #22c55e;
+    --red-color: #22c55e;
     --yallow-color: #ffc107;
     --gray-color: #6c757d;
 }
+  body {
+    font-family: 'Malgun Gothic', Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 20px;
+  }
 
-body {
-    font-family: 'Malgun Gothic', 'Helvetica Neue', Arial, sans-serif;
-    background-color: var(--main-bg);
-    margin: 0;
-}
+  h2 {
+    text-align: center;
+  }
 
-/* 헤더 전체 (J2P4, 메뉴 모두 포함) */
-header {
-    background: linear-gradient(to right, var(--primary-dark), var(--secondary-dark));
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
+  #notice-list {
     display: flex;
     flex-direction: column;
-    padding: 0;
-}
-
-/* 헤더 상단 섹션 (J2P4, 검색, 로그아웃, 마이아이콘) */
-header .top-header-section {
-    height: 50px;
-    display: flex;
-    align-items: center;
     gap: 15px;
-    padding: 0 20px;
-}
+    max-width: 600px;
+    margin: 20px auto;
+  }
 
-header .corp {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2rem;
-    transition: transform 0.2s ease-in-out;
-}
+  .notice-card {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 그림자 적용 */
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
 
-header .corp:hover {
-    transform: scale(1.05);
-}
+  .notice-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
 
-header .search {
-    margin-left: auto;
-}
-
-/* 회원 아이콘 부분*/
-header .myIcon {
-    position: relative;
-    padding-right: 10px;
-}
-
-/* 마이아이콘 하위메뉴 스타일 - 사진과 동일하게 즉시 표시 */
-header .myIcon ul.subList {
-    display: none; /* 기본적으로 숨김 */
-    background-color: var(--secondary-dark);
-    position: absolute;
-    top: 100%;
-    right: 0;
-    list-style-type: none;
-    color: var(--light-accent);
-    font-weight: normal;
-    flex-direction: column;
-    justify-content: flex-start;
-    z-index: 9999;
-    min-width: 150px;
-    margin: 0;
-    padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* 마이아이콘에 마우스를 올리면 하위 메뉴 보이기 */
-header .myIcon:hover .subList {
-    display: flex; /* 마우스 올리면 즉시 보임 */
-}
-
-/* 메인 네비게이션 (GNB) */
-header .main-nav {
-    background: linear-gradient(to right, var(--secondary-dark), var(--primary-dark));
+  .notice-card a {
+    text-decoration: none;
+    color: #333;
     font-weight: bold;
-    font-size: 1.1rem;
-    padding: 10px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
+  }
 
-header .main-nav ul.mainList {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-evenly;
-    padding: 0;
-    margin: 0;
-}
-
-header .main-nav ul.mainList > li {
-    position: relative;
-    color: white;
-}
-
-/* 메인 메뉴 하위 메뉴 스타일 (부드러운 효과) */
-header .main-nav ul.subList {
-    background-color: var(--primary-dark);
-    color: var(--light-accent);
-    border-radius: 5px;
-    position: absolute;
-    left: 0;
-    font-weight: normal;
-    font-size: medium;
-    flex-direction: column;
-    justify-content: flex-start;
-    z-index: 9999;
-    min-width: 160px;
+  .notice-date {
+    font-size: 0.85rem;
+    color: #666;
     margin-top: 5px;
-    padding: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transform: translateY(-10px);
-    visibility: hidden;
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
-}
-
-/* 마우스를 올리면 메인 메뉴 하위 메뉴 보이기 */
-header .main-nav ul.mainList > li:hover .subList {
-    opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
-}
-
-/* 하위 메뉴 아이템 */
-header .main-nav .subList li {
-    padding: 8px 12px;
-}
-
-header .main-nav .subList li:hover {
-    background-color: var(--secondary-dark);
-    border-radius: 5px;
-}
-
-header .main-nav a,
-header .main-nav a:link,
-header .main-nav a:visited {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* 기존 .titleBox는 숨김 처리 */
-.titleBox {
-    display: none;
-}
-
-/* 메인 몸통 부분 */
-.wrap {
-    border-radius: var(--radius);
-    background: transparent;
-    width: 90%;
-    max-width: 1200px;
-    margin: 10px auto;
-    padding: 20px;
-}
-
-/* 메인 페이지 제목을 wrap 안에 새로 추가 */
-.main-content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.main-content-header h2 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: var(--text-color);
-    margin: 0;
-}
-
-.main-content-header .toMainpage {
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    text-decoration: none;
-}
-
-.main-content-header .toMainpage img {
-    margin-top: 2px;
-}
-
-.mainpage {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-}
-
-/* 상단 섹션 - 생산 현황, 재고 현황, 공지 사항 */
-.top-section {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    width: 100%;
-}
-
-.sandan {
-    flex-grow: 1.5;
-    border-radius: var(--radius);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.right-column-top {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.jaego,
-.gongji {
-    border-radius: var(--radius);
-    background-color: white;
-    padding: 20px;
-    height: 100%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.jisi {
-    flex-grow: 2;
-    border-radius: var(--radius);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.gesi {
-    flex-grow: 1;
-    border-radius: var(--radius);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* 하단 섹션 - 설비 가동 현황, 불량 현황 및 작업 지시, 게시판 */
-.bottom-section {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-    padding-bottom: 20px;
-}
-
-/* 제목 부분 */
-h3 {
-    margin: 0 0 7px 0;
-    font-size: 1.2em;
-}
-
-h4 {
-    margin-bottom: 10px;
-    text-align: center;
-    font-size: 1.1em;
-}
-
-/* 생산 현황 내부 */
-.san1 .dan:hover {
-    background-color: var(--hover-bg);
-}
-
-.san1 {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.san2 {
-    display: flex;
-    gap: 15px;
-}
-
-.dan {
-    background-color: var(--main-bg);
-    border-radius: 5px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: 15px 10px;
-    height: auto;
-}
-
-.dan span {
-    font-size: 0.9em;
-    font-weight: normal;
-    margin-bottom: 5px;
-}
-
-.dan strong {
-    font-size: 1.8em;
-    font-weight: bold;
-}
-
-/* 생산 현황 이미지 */
-/* .p {
-    margin-top: 20px;
-}
-
-.pp img {
-    width: 70%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
-} */
-
-/* 재고 현황 */
-.jae {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.jae-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.won,
-.sang,
-.rang {
-    width: 10px;
-    height: 10px;
-    border-radius: 15%;
-}
-
-.won {
-background-color: var(--blue-color);
-}
-
-.sang {
-    background-color: var(--green-color);
-}
-
-.rang {
-    background-color: var(--red-color);
-}
-
-/* 공지 사항 */
-.an {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-decoration: none;
-    color: var(--text-color);
-}
-
-.an p:hover {
-    background-color: var(--hover-bg);
-}
-
-.an p {
-    margin: 0;
-    font-size: 0.9em;
-    background-color: var(--main-bg);
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.an span {
-    color: var(--border-color);
-}
-
-.an p a {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-/* 불량 현황 및 작업 지시 */
-.jisi .jisi-content {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.jisi .ji-chart {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0;
-}
-
-.jisi .ji-chart .u1 {
-    width: 100%;
-    text-align: center;
-}
-
-.jisi .ji-chart .u1 img {
-    width: 90%;
-    height: auto;
-}
-
-/* 게시판 */
-.ge {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    text-decoration: none;
-}
-
-.ge p:hover {
-    background-color: var(--hover-bg);
-}
-
-.ge p {
-    margin: 0;
-    font-size: 0.9em;
-    background-color: var(--main-bg);
-    border-radius: 5px;
-    padding: 10px;
-}
-
-.ge span {
-    color: var(--border-color);
-}
-
-.ge p a {
-    color: var(--text-color);
-    text-decoration: none;
-}
+  }
