@@ -10,6 +10,14 @@
     --radius: 7px;
 }
 
+* { 
+    box-sizing: border-box; 
+}
+
+::after, ::before {
+    box-sizing: content-box;
+}
+
 /* 헤더 부분 */
 header {
     background-color: #495057;
@@ -123,6 +131,7 @@ a, a:link, a:visited {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: content-box; 
 }
 
 .titleBox span {
@@ -292,27 +301,6 @@ input[type="date"], select {
     align-items: center;
     font-family: 'Pretendard';
     font-size: 1.1rem;
-}
-
-/* (공통 X)생산 실적 - 필터 영역 */
-.wrap-select {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin: 30px 50px;
-    display : flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-.select-box {
-    display: flex;
-    gap: 30px;
-}
-.select-title {
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-.select-submit {
-    align-content: center;
 }
 
 /* 사이드 패널 */
