@@ -1,10 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<title>BOM 등록/수정/삭제</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/06_bom_CUD.css">
-	<script src ="${pageContext.request.contextPath}/Html/asset/06_bom_CUD.js" ></script>
+	<title>불량률 현황</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/10_defect_rate.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -76,42 +78,128 @@
 
 	<div class="wrap">
         <div class="lookup">
-            <!-- 세션에 따라 수정 가능 or read only -->
-			<div>품목 코드 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
-            <div>품목명 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
-			<div>작성자 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
-		</div>
+			<div class="lookup_left">
+				<select> <!-- 공정별 검색 -->
+					<option value="" disabled selected>공정별</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<!-- 일자별 검색 -->
+				일자 <input type="date">
+				<select> <!-- 품명 검색 -->
+					<option value="" disabled selected>품명</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+			</div>
+			<div>
+				<input type="text" placeholder="공정, 품명 검색...">
+				<input type="button" value="검색">
+			</div>
+        </div>
 
 		<div class="table-container">
-			<table class="bom_tab">
+    		<table class="lot_tab">
 				<thead>
 					<tr>
-						<th style="width: 30px;">선택</th>
-						<th style="width: 33px;">No.</th>
-						<th>원재료명</th>
-						<th>용도</th>
-						<th>자재 코드</th>
-						<th>단가</th>
-						<th>단위</th>
-						<th>소요량</th>
-						<th>입고처</th>
+						<th>공정명</th>
+						<th>일자</th>
+						<th>품명</th>
+						<th>생산 수량</th>
+						<th>불량 수량</th>
+						<th>불량률</th>
 					</tr>		
 				</thead>
 				<tbody>
-
+					<tr>
+						<td>공정명1</td>
+						<td>일자1</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명2</td>
+						<td>일자2</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명3</td>
+						<td>일자3</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명4</td>
+						<td>일자4</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명5</td>
+						<td>일자5</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명6</td>
+						<td>일자6</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명7</td>
+						<td>일자7</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명8</td>
+						<td>일자8</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
+					<tr>
+						<td>공정명9</td>
+						<td>일자9</td>
+						<td>품명</td>
+						<td>생산 수량</td>
+						<td>불량 수량</td>
+						<td>불량률</td>
+					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>총 생산 수량</td>
+						<td>총 불량 수량</td>
+						<td>총 불량률</td>
+					</tr>
+				</tfoot>
 			</table>
-		</div>
-		<div class="itembtnDiv">
-			<input type="button" value="항목 추가" class="addItemBtn btn"></input>
-			<input type="button" value="항목 삭제" class="delItemBtn btn"></input>
-		</div>
-
-		<div class="bottomBtn">
-			<input type="button" value="삭제" class="deleteBtn btn"></input>
-			<input type="button" value="수정" class="updateBtn btn"></input>
-			<input type="button" value="등록" class="createBtn btn"></input>
 		</div>
 	</div>
 </body>
-</html>
+</html></html>

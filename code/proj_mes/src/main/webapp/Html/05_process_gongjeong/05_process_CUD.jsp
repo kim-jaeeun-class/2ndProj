@@ -74,66 +74,21 @@
             <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
         </ul>
     </nav>
+    
 	<div class="titleBox">
 		<span>공정 등록 / 수정 / 삭제</span>
-		<a href="">
+		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
 			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
 				메인 화면으로
 			</div>
 		</a>
 	</div>
 
-	<div class="wrap">
-		<form id="lookupForm" action="process" method="get">
-			<div class="lookup">
-				<div class="lookLeft">
-					<div>
-						품목 코드
-						<select id="itemCodeSelectCUD" name="itemCode">
-						    <option value="" selected>선택</option>
-						    <c:forEach var="itemCode" items="${itemCodes}">
-						        <option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
-						            <c:out value="${itemCode}" />
-						        </option>
-						    </c:forEach>
-						</select>
-					</div>
-					<div>
-						부서
-						<select id="departSearchSelect" name="departLevel">
-							<option value="">선택</option>
-							<c:forEach var="departLevel" items="${departLevels}">
-								<option value="${departLevel}" <c:if test="${selectedDepart eq departLevel}">selected</c:if>>
-									<c:out value="${departLevel}" />
-								</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div>
-						공정
-						<select id="procSearchSelect" name="procName">
-							<option value="">선택</option>
-							<c:forEach var="procName" items="${procNames}">
-								<option value="${procName}" <c:if test="${selectedProcName eq procName}">selected</c:if>>
-									<c:out value="${procName}" />
-								</option>
-							</c:forEach>
-						</select>
-					</div>
-				</div>
-				<div class="loolRight">
-					<input type="button" value="조회" class="lookupBtn btn"></input>
-					<input type="button" value="새 공정 등록" class="newBtn btn"></input>
-				</div>
-			</div>
-		</form>
-		
+	<div class="wrap">		
 		<form id="processCUDForm" action="process" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="action" id="action">
 			<input type="hidden" name="procId" id="procId_hidden">
-			<span>공정 정보 입력</span><br>
 			<div class="processInfo">
 				
 				<div class="table-container">
@@ -141,7 +96,7 @@
 						<tr>
 							<td>품목 코드</td>
 							<td>
-								<select id="itemCodeSelectCUD" name="itemCode" onchange="this.form.submit()">
+								<select id="itemCodeSelectCUD" name="itemCode">
 									<option value="" selected>선택</option>
 									<c:forEach var="itemCode" items="${itemCodes}">
 										<option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
@@ -171,7 +126,11 @@
 						</tr>
 						<tr>
 							<td>공정</td>
-							<td><input type="text" id="procName" name="procName" value="${process.proc_name}"></td>
+							<td>				    
+								<select id="procNameSelect" name="procName">
+					            	<option value="">선택</option>
+					            </select>
+							</td>
 						</tr>
 						<tr>
 							<td>공정 설명</td>

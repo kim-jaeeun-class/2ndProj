@@ -35,16 +35,12 @@
             cursor: pointer;
         }
         
-        /* 메인 내비게이션 목록의 호버 배경색을 파란색으로 변경하여 글씨가 잘 보이게 수정 */
         .mainList li:hover {
             background-color: #3b82f6;
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
-
-    <!-- 헤더 섹션 -->
-    <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
     <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
         <div class="flex items-center space-x-2">
             <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
@@ -66,8 +62,6 @@
         </div>
     </header>
 
-    <!-- 메인 내비게이션 -->
-    <!-- Tailwind 클래스 대신 직접 정의한 nav-bg 클래스 적용 -->
     <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
             <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
@@ -83,10 +77,9 @@
     
 	<div class="titleBox">
 		<span>공정 목록</span>
-		<a href="">
+		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
 			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
 				메인 화면으로
 			</div>
 		</a>
@@ -141,10 +134,10 @@
 					<tr>
 						<th>선택</th>
 						<th>순번</th>
-						<th>공정 순서</th>
 						<th>품목 코드</th>
-						<th>공정명</th>
 						<th>부서</th>
+						<th>공정 순서</th>
+						<th>공정명</th>
 						<th>공정 설명</th>
 						<th>이미지</th>
 					</tr>		
@@ -158,10 +151,10 @@
 							<tr>
 								<td><input type="radio" name="selectedProcId" value="${proc.proc_id}"></td>
 								<td><c:out value="${status.count}" /></td>
-								<td class="procSeqCell"><c:out value="${proc.proc_seq}" /></td>
 								<td><c:out value="${proc.item_code}" /></td>
-								<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
 								<td class="departLevelCell"><c:out value="${proc.depart_level}" /></td>
+								<td class="procSeqCell"><c:out value="${proc.proc_seq}" /></td>
+								<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
 								<td class="procInfoCell"><c:out value="${proc.proc_info}" /></td>
 								<td>
 								    <c:if test="${not empty proc.proc_img}">

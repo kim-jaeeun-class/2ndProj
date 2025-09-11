@@ -1,11 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<title>BOM 목록</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/06_bom_list.css">
-	<script src ="${pageContext.request.contextPath}/Html/asset/06_bom_list.js" ></script>
-	
+	<title>BOM 등록/수정/삭제</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/06_bom_CUD.css">
+	<script src ="${pageContext.request.contextPath}/Html/asset/06_bom_CUD.js" ></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -72,45 +75,30 @@
         </ul>
     </nav>
     
-	<div class="titleBox"></div>
+	<div class="titleBox">
+		<span>BOM / 등록 / 수정 / 삭제</span>
+		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
 
 	<div class="wrap">
-		<div class="lookup">
-			<div class="lookup_left">
-				품목 코드
-				<select>
-					<option selected>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-					<option>6</option>
-				</select>
-				품목명
-				<select>
-					<option selected>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-					<option>6</option>
-				</select>
-			</div>
-			<div class="btnDiv">
-				<input type="button" value="조회" class="lookupBtn btn"></input>
-				<input type="button" value="신규" class="newBOMBtn btn"></input>
-			</div>
+        <div class="lookup">
+            <!-- 세션에 따라 수정 가능 or read only -->
+			<div>품목 코드 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
+            <div>품목명 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
+			<div>작성자 &nbsp;&nbsp;<input type="text" placeholder="수정 가능 or read only"></div>
 		</div>
 
 		<div class="table-container">
-    		<div class="writer">
-				작성자 :
-				<input type="text" value="작성자 이름" readonly>
-			</div>
-    		<table class="bom_tab">
+			<table class="bom_tab">
 				<thead>
 					<tr>
-						<th>No.</th>
+						<th style="width: 30px;">선택</th>
+						<th style="width: 33px;">No.</th>
 						<th>원재료명</th>
 						<th>용도</th>
 						<th>자재 코드</th>
@@ -121,101 +109,19 @@
 					</tr>		
 				</thead>
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>원재료명</td>
-						<td>용도</td>
-						<td>자재 코드</td>
-						<td>단가</td>
-						<td>단위</td>
-						<td>EA</td>
-						<td>입고처</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
+
 				</tbody>
 			</table>
-        </div>
+		</div>
+		<div class="itembtnDiv">
+			<input type="button" value="항목 추가" class="addItemBtn btn"></input>
+			<input type="button" value="항목 삭제" class="delItemBtn btn"></input>
+		</div>
+
 		<div class="bottomBtn">
-			<input type="button" value="수정" class="updateBOMBtn btn"></input>
+			<input type="button" value="삭제" class="deleteBtn btn"></input>
+			<input type="button" value="수정" class="updateBtn btn"></input>
+			<input type="button" value="등록" class="createBtn btn"></input>
 		</div>
 	</div>
 </body>

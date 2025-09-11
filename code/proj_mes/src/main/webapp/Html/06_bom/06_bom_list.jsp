@@ -1,10 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 	<meta charset="UTF-8">
-	<title>불량률 현황</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/10_defect_rate.css">
-
+	<title>BOM 목록</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/Html/asset/06_bom_list.css">
+	<script src ="${pageContext.request.contextPath}/Html/asset/06_bom_list.js" ></script>
+	
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -74,128 +78,147 @@
 	<div class="titleBox"></div>
 
 	<div class="wrap">
-        <div class="lookup">
+		<div class="lookup">
 			<div class="lookup_left">
-				<select> <!-- 공정별 검색 -->
-					<option value="" disabled selected>공정별</option>
-					<option>1</option>
+				품목 코드
+				<select>
+					<option selected>1</option>
 					<option>2</option>
 					<option>3</option>
 					<option>4</option>
+					<option>5</option>
+					<option>6</option>
 				</select>
-				<!-- 일자별 검색 -->
-				일자 <input type="date">
-				<select> <!-- 품명 검색 -->
-					<option value="" disabled selected>품명</option>
-					<option>1</option>
+				품목명
+				<select>
+					<option selected>1</option>
 					<option>2</option>
 					<option>3</option>
 					<option>4</option>
+					<option>5</option>
+					<option>6</option>
 				</select>
 			</div>
-			<div>
-				<input type="text" placeholder="공정, 품명 검색...">
-				<input type="button" value="검색">
+			<div class="btnDiv">
+				<input type="button" value="조회" class="lookupBtn btn"></input>
+				<input type="button" value="신규" class="newBOMBtn btn"></input>
 			</div>
-        </div>
+		</div>
 
 		<div class="table-container">
-    		<table class="lot_tab">
+    		<div class="writer">
+				작성자 :
+				<input type="text" value="작성자 이름" readonly>
+			</div>
+    		<table class="bom_tab">
 				<thead>
 					<tr>
-						<th>공정명</th>
-						<th>일자</th>
-						<th>품명</th>
-						<th>생산 수량</th>
-						<th>불량 수량</th>
-						<th>불량률</th>
+						<th>No.</th>
+						<th>원재료명</th>
+						<th>용도</th>
+						<th>자재 코드</th>
+						<th>단가</th>
+						<th>단위</th>
+						<th>소요량</th>
+						<th>입고처</th>
 					</tr>		
 				</thead>
 				<tbody>
 					<tr>
-						<td>공정명1</td>
-						<td>일자1</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>1</td>
+						<td>원재료명</td>
+						<td>용도</td>
+						<td>자재 코드</td>
+						<td>단가</td>
+						<td>단위</td>
+						<td>EA</td>
+						<td>입고처</td>
 					</tr>
 					<tr>
-						<td>공정명2</td>
-						<td>일자2</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>2</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명3</td>
-						<td>일자3</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>3</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명4</td>
-						<td>일자4</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>4</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명5</td>
-						<td>일자5</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>5</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명6</td>
-						<td>일자6</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>6</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명7</td>
-						<td>일자7</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>7</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명8</td>
-						<td>일자8</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>8</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 					<tr>
-						<td>공정명9</td>
-						<td>일자9</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
+						<td>9</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>더미</td>
+						<td>EA</td>
+						<td>더미</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>총 생산 수량</td>
-						<td>총 불량 수량</td>
-						<td>총 불량률</td>
-					</tr>
-				</tfoot>
 			</table>
+        </div>
+		<div class="bottomBtn">
+			<input type="button" value="수정" class="updateBOMBtn btn"></input>
 		</div>
 	</div>
 </body>
