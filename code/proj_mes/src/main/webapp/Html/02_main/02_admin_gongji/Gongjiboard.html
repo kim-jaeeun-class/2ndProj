@@ -1,585 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지 사항</title>
-    <link rel="stylesheet" href="Gongjiboard.css" />
+    <!-- Inter 폰트 및 Tailwind CSS CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --border: #9aa0a6;
-            --text: #222;
-            --muted: #666;
-            --button: #5a5a5a;
-            --button-text: #fff;
-            --field-border: #a4a5a7;
-            --page-bg: #ffffff;
-            --radius: 10px;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
-                "Helvetica Neue", Arial, sans-serif;
-        }
-
-        /* 헤더 부분 */
-        header {
-            background-color: #495057;
-            height : 50px;
-            border: 1px solid;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        header .corp {
-            display: flex;
-            align-items: center;  
-            padding-left: 10px;
-            gap: 10px;
-            font-size: 1.2rem;
-        }
-
-        header .search {
-            margin-left: auto;
-            margin-right: 10px;
-        }
-
-        /* 회원 아이콘 부분*/
-        header .myIcon {
-            position: relative;
-            padding: 5px 10px 5px 0;
-        }
-
-        header ul.subList {
-            display: none;
-            background-color: turquoise;
-            position: absolute;
-            top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
-            right: 0;
-            list-style-type: none;
-            color: #333333;
-            font-weight: normal;
-            flex-direction: column;  
-            justify-content: flex-start;  
-            z-index: 9999;  
-            min-width: 150px;  
-            margin: 0; /* ul 기본 margin 제거 */
-            padding: 0; /* ul 기본 padding 제거 */
-        }
-
-        /* 마우스를 올리면 하위 메뉴 보이기 */
-        header .myIcon:hover .subList {
-            display: flex;
-        }
-
-        /* GNB 부분 */
-        .gnb {
-            background-color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .gnb ul {
-            list-style-type: none;
-            display: flex;
-            justify-content: space-evenly;
-            padding-left: 0;
-        }
-
-        .gnb ul.subList {
-            background-color: #495057;
-            color: white;
-            border-radius: 5%;
-            position: absolute;
-            left: 0;
-            display: none;
-            font-weight: normal;
-            font-size: medium;
-            flex-direction: column;  
-            justify-content: flex-start;  
-            z-index: 9999;  
-            min-width: 130px;  
-        }
-        .gnb ul.mainList > li {
-            position: relative; /* 하위 메뉴의 위치 기준이 됨 */
-            color: #333333;
-        }
-        .gnb ul.mainList > li:hover .subList {
-            display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
-            margin-top: 0px;
-        }
-
-        .subList li {
-            padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
-            margin: 1px 1px;  /* 위아래 간격 추가 */
-        }
-
-        /* a 링크 양식 지정 */
-        a, a:link, a:visited {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        /* 제목 부분 */
-        .titleBox {
-            background-color: var(--field-border);
-            height: 25px;
-            margin: 0 auto;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .titleBox span {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin-left: 10px;
-            color: #333333;
-        }
-
-        .toMainpage {
-            color: var(--button);
-            margin-right: 10px;
-        }
-
-        /* 메인 몸통 부분 */
-        .wrap {
-            border: 1px solid var(--border);
-            border-radius: 5px;
-            background-color: #ffffff;
-            width: 90%;
-            margin: 10px auto;
-        }
-
-        /* 모바일 반응형 */
-        @media (max-width: 768px) {
-            /* 여기에 모바일 스타일 넣으시면 됩니다 */
-        }
-        body {
-            font-family : "맑은 고딕", sans-serif;
-            background-color: #f5f5f5;
-            margin:0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
             padding: 0;
         }
 
-        .container {
-            width : 900px;
-            margin: 30px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow : 0 0 10px rgba(0,0,0,0.1);
+        /* 드롭다운 메뉴 애니메이션 */
+        .group:hover .subList {
+            display: flex !important;
         }
 
-        header {
-            display : flex;
-            justify-content : space-between;
-            align-items : center;
-            margin-bottom : 20px;
-        }
-        /* 헤더 영역: 한 줄에 좌우 배치 */
-        .header-top {
-            display: flex;
-            justify-content: space-between; /* 좌우 정렬 */
-            align-items: center;
-            width:100%;
-        }
-        /* 제목 스타일 */
-        .board-title {
-            font-size: 24px;
-            margin: 0;
+        .subList {
+            display: none !important;
+            flex-direction: column;
+            min-width: 150px;
+            z-index: 9999;
+            background-color: #4b5563;
         }
 
-        /* 링크 스타일 */
-        .main-link {
-            font-size: 14px;
-            text-decoration: none;
-            color: #333;
-        }
-        header h1 {
-            margin : 0;
-            font-size : 24px;
-        }
-        .search-area {
-            display: flex;
-            justify-content: flex-end;  /* 오른쪽 정렬 */
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            margin-bottom: 10px;              
-        }
-        .search-area select,
-        .search-area input {
-            padding: 5px;
-        }
-        .main-link {
-            font-size : 14px;
-            color : #555;
-            text-decoration : none;
-        }
-        table {
-            width : 100% ;
-            border-collapse : collapse;
-        }
-        thead {
-            background-color : #e0e0e0;
-        }
-        th,td {
-            padding : 12px;
-            text-align : center;
-            border-bottom : 1px solid #ddd;
-        }
-        td:nth-child(2) {
-            text-align : left;
+        .header-bg {
+            background-color: #002a40;
         }
 
-        .pagination {
-            text-align : center;
-            margin : 20px 0;
+        .nav-bg {
+            background-color: #003751;
         }
 
-        .pagination span {
-            margin : 0 5px;
-            cursor: pointer;
-            color: #333;
-        }
-
-        .button-area {
-            text-align : right;
-        }
-        .button-area button {
-            padding: 8px 16px;
-            background-color: #333;
-            color : white ;
-            border : none;
-            cursor : pointer;
-        }
-        .button-area button:hover {
-            background-color: #555;
-        }
-        /* 검색 조건 위치 맞추기 */
-        .search-area-outside {
-            display: flex;
-            flex-direction: row;     /* ➤ 가로 정렬 */
-            align-items: center;     /* ➤ 세로 정렬 맞춤 */
-            gap: 10px;               /* ➤ 요소 간 여백 */
-            margin-bottom: 10px;
-            /* 💡 수정된 부분 */
-            margin-left: auto;
-            /* 가운데 정렬 */
-            width: fit-content;    /* 내용에 맞게 줄어듦 */
-
-            white-space: nowrap;
-        /* 입력 스타일 */
-        }
-        .search-area-outside select,
-        .search-area-outside input {
-            padding: 5px;
-        }
-        .write-button {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: #333;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .write-button:hover {
-            background-color: #555;
-        }
-        #search-button {
-            padding: 5px 12px;
-            background-color: #333;
-            color: white;
-            border: none;
+        .mainList,
+        #noticeContent,
+        #boardContent {
             cursor: pointer;
         }
 
-        #search-button:hover {
-            background-color: #555;
+        .mainList li:hover {
+            background-color: #3b82f6;
+        }
+
+        .hidden-section {
+            display: none;
         }
     </style>
 </head>
-<body>
-    <header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
 
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-	<div class="titleBox">
-		<span>공지 사항</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				<a href="mainpage.html" class="mainpage.html">메인 화면으로</a>
-			</div>
-		</a>
-	</div>
-
-	<div class="wrap">
-	</div>
-    <div class = "container">
-        <div class="search-area-outside">
-            <label for="search-select">검색조건</label>
-            <select id="search-select">
-              <option>제목</option>
-              <option>내용</option>
-            </select>
-            <input type="text" id="search-input" placeholder="검색할 내용을 입력하세요" />
-            <button id="search-button">검색</button>
+<body class="bg-gray-100 text-gray-800">
+    <!-- 헤더 섹션 -->
+    <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
+        <div class="flex items-center space-x-2">
+            <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
+            <h3 class="text-xl font-bold">J2P4</h3>
         </div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>유형</th>
-                    <th>제목</th>
-                    <th>담당부서</th>
-                    <th>등록일</th>
-                    <th>조회수</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-
-        <div class="pagination">
-            <span>1</span>
-            <span>2</span>
-            <span>3</span>
-            <span>4</span>
+        <div class="flex items-center space-x-4 sm:space-x-8">
+            <div class="search cursor-pointer">
+                <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
+            </div>
+            <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
+                로그아웃
+            </div>
+            <div class="myIcon relative">
+                <a href="javascript:void(0);" id="myIconBtn">
+                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
+                </a>
+            </div>
         </div>
-      
-        <!-- 글쓰기 버튼 링크 연결 -->
-        <div class = "button-area">
-            <a href="Gongjiboardregistration.html" class="write-button" style="color: white;"> 글쓰기</a>
+    </header>
+
+    <!-- 메인 내비게이션 -->
+    <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
+        <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+        </ul>
+    </nav>
+
+    <!-- 공지 사항 목록 섹션 -->
+    <div id="list-section" class="p-4 sm:p-8 max-w-7xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">공지 사항</h2>
+
+        <!-- Search Area -->
+        <div class="flex flex-col md:flex-row md:items-center justify-end md:space-x-4 mb-4">
+            <div class="flex items-center space-x-2 w-full md:w-auto">
+                <label for="search-select" class="text-gray-600 font-medium whitespace-nowrap">검색조건</label>
+                <select id="search-select"
+                    class="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-2 mt-2 md:mt-0 w-full md:w-auto">
+                <input type="text" id="search-input" placeholder="검색할 내용을 입력하세요"
+                    class="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="search-button"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-300">검색</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-700 rounded-lg overflow-hidden shadow-md">
+                <thead class="text-xs text-gray-900 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="py-3 px-6 text-center">유형</th>
+                        <th scope="col" class="py-3 px-6">제목</th>
+                        <th scope="col" class="py-3 px-6 text-center hidden md:table-cell">담당부서</th>
+                        <th scope="col" class="py-3 px-6 text-center hidden md:table-cell">등록일</th>
+                        <th scope="col" class="py-3 px-6 text-center">조회수</th>
+                    </tr>
+                </thead>
+                <tbody id="post-table-body">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination flex justify-center items-center space-x-2 py-4 mt-2">
+            <!-- Pagination spans will be added by JavaScript -->
+        </div>
+
+        <!-- Write Button -->
+        <div class="flex justify-end mt-4">
+            <button id="write-button"
+                class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-lg hover:bg-blue-700 transition duration-300">
+                글쓰기
+            </button>
         </div>
     </div>
-<script>
-    // 게시글 데이터 배열 (예시)
-    const posts = [
-        { "type": "[안내]", "title": "2025년 하반기 생산 목표 공지", "dept": "생산관리팀", "date": "2024-12-13", "views": 13 },
-        { "type": "[긴급]", "title": "라인2 설비 점검 일정 변경", "dept": "시설관리팀", "date": "2024-12-13", "views": 13 },
-        { "type": "[공유]", "title": "안전 수칙 교육 일정 및 내용 안내", "dept": "안전보건팀", "date": "2024-12-13", "views": 24 },
-        { "type": "[안내]", "title": "MES 시스템 정기 점검 안내", "dept": "IT운영팀", "date": "2024-12-13", "views": 24 },
-        { "type": "[경영]", "title": "신규 프로젝트 기획안 공모", "dept": "기획팀", "date": "2024-12-12", "views": 35 },
-        { "type": "[긴급]", "title": "전사 비상훈련 실시 안내", "dept": "총무팀", "date": "2024-12-11", "views": 41 },
-        { "type": "[안내]", "title": "사내 복지제도 변경 사항", "dept": "인사팀", "date": "2024-12-10", "views": 55 },
-        { "type": "[공유]", "title": "영업팀 2024년 4분기 실적 보고", "dept": "영업팀", "date": "2024-12-09", "views": 68 },
-        { "type": "[경영]", "title": "2025년도 사업 계획 확정 공고", "dept": "경영관리팀", "date": "2024-12-08", "views": 72 },
-        { "type": "[안내]", "title": "재무팀 월말 결산 일정 안내", "dept": "재무회계팀", "date": "2024-12-07", "views": 81 },
-        { "type": "[기술]", "title": "제품 품질 개선을 위한 회의록", "dept": "품질관리팀", "date": "2024-12-06", "views": 90 },
-        { "type": "[안내]", "title": "2024년 연차 사용 권장 안내", "dept": "인사팀", "date": "2024-12-05", "views": 105 },
-        { "type": "[공유]", "title": "신입사원 교육 프로그램 결과 보고", "dept": "교육팀", "date": "2024-12-04", "views": 110 },
-        { "type": "[긴급]", "title": "서버 긴급 패치 작업 공지", "dept": "IT운영팀", "date": "2024-12-03", "views": 122 },
-        { "type": "[경영]", "title": "신규 거래처 발굴 성과 보고", "dept": "영업팀", "date": "2024-12-02", "views": 130 },
-        { "type": "[기술]", "title": "생산 라인 효율성 증대 방안", "dept": "생산기술팀", "date": "2024-12-01", "views": 145 },
-        { "type": "[안내]", "title": "2025년 조직 개편안 사전 공지", "dept": "경영관리팀", "date": "2024-11-30", "views": 150 },
-        { "type": "[공유]", "title": "분기별 재고 현황 보고서", "dept": "자재관리팀", "date": "2024-11-29", "views": 162 },
-        { "type": "[긴급]", "title": "사내 망 보안 강화 안내", "dept": "IT보안팀", "date": "2024-11-28", "views": 178 },
-        { "type": "[기술]", "title": "품질 관리 자동화 솔루션 도입", "dept": "품질관리팀", "date": "2024-11-27", "views": 185 },
-        { "type": "[공유]", "title": "신제품 출시 기념 워크숍 개최", "dept": "마케팅팀", "date": "2024-11-26", "views": 191 },
-        { "type": "[안내]", "title": "연말정산 서류 제출 기한 안내", "dept": "재무회계팀", "date": "2024-11-25", "views": 204 },
-        { "type": "[경영]", "title": "경영진 정기 회의 결과 보고", "dept": "경영관리팀", "date": "2024-11-24", "views": 213 },
-        { "type": "[기술]", "title": "신규 생산 설비 도입 설명회", "dept": "생산기술팀", "date": "2024-11-23", "views": 220 },
-        { "type": "[안내]", "title": "워크숍 참가자 명단 확정 공지", "dept": "인사팀", "date": "2024-11-22", "views": 234 },
-        { "type": "[긴급]", "title": "전력 시스템 점검에 따른 작업 중단", "dept": "시설관리팀", "date": "2024-11-21", "views": 240 },
-        { "type": "[공유]", "title": "영업팀 주간 실적 및 목표 공유", "dept": "영업팀", "date": "2024-11-20", "views": 251 },
-        { "type": "[기술]", "title": "불량 원인 분석 및 개선 방안", "dept": "품질관리팀", "date": "2024-11-19", "views": 265 },
-        { "type": "[안내]", "title": "MES 사용 매뉴얼 업데이트", "dept": "IT운영팀", "date": "2024-11-18", "views": 272 },
-        { "type": "[경영]", "title": "해외 시장 진출 계획 발표", "dept": "기획팀", "date": "2024-11-17", "views": 288 },
-        { "type": "[공유]", "title": "사내 동호회 활동 지원 안내", "dept": "총무팀", "date": "2024-11-16", "views": 301 },
-        { "type": "[안내]", "title": "개인 정보 보호 교육 의무 이수", "dept": "정보보안팀", "date": "2024-11-15", "views": 310 },
-        { "type": "[긴급]", "title": "원자재 입고 지연에 따른 공지", "dept": "자재관리팀", "date": "2024-11-14", "views": 325 },
-        { "type": "[기술]", "title": "로봇 자동화 시스템 도입 검토", "dept": "생산기술팀", "date": "2024-11-13", "views": 331 },
-        { "type": "[경영]", "title": "경영 목표 달성 인센티브 지급", "dept": "인사팀", "date": "2024-11-12", "views": 340 },
-        { "type": "[안내]", "title": "사내식당 메뉴 및 운영 시간 변경", "dept": "총무팀", "date": "2024-11-11", "views": 354 },
-        { "type": "[공유]", "title": "신규 고객사 계약 체결 소식", "dept": "영업팀", "date": "2024-11-10", "views": 366 },
-        { "type": "[기술]", "title": "데이터 분석 시스템 구축 완료", "dept": "IT운영팀", "date": "2024-11-09", "views": 375 },
-        { "type": "[안내]", "title": "정기 건강검진 신청 안내", "dept": "안전보건팀", "date": "2024-11-08", "views": 382 },
-        { "type": "[긴급]", "title": "화재 경보 오작동에 대한 안내", "dept": "시설관리팀", "date": "2024-11-07", "views": 390 },
-        { "type": "[경영]", "title": "경쟁사 동향 분석 보고서", "dept": "기획팀", "date": "2024-11-06", "views": 401 },
-        { "type": "[안내]", "title": "사내 도서관 신규 도서 입고", "dept": "총무팀", "date": "2024-11-05", "views": 415 },
-        { "type": "[공유]", "title": "친환경 생산 공법 도입 성과", "dept": "생산기술팀", "date": "2024-11-04", "views": 420 },
-        { "type": "[기술]", "title": "특허 출원 진행 상황", "dept": "연구개발팀", "date": "2024-11-03", "views": 435 },
-        { "type": "[안내]", "title": "장기 근속자 포상 신청", "dept": "인사팀", "date": "2024-11-02", "views": 444 },
-        { "type": "[긴급]", "title": "긴급 소방 훈련 및 대피 안내", "dept": "안전보건팀", "date": "2024-11-01", "views": 450 },
-        { "type": "[경영]", "title": "분기별 재무 성과 발표", "dept": "재무회계팀", "date": "2024-10-31", "views": 465 },
-        { "type": "[공유]", "title": "고객 만족도 조사 결과", "dept": "마케팅팀", "date": "2024-10-30", "views": 472 },
-        { "type": "[기술]", "title": "생산 설비 유지보수 계획", "dept": "생산기술팀", "date": "2024-10-29", "views": 481 },
-        { "type": "[안내]", "title": "2025년도 예산 편성 지침", "dept": "기획팀", "date": "2024-10-28", "views": 490 },
-        { "type": "[긴급]", "title": "네트워크 장애 발생에 따른 공지", "dept": "IT운영팀", "date": "2024-10-27", "views": 500 },
-        { "type": "[경영]", "title": "주주총회 개최 안내", "dept": "경영관리팀", "date": "2024-10-26", "views": 511 },
-        { "type": "[기술]", "title": "새로운 생산 공정 도입", "dept": "연구개발팀", "date": "2024-10-25", "views": 520 },
-        { "type": "[공유]", "title": "부서별 목표 달성 현황", "dept": "인사팀", "date": "2024-10-24", "views": 535 },
-        { "type": "[안내]", "title": "사내 규정 개정 안내", "dept": "총무팀", "date": "2024-10-23", "views": 540 },
-        { "type": "[긴급]", "title": "태풍 대비 시설물 점검", "dept": "시설관리팀", "date": "2024-10-22", "views": 551 },
-        { "type": "[경영]", "title": "시장 분석 리포트 공유", "dept": "마케팅팀", "date": "2024-10-21", "views": 560 },
-        { "type": "[기술]", "title": "생산성 향상 제안 공모", "dept": "생산관리팀", "date": "2024-10-20", "views": 575 },
-        { "type": "[안내]", "title": "정기 회식비 정산 안내", "dept": "재무회계팀", "date": "2024-10-19", "views": 580 },
-        { "type": "[공유]", "title": "분기별 우수 사원 선정", "dept": "인사팀", "date": "2024-10-18", "views": 592 }
-    ];
 
-    const postsPerPage = 10; // 한 페이지에 보여줄 글 개수
-    let currentPage = 1;
+    <!-- 게시글 작성 섹션 (hidden by default) -->
+    <div id="write-section" class="hidden-section p-4 sm:p-8 max-w-7xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">새 글 작성</h2>
+        <div class="bg-white p-6 rounded-md shadow-md">
+            <div class="mb-4">
+                <label for="post-type" class="block text-gray-700 font-medium mb-2">유형</label>
+                <select id="post-type"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option>[안내]</option>
+                    <option>[긴급]</option>
+                    <option>[공유]</option>
+                    <option>[경영]</option>
+                    <option>[기술]</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="post-title" class="block text-gray-700 font-medium mb-2">제목</label>
+                <input type="text" id="post-title"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="post-dept" class="block text-gray-700 font-medium mb-2">담당부서</label>
+                <input type="text" id="post-dept"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="post-content" class="block text-gray-700 font-medium mb-2">내용</label>
+                <textarea id="post-content" rows="10"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="save-button"
+                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">등록</button>
+                <button id="cancel-button"
+                    class="px-6 py-2 bg-gray-400 text-white font-semibold rounded-md hover:bg-gray-500 transition duration-300">취소</button>
+            </div>
+        </div>
+    </div>
 
-    function renderTable(page) {
-        currentPage = page;
-        const tbody = document.querySelector('tbody');
-        tbody.innerHTML = ""; // 기존 내용 지우기
+    <!-- 게시글 보기 섹션 (hidden by default) -->
+    <div id="view-section" class="hidden-section p-4 sm:p-8 max-w-7xl mx-auto">
+        <div class="bg-white p-6 rounded-md shadow-md">
+            <div class="border-b-2 border-gray-200 pb-4 mb-4">
+                <h2 id="view-title" class="text-xl sm:text-2xl font-bold text-gray-900 mb-2"></h2>
+                <div class="text-sm text-gray-500 flex justify-between items-center">
+                    <span id="view-dept"></span>
+                    <span id="view-date"></span>
+                </div>
+            </div>
+            <div id="view-content" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
+            <div class="flex justify-end mt-6">
+                <button id="back-button"
+                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">목록으로</button>
+            </div>
+        </div>
+    </div>
 
-        // 보여줄 글 범위 계산
-        const start = (page - 1) * postsPerPage;
-        const end = start + postsPerPage;
-        const pagePosts = posts.slice(start, end);
+    <script>
+        // 게시글 데이터 배열 (예시)
+        const posts = [
+            { "id": 1, "type": "[안내]", "title": "2025년 하반기 생산 목표 공지", "dept": "생산관리팀", "date": "2024-12-13", "views": 13, "content": "2025년 하반기 생산 목표에 대한 공지입니다.\n\n세부 내용은 다음과 같습니다:\n- 목표 달성률 120%\n- 불량률 1% 미만 유지\n- 안전 사고 0건 달성\n\n모두의 적극적인 협조 부탁드립니다." },
+            { "id": 2, "type": "[긴급]", "title": "라인2 설비 점검 일정 변경", "dept": "시설관리팀", "date": "2024-12-13", "views": 13, "content": "긴급 설비 점검으로 인해 라인2의 점검 일정이 변경되었습니다.\n\n변경 전: 2024-12-15 09:00\n변경 후: 2024-12-14 18:00\n\n작업에 차질 없으시길 바랍니다." },
+            { "id": 3, "type": "[공유]", "title": "안전 수칙 교육 일정 및 내용 안내", "dept": "안전보건팀", "date": "2024-12-13", "views": 24, "content": "모든 직원을 대상으로 안전 수칙 교육을 실시합니다.\n\n- 일시: 2024-12-20 14:00\n- 장소: 대강당\n- 필수 참석 대상: 전 직원\n\n안전한 근무 환경 조성을 위해 반드시 참석해주시기 바랍니다." },
+            { "id": 4, "type": "[안내]", "title": "MES 시스템 정기 점검 안내", "dept": "IT운영팀", "date": "2024-12-13", "views": 24, "content": "MES 시스템의 안정적인 운영을 위해 정기 점검을 실시합니다.\n\n점검 시간 동안 일부 서비스 이용이 제한될 수 있습니다.\n\n점검 일시: 2024-12-18 22:00 ~ 24:00" },
+            { "id": 5, "type": "[경영]", "title": "신규 프로젝트 기획안 공모", "dept": "기획팀", "date": "2024-12-12", "views": 35, "content": "회사의 미래 성장을 위한 신규 프로젝트 기획안을 공모합니다.\n\n참신하고 혁신적인 아이디어를 제안해 주세요.\n\n- 제출 기간: 2024-12-20까지\n- 제출 방법: 기획팀 이메일" },
+            { "id": 6, "type": "[긴급]", "title": "전사 비상훈련 실시 안내", "dept": "총무팀", "date": "2024-12-11", "views": 41, "content": "예기치 못한 상황에 대비하여 전사 비상훈련을 실시합니다.\n\n훈련 일시: 2024-12-15 10:00\n\n훈련에 적극적으로 참여해주시기 바랍니다." },
+            { "id": 7, "type": "[안내]", "title": "사내 복지제도 변경 사항", "dept": "인사팀", "date": "2024-12-10", "views": 55, "content": "사내 복지제도에 일부 변경이 있어 안내드립니다.\n\n- 변경 내용: 자녀 학자금 지원 확대\n- 적용 시기: 2025년 1월 1일부\n\n자세한 사항은 인사팀에 문의해 주세요." },
+            { "id": 8, "type": "[공유]", "title": "영업팀 2024년 4분기 실적 보고", "dept": "영업팀", "date": "2024-12-09", "views": 68, "content": "영업팀의 2024년 4분기 실적 보고서입니다.\n\n전년 대비 150%의 매출 성장을 달성했습니다.\n\n모든 팀원들의 노고에 감사드립니다." },
+            { "id": 9, "type": "[경영]", "title": "2025년도 사업 계획 확정 공고", "dept": "경영관리팀", "date": "2024-12-08", "views": 72, "content": "경영진 회의를 통해 2025년도 사업 계획이 확정되었습니다.\n\n계획에 따라 각 부서별 목표 수립을 진행해 주시기 바랍니다." },
+            { "id": 10, "type": "[안내]", "title": "재무팀 월말 결산 일정 안내", "dept": "재무회계팀", "date": "2024-12-07", "views": 81, "content": "12월 월말 결산 일정을 안내드립니다.\n\n- 기간: 2024-12-28 ~ 2024-12-31\n\n기간 내에 모든 증빙 서류를 제출해 주시기 바랍니다." },
+            { "id": 11, "type": "[기술]", "title": "제품 품질 개선을 위한 회의록", "dept": "품질관리팀", "date": "2024-12-06", "views": 90, "content": "품질 개선을 위한 회의 결과입니다.\n\n- 개선 방안: 공정 단계별 검수 강화\n- 담당자: 김철수 과장\n- 목표: 불량률 0.5% 미만" },
+            { "id": 12, "type": "[안내]", "title": "2024년 연차 사용 권장 안내", "dept": "인사팀", "date": "2024-12-05", "views": 105, "content": "미사용 연차를 소진하여 충분한 휴식을 취하시기 바랍니다.\n\n- 권장 기간: 2024년 12월 31일까지\n\n잔여 연차 일수는 사내 시스템에서 확인 가능합니다." },
+            { "id": 13, "type": "[공유]", "title": "신입사원 교육 프로그램 결과 보고", "dept": "교육팀", "date": "2024-12-04", "views": 110, "content": "신입사원 교육 프로그램이 성공적으로 마무리되었습니다.\n\n- 교육 만족도: 95%\n\n뛰어난 교육 성과를 보여주신 신입사원 여러분께 박수를 보냅니다." },
+            { "id": 14, "type": "[긴급]", "title": "서버 긴급 패치 작업 공지", "dept": "IT운영팀", "date": "2024-12-03", "views": 122, "content": "시스템 안정화를 위해 서버 긴급 패치 작업을 실시합니다.\n\n작업 시간: 2024-12-03 23:00 ~ 24:00" },
+            { "id": 15, "type": "[경영]", "title": "신규 거래처 발굴 성과 보고", "dept": "영업팀", "date": "2024-12-02", "views": 130, "content": "영업팀의 신규 거래처 발굴 성과 보고입니다.\n\n- 신규 계약 건수: 5건\n- 예상 매출 증대: 10억원\n\n모든 팀원들의 노력에 감사드립니다." },
+            { "id": 16, "type": "[기술]", "title": "생산 라인 효율성 증대 방안", "dept": "생산기술팀", "date": "2024-12-01", "views": 145, "content": "생산 라인 효율성 증대를 위한 회의 결과입니다.\n\n- 개선 방안: 자동화 설비 추가 도입\n- 예상 효과: 생산량 20% 증가" },
+            { "id": 17, "type": "[안내]", "title": "2025년 조직 개편안 사전 공지", "dept": "경영관리팀", "date": "2024-11-30", "views": 150, "content": "회사의 미래 성장을 위한 조직 개편안을 사전 공지합니다.\n\n세부 내용은 추후 공지될 예정입니다." },
+            { "id": 18, "type": "[공유]", "title": "분기별 재고 현황 보고서", "dept": "자재관리팀", "date": "2024-11-29", "views": 162, "content": "2024년 4분기 재고 현황 보고서입니다.\n\n- 재고 소진율: 98%\n\n안정적인 재고 관리에 힘써주셔서 감사합니다." },
+            { "id": 19, "type": "[긴급]", "title": "사내 망 보안 강화 안내", "dept": "IT보안팀", "date": "2024-11-28", "views": 178, "content": "최근 증가하는 사이버 위협에 대비하여 사내 망 보안을 강화합니다.\n\n모든 직원은 보안 수칙을 준수해 주시기 바랍니다." },
+            { "id": 20, "type": "[기술]", "title": "품질 관리 자동화 솔루션 도입", "dept": "품질관리팀", "date": "2024-11-27", "views": 185, "content": "품질 관리 효율성 향상을 위해 자동화 솔루션을 도입합니다.\n\n- 도입 시기: 2025년 1월\n\n자세한 내용은 추후 공지됩니다." },
+            { "id": 21, "type": "[공유]", "title": "신제품 출시 기념 워크숍 개최", "dept": "마케팅팀", "date": "2024-11-26", "views": 191, "content": "신제품 출시를 기념하여 워크숍을 개최합니다.\n\n- 일시: 2024-12-10\n- 장소: 경주\n\n많은 참여 부탁드립니다." },
+            { "id": 22, "type": "[안내]", "title": "연말정산 서류 제출 기한 안내", "dept": "재무회계팀", "date": "2024-11-25", "views": 204, "content": "2024년 연말정산 서류 제출 기한을 안내드립니다.\n\n- 기한: 2024-12-15까지\n- 제출 방법: 인사팀에 직접 제출" },
+            { "id": 23, "type": "[경영]", "title": "경영진 정기 회의 결과 보고", "dept": "경영관리팀", "date": "2024-11-24", "views": 213, "content": "정기 경영진 회의 결과 보고입니다.\n\n주요 논의 사항: 신규 사업 투자 계획" },
+            { "id": 24, "type": "[기술]", "title": "신규 생산 설비 도입 설명회", "dept": "생산기술팀", "date": "2024-11-23", "views": 220, "content": "신규 생산 설비 도입 관련 설명회를 개최합니다.\n\n- 일시: 2024-12-05 15:00\n- 장소: 본사 5층 회의실" },
+            { "id": 25, "type": "[안내]", "title": "워크숍 참가자 명단 확정 공지", "dept": "인사팀", "date": "2024-11-22", "views": 234, "content": "워크숍 참가자 명단이 확정되어 공지합니다.\n\n명단은 사내 게시판에서 확인 가능합니다." },
+            { "id": 26, "type": "[긴급]", "title": "전력 시스템 점검에 따른 작업 중단", "dept": "시설관리팀", "date": "2024-11-21", "views": 240, "content": "전력 시스템 긴급 점검으로 인해 작업이 일시 중단됩니다.\n\n- 중단 시간: 2024-11-21 13:00 ~ 15:00" },
+            { "id": 27, "type": "[공유]", "title": "영업팀 주간 실적 및 목표 공유", "dept": "영업팀", "date": "2024-11-20", "views": 251, "content": "영업팀 주간 실적 및 다음 주 목표를 공유합니다.\n\n주간 목표 달성률: 110%" },
+            { "id": 28, "type": "[기술]", "title": "불량 원인 분석 및 개선 방안", "dept": "품질관리팀", "date": "2024-11-19", "views": 265, "content": "최근 발생한 불량 제품의 원인을 분석하고 개선 방안을 마련했습니다.\n\n- 원인: 원자재 문제\n- 개선 방안: 원자재 공급처 변경" },
+            { "id": 29, "type": "[안내]", "title": "MES 사용 매뉴얼 업데이트", "dept": "IT운영팀", "date": "2024-11-18", "views": 272, "content": "MES 시스템 사용 매뉴얼이 업데이트되었습니다.\n\n변경된 내용은 사내 시스템에서 확인해 주세요." },
+            { "id": 30, "type": "[경영]", "title": "해외 시장 진출 계획 발표", "dept": "기획팀", "date": "2024-11-17", "views": 288, "content": "회사의 미래 성장을 위한 해외 시장 진출 계획을 발표합니다.\n\n- 진출 지역: 동남아시아\n- 진출 시기: 2025년 상반기" },
+            { "id": 31, "type": "[공유]", "title": "사내 동호회 활동 지원 안내", "dept": "총무팀", "date": "2024-11-16", "views": 301, "content": "직원들의 복지 향상을 위해 사내 동호회 활동을 지원합니다.\n\n- 지원 금액: 동호회 당 월 10만원\n\n많은 신청 바랍니다." },
+            { "id": 32, "type": "[안내]", "title": "개인 정보 보호 교육 의무 이수", "dept": "정보보안팀", "date": "2024-11-15", "views": 310, "content": "모든 직원은 개인 정보 보호 교육을 의무적으로 이수해야 합니다.\n\n- 교육 기간: 2024-11-20까지" },
+            { "id": 33, "type": "[긴급]", "title": "원자재 입고 지연에 따른 공지", "dept": "자재관리팀", "date": "2024-11-14", "views": 325, "content": "납품처의 사정으로 인해 원자재 입고가 지연되고 있습니다.\n\n생산 일정에 차질 없도록 조치 바랍니다." },
+            { "id": 34, "type": "[기술]", "title": "로봇 자동화 시스템 도입 검토", "dept": "생산기술팀", "date": "2024-11-13", "views": 331, "content": "생산 효율성 극대화를 위해 로봇 자동화 시스템 도입을 검토 중입니다.\n\n- 예상 도입 시기: 2025년" },
+            { "id": 35, "type": "[경영]", "title": "경영 목표 달성 인센티브 지급", "dept": "인사팀", "date": "2024-11-12", "views": 340, "content": "2024년도 경영 목표 달성에 따른 인센티브가 지급됩니다.\n\n- 지급일: 2024-12-20\n\n모든 직원 여러분의 노고에 감사드립니다." },
+            { "id": 36, "type": "[안내]", "title": "사내식당 메뉴 및 운영 시간 변경", "dept": "총무팀", "date": "2024-11-11", "views": 354, "content": "사내식당 메뉴 및 운영 시간이 변경됩니다.\n\n자세한 내용은 식당 공지사항을 확인해 주세요." },
+            { "id": 37, "type": "[공유]", "title": "신규 고객사 계약 체결 소식", "dept": "영업팀", "date": "2024-11-10", "views": 366, "content": "영업팀의 노력으로 신규 고객사와의 계약이 체결되었습니다.\n\n- 고객사: (주)테스트\n\n앞으로의 시너지 효과가 기대됩니다." },
+            { "id": 38, "type": "[기술]", "title": "데이터 분석 시스템 구축 완료", "dept": "IT운영팀", "date": "2024-11-09", "views": 375, "content": "데이터 기반의 의사 결정을 위해 데이터 분석 시스템 구축이 완료되었습니다.\n\n- 사용 방법: 사내 시스템 매뉴얼 참조" },
+            { "id": 39, "type": "[안내]", "title": "정기 건강검진 신청 안내", "dept": "안전보건팀", "date": "2024-11-08", "views": 382, "content": "정기 건강검진을 아래 기간 내에 신청해 주시기 바랍니다.\n\n- 신청 기간: 2024-11-15까지\n- 신청 방법: 사내 시스템 온라인 신청" },
+            { "id": 40, "type": "[긴급]", "title": "화재 경보 오작동에 대한 안내", "dept": "시설관리팀", "date": "2024-11-07", "views": 390, "content": "오늘 오전에 발생한 화재 경보 오작동에 대해 안내드립니다.\n\n- 원인: 시스템 오류\n- 조치: 즉시 정상화 완료" },
+            { "id": 41, "type": "[경영]", "title": "경쟁사 동향 분석 보고서", "dept": "기획팀", "date": "2024-11-06", "views": 401, "content": "최신 경쟁사 동향 분석 보고서입니다.\n\n- 보고서 내용: 시장 점유율, 신제품 동향\n\n기획팀에 방문하여 열람 가능합니다." },
+            { "id": 42, "type": "[안내]", "title": "사내 도서관 신규 도서 입고", "dept": "총무팀", "date": "2024-11-05", "views": 415, "content": "사내 도서관에 신규 도서가 입고되었습니다.\n\n- 목록: 게시판에서 확인" },
+            { "id": 43, "type": "[공유]", "title": "친환경 생산 공법 도입 성과", "dept": "생산기술팀", "date": "2024-11-04", "views": 420, "content": "친환경 생산 공법 도입으로 폐기물 배출량을 30% 감소시켰습니다.\n\n모두의 노력에 감사드립니다." },
+            { "id": 44, "type": "[기술]", "title": "특허 출원 진행 상황", "dept": "연구개발팀", "date": "2024-11-03", "views": 435, "content": "진행 중인 특허 출원 상황을 공유합니다.\n\n- 예상 등록 시기: 2025년 3월" },
+            { "id": 45, "type": "[안내]", "title": "장기 근속자 포상 신청", "dept": "인사팀", "date": "2024-11-02", "views": 444, "content": "장기 근속자에 대한 포상 신청을 받습니다.\n\n- 신청 대상: 5년, 10년, 15년 이상 근속자\n- 신청 기간: 2024-11-10까지" },
+            { "id": 46, "type": "[긴급]", "title": "긴급 소방 훈련 및 대피 안내", "dept": "안전보건팀", "date": "2024-11-01", "views": 450, "content": "화재 발생에 대비한 긴급 소방 훈련을 실시합니다.\n\n- 일시: 2024-11-05 14:00\n- 대피 장소: 본사 주차장" },
+            { "id": 47, "type": "[경영]", "title": "분기별 재무 성과 발표", "dept": "재무회계팀", "date": "2024-10-31", "views": 465, "content": "2024년 3분기 재무 성과를 발표합니다.\n\n- 매출: 100억원 달성" },
+            { "id": 48, "type": "[공유]", "title": "고객 만족도 조사 결과", "dept": "마케팅팀", "date": "2024-10-30", "views": 472, "content": "최근 진행된 고객 만족도 조사 결과를 공유합니다.\n\n- 만족도: 90% 이상" },
+            { "id": 49, "type": "[기술]", "title": "생산 설비 유지보수 계획", "dept": "생산기술팀", "date": "2024-10-29", "views": 481, "content": "주요 생산 설비에 대한 정기 유지보수 계획입니다.\n\n- 대상: 라인1, 라인2\n- 기간: 2024-11-01 ~ 2024-11-03" },
+            { "id": 50, "type": "[안내]", "title": "2025년도 예산 편성 지침", "dept": "기획팀", "date": "2024-10-28", "views": 490, "content": "2025년도 예산 편성 지침을 안내드립니다.\n\n각 부서는 지침에 따라 예산안을 제출해 주세요." },
+            { "id": 51, "type": "[긴급]", "title": "네트워크 장애 발생에 따른 공지", "dept": "IT운영팀", "date": "2024-10-27", "views": 500, "content": "네트워크 장애가 발생하여 긴급 점검을 실시합니다.\n\n일부 시스템 접속이 원활하지 않을 수 있습니다." },
+            { "id": 52, "type": "[경영]", "title": "주주총회 개최 안내", "dept": "경영관리팀", "date": "2024-10-26", "views": 511, "content": "정기 주주총회 개최를 안내드립니다.\n\n- 일시: 2024-11-15 10:00" },
+            { "id": 53, "type": "[기술]", "title": "새로운 생산 공정 도입", "dept": "연구개발팀", "date": "2024-10-25", "views": 520, "content": "생산 효율성 증대를 위해 새로운 생산 공정을 도입합니다.\n\n- 도입 시기: 2025년 2월" },
+            { "id": 54, "type": "[공유]", "title": "부서별 목표 달성 현황", "dept": "인사팀", "date": "2024-10-24", "views": 535, "content": "2024년 부서별 목표 달성 현황을 공유합니다.\n\n높은 목표 달성률을 보여준 모든 부서에 감사드립니다." },
+            { "id": 55, "type": "[안내]", "title": "사내 규정 개정 안내", "dept": "총무팀", "date": "2024-10-23", "views": 540, "content": "사내 규정이 일부 개정되어 안내드립니다.\n\n개정된 규정은 사내 게시판에서 확인 가능합니다." },
+            { "id": 56, "type": "[긴급]", "title": "태풍 대비 시설물 점검", "dept": "시설관리팀", "date": "2024-10-22", "views": 551, "content": "다가오는 태풍에 대비하여 시설물 긴급 점검을 실시합니다.\n\n- 점검 기간: 2024-10-22 ~ 2024-10-23" },
+            { "id": 57, "type": "[경영]", "title": "시장 분석 리포트 공유", "dept": "마케팅팀", "date": "2024-10-21", "views": 560, "content": "최신 시장 분석 리포트입니다.\n\n- 주요 내용: 최신 트렌드, 소비자 동향" },
+            { "id": 58, "type": "[기술]", "title": "생산성 향상 제안 공모", "dept": "생산관리팀", "date": "2024-10-20", "views": 575, "content": "생산성 향상을 위한 직원 제안을 공모합니다.\n\n- 기간: 2024-11-15까지\n- 포상: 우수 제안자에게 포상금 지급" },
+            { "id": 59, "type": "[안내]", "title": "정기 회식비 정산 안내", "dept": "재무회계팀", "date": "2024-10-19", "views": 580, "content": "분기별 정기 회식비 정산 절차를 안내드립니다.\n\n- 제출 기한: 2024-10-31까지" },
+            { "id": 60, "type": "[공유]", "title": "분기별 우수 사원 선정", "dept": "인사팀", "date": "2024-10-18", "views": 592, "content": "2024년 3분기 우수 사원이 선정되었습니다.\n\n- 우수 사원: 김민준 사원 (생산관리팀)\n\n축하드립니다!" }
+        ];
 
-        // 글을 tbody에 추가
-        pagePosts.forEach(post => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${post.type}</td>
-                <td><a href="Gongjiboardafter.html">${post.title}</a></td>
-                <td>${post.dept}</td>
-                <td>${post.date}</td>
-                <td>${post.views}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+        // 초기 상태 변수들
+        let visiblePosts = [...posts];
+        const postsPerPage = 10;
+        let currentPage = 1;
 
-        updatePagination();
-    }
-
-    function updatePagination() {
-        const pagination = document.querySelector('.pagination');
-        pagination.innerHTML = "";
-
-        const totalPages = Math.ceil(posts.length / postsPerPage);
-
-        for(let i = 1; i <= totalPages; i++) {
-            const span = document.createElement('span');
-            span.textContent = i;
-            if(i === currentPage) {
-                span.style.fontWeight = "bold"; // 현재 페이지 강조
-            }
-            span.style.cursor = "pointer";
-            span.addEventListener("click", () => renderTable(i));
-            pagination.appendChild(span);
+        // 섹션 보이기/숨기기 함수
+        function showSection(sectionId) {
+            document.getElementById('list-section').classList.add('hidden-section');
+            document.getElementById('write-section').classList.add('hidden-section');
+            document.getElementById('view-section').classList.add('hidden-section');
+            document.getElementById(sectionId).classList.remove('hidden-section');
         }
-    }
 
-    // 초기 렌더링
-    renderTable(1);
+        // 테이블 렌더링 함수
+        function renderTable() {
+            const tbody = document.getElementById('post-table-body');
+            tbody.innerHTML = "";
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const pagePosts = visiblePosts.slice(start, end);
 
-    // 검색 버튼 클릭 시 필터링
-    document.getElementById('search-button').addEventListener('click', function () {
-        const keyword = document.getElementById('search-input').value.trim().toLowerCase();
-        const criteria = document.getElementById('search-select').value;
+            pagePosts.forEach(post => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-50 transition duration-300 border-b";
+                tr.innerHTML = `
+                    <td class="py-3 px-6 text-center text-xs md:text-sm font-semibold">${post.type}</td>
+                    <td class="py-3 px-6 text-left text-xs md:text-sm">
+                        <a href="#" class="post-title-link hover:underline hover:text-blue-600" data-post-id="${post.id}">${post.title}</a>
+                    </td>
+                    <td class="py-3 px-6 text-center text-xs md:text-sm hidden md:table-cell">${post.dept}</td>
+                    <td class="py-3 px-6 text-center text-xs md:text-sm hidden md:table-cell">${post.date}</td>
+                    <td class="py-3 px-6 text-center text-xs md:text-sm">${post.views}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            updatePagination();
+            addPostTitleListeners();
+        }
 
-        const filteredPosts = posts.filter(post => {
-            if (criteria === "제목") {
-                return post.title.toLowerCase().includes(keyword);
-            } else if (criteria === "내용") {
-                // 현재 post에 내용은 없으므로 title로 대체
-                return post.title.toLowerCase().includes(keyword);
+        // 페이지네이션 업데이트 함수
+        function updatePagination() {
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = "";
+            const totalPages = Math.ceil(visiblePosts.length / postsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const span = document.createElement('span');
+                span.textContent = i;
+                span.className = `cursor-pointer px-3 py-1 rounded-md transition duration-300 ${i === currentPage ? 'bg-blue-600 text-white font-bold' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
+                span.addEventListener("click", () => {
+                    currentPage = i;
+                    renderTable();
+                });
+                pagination.appendChild(span);
             }
-            return true;
+        }
+
+        // 검색 버튼 이벤트 리스너
+        document.getElementById('search-button').addEventListener('click', function () {
+            const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+            const criteria = document.getElementById('search-select').value;
+            visiblePosts = posts.filter(post => {
+                const titleMatch = post.title.toLowerCase().includes(keyword);
+                const contentMatch = post.content.toLowerCase().includes(keyword);
+
+                if (criteria === "title") {
+                    return titleMatch;
+                } else if (criteria === "content") {
+                    return contentMatch;
+                }
+                // Both title and content
+                return titleMatch || contentMatch;
+            });
+            currentPage = 1;
+            renderTable();
         });
 
-        renderFilteredTable(filteredPosts);
-    });
-
-    // 검색 결과로 테이블 렌더링하는 함수
-    function renderFilteredTable(filtered) {
-        const tbody = document.querySelector('tbody');
-        tbody.innerHTML = "";
-
-        const limited = filtered.slice(0, postsPerPage);
-        limited.forEach(post => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${post.type}</td>
-                <td><a href="Gongjiboardafter.html">${post.title}</a></td>
-                <td>${post.dept}</td>
-                <td>${post.date}</td>
-                <td>${post.views}</td>
-            `;
-            tbody.appendChild(tr);
+        // 글쓰기 버튼 이벤트 리스너
+        document.getElementById('write-button').addEventListener('click', function () {
+            showSection('write-section');
         });
 
-        // 검색 결과에 대한 페이지네이션 제거
-        document.querySelector('.pagination').innerHTML = "";
-    }
-</script>
+        // 등록 버튼 이벤트 리스너
+        document.getElementById('save-button').addEventListener('click', function () {
+            const postType = document.getElementById('post-type').value;
+            const postTitle = document.getElementById('post-title').value.trim();
+            const postDept = document.getElementById('post-dept').value.trim();
+            const postContent = document.getElementById('post-content').value.trim();
+
+            // 제목과 내용이 비어있는 경우
+            if (!postTitle || !postContent) {
+                // 커스텀 모달 UI를 사용해야 하지만, 편의를 위해 console.log로 대체합니다.
+                console.log("제목과 내용을 모두 입력해주세요.");
+                return;
+            }
+
+            const newPost = {
+                id: posts.length + 1,
+                type: postType,
+                title: postTitle,
+                dept: postDept || "작성자",
+                date: new Date().toISOString().slice(0, 10),
+                views: 0,
+                content: postContent
+            };
+
+            posts.unshift(newPost); // 새 글을 맨 앞에 추가
+            visiblePosts = [...posts]; // 가시적 게시글 목록 업데이트
+            currentPage = 1; // 첫 페이지로 이동
+            renderTable(); // 테이블 다시 렌더링
+            showSection('list-section'); // 목록 섹션으로 돌아가기
+
+            // 입력 필드 초기화
+            document.getElementById('post-type').value = "[안내]";
+            document.getElementById('post-title').value = "";
+            document.getElementById('post-dept').value = "";
+            document.getElementById('post-content').value = "";
+        });
+
+        // 취소 버튼 이벤트 리스너
+        document.getElementById('cancel-button').addEventListener('click', function () {
+            showSection('list-section');
+        });
+
+        // 게시글 제목 링크에 이벤트 리스너 추가
+        function addPostTitleListeners() {
+            document.querySelectorAll('.post-title-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const postId = parseInt(this.dataset.postId);
+                    const post = posts.find(p => p.id === postId);
+                    if (post) {
+                        // 조회수 증가
+                        post.views++;
+
+                        document.getElementById('view-title').textContent = post.title;
+                        document.getElementById('view-dept').textContent = `담당부서: ${post.dept}`;
+                        document.getElementById('view-date').textContent = `등록일: ${post.date} | 조회수: ${post.views}`;
+                        document.getElementById('view-content').textContent = post.content;
+                        showSection('view-section');
+                        renderTable(); // 조회수 업데이트를 위해 목록 테이블도 다시 렌더링
+                    }
+                });
+            });
+        }
+
+        // 목록으로 버튼 이벤트 리스너
+        document.getElementById('back-button').addEventListener('click', function () {
+            showSection('list-section');
+        });
+
+        // 초기 렌더링
+        window.onload = function () {
+            renderTable();
+        };
+
+    </script>
+
 </body>
+
 </html>

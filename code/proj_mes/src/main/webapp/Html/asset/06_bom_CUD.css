@@ -14,6 +14,30 @@
     border: 1px solid var(--border);
 }
 
+/* 제목 부분 */
+.titleBox {
+    background-color: var(--field-border);
+    height: 25px;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: content-box; 
+}
+
+.titleBox span {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #333333;
+}
+
+.toMainpage {
+    color: var(--button);
+    margin-right: 10px;
+}
+
 /* 버튼 공통 양식*/
 .btn {
     border-radius: var(--radius);
