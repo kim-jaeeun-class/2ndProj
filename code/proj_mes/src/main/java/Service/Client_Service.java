@@ -9,7 +9,7 @@ public class Client_Service {
 
     private final ClientDAO clientDAO = new ClientDAO();
 
-    public List<ClientDTO> getAllItem() {
+    public List<ClientDTO> getAllClient() {
         return clientDAO.selectAll();
     }
 

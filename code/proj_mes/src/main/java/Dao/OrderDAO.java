@@ -1,331 +1,307 @@
 package Dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import Dto.ItemDTO;
 import Dto.OrderDTO;
-
-
+import Dto.OrderDetDTO;
 
 public class OrderDAO {
 
-	// DB 접속 메소드
-	private Connection getConn() {
-		Connection conn = null;
-		
-		try {
-			
-			Context ctx = new InitialContext();
-			
-			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
-			
-			// DB 접속
-			conn = dataFactory.getConnection();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return conn;
-	}
+  // ===== 1) 커넥션 (JNDI) =====
+  private Connection getConn() throws SQLException {
+    try {
+      Context ctx = new InitialContext();
+      DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle");
+      return ds.getConnection();
+    } catch (Exception e) {
+      throw new SQLException("DB 커넥션 획득 실패", e);
+    }
+  }
+
+  // ===== 유틸 =====
+  private static boolean isBlank(String s) { return s == null || s.trim().isEmpty(); }
+  private static String safeStr(String s){ return s==null ? "" : s.trim(); }
+  private static String enforceLen(String s, int max){
+    if (s == null) return null;
+    String v = s.trim();
+    return v.length() <= max ? v : v.substring(0, max);
+  }
 
 
-	// select
-	public List selectAll() {
-		
-		List list = new ArrayList();
-		
-		try {
-			
-			// DB 접속
-			Connection con = getConn();
-			
-			// SQL 준비
-			String query = "select * from orders";
-			PreparedStatement ps = con.prepareStatement(query);
-			
-			// SQL 실행
-			ResultSet rs = ps.executeQuery();
-			
-			// 결과 활용
-			while(rs.next()) {
-				OrderDTO dto = new OrderDTO();
-				
-				dto.setOrder_key(rs.getString("order_key"));
-				dto.setOrder_date(rs.getDate("order_date"));
-				dto.setOrder_number(rs.getString("order_number"));
-				
-//				dto.setDapart_ID2(rs.getString("dapart_ID2"));
-				dto.setDepart_level(rs.getString("depart_level"));
-				
-//				dto.setWorker_name(rs.getString("worker_id"));
-				dto.setWorker_name(rs.getString("worker_name"));
-				
-				dto.setTotalQty(rs.getString("totalQty"));
-				dto.setTotalAmt(rs.getString("totalAmt"));
-				
-				dto.setOrder_state(rs.getInt("order_state"));
-//				dto.setOrder_pay(rs.getDate("order_pay"));
-				
-//				dto.setClient_id(rs.getString("client_id"));
-//				dto.setBusiness_number(rs.getString("business_number"));
-//				dto.setClient_phone(rs.getString("client_phone"));
-//				
-//				dto.setBigo(rs.getString("bigo"));
+/** 목록(총수량/총금액 포함) — item_price는 문자열이라 숫자 변환 */
+public List<OrderDTO> selectAllWithSummary() throws Exception {
+  String sql =
+    "SELECT o.order_key, o.order_number, o.order_date, o.order_state, " +
+    "       d.depart_level, w.worker_name, " +
+    "       NVL(SUM(NVL(od.quantity,0)), 0) AS totalQty, " +
+    "       NVL(SUM( NVL(od.quantity,0) * NVL(TO_NUMBER(REGEXP_REPLACE(od.item_price,'[^0-9.]','')),0) ), 0) AS totalAmt " +
+    "FROM orders o " +
+    "LEFT JOIN department d ON o.dapart_ID2 = d.dapart_ID2 " +
+    "LEFT JOIN worker     w ON o.worker_id   = w.worker_id " +
+    "LEFT JOIN order_detail od ON TRIM(od.order_key) = TRIM(o.order_key) " +
+    "GROUP BY o.order_key, o.order_number, o.order_date, o.order_state, d.depart_level, w.worker_name " +
+    "ORDER BY o.order_date DESC, o.order_key DESC";
 
-				
-				
-				list.add(dto);
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	
-	// 상세페이지
-	// 상세페이지: 헤더(기본정보) 1건 조회
-	// 상세페이지 하나만 조회 (order_key로)
-	public OrderDTO selectOneOrder(OrderDTO orderDTO) {
+  List<OrderDTO> list = new ArrayList<>();
+  try (Connection con = getConn();
+       PreparedStatement ps = con.prepareStatement(sql);
+       ResultSet rs = ps.executeQuery()) {
+    while (rs.next()) {
+      OrderDTO dto = new OrderDTO();
+      dto.setOrder_key(rs.getString("order_key"));
+      dto.setOrder_number(rs.getString("order_number"));
+      dto.setOrder_date(rs.getDate("order_date"));
+      dto.setOrder_state(rs.getInt("order_state"));
+      dto.setDepart_level(rs.getString("depart_level"));
+      dto.setWorker_name(rs.getString("worker_name"));
+      dto.setTotalQty(String.valueOf(rs.getLong("totalQty")));
+      dto.setTotalAmt(String.valueOf(rs.getLong("totalAmt")));
+      list.add(dto);
+    }
+  }
+  return list;
+}
+/** 상세 헤더 1건 — order_key 기준 */
+public OrderDTO selectOneByKey(String orderKey) throws Exception {
+  String sql =
+    "SELECT o.order_key, o.order_number, o.order_date, o.order_pay, o.order_state, o.bigo, " +
+    "       o.client_id, c.client_name, c.business_number, c.client_phone, " +
+    "       o.dapart_ID2, d.depart_level, o.worker_id, w.worker_name " +
+    "FROM orders o " +
+    "LEFT JOIN department d ON o.dapart_ID2 = d.dapart_ID2 " +
+    "LEFT JOIN worker     w ON o.worker_id   = w.worker_id " +
+    "LEFT JOIN client     c ON o.client_id   = c.client_id " +
+    "WHERE TRIM(o.order_key) = TRIM(?)";
 
-	    OrderDTO resultDTO = null;
+  try (Connection con = getConn();
+       PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setString(1, orderKey);
+    try (ResultSet rs = ps.executeQuery()) {
+      if (!rs.next()) return null;
+      OrderDTO dto = new OrderDTO();
+      dto.setOrder_key(rs.getString("order_key"));
+      dto.setOrder_number(rs.getString("order_number"));
+      dto.setOrder_date(rs.getDate("order_date"));
+      dto.setOrder_pay(rs.getDate("order_pay"));         // 납기일
+      dto.setOrder_state(rs.getInt("order_state"));
+      dto.setBigo(rs.getString("bigo"));
+      dto.setClient_id(rs.getString("client_id"));
+      dto.setClient_name(rs.getString("client_name"));
+      dto.setBusiness_number(rs.getString("business_number"));
+      dto.setClient_phone(rs.getString("client_phone"));
+      dto.setDapart_ID2(rs.getString("dapart_ID2"));
+      dto.setDepart_level(rs.getString("depart_level"));
+      dto.setWorker_id(rs.getString("worker_id"));
+      dto.setWorker_name(rs.getString("worker_name"));
+      return dto;
+    }
+  }
+}
+/** 상세 품목 리스트 — order_key 기준 */
+public List<OrderDetDTO> selectOrderItemsByKey(String orderKey) throws Exception {
+  String sql =
+    "SELECT item_code, item_price, quantity " +
+    "FROM order_detail " +
+    "WHERE TRIM(order_key) = TRIM(?) " +
+    "ORDER BY rowid";
 
-	    try {
-	        // DB 접속
-	        Connection conn = getConn();
+  List<OrderDetDTO> list = new ArrayList<>();
+  try (Connection con = getConn();
+       PreparedStatement ps = con.prepareStatement(sql)) {
+    ps.setString(1, orderKey);
+    try (ResultSet rs = ps.executeQuery()) {
+      while (rs.next()) {
+        OrderDetDTO d = new OrderDetDTO();
+        d.setItem_code(rs.getString("item_code"));
+        d.setItem_price(rs.getString("item_price")); // 문자열 그대로 저장
+        d.setQuantity(rs.getInt("quantity"));
+        list.add(d);
+      }
+    }
+  }
+  return list;
+}
+/** 신규 등록: 헤더 + 상세 일괄 저장 (트랜잭션) — 반환: 생성된 order_key */
+public String insertOrderDet(OrderDTO order, List<OrderDetDTO> details) throws Exception {
+  String seqSql = "SELECT order_seq.NEXTVAL FROM dual";
+  String insOrderSql =
+    "INSERT INTO orders " +
+    " (order_key, order_number, order_date, order_pay, order_state, client_id, worker_id, dapart_ID2, bigo) " +
+    " VALUES (?, ?, SYSDATE, ?, ?, ?, ?, ?, ?)";
+  String insDtlSql =
+    "INSERT INTO order_detail (order_key, item_code, item_price, quantity) VALUES (?, ?, ?, ?)";
 
-	        // SQL 준비
-	        String query  = " select * from orders ";
-	               query += " where order_key = ? ";
+  try (Connection conn = getConn()) {
+    conn.setAutoCommit(false);
 
-	        PreparedStatement ps = conn.prepareStatement(query);
-	        ps.setString(1, orderDTO.getOrder_key());  
+    long nextVal;
+    try (PreparedStatement psSeq = conn.prepareStatement(seqSql);
+         ResultSet rs = psSeq.executeQuery()) {
+      if (!rs.next()) throw new SQLException("시퀀스 조회 실패");
+      nextVal = rs.getLong(1);
+    }
 
-	        // SQL 실행
-	        ResultSet rs = ps.executeQuery();
+    String today = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
+    String seq2  = String.format("%02d", nextVal % 100);
+    String orderKey    = "A" + today + seq2; // PK
+    String orderNumber = "B" + today + seq2; // 비즈번호
 
-	        // 결과 활용
-	        if (rs.next()) {
-	            resultDTO = new OrderDTO();
+    // 헤더 저장
+    try (PreparedStatement ps = conn.prepareStatement(insOrderSql)) {
+      ps.setString(1, orderKey);
+      ps.setString(2, orderNumber);
+      ps.setDate  (3, order.getOrder_pay());         // nullable
+      ps.setInt   (4, order.getOrder_state());
+      ps.setString(5, order.getClient_id());
+      ps.setString(6, order.getWorker_id());
+      ps.setString(7, order.getDapart_ID2());
+      ps.setString(8, safeStr(order.getBigo()));
+      ps.executeUpdate();
+    }
 
-	            resultDTO.setWorker_id(rs.getString("worker_id"));
-	            resultDTO.setWorker_name(rs.getString("worker_name"));
-	            resultDTO.setOrder_pay(rs.getDate("order_pay"));
-	            resultDTO.setClient_id(rs.getString("client_id"));
-	            resultDTO.setBusiness_number(rs.getString("business_number"));
-	            resultDTO.setClient_phone(rs.getString("client_phone"));
-	            resultDTO.setBigo(rs.getString("bigo"));
+    // 상세 저장 (배치)
+    if (details != null && !details.isEmpty()) {
+      try (PreparedStatement ps = conn.prepareStatement(insDtlSql)) {
+        for (OrderDetDTO d : details) {
+          if (d == null || isBlank(d.getItem_code())) continue;
+          ps.setString(1, orderKey);
+          ps.setString(2, enforceLen(d.getItem_code(), 20));       // 방어(필요 시)
+          ps.setString(3, safeStr(d.getItem_price()));             // "100,000"
+          ps.setInt   (4, d.getQuantity());
+          ps.addBatch();
+        }
+        ps.executeBatch();
+      }
+    }
 
-	            resultDTO.setOrder_key(rs.getString("order_key"));
-	            resultDTO.setOrder_number(rs.getString("order_number"));
-	            resultDTO.setOrder_date(rs.getDate("order_date"));
-	            resultDTO.setOrder_state(rs.getInt("order_state"));
-	            resultDTO.setDapart_ID2(rs.getString("dapart_ID2"));
-	        }
+    conn.commit();
+    return orderKey;
+  } catch (Exception e) {
+    throw e;
+  }
+}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+//OrderDAO.java 에 추가
+public void deleteOrdersCascade(List<String> orderKeys) throws Exception {
+ String delDetail = "DELETE FROM order_detail WHERE order_key = ?";
+ String delHeader = "DELETE FROM orders       WHERE order_key = ?";
 
-	    return resultDTO;
-	}
+ try (Connection conn = getConn();
+      PreparedStatement psDet = conn.prepareStatement(delDetail);
+      PreparedStatement psHdr = conn.prepareStatement(delHeader)) {
 
-	
-	// 상세페이지: 상세(품목) 목록 조회 - (order_key, item_code) PK 기준
-	public List<ItemDTO> selectOrderItems(OrderDTO orderDTO) {
+     conn.setAutoCommit(false);
 
-	    List<ItemDTO> list = new ArrayList<>();
+     for (String k : orderKeys) {
+         if (k == null || k.trim().isEmpty()) continue;
+         String key = k.trim();
 
-	    try {
-	        // DB 접속
-	        Connection conn = getConn();
+         // 상세 먼저
+         psDet.setString(1, key);
+         psDet.addBatch();
 
-	        // SQL 준비
-	        String query  = " select ";
-	               query += "   od.item_code, ";
-	               query += "   nvl(i.item_name, od.item_code) as item_name, ";
-	               query += "   od.item_price, ";
-	               query += "   od.quantity ";
-	               query += " from order_detail od ";
-	               query += " left join items i on i.item_code = od.item_code ";
-	               query += " where od.order_key = ? ";
-	               query += " order by od.item_code ";
+         // 헤더 나중
+         psHdr.setString(1, key);
+         psHdr.addBatch();
+     }
 
-	        PreparedStatement ps = conn.prepareStatement(query);
-	        ps.setString(1, orderDTO.getOrder_key());  
-
-	        // SQL 실행
-	        ResultSet rs = ps.executeQuery();
-
-	        // 결과 활용
-	        while (rs.next()) {
-	            ItemDTO dto = new ItemDTO();
-	            dto.setItem_code(rs.getString("item_code"));
-	            dto.setItem_name(rs.getString("item_name"));
-	            dto.setItem_price(rs.getString("item_price"));
-	            dto.setQuantity(rs.getInt("quantity"));
-	            
-	            list.add(dto);
-	        }
-
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return list;
-	}
+     psDet.executeBatch();
+     psHdr.executeBatch();
+     conn.commit();
+ }
+}
 
 
-	
-	// insert
-	public int insertOrder(OrderDTO orderDTO) {
-		
-		 String seqSql = "SELECT order_seq.NEXTVAL FROM dual";
-		    String insSql = "INSERT INTO orders "
-		                  + " (order_key, order_number, order_date, order_state, client_id, worker_id, dapart_ID2) "
-		                  + " VALUES (?, ?, SYSDATE, ?, ?, ?, ?)";
+/** 상세 전체 교체 — 기존 삭제 후 새로 삽입 (트랜잭션) */
+public void replaceOrderDetails(String orderKey, List<OrderDetDTO> details) throws Exception {
+  String delSql = "DELETE FROM order_detail WHERE order_key = ?";
+  String insSql = "INSERT INTO order_detail (order_key, item_code, item_price, quantity) VALUES (?, ?, ?, ?)";
 
-		    try (Connection conn = getConn();
-		         PreparedStatement psSeq = conn.prepareStatement(seqSql)) {
+  try (Connection conn = getConn();
+       PreparedStatement psDel = conn.prepareStatement(delSql);
+       PreparedStatement psIns = conn.prepareStatement(insSql)) {
 
-		        long nextVal = 0L;
-		        try (ResultSet rs = psSeq.executeQuery()) {
-		            if (rs.next()) nextVal = rs.getLong(1);
-		        }
+    conn.setAutoCommit(false);
 
-		        // ★ 자바에서 안전하게 발주번호 생성: B + 오늘(YYYYMMDD) + 시퀀스 2자리
-		        String today = new java.text.SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
-		        String seq2  = String.format("%02d", nextVal % 100);
-		        String orderNumber = "B" + today + seq2;
+    // 1) 기존 삭제
+    psDel.setString(1, orderKey);
+    psDel.executeUpdate();
 
-		        try (PreparedStatement ps = conn.prepareStatement(insSql)) {
-		            // 1) PK
-		            ps.setLong(1, nextVal);
-		            // 2) 주문번호
-		            ps.setString(2, orderNumber);
-		            // 3) 상태(0=대기)
-		            ps.setInt(3, orderDTO.getOrder_state());
-		            // 4) 거래처 (NOT NULL)
-		            ps.setString(4, orderDTO.getClient_id());
-		            // 5) 사번
-		            ps.setString(5, orderDTO.getWorker_id());
-		            // 6) 부서ID (DTO 오탈자 유지: dapart_ID2)
-		            ps.setString(6, orderDTO.getDapart_ID2());
+    // 2) 신규 삽입(0건이면 ‘전부 삭제’ 상태가 됨)
+    if (details != null) {
+      for (OrderDetDTO d : details) {
+        if (d == null || isBlank(d.getItem_code())) continue;
+        psIns.setString(1, orderKey);
+        psIns.setString(2, enforceLen(d.getItem_code(), 20));
+        psIns.setString(3, safeStr(d.getItem_price()));
+        psIns.setInt   (4, d.getQuantity());
+        psIns.addBatch();
+      }
+      psIns.executeBatch();
+    }
 
-		            // 실행
-		            return ps.executeUpdate();
-		        }
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		        return 0;
-		    }
-	}
-	
-	
-	
-	// update
-	public int updateOrder(String orderKey, int newState) {
-		
-		
-		try {
-			
-			// DB 접속
-			Connection conn = getConn();
-			
-			// SQL 준비
-			String query = " update from orders";
-				   query += " set order_state = ? ";
-				   query += " where order_key = ?";
-			
-			PreparedStatement ps = conn.prepareStatement(query);
-			
-			ps.setInt(1, newState);     // 1 또는 3
-		    ps.setString(2, orderKey);
-			
-			// SQL 실행
-		    return ps.executeUpdate();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return 0;
-	}
-	
-	// delete
-		public int deleteOrder(OrderDTO orderDTO) {
-			
-			int result = -1;
-			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " delete from orders";
-					   query += " where order_key = ?";
-			   
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, orderDTO.getOrder_key());
-				
-				// SQL 실행
-				result = ps.executeUpdate();
-			
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
-		}
-		
-	public List selectAllDep() {
-			
-		List list = new ArrayList();
-		
-		try {
-			
-			// DB 접속
-			Connection con = getConn();
-			
-			// SQL 준비
-			String query = " select w.worker_id, w.worker_name, w.dapart_ID2, d.depart_level"; 
-				   query += " from worker w"; 
-				   query += " join department d on w.dapart_ID2 = d.dapart_ID2";
-				   
-			PreparedStatement ps = con.prepareStatement(query);
-			
-			// SQL 실행
-			ResultSet rs = ps.executeQuery();
-			
-			// 결과 활용
-			while(rs.next()) {
-				OrderDTO dto = new OrderDTO();
-				
-				dto.setWorker_id(rs.getString("worker_id"));
-				dto.setWorker_name(rs.getString("worker_name"));
-				dto.setDapart_ID2(rs.getString("dapart_ID2"));
-				dto.setDepart_level(rs.getString("depart_level"));
-				
-				list.add(dto);
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}		
-	
-	
+    conn.commit();
+  }
+}
+/** 진행상태 변경 */
+public int updateOrder(String orderKey, int newState) throws Exception {
+  String sql = "UPDATE orders SET order_state = ? WHERE order_key = ?";
+  try (Connection conn = getConn();
+       PreparedStatement ps = conn.prepareStatement(sql)) {
+    ps.setInt(1, newState);
+    ps.setString(2, orderKey);
+    return ps.executeUpdate();
+  }
+}
+/** 단건 삭제 (상세→헤더) */
+public int deleteOrder(String orderKey) throws Exception {
+  String delDtl = "DELETE FROM order_detail WHERE order_key = ?";
+  String delHdr = "DELETE FROM orders       WHERE order_key = ?";
+  try (Connection conn = getConn();
+       PreparedStatement psD = conn.prepareStatement(delDtl);
+       PreparedStatement psH = conn.prepareStatement(delHdr)) {
+    conn.setAutoCommit(false);
+
+    psD.setString(1, orderKey);
+    psD.executeUpdate();
+
+    psH.setString(1, orderKey);
+    int n = psH.executeUpdate();
+
+    conn.commit();
+    return n;
+  }
+}
+/** 부서/담당자 모달 목록 */
+public List<OrderDTO> selectAllDep() {
+  String sql =
+    "SELECT w.worker_id, w.worker_name, w.dapart_ID2, d.depart_level " +
+    "FROM worker w " +
+    "JOIN department d ON w.dapart_ID2 = d.dapart_ID2 " +
+    "ORDER BY d.depart_level, w.worker_name";
+
+  List<OrderDTO> list = new ArrayList<>();
+  try (Connection con = getConn();
+       PreparedStatement ps = con.prepareStatement(sql);
+       ResultSet rs = ps.executeQuery()) {
+    while (rs.next()) {
+      OrderDTO dto = new OrderDTO();
+      dto.setWorker_id(rs.getString("worker_id"));
+      dto.setWorker_name(rs.getString("worker_name"));
+      dto.setDapart_ID2(rs.getString("dapart_ID2"));
+      dto.setDepart_level(rs.getString("depart_level"));
+      list.add(dto);
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  return list;
+}
+
 }

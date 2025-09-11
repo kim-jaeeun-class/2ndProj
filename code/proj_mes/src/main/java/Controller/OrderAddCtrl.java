@@ -2,115 +2,93 @@ package Controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import Dto.OrderDTO;
-import Service.Client_Service;
-import Service.ItemService;
+import Dto.OrderDetDTO;
 import Service.OrderService;
-
 
 @WebServlet("/orderAdd")
 public class OrderAddCtrl extends HttpServlet {
-    
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		System.out.println("/orderAdd doGet 실행");
-		
-		// 한글 깨짐 방지
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
-		
-		ItemService itemService = new ItemService();
-		List itemList = itemService.getAllItem();
-		
-		Client_Service clientService = new Client_Service();
-		List clientList = clientService.getAllItem();
-		
-		OrderService orderService = new OrderService();
-		List deptList = orderService.getAllDep();
-			
-		request.setAttribute("mode", "add");           // 등록 모드
-		request.setAttribute("order", null);           // 신규라서 없음
-		
-		request.setAttribute("itemList", itemList);
-		request.setAttribute("clientList", clientList);
-		request.setAttribute("deptList", deptList);
-		
-		request.getRequestDispatcher("/07_orderRegistration.jsp").forward(request, response);
-	}
-	
-	private Integer toIntOrDefault(String s, int def) {
-        try { return (s == null || s.isBlank()) ? def : Integer.parseInt(s.trim()); }
-        catch (Exception e) { return def; }
-    }
-	
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		System.out.println("/orderAdd doPost 실행");
-		
-		// 한글 깨짐 방지
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
-		
-		OrderDTO dto = new OrderDTO();
-		
-		try {
-			// parameter 및 dto
-			String orderNumber = request.getParameter("order_num");
-			dto.setOrder_number(orderNumber);
-			
-//			String sOrderDate = request.getParameter("order_date");
-//			Date orderdate = Date.valueOf(sOrderDate);
-//			dto.setOrder_date(orderdate);
-			
-			String sOrderPay = request.getParameter("order_pay");
-			Date orderpay = Date.valueOf(sOrderPay);
-			dto.setOrder_pay(orderpay);
-			
-			String sState = request.getParameter("order_state");
-			int state = Integer.parseInt(sState);
-			dto.setOrder_state(state);
-			
-			String clientId = request.getParameter("client_id");
-			dto.setClient_id(clientId);
-			System.out.println("client: "+ clientId);
-			
-			String workerId = request.getParameter("worker_id");
-			dto.setWorker_id(workerId);
-			
-			String deptId = request.getParameter("dept_id"); // DTO의 필드명은 dapart_ID2
-			dto.setDapart_ID2(deptId);
-			int sstate = toIntOrDefault(request.getParameter("order_state"), 0); // 기본 0: 임시저장
-			
-			
-			
-			// DB 삽입
-			OrderService orderService = new OrderService();
-			int result = orderService.addOrder(dto);
-			
-			if(result > 0) {
-			      response.sendRedirect(request.getContextPath() + "/orderList");
-		    } else {
-			      response.sendRedirect(request.getContextPath() + "/orderAdd?error=fail");
-		    }
-			
-			System.out.println("삽입 결과 : "+ result);
-			
-			
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    req.setCharacterEncoding("utf-8");
+    resp.setContentType("text/html;charset=utf-8");
 
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
+    // 1) 헤더 파라미터
+    OrderDTO orderDTO = new OrderDTO();
+    orderDTO.setClient_id(req.getParameter("client_id"));
+    orderDTO.setWorker_id(req.getParameter("worker_id"));
+    orderDTO.setDapart_ID2(req.getParameter("dapart_ID2"));
+    orderDTO.setOrder_state(parseIntOrDefault(req.getParameter("order_state"), 0));
 
+    // 납기일(yyyy-MM-dd) 저장
+    String pay = req.getParameter("order_pay");
+    if (pay != null && !pay.isBlank()) {
+      orderDTO.setOrder_pay(Date.valueOf(pay));
     }
 
-    
+    // 2) 품목 파라미터 (item_code / item_code[] 모두 수용)
+    String[] codes  = params(req, "item_code");
+    String[] prices = params(req, "item_price");
+    String[] qtys   = params(req, "quantity");
+
+    List<OrderDetDTO> details = new ArrayList<>();
+    if (codes != null) {
+      for (int i = 0; i < codes.length; i++) {
+        String code = trim(codes[i]);
+        if (code == null || code.isEmpty()) continue;
+
+        String price = (prices != null && i < prices.length) ? prices[i] : "0";
+        String qtyS  = (qtys   != null && i < qtys.length)   ? qtys[i]   : "0";
+        int qty = safeParseInt(qtyS, 0);
+
+        OrderDetDTO d = new OrderDetDTO();
+        d.setItem_code(enforceLen(code, 20));             // ORA-12899 방지
+        d.setItem_price(price == null ? "0" : price.trim());
+        d.setQuantity(qty);
+        details.add(d);
+      }
+    }
+
+    if (details.isEmpty()) {
+      resp.getWriter().write("등록 실패: 품목 1개 이상 필요");
+      return;
+    }
+
+    // 3) 저장
+    try {
+      String newKey = new OrderService().addOrderDet(orderDTO, details);
+      resp.sendRedirect(req.getContextPath()+"/orderDetail?key="+newKey+"&mode=view");
+    } catch (Exception e) {
+      e.printStackTrace();
+      resp.getWriter().write("등록 실패: " + e.getMessage());
+    }
+  }
+
+  // ===== helpers =====
+  private static String[] params(HttpServletRequest req, String base) {
+    String[] v = req.getParameterValues(base);
+    if (v == null) v = req.getParameterValues(base + "[]");
+    return v;
+  }
+  private static int safeParseInt(String s, int def){
+    if (s == null) return def;
+    try { return Integer.parseInt(s.replaceAll("[^0-9]", "")); } catch (Exception e) { return def; }
+  }
+  private static String enforceLen(String s, int max){
+    if (s == null) return null;
+    String v = s.trim();
+    return v.length() <= max ? v : v.substring(0, max);
+  }
+  private static int parseIntOrDefault(String s, int def){
+    if (s == null) return def;
+    try { return Integer.parseInt(s.replaceAll("[^0-9]","")); } catch(Exception e){ return def; }
+  }
+  private static String trim(String s){ return s == null ? null : s.trim(); }
 }
