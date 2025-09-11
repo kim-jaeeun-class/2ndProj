@@ -34,16 +34,50 @@ document.addEventListener("DOMContentLoaded", () => {
     // 공통 기능 : 테이블 행 삭제
     // ===============================
     const initTableDelete = () => {
-        const mainDeleteBtns = document.querySelectorAll('.wrap-table .delete-btn, .wrap-table .delete');
+        const mainDeleteBtns = document.querySelectorAll('.wrap-table .delete-btn');
         mainDeleteBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+
                 const table = btn.closest('.wrap-table').querySelector('table');
                 if (!table) return;
+
                 const checked = table.querySelectorAll('tbody input[type="checkbox"]:checked');
-                checked.forEach(cb => cb.closest('tr').remove());
+                if (checked.length === 0) {
+                    alert('삭제할 항목을 선택해주세요.');
+                    return;
+                }
+
+                // 확인
+                if (!confirm('선택한 항목을 삭제하시겠습니까?')) return;
+
+                // 폼 생성
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = 'proplan';
+
+                // action hidden
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = 'delete';
+                form.appendChild(actionInput);
+
+                // 선택된 체크박스 값 추가
+                checked.forEach(cb => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'chk';
+                    input.value = cb.value;
+                    form.appendChild(input);
+                });
+
+                document.body.appendChild(form);
+                form.submit();
             });
         });
     };
+
 
     // ===============================
     // 작업 지시서 페이지 기능
@@ -558,6 +592,70 @@ if (saveBtn && mainTable && panelForm) {
                 panelDown.classList.remove('open');
             }
         });
+    }
+
+    // ===============================
+    // 상세 패널 클릭 & 삭제 기능
+    // ===============================
+    if (mainTable && panelDown) {
+        // 메인 테이블 클릭 시 상세 패널 열기
+        mainTable.addEventListener('click', (e) => {
+            const row = e.target.closest('tr.data');
+            if (!row) return;
+            if (e.target.closest('input[type="checkbox"]')) return; // 체크박스 클릭 제외
+
+            const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
+            const rowTds = Array.from(row.querySelectorAll('td')).slice(1); // 체크박스 제외
+            rowTds.forEach((td, i) => {
+                if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
+            });
+
+            // 삭제용 hidden input 세팅
+            const hiddenInput = document.querySelector('#detail-delete-id');
+            hiddenInput.value = row.querySelector('td:nth-child(2)').textContent.trim(); // cpID
+
+            panelDown.classList.add('open');
+        });
+
+    const deleteBtn = panelDown.querySelector('.delete');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const cpID = document.querySelector('#detail-delete-id').value;
+            if (!cpID) return;
+
+            if (!confirm('정말 이 항목을 삭제하시겠습니까?')) return;
+
+            // 폼 생성
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = 'proplan';
+
+            // action hidden
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            form.appendChild(actionInput);
+
+            // cpID hidden
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'cpID';
+            idInput.value = cpID;
+            form.appendChild(idInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    }
+
+
+        // 상세 패널 닫기
+        const panelDownCloseBtn = panelDown.querySelector('.close-btn');
+        if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
+        panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
     }
 
     };

@@ -72,20 +72,34 @@ public class ProPlanDAO {
 		return listAll;
 	}
 	
-	// 필터링 조회 : 계획 등록일(오름차순) 기준으로 조회
+	// 필터링 조회 : 계획 시작일(오름차순) 기준으로 조회
 	public List<ProPlanDTO> selectPPDateUp(ProPlanDTO proPlanDTO) {
 		List<ProPlanDTO> listFilter = new ArrayList<ProPlanDTO>();
 		
 		try {
 			Connection conn = getConn();
 			
-			String query = "select "
-					+ "		cp_id, cp_count, start_date, end_date, cp_rate,"
-					+ "		success_rate, defect_rate, bigo, item_code"
-					+ "		from create_plan"
-					+ "		where start_date >= ? and end_date <= ?"
-					+ "		order by start_date";
-			PreparedStatement ps = conn.prepareStatement(query);
+			String query;
+			PreparedStatement ps;
+			
+			if(proPlanDTO.getStartDate() == null || proPlanDTO.getEndDate() == null) {
+				query = "	select "
+			    		+ "	cp_id, cp_count, start_date, end_date, cp_rate, "
+			    		+ "	success_rate, defect_rate, bigo, item_code "
+			    		+ "	from create_plan order by start_date";
+				ps = conn.prepareStatement(query);
+			}
+			else {
+				query = "	select "
+						+ "	cp_id, cp_count, start_date, end_date, cp_rate,"
+						+ "	success_rate, defect_rate, bigo, item_code"
+						+ "	from create_plan"
+						+ "	where start_date >= ? and start_date <= ?"
+						+ "	order by start_date";
+				ps = conn.prepareStatement(query);
+			}
+
+	
 			
 			
 			ps.setDate(1, proPlanDTO.getStartDate());
@@ -129,14 +143,25 @@ public class ProPlanDAO {
 		try {
 			Connection conn = getConn();
 			
-			String query = "select "
-					+ "		cp_id, cp_count, start_date, end_date, cp_rate,"
-					+ "		success_rate, defect_rate, bigo, item_code"
-					+ "		from create_plan"
-					+ "		where start_date >= ? and end_date <= ?"
-					+ "		order by start_date desc";
-			PreparedStatement ps = conn.prepareStatement(query);
+			String query;
+			PreparedStatement ps;
 			
+			if(proPlanDTO.getStartDate() == null || proPlanDTO.getEndDate() == null) {
+				query = "	select "
+			    		+ "	cp_id, cp_count, start_date, end_date, cp_rate, "
+			    		+ "	success_rate, defect_rate, bigo, item_code "
+			    		+ "	from create_plan order by start_date desc";
+				ps = conn.prepareStatement(query);
+			}
+			else {
+				query = "	select "
+						+ "	cp_id, cp_count, start_date, end_date, cp_rate,"
+						+ "	success_rate, defect_rate, bigo, item_code"
+						+ "	from create_plan"
+						+ "	where start_date >= ? and start_date <= ?"
+						+ "	order by start_date desc";
+				ps = conn.prepareStatement(query);
+			}
 			
 			ps.setDate(1, proPlanDTO.getStartDate());
 			ps.setDate(2, proPlanDTO.getEndDate());

@@ -13,6 +13,7 @@ public class ProPlanDTO {
 	private double defectRate;
 	private String bigo;
 	private String itemCode;
+	private Date submitDate;
 	
 	private String itemName;	// 품목명 : join 필요
 	
@@ -99,12 +100,22 @@ public class ProPlanDTO {
 		this.woPQ = woPQ;
 	}
 	
+	
+	public Date getSubmitDate() {
+		return submitDate;
+	}
+	public void setSubmitDate(Date submitDate) {
+		this.submitDate = submitDate;
+	}
 	@Override
 	public String toString() {
 		return "ProPlanDTO [cpID=" + cpID + ", cpCount=" + cpCount + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", cpRate=" + cpRate + ", successRate=" + successRate + ", defectRate=" + defectRate + ", bigo="
-				+ bigo + ", itemCode=" + itemCode + ", itemName=" + itemName + ", woNum=" + woNum + ", woDate=" + woDate
-				+ ", woPQ=" + woPQ + "]";
+				+ bigo + ", itemCode=" + itemCode + ", submitDate=" + submitDate + ", itemName=" + itemName + ", woNum="
+				+ woNum + ", woDate=" + woDate + ", woPQ=" + woPQ + "]";
 	}
+
+	
+	
 	
 }

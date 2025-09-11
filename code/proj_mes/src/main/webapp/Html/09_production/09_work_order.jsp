@@ -99,26 +99,28 @@
         <div class="sidenwrap">
             <div class="side">
                 <!-- a 링크 나중에 달기 -->
-                <a href="">
+                <a href="proplan">
                     <div class="side-menu">생산 계획</div>
                 </a>
-                <a href="">
+                <a href="workorder">
                     <div class="side-menu">작업 지시서</div>
                 </a>
             </div>
             <div class="wrap">
                 <div class="wrap-select">
                     <form class="date-filter" action="workorder">
+                    	<input type="hidden" name="action" value="search">
                         <div class="select-con">
                             <div class="select-title" name="wo-filter-title">조회일 입력</div>
-							<input type=date name="wo-filter-date">
+							<input type="date" name="wo-filter-date">
                         </div>
                         <div class="filter-submit">
-                            <button type="button" class="button">조회</button>
+                            <button type="submit" class="button">조회</button>
                         </div>
                     </form>
                 </div>
                 <form class="wrap-table" method="get" action="workorder">
+                	<input type="hidden" name="action" value="delete">
                     <div class="table-view">
                         <table>
                             <thead>
@@ -136,7 +138,7 @@
                                 <!-- DTO에 있는 거 wo라고 이름 지어서 꺼내는 것!!! -->
                                 <!-- 근데 지금 client 테이블 조인을... 내일 얘기하자 -->
                                 <c:forEach var="wo" items="${list}">
-                                    <tr>
+                                    <tr class = "data">
                                         <!-- 구분용으로 date, num 다 넣음 -->
                                         <td><input type="checkbox" value="${wo.woNum}" name="chk"></td>
                                         <td>${wo.woNum}</td>
@@ -155,7 +157,7 @@
                         </table>
                     </div>
                 <div class="wrap-tableBtn">
-                    <input type="button" name="main-sel-delete" class="button delete-btn" value="삭제">
+                    <input type="submit" name="main-sel-delete" class="button delete-btn" value="삭제">
                     <input type="button" name="main-apply" class="button open-btn" value="등록">
                 </div>
             </form>
@@ -166,6 +168,7 @@
             <button class="close-btn">✕</button>
             <h2>작업 지시서 등록</h2>
             <form method = "post" action = "workorder">
+            	<input type="hidden" name="action" value="add">
                 <div class="form-group">
                     <label>작업지시NO.</label>
                     <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
@@ -220,6 +223,7 @@
             <button class="close-btn">✕</button>
                 <h2>작업 지시서 상세</h2>
                 <form class="wrap-table panel-table" method = "get" action="workorder">
+                	<input type="hidden" name="action" value="delete">
                     <table class = "modal-table">
                     		<!--  여기는 메인 테이블 보고 자동으로 뜨도록 -->
 <!--                         <tr> -->
@@ -251,9 +255,46 @@
 <!--                             <td class="modal-table-con">#수량</td> -->
 <!--                         </tr> -->
                     </table>
-                    <div class="warp-tableBtn">
-	                    <input type="button" class="button" value="BOM 조회">
-	                    <input type="button" class="button" value="공정 조회">
+                    <!-- 여기에 있는 item-table은 클릭하면 자동으로 id에 맞는 조건만 나오도록 필터링 된
+                    	BOM, 공정 목록(내지는 상세) 페이지로 이동 -->
+                    <div class="wrap-tableBtn">
+	                    <table class="item-table bom">
+	                        <thead>
+	                            <tr>
+	                                <th style="width: 30%">BOM ID</th>
+	                                <th>사용 용도</th>
+	                                <th style="width: 15%;">단위</th>
+	                                <th style="width: 15%;">소요량</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr>
+	                                <td>#ID</td>
+	                                <td>#용도</td>
+	                                <td>#단위</td>
+	                                <td>#소요량</td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+                    </div>
+                    <div class="wrap-tableBtn">
+	                    <table class="item-table proc">
+	                        <thead>
+	                            <tr>
+	                                <th style="width: 30%">공정 ID</th>
+	                                <th>공정명</th>
+	                                <th style="width: 15%;">단위</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr>
+	                                <td>#ID</td>
+	                                <td>#용도</td>
+	                                <td>#단위</td>
+	                                <td>#소요량</td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
                     </div>
                     <div class="wrap-tableBtn">
                     	<input type="button" class="button" value="생산수량 입력">
@@ -274,6 +315,7 @@
                         <input type="button" value="검색">
                     </div>
                     <div class ="form-group">
+                    	<input type="hidden" name="action" value="item-add">
                         <div class = "wrap-table panel-table" style="height: 400px;">
                             <table>
                                 <thead>
@@ -299,7 +341,7 @@
                     </div>
                     <div class="wrap-tableBtn">
                         <input type="button" class="button reset" value="선택 해제">
-                        <button type="button" class="button save">저장</button>
+                        <button type="submit" class="button save">저장</button>
                     </div>
                 </form>
             </div>
