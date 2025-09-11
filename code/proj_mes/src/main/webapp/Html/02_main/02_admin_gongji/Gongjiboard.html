@@ -50,6 +50,16 @@
         .hidden-section {
             display: none;
         }
+
+        .pagination span {
+            min-width: 32px;
+            text-align: center;
+        }
+        
+        /* Added to prevent layout jumping */
+        #view-content {
+            min-height: 20rem; 
+        }
     </style>
 </head>
 
@@ -69,7 +79,8 @@
             </div>
             <div class="myIcon relative">
                 <a href="javascript:void(0);" id="myIconBtn">
-                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
+                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white"
+                        alt="마이페이지 아이콘">
                 </a>
             </div>
         </div>
@@ -193,9 +204,15 @@
                 </div>
             </div>
             <div id="view-content" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
-            <div class="flex justify-end mt-6">
+            <div class="flex justify-end mt-6 space-x-2">
+                <!-- 목록으로 버튼을 가장 앞에 배치 -->
                 <button id="back-button"
                     class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300">목록으로</button>
+                <!-- 이전 글/다음 글 버튼 -->
+                <button id="prev-button"
+                    class="px-4 py-2 bg-gray-400 text-white font-semibold rounded-md transition duration-300 cursor-not-allowed">이전 글</button>
+                <button id="next-button"
+                    class="px-4 py-2 bg-gray-400 text-white font-semibold rounded-md transition duration-300 cursor-not-allowed">다음 글</button>
             </div>
         </div>
     </div>
@@ -269,6 +286,7 @@
         let visiblePosts = [...posts];
         const postsPerPage = 10;
         let currentPage = 1;
+        let currentPostId = null;
 
         // 섹션 보이기/숨기기 함수
         function showSection(sectionId) {
@@ -322,6 +340,70 @@
             }
         }
 
+        // 특정 게시글 내용을 보여주는 함수
+        function showPostContent(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                // 현재 게시글 ID 업데이트
+                currentPostId = postId;
+                // 조회수 증가
+                post.views++;
+
+                // 게시글 내용 렌더링
+                document.getElementById('view-title').textContent = post.title;
+                document.getElementById('view-dept').textContent = `담당부서: ${post.dept}`;
+                document.getElementById('view-date').textContent = `등록일: ${post.date} | 조회수: ${post.views}`;
+                document.getElementById('view-content').textContent = post.content;
+
+                // 이전/다음 버튼 상태 업데이트
+                updateNavigationButtons();
+
+                showSection('view-section');
+                renderTable(); // 조회수 업데이트를 위해 목록 테이블도 다시 렌더링
+            }
+        }
+
+        // 이전/다음 버튼 상태 업데이트 함수
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const sortedPosts = posts.sort((a, b) => b.id - a.id); // 최신 글이 앞에 오도록 정렬
+            const currentPostIndex = sortedPosts.findIndex(p => p.id === currentPostId);
+
+            // 이전 글이 있으면 버튼 활성화, 없으면 비활성화
+            if (currentPostIndex < sortedPosts.length - 1) {
+                prevButton.disabled = false;
+                prevButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                prevButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white');
+            } else {
+                prevButton.disabled = true;
+                prevButton.classList.add('bg-gray-400', 'cursor-not-allowed', 'text-white');
+                prevButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            }
+
+            // 다음 글이 있으면 버튼 활성화, 없으면 비활성화
+            if (currentPostIndex > 0) {
+                nextButton.disabled = false;
+                nextButton.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                nextButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'text-white');
+            } else {
+                nextButton.disabled = true;
+                nextButton.classList.add('bg-gray-400', 'cursor-not-allowed', 'text-white');
+                nextButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            }
+        }
+
+        // 게시글 제목 링크에 이벤트 리스너 추가
+        function addPostTitleListeners() {
+            document.querySelectorAll('.post-title-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const postId = parseInt(this.dataset.postId);
+                    showPostContent(postId);
+                });
+            });
+        }
+
         // 검색 버튼 이벤트 리스너
         document.getElementById('search-button').addEventListener('click', function () {
             const keyword = document.getElementById('search-input').value.trim().toLowerCase();
@@ -354,15 +436,15 @@
             const postDept = document.getElementById('post-dept').value.trim();
             const postContent = document.getElementById('post-content').value.trim();
 
-            // 제목과 내용이 비어있는 경우
             if (!postTitle || !postContent) {
-                // 커스텀 모달 UI를 사용해야 하지만, 편의를 위해 console.log로 대체합니다.
                 console.log("제목과 내용을 모두 입력해주세요.");
                 return;
             }
 
+            // 현재 게시글 ID 중 가장 큰 값을 찾아 새로운 ID 생성
+            const maxId = posts.reduce((max, post) => Math.max(max, post.id), 0);
             const newPost = {
-                id: posts.length + 1,
+                id: maxId + 1,
                 type: postType,
                 title: postTitle,
                 dept: postDept || "작성자",
@@ -389,31 +471,29 @@
             showSection('list-section');
         });
 
-        // 게시글 제목 링크에 이벤트 리스너 추가
-        function addPostTitleListeners() {
-            document.querySelectorAll('.post-title-link').forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const postId = parseInt(this.dataset.postId);
-                    const post = posts.find(p => p.id === postId);
-                    if (post) {
-                        // 조회수 증가
-                        post.views++;
-
-                        document.getElementById('view-title').textContent = post.title;
-                        document.getElementById('view-dept').textContent = `담당부서: ${post.dept}`;
-                        document.getElementById('view-date').textContent = `등록일: ${post.date} | 조회수: ${post.views}`;
-                        document.getElementById('view-content').textContent = post.content;
-                        showSection('view-section');
-                        renderTable(); // 조회수 업데이트를 위해 목록 테이블도 다시 렌더링
-                    }
-                });
-            });
-        }
-
         // 목록으로 버튼 이벤트 리스너
         document.getElementById('back-button').addEventListener('click', function () {
             showSection('list-section');
+        });
+
+        // 이전 글 버튼 이벤트 리스너
+        document.getElementById('prev-button').addEventListener('click', function () {
+            const sortedPosts = posts.sort((a, b) => b.id - a.id); // 최신 글이 앞에 오도록 정렬
+            const currentPostIndex = sortedPosts.findIndex(p => p.id === currentPostId);
+            if (currentPostIndex < sortedPosts.length - 1) {
+                const prevPostId = sortedPosts[currentPostIndex + 1].id;
+                showPostContent(prevPostId);
+            }
+        });
+
+        // 다음 글 버튼 이벤트 리스너
+        document.getElementById('next-button').addEventListener('click', function () {
+            const sortedPosts = posts.sort((a, b) => b.id - a.id); // 최신 글이 앞에 오도록 정렬
+            const currentPostIndex = sortedPosts.findIndex(p => p.id === currentPostId);
+            if (currentPostIndex > 0) {
+                const nextPostId = sortedPosts[currentPostIndex - 1].id;
+                showPostContent(nextPostId);
+            }
         });
 
         // 초기 렌더링
