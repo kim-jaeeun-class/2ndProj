@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="cPath" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,44 +10,44 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>J2P4 :: 작업 지시서</title>
-        <link rel="stylesheet" href="../asset/font.css">
-        <link rel="stylesheet" href="../asset/09_common.css">
+        <link rel="stylesheet" href="<c:url value='/Html/asset/font.css'/>">
+        <link rel="stylesheet" href="<c:url value='/Html/asset/09_common.css'/>">
         <script src ="../asset/template_load.js" ></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 동적 차트를 위한 Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-        }
-
-        /* 차트 캔버스의 최대 높이 설정 */
-        canvas {
-            max-height: 200px;
-        }
-
-        .header-bg {
-            background-color: #002a40;
-        }
-
-        .nav-bg {
-            background-color: #003751;
-        }
-
-        .mainList, #noticeContent, #boardContent {
-            cursor: pointer;
-        }
-        
-        /* 메인 내비게이션 목록의 호버 배경색을 파란색으로 변경하여 글씨가 잘 보이게 수정 */
-        .mainList li:hover {
-            background-color: #3b82f6;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-800" page="wo">
+	    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	    <!-- Tailwind CSS CDN -->
+	    <script src="https://cdn.tailwindcss.com"></script>
+	    <!-- 동적 차트를 위한 Chart.js CDN -->
+	    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	    <style>
+	        body {
+	            font-family: 'Inter', sans-serif;
+	            background-color: #f3f4f6;
+	        }
+	
+	        /* 차트 캔버스의 최대 높이 설정 */
+	        canvas {
+	            max-height: 200px;
+	        }
+	
+	        .header-bg {
+	            background-color: #002a40;
+	        }
+	
+	        .nav-bg {
+	            background-color: #003751;
+	        }
+	
+	        .mainList, #noticeContent, #boardContent {
+	            cursor: pointer;
+	        }
+	        
+	        /* 메인 내비게이션 목록의 호버 배경색을 파란색으로 변경하여 글씨가 잘 보이게 수정 */
+	        .mainList li:hover {
+	            background-color: #3b82f6;
+	        }
+	    </style>
+	</head>
+	<body class="bg-gray-100 text-gray-800" page="wo">
 
     <!-- 헤더 섹션 -->
     <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
@@ -107,20 +110,15 @@
                 <div class="wrap-select">
                     <form class="date-filter" action="workorder">
                         <div class="select-con">
-                            <div class="select-title">정렬 기준</div>
-                            <select name="stat" class="select select-drop">
-                                <option value="전달값1" selected="selected">전체</option>
-                                <option value="전달값2">미진행</option>
-                                <option value="전달값3">진행</option>
-                                <option value="전달값4">완료</option>
-                            </select>
+                            <div class="select-title" name="wo-filter-title">조회일 입력</div>
+							<input type=date name="wo-filter-date">
                         </div>
                         <div class="filter-submit">
                             <button type="button" class="button">조회</button>
                         </div>
                     </form>
                 </div>
-                <form class="wrap-table">
+                <form class="wrap-table" method="get" action="workorder">
                     <div class="table-view">
                         <table>
                             <thead>
@@ -140,12 +138,12 @@
                                 <c:forEach var="wo" items="${list}">
                                     <tr>
                                         <!-- 구분용으로 date, num 다 넣음 -->
-                                        <td><input type="checkbox" value="${wo.woDate}-${wo.woNum}" name="chk"></td>
+                                        <td><input type="checkbox" value="${wo.woNum}" name="chk"></td>
                                         <td>${wo.woNum}</td>
                                         <td>${wo.woDate}</td>
                                         <td>${wo.workerID}</td>
                                         <td>${wo.woDuedate}</td>
-                                        <td>${wo.itemName}</td>
+                                        <td>${wo.item_name}</td>
                                         <td>${wo.woPQ}</td>
                                         <td>${wo.woAQ}</td>
                                         <td>
@@ -157,8 +155,8 @@
                         </table>
                     </div>
                 <div class="wrap-tableBtn">
-                    <input type="button" class="button delete-btn" value="삭제">
-                    <input type="button" class="button open-btn" value="등록">
+                    <input type="button" name="main-sel-delete" class="button delete-btn" value="삭제">
+                    <input type="button" name="main-apply" class="button open-btn" value="등록">
                 </div>
             </form>
         </div>
@@ -167,7 +165,7 @@
         <div class="panel">
             <button class="close-btn">✕</button>
             <h2>작업 지시서 등록</h2>
-            <form>
+            <form method = "post" action = "workorder">
                 <div class="form-group">
                     <label>작업지시NO.</label>
                     <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
@@ -178,7 +176,7 @@
                 </div>
                 <div class="form-group">
                     <label>납기일</label>
-                    <input type="date" name="give-date">
+                    <input type="date" name="duedate">
                 </div>
                 <div class="form-group">
                     <label>담당자</label>
@@ -191,8 +189,8 @@
                 <div class ="form-group">
                     <div class = "wrap-table panel-table">
                         <div class = "wrap-tableBtn">
-                            <input type="button" class="button" value="품목 추가">
-                            <input type="button" class="button delete" value="품목 삭제">                       
+                            <input type="button" name = "item-add" class="button" value="품목 추가">
+                            <input type="button" name = "item-delete" class="button delete" value="품목 삭제">                       
                         </div>
                         <div class = "panel-table-wrap">
                             <table>
@@ -213,9 +211,57 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="button panel-save">저장</button>
+                    <button type="submit" name="add-apply" class="button panel-save">저장</button>
                 </div>
             </form>
+        </div>
+        <!-- 작업 지시서 상세로 가는중~~~ -->
+        <div class="panel" id="panel-down">
+            <button class="close-btn">✕</button>
+                <h2>작업 지시서 상세</h2>
+                <form class="wrap-table panel-table" method = "get" action="workorder">
+                    <table class = "modal-table">
+                    		<!--  여기는 메인 테이블 보고 자동으로 뜨도록 -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">작업지시번호</td> -->
+<!--                             <td class="modal-table-con">#작업지시번호</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">지시일</td> -->
+<!--                             <td class="modal-table-con">#지시일</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">담당자명</td> -->
+<!--                             <td class="modal-table-con">#담당자명</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">납기일</td> -->
+<!--                             <td class="modal-table-con">#납기일</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">품목명</td> -->
+<!--                             <td class="modal-table-con">#품목명</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">지시 수량</td> -->
+<!--                             <td class="modal-table-con">#수량</td> -->
+<!--                         </tr> -->
+<!--                         <tr> -->
+<!--                             <td class="modal-table-title">생산 수량</td> -->
+<!--                             <td class="modal-table-con">#수량</td> -->
+<!--                         </tr> -->
+                    </table>
+                    <div class="warp-tableBtn">
+	                    <input type="button" class="button" value="BOM 조회">
+	                    <input type="button" class="button" value="공정 조회">
+                    </div>
+                    <div class="wrap-tableBtn">
+                    	<input type="button" class="button" value="생산수량 입력">
+                        <input type="button" class="button" value="수정">
+                        <input type="button" class="button delete" value="삭제">
+                    </div>
+                </form>
+            </div>
         </div>
         <!-- 품목 추가 모달 -->
         <div class="modal-overlay">
@@ -223,6 +269,10 @@
                 <button class="modal-close">✕</button>
                 <h2>품목 추가</h2>
                 <form class="modal-form">
+                    <div class="form-group modal-search">
+                        <input type="text">
+                        <input type="button" value="검색">
+                    </div>
                     <div class ="form-group">
                         <div class = "wrap-table panel-table" style="height: 400px;">
                             <table>
@@ -234,7 +284,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><input type="checkbox" value="전달값" name="변수명"></td>
+                                        <td><input type="radio" value="전달값" name="변수명"></td>
                                         <td>#품목코드</td>
                                         <td>#품목명</td>
                                     </tr>
@@ -242,9 +292,10 @@
                             </table>                
                         </div>
                     </div>
-                    <div class="form-group modal-search">
-                        <input type="text">
-                        <input type="button" value="검색">
+                    <div class ="form-group">
+                        <div>수량 입력</div>
+                        <input type="number">
+                        <input type="button" value="수량 입력">
                     </div>
                     <div class="wrap-tableBtn">
                         <input type="button" class="button reset" value="선택 해제">
@@ -254,6 +305,6 @@
             </div>
         </div>
 
-        <script src="../asset/09_common.js"></script>
+        <script src="<c:url value='/Html/asset/09_common.js'/>"></script>
     </body>
 </html>

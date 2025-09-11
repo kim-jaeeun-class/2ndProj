@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cancelBtn) cancelBtn.addEventListener('click', () => panel.classList.remove('open'));
     };
 
+
     // ===============================
     // 공통 기능 : 체크박스 전체 선택
     // ===============================
@@ -118,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (modalSaveBtn && panelTable && modalOverlay) {
             modalSaveBtn.addEventListener('click', () => {
-                const checkedRows = modalOverlay.querySelectorAll('tbody input[type="checkbox"]:checked');
+                const checkedRows = modalOverlay.querySelectorAll('tbody input[type="radio"]:checked');
                 checkedRows.forEach(rowCheckbox => {
                     const row = rowCheckbox.closest('tr');
                     const code = row.children[1].textContent;
@@ -133,16 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const tr = document.createElement('tr');
 
-                    const tdCheckbox = document.createElement('td');
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    tdCheckbox.appendChild(checkbox);
-                    tr.appendChild(tdCheckbox);
-
-                    const tdNo = document.createElement('td');
-                    tdNo.textContent = panelTable.children.length + 1;
-                    tr.appendChild(tdNo);
-
                     const tdCode = document.createElement('td');
                     tdCode.textContent = code;
                     tr.appendChild(tdCode);
@@ -155,10 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     const tdQty = document.createElement('td');
                     tdQty.textContent = '';
                     tr.appendChild(tdQty);
-
-                    const tdNote = document.createElement('td');
-                    tdNote.textContent = '';
-                    tr.appendChild(tdNote);
 
                     panelTable.appendChild(tr);
                 });
@@ -175,6 +162,7 @@ const panelForm = document.querySelector('.panel form');
 const mainTable = document.querySelector('.wrap-table tbody');
 const panel = document.querySelector('.panel');
 const saveBtn = document.querySelector('.panel .panel-save');
+const panelDown = document.querySelector('#panel-down');
 
 if (saveBtn && mainTable && panelForm) {
     saveBtn.addEventListener('click', (e) => {
@@ -336,6 +324,65 @@ if (saveBtn && mainTable && panelForm) {
         panel.classList.remove('open');
         panelForm.reset();
     });
+
+    // ==========================
+    // 작업 지시 상세
+    // ==========================
+        if (mainTable && panelDown) {
+        // 체크박스 클릭 문제 해결 1
+        const existingCheckboxes = mainTable.querySelectorAll('input[type="checkbox"]');
+        existingCheckboxes.forEach(function(cb) {
+            cb.addEventListener('click', function(evt) {
+                evt.stopPropagation();
+            });
+        });
+
+        // 클릭 인식
+        mainTable.addEventListener('click', function(e) {
+            // 클릭한 요소로부터 가장 가까운 행 찾기
+            const row = e.target.closest('tr.data');
+            if (!row) return; // tr이 아니면 종료
+
+            // 체크박스 영역 클릭 시 상세 열기 중단
+            // 모달로 이동할 때도 이러더니 여기서도 또...
+            // - e.target 자체가 checkbox일 때
+            if (e.target.closest('input[type="checkbox"]')) return;
+
+            // - 클릭한 td 내부에 checkbox가 있는 경우도 차단
+            const clickedTd = e.target.closest('td');
+            if (clickedTd && clickedTd.querySelector('input[type="checkbox"]')) return;
+
+            // panelDown 내부의 상세 필드(두 번째 td들)를 선택
+            const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
+
+            // 체크박스 제외하고 데이터 뽑기
+            const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
+
+            for (let i = 0; i < modalValueCells.length; i++) {
+                const valueCell = modalValueCells[i];
+                const correspondingTd = rowTds[i];
+                if (correspondingTd) {
+                    valueCell.textContent = correspondingTd.textContent.trim();
+                } else {
+                    valueCell.textContent = '';
+                }
+            }
+            panelDown.classList.add('open');
+        });
+
+        // 닫기
+        const panelDownCloseBtn = panelDown.querySelector('.close-btn');
+        if (panelDownCloseBtn) {
+            panelDownCloseBtn.addEventListener('click', function() {
+                panelDown.classList.remove('open');
+            });
+        }
+        panelDown.addEventListener('click', function(evt) {
+            if (evt.target === panelDown) {
+                panelDown.classList.remove('open');
+            }
+        });
+    }
 }
 
 
@@ -380,7 +427,8 @@ if (saveBtn && mainTable && panelForm) {
     const mainTable = document.querySelector('.wrap-table tbody');
     const panel = document.querySelector('.panel');
     const saveBtn = document.querySelector('.panel .panel-save'); // ← panel-save 클래스 맞춰 수정
-    
+    const panelDown = document.querySelector('#panel-down');
+
     if (saveBtn && mainTable && panelForm) {
         saveBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -405,11 +453,6 @@ if (saveBtn && mainTable && panelForm) {
             tdCheckbox.appendChild(checkbox);
             tr.appendChild(tdCheckbox);
 
-            // 순번 (행 개수 + 1)
-            const tdNo = document.createElement('td');
-            tdNo.textContent = mainTable.querySelectorAll('tr').length + 1;
-            tr.appendChild(tdNo);
-
             // 생산계획번호
             const tdPN = document.createElement('td');
             tdPN.textContent = proPlanNo;
@@ -425,9 +468,6 @@ if (saveBtn && mainTable && panelForm) {
             tdPA.textContent = planAmount;
             tr.appendChild(tdPA);
 
-            // 진행 상태 (빈 칸)
-            tr.appendChild(document.createElement('td'));
-
             // 계획 기간
             const tdDate = document.createElement('td');
             if (planStart && planEnd) {
@@ -437,11 +477,6 @@ if (saveBtn && mainTable && panelForm) {
 
             // 진행률 (빈 칸)
             tr.appendChild(document.createElement('td'));
-
-            // 작업 공정
-            const tdWP = document.createElement('td');
-            tdWP.textContent = workSeq;
-            tr.appendChild(tdWP);
 
             // 달성률 (빈 칸)
             tr.appendChild(document.createElement('td'));
@@ -465,41 +500,63 @@ if (saveBtn && mainTable && panelForm) {
         });
     }
 
-    // 메인 테이블 행 클릭 -> 상세 모달 열기
-    const modalOverlay = document.querySelector('.modal-overlay');
-    if (mainTable && modalOverlay) {
-        // 체크박스 클릭 시 모달 열기 방지
-        mainTable.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('click', e => e.stopPropagation());
+    // 메인 테이블 행 클릭 -> 상세 모달 열기. 이건 이제 등록 슬라이드보다 낮은 z-index 위치에서 열게 할 예정.
+    // 현재 modalOverlay만 panel-down으로 작성하다 맒.
+    // panel-down은 그냥 panel보다 z-index가 낮게 있는 것.
+      // 메인 테이블 행 클릭 → 상세 패널(#panel-down) 열기
+    if (mainTable && panelDown) {
+        // 체크박스 클릭 문제 해결 1
+        const existingCheckboxes = mainTable.querySelectorAll('input[type="checkbox"]');
+        existingCheckboxes.forEach(function(cb) {
+            cb.addEventListener('click', function(evt) {
+                evt.stopPropagation();
+            });
         });
-        mainTable.addEventListener('click', (e) => {
-            const row = e.target.closest('tr.data');
-            if (!row) return;
 
-            // 체크박스 클릭이면 모달 열기 방지
-            if (e.target.type === 'checkbox') return;
-            if (e.target.closest('td')?.querySelector('input[type="checkbox"]')) return;
+        // 클릭 인식
+        mainTable.addEventListener('click', function(e) {
+            // 클릭한 요소로부터 가장 가까운 행 찾기
+            const row = e.target.closest('tr.data');
+            if (!row) return; // tr이 아니면 종료
+
+            // 체크박스 영역 클릭 시 상세 열기 중단
+            // 모달로 이동할 때도 이러더니 여기서도 또...
+            // - e.target 자체가 checkbox일 때
             if (e.target.closest('input[type="checkbox"]')) return;
 
-            const modal = modalOverlay.querySelector('.modal');
-            const modalCells = modal.querySelectorAll('table tr td:nth-child(2)');
+            // - 클릭한 td 내부에 checkbox가 있는 경우도 차단
+            const clickedTd = e.target.closest('td');
+            if (clickedTd && clickedTd.querySelector('input[type="checkbox"]')) return;
 
-            // 체크박스(td[0]) 제외, 순번(td[1])부터 마지막까지 가져오기
-            const rowData = Array.from(row.querySelectorAll('td')).slice(2).map(td => td.textContent.trim());
+            // panelDown 내부의 상세 필드(두 번째 td들)를 선택
+            const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
 
-            rowData.forEach((val, i) => {
-                if (modalCells[i]) modalCells[i].textContent = val;
+            // 체크박스 제외하고 데이터 뽑기
+            const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
+
+            for (let i = 0; i < modalValueCells.length; i++) {
+                const valueCell = modalValueCells[i];
+                const correspondingTd = rowTds[i];
+                if (correspondingTd) {
+                    valueCell.textContent = correspondingTd.textContent.trim();
+                } else {
+                    valueCell.textContent = '';
+                }
+            }
+            panelDown.classList.add('open');
+        });
+
+        // 닫기
+        const panelDownCloseBtn = panelDown.querySelector('.close-btn');
+        if (panelDownCloseBtn) {
+            panelDownCloseBtn.addEventListener('click', function() {
+                panelDown.classList.remove('open');
             });
-
-            modalOverlay.classList.add('active');
-        });
-
-        // 모달 닫기
-        modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+        }
+        panelDown.addEventListener('click', function(evt) {
+            if (evt.target === panelDown) {
+                panelDown.classList.remove('open');
+            }
         });
     }
 

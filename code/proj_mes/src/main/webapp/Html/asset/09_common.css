@@ -336,6 +336,10 @@ input[type="date"], select {
     z-index: 1000;
 }
 
+#panel-down {
+    z-index: 500;
+}
+
 .panel.open {
     right: 0;
 }
@@ -478,6 +482,12 @@ input[type="radio"] {
     min-width: 120px;
     height: 35px;
     border-radius: 5px;
+}
+
+/* (공통X) 생산 계획 - 상세 사이드 패널 콘텐츠 높이 조절 */
+#panel-down .panel-table {
+    height: 700px;
+    margin: auto;
 }
 
 /* 모달 공통 */
