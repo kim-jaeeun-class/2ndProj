@@ -121,86 +121,100 @@ public class ProcessCtrl extends HttpServlet {
     
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	System.out.println("/process doPost 실행");
+        System.out.println("/process doPost 실행");
 
-    	// 한글 깨짐 방지
-    	request.setCharacterEncoding("utf-8");
-    	response.setContentType("text/html;charset=utf-8");
+        // 한글 깨짐 방지
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
 
-    	String action = null;
-    	String filePath = null;
-    	ProcessDTO dto = new ProcessDTO();
-    	
-    	// multipart/form-data 요청인지 확인
-    	if (ServletFileUpload.isMultipartContent(request)) {
-    		try {
-    			DiskFileItemFactory factory = new DiskFileItemFactory();
-    			ServletFileUpload upload = new ServletFileUpload(factory);
-    			List<FileItem> items = upload.parseRequest(request);
-    			
-    			for (FileItem item : items) {
-    				if (item.isFormField()) {
-    					// 일반 폼 필드 처리
-    					switch (item.getFieldName()) {
-    						case "action":
-    							action = item.getString("utf-8");
-    							break;
-    						case "procId":
-    							dto.setProc_id(item.getString("utf-8"));
-    							break;
-    						case "procName":
-    							dto.setProc_name(item.getString("utf-8"));
-    							break;
-    						case "departLevel":
-    							dto.setDapart_id2(item.getString("utf-8"));
-    							break;
-    						case "procInfo":
-    							dto.setProc_info(item.getString("utf-8"));
-    							break;
-    						case "itemCode":
-    							dto.setItem_code(item.getString("utf-8"));
-    							break;
-    					}
-    				} else {
-    					// 파일 필드 처리
-    					if (item.getName() != null && !item.getName().isEmpty()) {
-    						String fileName = new File(item.getName()).getName();
-    						filePath = "uploads/" + fileName; // webapps/proj_mes/uploads 폴더에 저장
-    						File uploadedFile = new File(getServletContext().getRealPath(filePath));
-    						item.write(uploadedFile);
-    					}
-    				}
-    			}
-    		} catch (FileUploadException e) {
-    			e.printStackTrace();
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		}
-    	} else {
-    		// multipart/form-data가 아닐 경우 (예: 삭제 버튼)
-    		action = request.getParameter("action");
-    		dto.setProc_id(request.getParameter("procId"));
-    	}
-    	
-    	boolean success = false;
-    	if (action != null) {
-    		if ("create".equals(action)) {
-    			dto.setProc_img(filePath);
-    			success = processService.createProcess(dto);
-    		} else if ("update".equals(action)) {
-    			dto.setProc_img(filePath);
-    			success = processService.updateProcess(dto);
-    		} else if ("delete".equals(action)) {
-    			success = processService.deleteProcess(dto.getProc_id());
-    		}
-    	}
-    	
-    	// 결과에 따라 응답 페이지로 리다이렉트 (PRG 패턴)
-    	if (success) {
-    		response.sendRedirect(request.getContextPath() + "/process");
-    	} else {
-    		response.getWriter().println("<script>alert('작업 실패'); history.back();</script>");
-    	}
+        String action = null;            // CUD 구분
+        String filePath = null;          // 업로드 이미지 경로
+        ProcessDTO dto = new ProcessDTO(); // 공정 DTO 객체 생성
+        boolean deleteImageFlag = false; // 이미지 삭제 여부
+
+        // 1️⃣ multipart/form-data 요청인지 확인
+        if (ServletFileUpload.isMultipartContent(request)) {
+            try {
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                List<FileItem> items = upload.parseRequest(request);
+
+                for (FileItem item : items) {
+                    if (item.isFormField()) {
+                        // 2️⃣ 일반 폼 필드 처리
+                        switch (item.getFieldName()) {
+                            case "action":        // create/update/delete
+                                action = item.getString("utf-8");
+                                break;
+                            case "procId":        // 공정 순서
+                                dto.setProc_id(item.getString("utf-8"));
+                                break;
+                            case "procName":      // 공정 이름
+                                dto.setProc_name(item.getString("utf-8"));
+                                break;
+                            case "departLevel":   // 부서
+                                dto.setDepart_level(item.getString("utf-8"));
+                                break;
+                            case "procInfo":      // 공정 설명
+                                dto.setProc_info(item.getString("utf-8"));
+                                break;
+                            case "itemCode":      // 품목 코드
+                                dto.setItem_code(item.getString("utf-8"));
+                                break;
+                            case "deleteImage":   // 이미지 삭제 여부
+                                deleteImageFlag = "true".equals(item.getString("utf-8"));
+                                break;
+                        }
+                    } else {
+                        // 3️⃣ 파일 필드 처리
+                        if (item.getName() != null && !item.getName().isEmpty()) {
+                            String fileName = new File(item.getName()).getName();
+                            filePath = "uploads/" + fileName; // 웹앱 기준 저장 경로
+                            File uploadedFile = new File(getServletContext().getRealPath(filePath));
+                            item.write(uploadedFile);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.getWriter().println("<script>alert('파일 업로드 실패'); history.back();</script>");
+                return;
+            }
+        } else {
+            // multipart/form-data가 아닐 경우 (삭제 버튼 등)
+            action = request.getParameter("action");
+            dto.setProc_id(request.getParameter("procId"));
+        }
+
+        boolean success = false;
+
+        // 4️⃣ CUD 처리
+        if (action != null) {
+            switch (action) {
+                case "create":  // 4-1. 등록
+                    dto.setProc_img(filePath);
+                    success = processService.createProcess(dto);
+                    break;
+                case "update":  // 4-2. 수정
+                    if (deleteImageFlag) {
+                        dto.setProc_img(null); // 이미지 삭제 처리
+                    } else if (filePath != null) {
+                        dto.setProc_img(filePath); // 새로운 이미지 교체
+                    }
+                    success = processService.updateProcess(dto);
+                    break;
+                case "delete":  // 4-3. 삭제
+                    success = processService.deleteProcess(dto.getProc_id());
+                    break;
+            }
+        }
+
+        // 5️⃣ PRG 패턴: 결과에 따라 리다이렉트
+        if (success) {
+            response.sendRedirect(request.getContextPath() + "/process");
+        } else {
+            response.getWriter().println("<script>alert('작업 실패'); history.back();</script>");
+        }
     }
     
     // HttpServletRequest에서 공정 정보를 추출하여 ProcessDTO 객체를 생성
