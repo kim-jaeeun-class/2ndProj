@@ -10,6 +10,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import Dto.OrderDTO;
 import Dto.OrderListDTO;
 
 
@@ -95,7 +96,32 @@ public class OrderListDAO {
 		
 		return list;
 	}
-	
+	// delete
+	public int deleteOrder(OrderDTO orderDTO) {
+		
+		int result = -1;
+		
+		try {
+			
+			// DB 접속
+			Connection conn = getConn();
+			
+			// SQL 준비
+			String query = " delete from orders";
+				   query += " where order_key = ?";
+		   
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, orderDTO.getOrder_key());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	// 상세페이지 하나만 조회
 //	public OrderListDTO selectOneOrderList(OrderListDTO orderListDTO) {
 //		

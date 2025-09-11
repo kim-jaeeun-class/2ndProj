@@ -36,9 +36,13 @@ public class OrderAddCtrl extends HttpServlet {
 		OrderService orderService = new OrderService();
 		List deptList = orderService.getAllDep();
 			
+		request.setAttribute("mode", "add");           // 등록 모드
+		request.setAttribute("order", null);           // 신규라서 없음
+		
 		request.setAttribute("itemList", itemList);
 		request.setAttribute("clientList", clientList);
 		request.setAttribute("deptList", deptList);
+		
 		request.getRequestDispatcher("/07_orderRegistration.jsp").forward(request, response);
 	}
 	

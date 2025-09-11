@@ -11,7 +11,10 @@ public class OrderDTO {
 	private int order_state;		// 진행 상태
 
 	private String client_id;		// 거래처ID
-
+	private String client_name;		// 거래처명
+	private String client_phone;
+    private String business_number;
+    
 	private String dapart_ID2;		// 부서ID
 	private String depart_level;	// 부서명
 
@@ -20,6 +23,8 @@ public class OrderDTO {
 	
 	private String totalQty;		// 총 수량
 	private String totalAmt; 		// 총 합계
+	
+	private String bigo;
 	
 	public String getOrder_key() {
 		return order_key;
@@ -95,12 +100,39 @@ public class OrderDTO {
 		this.totalAmt = totalAmt;
 	}
 	
+	public String getClient_name() {
+		return client_name;
+	}
+	public void setClient_name(String client_name) {
+		this.client_name = client_name;
+	}
+	public String getClient_phone() {
+		return client_phone;
+	}
+	public void setClient_phone(String client_phone) {
+		this.client_phone = client_phone;
+	}
+	public String getBusiness_number() {
+		return business_number;
+	}
+	public void setBusiness_number(String business_number) {
+		this.business_number = business_number;
+	}
+	
+	public String getBigo() {
+		return bigo;
+	}
+	public void setBigo(String bigo) {
+		this.bigo = bigo;
+	}
 	@Override
 	public String toString() {
 		return "OrderDTO [order_key=" + order_key + ", order_number=" + order_number + ", order_date=" + order_date
 				+ ", order_pay=" + order_pay + ", order_state=" + order_state + ", client_id=" + client_id
-				+ ", dapart_ID2=" + dapart_ID2 + ", depart_level=" + depart_level + ", worker_id=" + worker_id
-				+ ", worker_name=" + worker_name + ", totalQty=" + totalQty + ", totalAmt=" + totalAmt + "]";
+				+ ", client_name=" + client_name + ", client_phone=" + client_phone + ", business_number="
+				+ business_number + ", dapart_ID2=" + dapart_ID2 + ", depart_level=" + depart_level + ", worker_id="
+				+ worker_id + ", worker_name=" + worker_name + ", totalQty=" + totalQty + ", totalAmt=" + totalAmt
+				+ ", bigo=" + bigo + "]";
 	}
 	
 	

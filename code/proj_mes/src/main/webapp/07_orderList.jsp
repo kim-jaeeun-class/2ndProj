@@ -106,10 +106,10 @@
 			<td><a href="${detailUrl}">${o.order_number}</a></td>
 
 			<!-- 부서(역할) -->
-			<td>${o.dapart_ID2}</td>
+			<td>${o.depart_level}</td>
 			
 			<!-- 담당자 -->
-			<td>${o.worker_id}</td>
+			<td>${o.worker_name}</td>
 			
 			<!-- 총 수량 -->
 			<td><fmt:formatNumber value="${o.totalQty}"/></td>

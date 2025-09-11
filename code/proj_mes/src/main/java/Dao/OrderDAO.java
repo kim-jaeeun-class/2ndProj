@@ -62,11 +62,25 @@ public class OrderDAO {
 				dto.setOrder_key(rs.getString("order_key"));
 				dto.setOrder_date(rs.getDate("order_date"));
 				dto.setOrder_number(rs.getString("order_number"));
-				dto.setDapart_ID2(rs.getString("dapart_ID2"));
-				dto.setWorker_name(rs.getString("worker_id"));
+				
+//				dto.setDapart_ID2(rs.getString("dapart_ID2"));
+				dto.setDepart_level(rs.getString("depart_level"));
+				
+//				dto.setWorker_name(rs.getString("worker_id"));
+				dto.setWorker_name(rs.getString("worker_name"));
+				
 				dto.setTotalQty(rs.getString("totalQty"));
 				dto.setTotalAmt(rs.getString("totalAmt"));
+				
 				dto.setOrder_state(rs.getInt("order_state"));
+//				dto.setOrder_pay(rs.getDate("order_pay"));
+				
+//				dto.setClient_id(rs.getString("client_id"));
+//				dto.setBusiness_number(rs.getString("business_number"));
+//				dto.setClient_phone(rs.getString("client_phone"));
+//				
+//				dto.setBigo(rs.getString("bigo"));
+
 				
 				
 				list.add(dto);
@@ -104,13 +118,18 @@ public class OrderDAO {
 	        if (rs.next()) {
 	            resultDTO = new OrderDTO();
 
+	            resultDTO.setWorker_id(rs.getString("worker_id"));
+	            resultDTO.setWorker_name(rs.getString("worker_name"));
+	            resultDTO.setOrder_pay(rs.getDate("order_pay"));
+	            resultDTO.setClient_id(rs.getString("client_id"));
+	            resultDTO.setBusiness_number(rs.getString("business_number"));
+	            resultDTO.setClient_phone(rs.getString("client_phone"));
+	            resultDTO.setBigo(rs.getString("bigo"));
+
 	            resultDTO.setOrder_key(rs.getString("order_key"));
 	            resultDTO.setOrder_number(rs.getString("order_number"));
 	            resultDTO.setOrder_date(rs.getDate("order_date"));
-	            resultDTO.setOrder_pay(rs.getDate("order_pay"));
 	            resultDTO.setOrder_state(rs.getInt("order_state"));
-	            resultDTO.setClient_id(rs.getString("client_id"));
-	            resultDTO.setWorker_id(rs.getString("worker_id"));
 	            resultDTO.setDapart_ID2(rs.getString("dapart_ID2"));
 	        }
 
@@ -212,32 +231,7 @@ public class OrderDAO {
 		    }
 	}
 	
-	// delete
-		public int deleteOrder(OrderDTO orderDTO) {
-			
-			int result = -1;
-			
-			try {
-				
-				// DB 접속
-				Connection conn = getConn();
-				
-				// SQL 준비
-				String query = " delete from orders";
-					   query += " where order_key = ?";
-			   
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, orderDTO.getOrder_key());
-				
-				// SQL 실행
-				result = ps.executeUpdate();
-			
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			return result;
-		}
+	
 	
 	// update
 	public int updateOrder(String orderKey, int newState) {
@@ -267,6 +261,33 @@ public class OrderDAO {
 		
 		return 0;
 	}
+	
+	// delete
+		public int deleteOrder(OrderDTO orderDTO) {
+			
+			int result = -1;
+			
+			try {
+				
+				// DB 접속
+				Connection conn = getConn();
+				
+				// SQL 준비
+				String query = " delete from orders";
+					   query += " where order_key = ?";
+			   
+				PreparedStatement ps = conn.prepareStatement(query);
+				ps.setString(1, orderDTO.getOrder_key());
+				
+				// SQL 실행
+				result = ps.executeUpdate();
+			
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
 		
 	public List selectAllDep() {
 			
