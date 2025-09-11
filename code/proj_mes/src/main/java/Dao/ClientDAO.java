@@ -64,16 +64,54 @@ public class ClientDAO {
 
     /** 등록: PK는 20자, INOUT_DIVISION(NUMBER)은 setInt로 바인딩 */
     public int insert(ClientDTO d) {
-        final String sql =
-            "INSERT INTO CLIENT ( " +
-            "  CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
-            "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
-            ") VALUES ( " +
-            "  SUBSTR(RAWTOHEX(SYS_GUID()), 1, 20), ?, ?, ?, ?, ?, ?, ? " +
-            ")";
+    	
+    	
+        //자동키 생성 규칙을 고민해야 함
+        //지금은 자동 생성으로 키값을 생성하도록 구현됨
+        //sql전체의 길이를 구해서 1000 + 길이 -1 의 숫자를 구한다
+        //cl + 위에서 구한 숫자를 더한다. -> 최종형태는 문자열
+    	
+    	
+    	final String sql =
+    		    "INSERT INTO CLIENT ( " +
+    		    "  CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
+    		    "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
+    		    ") VALUES ( " +
+    		    "  'cl' || TO_CHAR(1000 + (SELECT COUNT(*) FROM CLIENT))" +
+    		    " , ?, ?, ?, ?, ?, ?, ? " +
+    		    ")";
+
+//        final String sql =
+//            "INSERT INTO CLIENT ( " +
+//            "  CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
+//            "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
+//            ") VALUES ( " +
+//             "cl"+ (1000 + " (SELECT COUNT(*) AS total_rows FROM CLIENT)")
+//            + " , ?, ?, ?, ?, ?, ?, ? " +
+//            ")";
         
-        //자동키 생성 규칙
-       select 
+        
+        
+        
+        
+
+
+        
+//        public int insert(ClientDTO d) {
+//            final String sql =
+//                "INSERT INTO CLIENT ( " +
+//                "  CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
+//                "  BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
+//                ") VALUES ( " +
+//                "  SUBSTR(RAWTOHEX(SYS_GUID()), 1, 20), ?, ?, ?, ?, ?, ?, ? " +
+//                ")";
+            
+        
+
+        
+        
+        
+        
 
         try (Connection con = getConn();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -105,7 +143,7 @@ public class ClientDAO {
         }
     }
 
-    /** ✅ 실제 DB에서 여러 건 삭제(트랜잭션/배치) */
+    /** 실제 DB에서 여러 건 삭제(트랜잭션/배치) */
     public int deleteByIds(List<String> ids) {
         if (ids == null || ids.isEmpty()) return 0;
 
