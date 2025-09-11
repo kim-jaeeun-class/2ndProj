@@ -80,6 +80,9 @@ public class ClientDAO {
     		    "  'cl' || TO_CHAR(1000 + (SELECT COUNT(*) FROM CLIENT))" +
     		    " , ?, ?, ?, ?, ?, ?, ? " +
     		    ")";
+    	
+    	//시퀀스릂 만들어서
+    	//만일 동시에 접속이 될 가능성이 있기 떄문에 이 부분을 고려하기 위해선 시퀀스를 만들어서 활용하는것이 가장 좋다.
 
 //        final String sql =
 //            "INSERT INTO CLIENT ( " +

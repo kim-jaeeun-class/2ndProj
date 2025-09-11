@@ -17,6 +17,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
+    	System.out.println("logout do get");
         resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 
     }
@@ -27,12 +28,13 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        System.out.println(req.getContextPath());
+//        System.out.println(req.getContextPath());
         String id = req.getParameter("userid");
         log.info("[LOGOUT] logout id={}", id);
 
 
         try {
+
             req.logout(); 
         } catch (ServletException ignored) {}
 
@@ -57,7 +59,7 @@ public class Logout extends HttpServlet {
         resp.setDateHeader("Expires", 0);
 
         //  로그인 페이지로 이동
-        resp.sendRedirect(req.getContextPath() + "/login.html");
+        resp.sendRedirect(req.getContextPath() + "/Html/01_login/login.html");
   
     }    
 }
