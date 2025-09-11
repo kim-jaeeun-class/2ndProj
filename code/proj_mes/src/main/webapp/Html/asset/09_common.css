@@ -8,6 +8,15 @@
     --field-border: #999;
     --page-bg: #ffffff;
     --radius: 7px;
+    --nav-color: #003751;
+}
+
+* { 
+    box-sizing: border-box; 
+}
+
+::after, ::before {
+    box-sizing: content-box;
 }
 
 /* 헤더 부분 */
@@ -123,6 +132,7 @@ a, a:link, a:visited {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: content-box; 
 }
 
 .titleBox span {
@@ -146,13 +156,30 @@ body {
     overflow-x: hidden;
     background-color: var(--page-bg);
 }
+/* sidenwrap : 사이드바와 wrap 모두 감싸는 부분*/
+.sidenwrap {
+    display: flex;
+}
+/* side : 사이드바 영역 */
+.side {
+    width: 15%;
+    background-color: var(--nav-color);
+}
+.side-menu {
+    border-bottom: 1px solid var(--border);
+    color: var(--button-text);
+    font-weight: 600;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+}
 
-/* wrap(모든 컨텐츠를 다 감싸는 부분) */
+/* wrap(사이드 제외 모든 컨텐츠(모달이나 슬라이딩 제외)를 다 감싸는 부분) */
 .wrap {
     border: 1px solid var(--border);
     border-radius: 5px;
     background-color: #ffffff;
-    width: 90%;
+    width: 80%;
     max-width: 1280px;
     margin: 10px auto;
     overflow-x: hidden;
@@ -294,33 +321,12 @@ input[type="date"], select {
     font-size: 1.1rem;
 }
 
-/* (공통 X)생산 실적 - 필터 영역 */
-.wrap-select {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin: 30px 50px;
-    display : flex;
-    justify-content: space-between;
-    padding: 20px;
-}
-.select-box {
-    display: flex;
-    gap: 30px;
-}
-.select-title {
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-.select-submit {
-    align-content: center;
-}
-
 /* 사이드 패널 */
 .panel {
     position: fixed;
     top: 0;
-    right: -800px;
-    width: 600px;
+    right: -90%;
+    width: 85%;
     height: 100%;
     background: #f9f9f9;
     box-shadow: -2px 0 6px rgba(0,0,0,0.2);

@@ -2,7 +2,9 @@ package Service;
 
 import java.util.*;
 import Dao.OrderDAO;
+import Dao.StockDAO;
 import Dto.OrderDTO;
+import Dto.StockDTO;
 
 /**
  * 선택된 분류(category)에 맞춰
@@ -21,6 +23,8 @@ public class StandardService {
         public String getTitle() { return title; }
     }
 
+    
+    
     /** 결과 DTO */
     public static class TableResult {
         private final String category;
@@ -35,7 +39,9 @@ public class StandardService {
         public List<Column> getColumns() { return columns; }
         public List<Map<String,Object>> getData() { return data; }
     }
-
+    
+    
+    
     /** 카테고리별 제공자 인터페이스 */
     public interface TableProvider {
         List<Column> columns();
@@ -48,6 +54,7 @@ public class StandardService {
     public StandardService() {
         // 기본 등록: 발주(orders)
         providers.put("발주", new OrderProvider());
+        providers.put("재고", new StockProvider());
 
         // 추후 공정/BOM/재고/생산/품질도 같은 패턴으로 providers.put("공정", new ProcessProvider()); 식으로 추가
 
@@ -112,8 +119,51 @@ public class StandardService {
         private static String nz(String s) { return s == null ? "" : s; }
     }
     
+    /* =========================
+    Provider 구현: 재고(Stock)
+    ========================= */    
+
     
     
+    
+    private static class StockProvider implements TableProvider {
+        private final StockDAO dao = new StockDAO(); // 주어진 DAO 그대로 사용
+        
+        @Override
+        public List<Column> columns() {
+            List<Column> cols = new ArrayList<>();
+            cols.add(new Column("stock_id",   "재고ID"));
+            cols.add(new Column("stock_date","등록일"));
+            cols.add(new Column("stock_loc",  "위치"));
+            cols.add(new Column("stock_div",   "구분"));
+            cols.add(new Column("stock_number", "수량"));
+            cols.add(new Column("item_code",   "품목코드"));
+
+            return cols;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<Map<String, Object>> data() {
+            List<Map<String,Object>> rows = new ArrayList<>();
+            List<?> list = dao.selectAll(); // 원 DAO 시그니처 유지(raw List)
+            for (Object o : list) {
+            	StockDTO d = (StockDTO) o;
+                Map<String,Object> row = new LinkedHashMap<>();
+                row.put("stock_id",    nz(d.getStock_id()));
+                row.put("stock_loc", d.getStock_loc());
+                row.put("stock_date",   d.getStock_date()); // java.sql.Date 그대로
+                row.put("stock_div",    d.getStock_div());
+                row.put("stock_number",  d.getStock_number());
+                row.put("item_code",    nz(d.getItem_code()));
+
+                rows.add(row);
+            }
+            return rows;
+        }
+
+        private static String nz(String s) { return s == null ? "" : s; }
+    }
     
 
 

@@ -372,96 +372,6 @@ if (saveBtn && mainTable && panelForm) {
 
     };
 
-
-    // ===============================
-    // 생산 실적 페이지 기능
-    // ===============================
-    const initProPerf = () => {
-        const saveBtn = document.querySelector('.panel .panel-save');
-        const mainTable = document.querySelector('.table-view table tbody');
-        const panel = document.querySelector('.panel');
-        const panelForm = document.querySelector('.panel form');
-
-        if (saveBtn && mainTable && panelForm) {
-            saveBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                // 값 수집
-                let woNo = '';
-                const woSelect = panelForm.querySelector('select[name="wo-num"]');
-                if (woSelect) {
-                    woNo = woSelect.value;
-                }
-
-                let stat = '';
-                const statRadio = panelForm.querySelector('input[name="pro-perf-stat"]:checked');
-                if (statRadio) {
-                    stat = statRadio.parentElement.textContent.trim();
-                }
-
-                const date = new Date().toISOString().split('T')[0];
-
-                let lotNo = '';
-                const lotSelect = panelForm.querySelector('select[name="lot-num"]');
-                if (lotSelect) {
-                    lotNo = lotSelect.value;
-                }
-
-                let inR = '';
-                const inRadio = panelForm.querySelector('input[name="in-form"]:checked');
-                if (inRadio) {
-                    inR = inRadio.parentElement.textContent.trim();
-                }
-
-                let outR = '';
-                const outRadio = panelForm.querySelector('input[name="out-form"]:checked');
-                if (outRadio) {
-                    outR = outRadio.parentElement.textContent.trim();
-                }
-
-                // 행 생성
-                const tr = document.createElement('tr');
-                tr.classList.add('data'); // 모달 연동용 클래스
-
-                const tdCheckbox = document.createElement('td');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                tdCheckbox.appendChild(checkbox);
-                tr.appendChild(tdCheckbox);
-
-                const tdWo = document.createElement('td');
-                tdWo.textContent = woNo;
-                tr.appendChild(tdWo);
-
-                const tdStat = document.createElement('td');
-                tdStat.textContent = stat;
-                tr.appendChild(tdStat);
-
-                const tdDate = document.createElement('td');
-                tdDate.textContent = date;
-                tr.appendChild(tdDate);
-
-                const tdLot = document.createElement('td');
-                tdLot.textContent = lotNo;
-                tr.appendChild(tdLot);
-
-                const tdIn = document.createElement('td');
-                tdIn.textContent = inR;
-                tr.appendChild(tdIn);
-
-                const tdOut = document.createElement('td');
-                tdOut.textContent = outR;
-                tr.appendChild(tdOut);
-
-                mainTable.appendChild(tr);
-
-                // 추가 후 처리
-                panel.classList.remove('open');   // 패널 닫기
-                panelForm.reset();                // 입력값 리셋
-            });
-        }
-    };
-
     // ===============================
     // 생산 계획
     // ===============================
@@ -604,5 +514,4 @@ if (saveBtn && mainTable && panelForm) {
 
     if (page === 'wo') initWorkOrder();
     if (page === 'pro-plan') initProduction();
-    if (page === 'pro-perf') initProPerf();
 });

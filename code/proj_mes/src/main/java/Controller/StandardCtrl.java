@@ -43,7 +43,7 @@ public class StandardCtrl extends HttpServlet {
 		
         String category = request.getParameter("category");
         if (category == null) category = "";
-
+        
         // 선택된 카테고리에 맞춰 컬럼/데이터 구성
         TableResult tr = standardService.buildTable(category);
         request.setAttribute("category", tr.getCategory());
@@ -56,11 +56,6 @@ public class StandardCtrl extends HttpServlet {
         
         //다른 select 마다의 데이러를 가져오는 파일을 활용하자
         
-		
-		
-		
-		
-		//등록하기 버튼을 누르면 다음 창으로 넘어가게 해
 		
 	}
 

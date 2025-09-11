@@ -10,10 +10,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import Dto.OrderDTO;
-import Dto.StockDTO;
+import Dto.ItemDTO;
 
-public class StockDAO {
+public class ItemDAO {
 
 	// DB 접속 메소드
 	private Connection getConn() {
@@ -47,7 +46,7 @@ public class StockDAO {
 			Connection con = getConn();
 			
 			// SQL 준비
-			String query = " select * from stock";
+			String query = " select * from item";
 			PreparedStatement ps = con.prepareStatement(query);
 			
 			// SQL 실행
@@ -55,14 +54,13 @@ public class StockDAO {
 			
 			// 결과 활용
 			while(rs.next()) {
-				StockDTO dto = new StockDTO();
+				ItemDTO dto = new ItemDTO();
 				
-				dto.setStock_id(rs.getString("stock_id"));
-				dto.setStock_date(rs.getDate("stock_date"));
-				dto.setStock_loc(rs.getInt("stock_loc"));
-				dto.setStock_div(rs.getInt("stock_div"));
-				dto.setStock_number(rs.getInt("stock_number"));
 				dto.setItem_code(rs.getString("item_code"));
+				dto.setItem_name(rs.getString("item_name"));
+				dto.setItem_bigo(rs.getString("item_bigo"));
+				dto.setItem_type(rs.getInt("item_type"));
+				dto.setItem_price(rs.getString("item_price"));
 				
 				list.add(dto);
 			}
@@ -75,9 +73,9 @@ public class StockDAO {
 	}
 	
 	// 상세페이지 하나만 조회
-	public StockDTO selectOneStock(StockDTO stockDTO) {
+	public ItemDTO selectOneItem(ItemDTO itemDTO) {
 		
-		StockDTO resultDTO = null;
+		ItemDTO resultDTO = null;
 		
 		try {
 				
@@ -85,11 +83,11 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " select * from stock";
-				   query += " where stock_id = ?";
+			String query = " select * from item";
+				   query += " where item_code = ?";
 				   
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
+			ps.setString(1, itemDTO.getItem_code());
 			
 			// SQL 실행
 			ResultSet rs = ps.executeQuery();
@@ -98,14 +96,13 @@ public class StockDAO {
 			if(rs.next()) {
 
 				// resultDTO가 null로 되어있어서 new 해줘야함
-				resultDTO = new StockDTO();
+				resultDTO = new ItemDTO();
 				
-				resultDTO.setStock_id(rs.getString("stock_id"));
-				resultDTO.setStock_date(rs.getDate("stock_date"));
-				resultDTO.setStock_loc(rs.getInt("stock_loc"));
-				resultDTO.setStock_div(rs.getInt("stock_div"));
-				resultDTO.setStock_number(rs.getInt("stock_number"));
 				resultDTO.setItem_code(rs.getString("item_code"));
+				resultDTO.setItem_name(rs.getString("item_name"));
+				resultDTO.setItem_bigo(rs.getString("item_bigo"));
+				resultDTO.setItem_type(rs.getInt("item_type"));
+				resultDTO.setItem_price(rs.getString("item_price"));
 			
 			}
 				
@@ -119,7 +116,7 @@ public class StockDAO {
 	}
 	
 	// delete
-	public int deleteStock(StockDTO stockDTO) {
+	public int deleteItem(ItemDTO itemDTO) {
 		
 		int result = -1;
 		
@@ -129,11 +126,11 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " delete from stock";
-				   query += " where stock_id = ?";
+			String query = " delete from item";
+				   query += " where item_code = ?";
 		   
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
+			ps.setString(1, itemDTO.getItem_code());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -146,7 +143,7 @@ public class StockDAO {
 	}
 	
 	// insert
-	public int insertStock(StockDTO stockDTO) {
+	public int insertItem(ItemDTO itemDTO) {
 		
 		int result = -1;
 		
@@ -156,16 +153,15 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " insert into stock (stock_id, stock_date, stock_loc, stock_div, stock_number, item_code)";
-				   query += " values(?, ?, ?, ?, ?, ?)";
+			String query = " insert into item (item_code, item_name, item_bigo, item_type, item_price)";
+				   query += " values(?, ?, ?, ?, ?)";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
-			ps.setDate(2, stockDTO.getStock_date());
-			ps.setInt(3, stockDTO.getStock_loc());
-			ps.setInt(4, stockDTO.getStock_div());
-			ps.setInt(5, stockDTO.getStock_number());
-			ps.setString(6, stockDTO.getItem_code());
+			ps.setString(1, itemDTO.getItem_code());
+			ps.setString(2, itemDTO.getItem_name());
+			ps.setString(3, itemDTO.getItem_bigo());
+			ps.setInt(4, itemDTO.getItem_type());
+			ps.setString(5, itemDTO.getItem_price());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -178,7 +174,7 @@ public class StockDAO {
 	}
 	
 	// update
-	public int updateStock(StockDTO stockDTO) {
+	public int updateItem(ItemDTO itemDTO) {
 		
 		int result = -1;
 		
@@ -188,21 +184,19 @@ public class StockDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " update from stock";
-			query += " set stock_date = ?, ";
-			query += "     stock_loc = ?, ";
-			query += "     stock_div = ?, ";
-			query += "     stock_number = ?, ";
-			query += "     item_code = ? ";
-			query += " where stock_id = ?";
+			String query = " update from item";
+			query += " set item_name = ?, ";
+			query += "     item_bigo = ?, ";
+			query += "     item_type = ?, ";
+			query += "     item_price = ? ";
+			query += " where item_code = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setDate(1, stockDTO.getStock_date());
-			ps.setInt(2, stockDTO.getStock_loc());
-			ps.setInt(3, stockDTO.getStock_div());
-			ps.setInt(4, stockDTO.getStock_number());
-			ps.setString(5, stockDTO.getItem_code());
-			ps.setString(6, stockDTO.getStock_id());
+			ps.setString(1, itemDTO.getItem_name());
+			ps.setString(2, itemDTO.getItem_bigo());
+			ps.setInt(3, itemDTO.getItem_type());
+			ps.setString(4, itemDTO.getItem_price());
+			ps.setString(5, itemDTO.getItem_code());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -213,4 +207,5 @@ public class StockDAO {
 		
 		return result;
 	}
+	
 }

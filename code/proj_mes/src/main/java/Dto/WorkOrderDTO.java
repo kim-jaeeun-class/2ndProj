@@ -3,32 +3,25 @@ package Dto;
 import java.sql.Date;
 
 public class WorkOrderDTO {
-	// 여기에서 변수 지정 하고 GETTER, SETTER, TOSTRING 설정
-	// 다른 식으로 얘기하자면 DB 테이블의 한 행을 담는 느낌?
+	// 기본 조회 테이블
+	private String woNum;		// 작업지시번호
+	private Date woDate;		// 지시일
+	private Date woDuedate;		// 마감일
+	private int woPQ;			// 지시 수량
+	private int woAQ;			// 생산 수량
+	private String workerID;	// 담당자
+	private String item_code;	// 품목코드 : 이걸 기준으로 join해서 품목명까지 가져오기
 	
-	private int woNum;	// 번호
-	private Date woDate;	// 지시일 : '지시일-번호' 형태로 작업지시번호 생성
-	private Date woDuedate;	// 마감일
-	private int woPQ;	// 목표
-	private int woAQ;	// 실제 생산
-	private String woPS;	// 진행 상태
-	private String workerID; // 사번 : FK
-	private String itemCode; // 품목 코드 : FK
+	private String worker_name;	// 사원명 : 뭐... 실제 담당자명 가져와야 하니까?
 	
-	// 품목 조회용 : 품목 테이블 영역
-	private String itemName; 
-	private String itemBigo;
-	private int itemType;
-	private int itemUnit;
-	private String itemPrice;
+	private String item_name;	// 품목명 : 품목 추가 영역에서 필요
 	
-	// 거래처 조회용 : clientname이 전체 조회에 있어서
-	private String clientName;
-	
-	public int getWoNum() {
+	private String bom_id;		// 품목에 맞는 bom 확인 및 조회
+	private String cp_id;		// 품목에 맞는 생산 계획 확인 및 조회
+	public String getWoNum() {
 		return woNum;
 	}
-	public void setWoNum(int woNum) {
+	public void setWoNum(String woNum) {
 		this.woNum = woNum;
 	}
 	public Date getWoDate() {
@@ -55,65 +48,48 @@ public class WorkOrderDTO {
 	public void setWoAQ(int woAQ) {
 		this.woAQ = woAQ;
 	}
-	public String getWoPS() {
-		return woPS;
-	}
-	public void setWoPS(String woPS) {
-		this.woPS = woPS;
-	}
 	public String getWorkerID() {
 		return workerID;
 	}
 	public void setWorkerID(String workerID) {
 		this.workerID = workerID;
 	}
-	public String getItemCode() {
-		return itemCode;
+	public String getItem_code() {
+		return item_code;
 	}
-	public void setItemCode(String itemCode) {
-		this.itemCode = itemCode;
+	public void setItem_code(String item_code) {
+		this.item_code = item_code;
 	}
-	
-	
-	
-	public String getItemName() {
-		return itemName;
+	public String getWorker_name() {
+		return worker_name;
 	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
+	public void setWorker_name(String worker_name) {
+		this.worker_name = worker_name;
 	}
-	public String getItemBigo() {
-		return itemBigo;
+	public String getItem_name() {
+		return item_name;
 	}
-	public void setItemBigo(String itemBigo) {
-		this.itemBigo = itemBigo;
+	public void setItem_name(String item_name) {
+		this.item_name = item_name;
 	}
-	public int getItemType() {
-		return itemType;
+	public String getBom_id() {
+		return bom_id;
 	}
-	public void setItemType(int itemType) {
-		this.itemType = itemType;
+	public void setBom_id(String bom_id) {
+		this.bom_id = bom_id;
 	}
-	public int getItemUnit() {
-		return itemUnit;
+	public String getCp_id() {
+		return cp_id;
 	}
-	public void setItemUnit(int itemUnit) {
-		this.itemUnit = itemUnit;
-	}
-	public String getItemPrice() {
-		return itemPrice;
-	}
-	public void setItemPrice(String itemPrice) {
-		this.itemPrice = itemPrice;
+	public void setCp_id(String cp_id) {
+		this.cp_id = cp_id;
 	}
 	@Override
 	public String toString() {
 		return "WorkOrderDTO [woNum=" + woNum + ", woDate=" + woDate + ", woDuedate=" + woDuedate + ", woPQ=" + woPQ
-				+ ", woAQ=" + woAQ + ", woPS=" + woPS + ", workerID=" + workerID + ", itemCode=" + itemCode
-				+ ", itemName=" + itemName + ", itemBigo=" + itemBigo + ", itemType=" + itemType + ", itemUnit="
-				+ itemUnit + ", itemPrice=" + itemPrice + "]";
+				+ ", woAQ=" + woAQ + ", workerID=" + workerID + ", item_code=" + item_code + ", worker_name="
+				+ worker_name + ", item_name=" + item_name + ", bom_id=" + bom_id + ", cp_id=" + cp_id + "]";
 	}
-
 	
 	
 	
