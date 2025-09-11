@@ -72,7 +72,7 @@ public class StockDAO {
 			// SQL 준비
 			//itemcode를 기반으로 item table 조인
 			//차라리 품목 코드를 가져온후 글자2의 크기로 잘라 맵핑하자 2/2/2+@
-			//목록에서 조회를 할떄 
+			//목록에서 조회를 할떄 데분류 전체이면 대분류만 찾으면 됨, 그 이후 연산 x , 두번째 중분류가지만일떄도 소분류는 연산하지 않아도 됨
 			String query = 
 					" SELECT "
 					+ "  s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, "
