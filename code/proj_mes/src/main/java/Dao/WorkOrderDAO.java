@@ -1,7 +1,6 @@
 package Dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class WorkOrderDAO {
 	}
 	
 	// 필터링 조회 : 작업 지시일 기준으로 조회
-	public List<WorkOrderDTO> selectOrderWO(Date woDate) {
+	public List<WorkOrderDTO> selectOrderWO(WorkOrderDTO workOrderDTO) {
 		List<WorkOrderDTO> listFilter = new ArrayList<WorkOrderDTO>();
 		
 		try {
@@ -96,7 +95,7 @@ public class WorkOrderDAO {
 			PreparedStatement ps = conn.prepareStatement(query);
 			
 			
-			ps.setDate(1, woDate);
+			ps.setDate(1, workOrderDTO.getWoDate());
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -172,7 +171,7 @@ public class WorkOrderDAO {
 	//	- 입력되는 값
 	//		+ 지시일, 작업지시NO, 담당자, 납기일, 지시 수량, 첨부, 품목(품목 테이블과 join)
     // 		TODO + 품목 목록을 봐야 하니 품목 테이블 join도 필요할 듯. 그리고 js에서 지시 수량 입력 제한 추가해야 함.
-	public int insertEmp(WorkOrderDTO workOrderDTO) {
+	public int insertWO(WorkOrderDTO workOrderDTO) {
 		
 		int result = -1;
 		try {
