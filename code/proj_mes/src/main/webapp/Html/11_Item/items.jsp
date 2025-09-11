@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List, Dto.ItemDTO" %>
+
+
 <%
   @SuppressWarnings("unchecked")
   List<ItemDTO> items = (List<ItemDTO>) request.getAttribute("items");
@@ -29,36 +31,20 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-<header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
-  <div class="flex items-center space-x-2">
-    <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
-    <h3 class="text-xl font-bold">J2P4</h3>
-  </div>
-  <div class="flex items-center space-x-4 sm:space-x-8">
-    <div class="search cursor-pointer">
-      <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
-    </div>
-    <div class="logout text-sm sm:text-base cursor-pointer hover:underline">로그아웃</div>
-    <div class="myIcon relative">
-      <a href="javascript:void(0);" id="myIconBtn">
-        <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
-      </a>
-    </div>
-  </div>
-</header>
 
-<nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
-  <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
-    <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
-  </ul>
-</nav>
+
+
+
+
+
+<!--  여기 두 줄이 템플릿에서 끌어올 자리 -->
+<div id="header-slot"></div>
+<div id="nav-slot"></div>
+
+
+
+
+
 
 <div class="p-4 sm:p-8 max-w-7xl mx-auto">
   <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">품목 목록</h2>
@@ -160,6 +146,23 @@
 </div>
 
 <script>
+  // 템플릿의 header/nav만 로드
+  (async function () {
+    try {
+      const url = '<%= ctx %>/Html/00_template/template.html';
+      const text = await (await fetch(url, { credentials: 'same-origin' })).text();
+      const doc  = new DOMParser().parseFromString(text, 'text/html');
+      const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+      const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
+      const headerSlot = document.getElementById('header-slot');
+      const navSlot    = document.getElementById('nav-slot');
+      if (header && headerSlot) headerSlot.replaceWith(header);
+      if (nav && navSlot)       navSlot.replaceWith(nav);
+    } catch (e) {
+      console.error('템플릿 로드 실패:', e);
+    }
+  })();
+
   // 전체 선택
   document.getElementById('selectAllCheckbox').addEventListener('change', (e) => {
     document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = e.target.checked);
@@ -170,7 +173,7 @@
     const ctx = '<%= ctx %>';
     document.querySelectorAll('#itemTableBody tr[data-code]').forEach(tr => {
       tr.addEventListener('dblclick', (e) => {
-        if (e.target.closest('input, button, a, label')) return; // 체크박스 더블클릭 무시
+        if (e.target.closest('input, button, a, label')) return;
         const code = tr.getAttribute('data-code');
         location.href = ctx + '/items?view=detail&code=' + encodeURIComponent(code);
       });
