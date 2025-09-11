@@ -7,7 +7,7 @@ public class ItemDTO {
 	private String item_bigo;	// 비고
 	private int item_type;		// 유형 
 	private String item_price;	// 단가
-	
+	private int quantity;		// 수량
 	
 	public String getItem_code() {
 		return item_code;
@@ -39,13 +39,20 @@ public class ItemDTO {
 	public void setItem_price(String item_price) {
 		this.item_price = item_price;
 	}
-	
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	
 	@Override
 	public String toString() {
 		return "ItemDTO [item_code=" + item_code + ", item_name=" + item_name + ", item_bigo=" + item_bigo
-				+ ", item_type=" + item_type + ", item_price=" + item_price + "]";
+				+ ", item_type=" + item_type + ", item_price=" + item_price + ", quantity=" + quantity + "]";
 	}
+	
+	
 	
 	
 	
