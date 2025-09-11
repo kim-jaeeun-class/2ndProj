@@ -2,8 +2,11 @@ package Service;
 
 import java.util.*;
 import Dao.OrderDAO;
+import Dao.ProPlanDAO;
+import Dao.ProcessDAO;
 import Dao.StockDAO;
 import Dto.OrderDTO;
+import Dto.ProcessDTO;
 import Dto.StockDTO;
 
 /**
@@ -55,6 +58,10 @@ public class StandardService {
         // 기본 등록: 발주(orders)
         providers.put("발주", new OrderProvider());
         providers.put("재고", new StockProvider());
+        providers.put("공정", new ProcProvider());
+//        providers.put("BOM", new ProcProvider());
+//        providers.put("생산", new ProplanProvider());
+//        providers.put("품질", new ProcProvider());
 
         // 추후 공정/BOM/재고/생산/품질도 같은 패턴으로 providers.put("공정", new ProcessProvider()); 식으로 추가
 
@@ -165,13 +172,103 @@ public class StandardService {
         private static String nz(String s) { return s == null ? "" : s; }
     }
     
+    /* =========================
+    Provider 구현: 공정(Process)
+    ========================= */    
+
+    
+    
+    
+    private static class ProcProvider implements TableProvider {
+        private final ProcessDAO dao = new ProcessDAO(); // 주어진 DAO 그대로 사용
+        
+        @Override
+        public List<Column> columns() {
+            List<Column> cols = new ArrayList<>();
+            cols.add(new Column("proc_id",   "재고ID"));
+            cols.add(new Column("proc_name","공정이름"));
+            cols.add(new Column("item_code",   "품목 코드"));
+            cols.add(new Column("dapart_id2",   "부서"));
+            cols.add(new Column("proc_info", "공정정보"));            
+           
+           
+            
+            return cols;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<Map<String, Object>> data() {
+            List<Map<String,Object>> rows = new ArrayList<>();
+            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
+            for (Object o : list) {
+            	ProcessDTO d = (ProcessDTO) o;
+                Map<String,Object> row = new LinkedHashMap<>();
+                row.put("proc_id",    nz(d.getProc_id()));
+                row.put("proc_name", d.getProc_name());
+                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
+                row.put("depart_id2",    d.getDapart_id2());
+                row.put("proc_info",  d.getProc_info());
 
 
+                rows.add(row);
+            }
+            return rows;
+        }
+
+        private static String nz(String s) { return s == null ? "" : s; }
+    }
+
     
     
     
+    /* =========================
+    Provider 구현: 생산계획(ProPlan)
+    ========================= */    
+
     
     
+    
+//    private static class ProplanProvider implements TableProvider {
+//        private final ProPlanDAO dao = new ProPlanDAO(); // 주어진 DAO 그대로 사용
+//        
+//        @Override
+//        public List<Column> columns() {
+//            List<Column> cols = new ArrayList<>();
+//            cols.add(new Column("proc_id",   "재고ID"));
+//            cols.add(new Column("proc_name","공정이름"));
+//            cols.add(new Column("item_code",   "품목 코드"));
+//            cols.add(new Column("dapart_id2",   "부서"));
+//            cols.add(new Column("proc_info", "공정정보"));            
+//           
+//           
+//            
+//            return cols;
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        public List<Map<String, Object>> data() {
+//            List<Map<String,Object>> rows = new ArrayList<>();
+//            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
+//            for (Object o : list) {
+//            	ProcessDTO d = (ProcessDTO) o;
+//                Map<String,Object> row = new LinkedHashMap<>();
+//                row.put("proc_id",    nz(d.getProc_id()));
+//                row.put("proc_name", d.getProc_name());
+//                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
+//                row.put("depart_id2",    d.getDapart_id2());
+//                row.put("proc_info",  d.getProc_info());
+//
+//
+//                rows.add(row);
+//            }
+//            return rows;
+//        }
+//
+//        private static String nz(String s) { return s == null ? "" : s; }
+//    }    
+//    
     
     
     

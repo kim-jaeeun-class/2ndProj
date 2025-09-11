@@ -131,7 +131,23 @@
         if(cat == "발주"){
         	cat = "orderRegistration";
         	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';        	
+        } else if(cat == "공정"){
+        	cat = "process";
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp'; 
+        } else if(cat =="재고"){
+        	cat = "stock";
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';        	        	
+        } else if(cat=="BOM"){
+        	cat = "BOM";
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';
+        } else if(cat=="생산"){
+        	cat = "생산";
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';        	
+        } else if(cat=="품질"){
+        	cat = "품질";
+        	location.href = '/proj_mes/' + encodeURIComponent(cat) + '.jsp';        	
         }
+        
 
       });
     })();
