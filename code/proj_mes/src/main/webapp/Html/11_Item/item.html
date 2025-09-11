@@ -81,9 +81,10 @@
                         <label for="select-wo" class="text-sm font-medium text-gray-700 mb-1">품목 유형</label>
                         <select id="select-wo" name="select-wo" class="select border rounded-md px-3 py-2 text-gray-800 focus:ring-blue-500 focus:border-blue-500">
                             <option value="전체" selected>전체</option>
+                            <option value="원자재">원자재</option>
                             <option value="완제품">완제품</option>
                             <option value="소모품">소모품</option>
-                            <option value="원자재">원자재</option>
+                            <option value="반제품">반제품</option>
                         </select>
                     </div>
                 </div>
@@ -122,31 +123,40 @@
     <div id="item-register-section" class="p-4 sm:p-8 max-w-7xl mx-auto hidden-section">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-xl p-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">신규 품목 등록</h2>
+            <!-- 사용자에게 직접 입력하도록 안내하는 메시지 추가 -->
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-md" role="alert">
+                <p class="font-bold">안내</p>
+                <p>품목 코드를 선택해 주세요. 선택 시 품목명, 단가, 유형이 자동으로 채워집니다.</p>
+            </div>
             <form id="itemRegisterForm" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- 품목 코드 -->
                     <div>
                         <label for="itemCode" class="block text-sm font-medium text-gray-700 mb-1">품목 코드</label>
-                        <input type="text" id="itemCode" name="itemCode" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <select id="itemCode" name="itemCode" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="" selected disabled>품목 코드 선택</option>
+                        </select>
                     </div>
                     <!-- 품목명 -->
                     <div>
                         <label for="itemName" class="block text-sm font-medium text-gray-700 mb-1">품목명</label>
-                        <input type="text" id="itemName" name="itemName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="itemName" name="itemName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
                     </div>
                     <!-- 단가 -->
                     <div>
                         <label for="itemPrice" class="block text-sm font-medium text-gray-700 mb-1">단가</label>
-                        <input type="text" id="itemPrice" name="itemPrice" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="itemPrice" name="itemPrice" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
                     </div>
                     <!-- 품목 유형 -->
                     <div>
                         <label for="itemType" class="block text-sm font-medium text-gray-700 mb-1">품목 유형</label>
-                        <select id="itemType" name="itemType" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="itemType" name="itemType" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                        <!-- <select id="itemType" name="itemType" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" disabled>
+                            <option value="원자재">원자재</option>
                             <option value="완제품">완제품</option>
                             <option value="소모품">소모품</option>
-                            <option value="원자재">원자재</option>
-                        </select>
+                            <option value="반제품">반제품</option>
+                        </select> -->
                     </div>
                 </div>
                 <div class="flex justify-end space-x-4 mt-6">
@@ -171,22 +181,52 @@
             const selectWo = document.getElementById('select-wo');
             const itemRegisterForm = document.getElementById('itemRegisterForm');
 
-            // 업데이트된 샘플 데이터 설정 (더 다양한 품목 포함)
-            const sampleData = [
-                { itemCode: 'A001', itemName: '에어팟 프로 2세대', itemPrice: '359000', itemType: '완제품' },
-                { itemCode: 'A002', itemName: '맥북 프로 14인치', itemPrice: '3000000', itemType: '완제품' },
-                { itemCode: 'A003', itemName: '아이폰 16', itemPrice: '1300000', itemType: '완제품' },
-                { itemCode: 'B001', itemName: '나사 세트', itemPrice: '5000', itemType: '소모품' },
-                { itemCode: 'B002', itemName: '아이폰16 액정', itemPrice: '150000', itemType: '소모품' },
-                { itemCode: 'B003', itemName: '배터리 팩', itemPrice: '80000', itemType: '소모품' },
-                { itemCode: 'C001', itemName: '알루미늄 판재', itemPrice: '15000', itemType: '원자재' },
-                { itemCode: 'C002', itemName: '구리선 롤', itemPrice: '25000', itemType: '원자재' },
-                { itemCode: 'C003', itemName: '실리콘 웨이퍼', itemPrice: '50000', itemType: '원자재' }
-            ];
+            // 신규 품목 등록 섹션의 입력 필드
+            const itemCodeSelect = document.getElementById('itemCode');
+            const itemNameInput = document.getElementById('itemName');
+            const itemPriceInput = document.getElementById('itemPrice');
+            const itemTypeSelect = document.getElementById('itemType');
 
-            // 로컬 저장소에 데이터가 없을 경우 초기 샘플 데이터로 설정
+            // --- 품목 코드에 따라 자동 입력될 마스터 데이터 ---
+            const masterData = {
+                'RMGLLC': { name: 'LCD 유리', type: '원자재', price: 359000 },
+                'RMGLOL': { name: 'OLED 유리', type: '원자재', price: 3000000 },
+                'RMGLAM': { name: 'AMOLED 유리', type: '원자재', price: 1300000 },
+                
+                'FPPHS23': { name: '갤럭시S23 핸드폰', type: '완제품', price: 1200000 },
+                'FPPHA17': { name: '아이폰17 핸드폰', type: '완제품', price: 1800000 },
+                'FPNIN3D': { name: '닌텐도3D', type: '완제품', price: 250000 },
+                'FPNINLI': { name: '닌텐도Lite', type: '완제품', price: 180000 },
+                'FPNVI05': { name: '5인치 네비', type: '완제품', price: 150000 },
+                'FPNVI07': { name: '7인치 네비', type: '완제품', price: 200000 },
+                
+                'CMSTSS': { name: 'S사이즈 스티로폼', type: '소모품', price: 5000 },
+                'CMSTSM': { name: 'M사이즈 스티로폼', type: '소모품', price: 7500 },
+                'CMSTSL': { name: 'L사이즈 스티로폼', type: '소모품', price: 10000 },
+                'CMPLL10': { name: '10M 비닐', type: '소모품', price: 3000 },
+                'CMPLL30': { name: '30M 비닐', type: '소모품', price: 8000 },
+                
+                'HPP001': { name: '1차 커팅 후', type: '반제품', price: 350000 },
+                'HPP002': { name: '2차 커팅 후', type: '반제품', price: 250000 },
+                'HPP003': { name: '코팅 후', type: '반제품', price: 180000 },
+                'HPP004': { name: '기능 검사 후', type: '반제품', price: 120000 },
+                'HPP005': { name: '외관 검사 후', type: '반제품', price: 50000 },
+                'HPP006': { name: '1차 재검 후', type: '반제품', price: 100000 },
+                'HPP007': { name: '2차 재검 후', type: '반제품', price: 25000 }
+            };
+
+            // 로컬 저장소에 데이터가 없을 경우 초기 마스터 데이터로 설정
             if (!localStorage.getItem('registeredItems')) {
-                localStorage.setItem('registeredItems', JSON.stringify(sampleData));
+                const initialData = Object.keys(masterData).map(code => {
+                    const item = masterData[code];
+                    return {
+                        itemCode: code,
+                        itemName: item.name,
+                        itemPrice: item.price.toString(),
+                        itemType: item.type
+                    };
+                });
+                localStorage.setItem('registeredItems', JSON.stringify(initialData));
             }
 
             // --- 유틸리티 함수 ---
@@ -250,6 +290,19 @@
                 renderItems(filteredItems);
             };
 
+            // 신규 품목 등록 폼에 품목 코드 옵션을 동적으로 추가하는 함수
+            const populateItemCodeOptions = () => {
+                // 기존 옵션들을 초기화
+                itemCodeSelect.innerHTML = '<option value="" selected disabled>품목 코드 선택</option>';
+                // masterData의 키(품목 코드)를 사용하여 옵션 생성
+                Object.keys(masterData).forEach(code => {
+                    const option = document.createElement('option');
+                    option.value = code;
+                    option.textContent = code;
+                    itemCodeSelect.appendChild(option);
+                });
+            };
+
             // --- 이벤트 리스너 ---
 
             // '조회' 버튼 클릭 이벤트
@@ -260,6 +313,12 @@
             // '등록' 버튼 클릭 시 신규 품목 등록 섹션 표시
             if (registerBtn) {
                 registerBtn.addEventListener('click', () => {
+                    // 폼 초기화 및 입력 필드 비활성화 상태로 유지
+                    itemRegisterForm.reset();
+                    itemNameInput.disabled = true;
+                    itemPriceInput.disabled = true;
+                    itemTypeSelect.disabled = true;
+
                     itemListSection.classList.add('hidden-section');
                     itemRegisterSection.classList.remove('hidden-section');
                 });
@@ -322,18 +381,41 @@
                 });
             }
 
+            // 품목 코드 드롭다운 변경 시 품목명과 단가 자동 완성
+            itemCodeSelect.addEventListener('change', () => {
+                const code = itemCodeSelect.value;
+                const item = masterData[code];
+
+                if (item) {
+                    itemNameInput.value = item.name;
+                    itemPriceInput.value = item.price.toLocaleString(); // 단가에 쉼표 추가
+                    itemTypeSelect.value = item.type;
+                } else {
+                    // 선택이 해제된 경우 필드 초기화
+                    itemNameInput.value = '';
+                    itemPriceInput.value = '';
+                    itemTypeSelect.value = '원자재';
+                }
+            });
+
             // 신규 품목 등록 폼 제출 이벤트
             if (itemRegisterForm) {
                 itemRegisterForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     
                     const newItem = {
-                        itemCode: document.getElementById('itemCode').value,
-                        itemName: document.getElementById('itemName').value,
-                        itemPrice: document.getElementById('itemPrice').value,
-                        itemType: document.getElementById('itemType').value
+                        itemCode: itemCodeSelect.value,
+                        itemName: itemNameInput.value,
+                        itemPrice: itemPriceInput.value.replace(/,/g, ''), // 쉼표 제거 후 저장
+                        itemType: itemTypeSelect.value
                     };
 
+                    // 모든 필드가 채워져 있는지 확인
+                    if (!newItem.itemCode || !newItem.itemName || !newItem.itemPrice || !newItem.itemType) {
+                        showMessage('모든 항목을 선택해주세요.');
+                        return;
+                    }
+                    
                     let items = JSON.parse(localStorage.getItem('registeredItems')) || [];
                     
                     // 중복 품목 코드 체크
@@ -345,10 +427,8 @@
                     items.push(newItem);
                     localStorage.setItem('registeredItems', JSON.stringify(items));
                     
-                    // 폼 초기화
+                    // 폼 초기화 및 목록 섹션으로 돌아가기
                     itemRegisterForm.reset();
-                    
-                    // 목록 섹션으로 돌아가기
                     itemListSection.classList.remove('hidden-section');
                     itemRegisterSection.classList.add('hidden-section');
                     
@@ -357,6 +437,9 @@
                 });
             }
 
+            // 페이지 로드 시 초기 품목 목록 렌더링 및 드롭다운 옵션 채우기
+            loadAndFilterItems();
+            populateItemCodeOptions();
         });
     </script>
 </body>

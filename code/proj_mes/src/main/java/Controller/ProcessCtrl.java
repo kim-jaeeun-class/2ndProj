@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,50 +34,69 @@ public class ProcessCtrl extends HttpServlet {
         String mode = request.getParameter("mode");
         String procId = request.getParameter("procId");
 
-        // Ajax 요청: 품목 코드에 따른 공정 정보 반환
-        if ("getProcessByItemCode".equals(action)) {
+        // AJAX 요청 처리
+        if ("getDepartLevelsByItemCode".equals(action)) {
             String itemCode = request.getParameter("itemCode");
-            ProcessDTO process = processService.getProcessByItemCode(itemCode);
-
+            List<String> departLevels = processService.getDepartLevelsByItemCode(itemCode);
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
-
-            if (process != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(process.getProc_seq()).append("|");
-                sb.append(process.getItem_code()).append("|");
-                sb.append(process.getDepart_level()).append("|");
-                sb.append(process.getProc_name()).append("|");
-                sb.append(process.getProc_info()).append("|");
-                sb.append(process.getProc_img() != null ? process.getProc_img() : "");
-                response.getWriter().write(sb.toString());
-            } else {
-                response.getWriter().write("");
-            }
+            response.getWriter().write(String.join(",", departLevels));
             return;
         }
 
-        // CUD 페이지 로직
-        if ("new".equals(mode) || "update".equals(mode)) {
-            request.setAttribute("mode", mode);
-            if ("update".equals(mode) && procId != null) {
-                ProcessDTO process = processService.getProcessById(procId);
-                String departLevel = request.getParameter("departLevel");
-                if (process != null) {
-                    process.setDepart_level(departLevel);
-                }
-                request.setAttribute("process", process);
+        if ("getProcNamesByItemAndDepart".equals(action)) {
+            String itemCodeParam = request.getParameter("itemCode");
+            String departLevelParam = request.getParameter("departLevel");
+            List<ProcessDTO> procList = processService.getProcNamesByItemAndDepart(itemCodeParam, departLevelParam);
+            List<String> procNames = new ArrayList<>();
+            for (ProcessDTO dto : procList) {
+                procNames.add(dto.getDepart_level() + " - " + dto.getProc_name());
             }
-            
-            // 이 두 리스트는 CUD 페이지의 select 박스에서 필요합니다.
-            request.setAttribute("itemCodes", processService.getUniqueItemCodes());
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(String.join(",", procNames));
+            return;
+        }
+
+     // CUD 페이지 로직
+        // new 모드
+        if ("new".equals(mode)) {
+            request.setAttribute("mode", mode);
+            request.setAttribute("itemCodes", processService.getAllItemCodes());
+
+            // 부서 목록 추가
             request.setAttribute("departLevels", processService.getUniqueDepartLevels());
-            
+
+            // 공정명 목록 (proc 테이블에서 가져오기)
+            request.setAttribute("procNames", processService.getUniqueProcNamesFromProcTable());
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("/Html/05_process_gongjeong/05_process_CUD.jsp");
             dispatcher.forward(request, response);
             return;
         }
+        
+        // update 모드
+        if ("update".equals(mode) && procId != null) {
+            request.setAttribute("mode", mode);
+            ProcessDTO process = processService.getProcessById(procId);
+            if (process != null) {
+                request.setAttribute("process", process);
+                request.setAttribute("itemCodes", processService.getAllItemCodes());
+                
+                // 1. 해당 품목 코드에 대한 부서 목록을 조회하여 JSP로 전달
+                List<String> departLevels = processService.getDepartLevelsByItemCode(process.getItem_code());
+                request.setAttribute("departLevels", departLevels);
+                
+                // 2. 해당 품목 코드와 부서에 해당하는 공정 목록을 조회하여 JSP로 전달
+                List<ProcessDTO> procNames = processService.getProcNamesByItemAndDepart(process.getItem_code(), process.getDepart_level());
+                request.setAttribute("procNames", procNames);
 
+            }
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Html/05_process_gongjeong/05_process_CUD.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+        
         // 목록 페이지 로직
         String itemCode = request.getParameter("itemCode");
         String departLevel = request.getParameter("departLevel");
@@ -85,20 +105,23 @@ public class ProcessCtrl extends HttpServlet {
         request.setAttribute("itemCodes", processService.getUniqueItemCodes());
         request.setAttribute("selectedItemCode", itemCode);
         
+        // departLevel 목록 세팅
         List<String> departLevels = (itemCode != null && !itemCode.isEmpty()) ?
                 processService.getDepartLevelsByItemCode(itemCode) :
                 processService.getUniqueDepartLevels();
         request.setAttribute("departLevels", departLevels);
         request.setAttribute("selectedDepart", departLevel);
 
-        List<String> procNames = (itemCode != null && !itemCode.isEmpty() && departLevel != null && !departLevel.isEmpty()) ?
-                processService.getProcNamesByItemAndDepart(itemCode, departLevel) :
-                (departLevel != null && !departLevel.isEmpty()) ?
-                        processService.getUniqueProcNamesByDepart(departLevel) :
-                        processService.getUniqueProcNames();
+        // procNames 목록 세팅 (depart_level 조건에 맞는 공정명만 가져오기)
+        List<ProcessDTO> procList = processService.getProcNamesByItemAndDepart(itemCode, departLevel);
+        List<String> procNames = new ArrayList<>();
+        for (ProcessDTO dto : procList) {
+            procNames.add(dto.getDepart_level() + " - " + dto.getProc_name());
+        }
         request.setAttribute("procNames", procNames);
         request.setAttribute("selectedProcName", procName);
 
+        // 검색 조건에 따른 전체 process 리스트
         List<ProcessDTO> processes = processService.getProcessesBySearch(itemCode, departLevel, procName);
         request.setAttribute("processes", processes);
 
@@ -106,83 +129,83 @@ public class ProcessCtrl extends HttpServlet {
         dispatcher.forward(request, response);
     }
     
-    // POST 요청 처리: 등록/수정/삭제 + 파일 업로드
+    // POST 요청 처리
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
 
         String action = null;
         ProcessDTO dto = new ProcessDTO();
-        String procIdToUpdate = null;
-        String filePath = null;
-
-        // multipart/form-data 요청 처리
+        
+        // 파일 업로드 요청인 경우 (multipart/form-data)
         if (ServletFileUpload.isMultipartContent(request)) {
+        	String filePath = null;
+        	
             try {
                 DiskFileItemFactory factory = new DiskFileItemFactory();
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 List<FileItem> items = upload.parseRequest(request);
-                
-                Map<String, String> formFields = new HashMap<>();
 
+                Map<String, String> formFields = new HashMap<>();
+                String fileName = null;
+                
                 for (FileItem item : items) {
                     if (item.isFormField()) {
                         formFields.put(item.getFieldName(), item.getString("utf-8"));
                     } else {
                         if (item.getName() != null && !item.getName().isEmpty()) {
-                            String fileName = new File(item.getName()).getName();
+                            fileName = new File(item.getName()).getName();
                             filePath = "uploads/" + fileName;
                             File uploadedFile = new File(getServletContext().getRealPath(filePath));
+                            
+                            // 기존 파일이 있다면 삭제
+                            if (uploadedFile.exists()) {
+                                uploadedFile.delete();
+                            }
+                            
                             item.write(uploadedFile);
                         }
                     }
                 }
 
                 action = formFields.get("action");
-                procIdToUpdate = formFields.get("procId");
                 
+                // DTO에 값 설정 (널 체크 및 변환 포함)
                 dto.setProc_id(formFields.get("procId"));
-                dto.setProc_name(formFields.get("procName"));
                 
-                // 문자열을 숫자로 변환
-                if (formFields.get("procSeq") != null) {
+                String procName = formFields.get("procName");
+                dto.setProc_name(procName); 
+                
+                if (procName != null && (procName.contains("검사") || procName.contains("관리"))) {
+                    dto.setProcess_check(1);
+                } else {
+                    dto.setProcess_check(0);
+                }
+
+                String procSeqStr = formFields.get("procSeq");
+                if (procSeqStr != null && !procSeqStr.isEmpty()) {
                     try {
-                        dto.setProc_seq(Integer.parseInt(formFields.get("procSeq")));
+                        dto.setProc_seq(Integer.parseInt(procSeqStr));
                     } catch (NumberFormatException e) {
-                        dto.setProc_seq(0); // 유효하지 않은 값 처리
+                        dto.setProc_seq(0);
                     }
+                } else {
+                    dto.setProc_seq(0);
                 }
                 
-                dto.setDepart_level(formFields.get("departLevel"));
+                String departLevel = formFields.get("departLevel");
+                String departId = processService.getDepartIdByLevel(departLevel);
+
+                dto.setDapart_id2(departId);
+                dto.setProc_img(filePath);
                 dto.setProc_info(formFields.get("procInfo"));
                 dto.setItem_code(formFields.get("itemCode"));
-
-                // 이미지 삭제 플래그 처리
+                
                 boolean deleteImageFlag = "true".equals(formFields.get("deleteImage"));
-
-                // 업데이트 로직 개선
-                if ("update".equals(action)) {
-                    // 기존 데이터를 먼저 가져옴
-                    ProcessDTO existingDto = processService.getProcessById(dto.getProc_id());
-                    if (existingDto != null) {
-                        // 기존 DTO에 새로운 값들을 덮어씌움
-                        existingDto.setProc_name(dto.getProc_name());
-                        existingDto.setProc_seq(dto.getProc_seq());
-                        existingDto.setDepart_level(dto.getDepart_level());
-                        existingDto.setProc_info(dto.getProc_info());
-                        existingDto.setItem_code(dto.getItem_code());
-                        
-                        if (deleteImageFlag) {
-                            existingDto.setProc_img(null); // 이미지 삭제 요청 시
-                        } else if (filePath != null) {
-                            existingDto.setProc_img(filePath); // 새 이미지 업로드 시
-                        }
-                        dto = existingDto;
-                    }
-                } else if ("create".equals(action)) {
-                    dto.setProc_img(filePath);
+                if (deleteImageFlag) {
+                    dto.setProc_img(null);
                 }
-
+                
             } catch (FileUploadException e) {
                 e.printStackTrace();
                 response.getWriter().println("<script>alert('파일 업로드 실패'); history.back();</script>");
@@ -192,8 +215,8 @@ public class ProcessCtrl extends HttpServlet {
                 response.getWriter().println("<script>alert('데이터 처리 실패'); history.back();</script>");
                 return;
             }
-        } else {
-            // 일반 HTTP 요청 처리 (예: 삭제 버튼)
+
+        } else { // 일반 폼 요청 (e.g., DELETE)
             action = request.getParameter("action");
             if ("delete".equals(action)) {
                 dto.setProc_id(request.getParameter("procId"));

@@ -96,41 +96,48 @@
 						<tr>
 							<td>품목 코드</td>
 							<td>
-								<select id="itemCodeSelectCUD" name="itemCode">
-									<option value="" selected>선택</option>
-									<c:forEach var="itemCode" items="${itemCodes}">
-										<option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
-											<c:out value="${itemCode}" />
-										</option>
-									</c:forEach>
+							    <select id="itemCodeSelectCUD" name="itemCode" <c:if test="${mode eq 'update'}">disabled</c:if>>
+								    <option value="">선택</option>
+								    <c:forEach var="itemCode" items="${itemCodes}">
+								        <option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
+								            ${itemCode}
+								        </option>
+								    </c:forEach>
 								</select>
-								<input type="text" id="newItemCode" placeholder="새 품목코드 입력 (선택)" style="display:none;">
+								<c:if test="${mode eq 'update'}">
+								    <input type="hidden" name="itemCode" value="${process.item_code}">
+								</c:if>
 							</td>
 						</tr>
 						<tr>
 							<td>공정 순서</td>
-							<td><input type="text" id="procSeq" value="${process.proc_seq}" <c:if test="${mode eq 'update'}">readonly</c:if>></td>
+							<td><input type="text" id="procSeq" name="procSeq" value="${process.proc_seq}" <c:if test="${mode eq 'update'}">readonly</c:if>></td>
 						</tr>
 						<tr>
-							<td>소속 부서</td>
-							<td>
-								<select id="departSelect" name="departLevel">
-									<option value="" selected>선택</option>
-									<c:forEach var="departLevel" items="${departLevels}">
-										<option value="${departLevel}" <c:if test="${process.depart_level eq departLevel}">selected</c:if>>
-											<c:out value="${departLevel}" />
-										</option>
-									</c:forEach>
+						    <td>소속 부서</td>
+						    <td>
+						        <select id="departSelect" name="departLevel">
+								    <option value="">선택</option>
+								    <c:forEach var="departLevel" items="${departLevels}">
+								        <option value="${departLevel}" <c:if test="${process.depart_level eq departLevel}">selected</c:if>>
+								            ${departLevel}
+								        </option>
+								    </c:forEach>
 								</select>
-							</td>
+						    </td>
 						</tr>
 						<tr>
 							<td>공정</td>
-							<td>				    
-								<select id="procNameSelect" name="procName">
-					            	<option value="">선택</option>
-					            </select>
-							</td>
+						    <td>                
+						        <select id="procNameSelect" name="procName">
+								    <option value="">선택</option>
+								    <c:forEach var="procName" items="${procNames}">
+								        <option value="${procName}" <c:if test="${process.proc_name eq procName}">selected</c:if>>
+								            ${procName}
+								        </option>
+								    </c:forEach>
+								</select>
+						    </td>
 						</tr>
 						<tr>
 							<td>공정 설명</td>

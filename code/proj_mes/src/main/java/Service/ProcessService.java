@@ -16,7 +16,12 @@ public class ProcessService {
     
     // Read (조회) =========================
     
-    // 모든 유니크한 품목 코드 목록을 조회합니다.
+    // item 테이블에서 item_code 모두 조회
+    public List<String> getAllItemCodes() {
+        return processDAO.getAllItemCodes();
+    }
+    
+    // 모든 유니크한 품목 코드 목록을 조회
     public List<String> getUniqueItemCodes() {
         return processDAO.getUniqueItemCodes();
     }
@@ -26,7 +31,7 @@ public class ProcessService {
         return processDAO.getUniqueDepartLevels();
     }
     
-    // 모든 유니크한 공정명 목록을 조회합니다.
+    // 모든 유니크한 공정명 목록을 조회
     public List<String> getUniqueProcNames() {
         return processDAO.getUniqueProcNames();
     }
@@ -45,10 +50,15 @@ public class ProcessService {
     public ProcessDTO getProcessByItemCode(String itemCode) {
         return processDAO.getProcessByItemCode(itemCode);
     }
+    
+    public String getDepartIdByLevel(String departLevel) {
+        // DAO의 getDepartIdByLevel 메서드를 호출하여 부서 ID를 반환
+        return processDAO.getDepartIdByLevel(departLevel);
+    }
 
     // 특정 품목 코드에 해당하는 부서 목록을 조회
     public List<String> getDepartLevelsByItemCode(String itemCode) {
-        return processDAO.getDepartLevelsByItemCode(itemCode);
+    	return processDAO.getDepartLevelsByItemCode(itemCode);
     }
 
     // 특정 부서에 해당하는 유니크한 공정명 목록을 조회
@@ -57,8 +67,13 @@ public class ProcessService {
     }
     
     // 특정 품목 코드와 부서에 해당하는 공정명 목록을 조회
-    public List<String> getProcNamesByItemAndDepart(String itemCode, String departLevel) {
+    public List<ProcessDTO> getProcNamesByItemAndDepart(String itemCode, String departLevel) {
         return processDAO.getProcNamesByItemAndDepart(itemCode, departLevel);
+    }
+    
+    // proc 테이블에서 모든 공정명 목록을 조회
+    public List<String> getUniqueProcNamesFromProcTable() {
+        return processDAO.getUniqueProcNamesFromProcTable();
     }
     
     // Update (수정) =========================

@@ -3,6 +3,7 @@ package Dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,35 @@ import javax.sql.DataSource;
 import Dto.ItemDTO;
 
 public class ItemDAO {
+	
+	
+	
+
+	// 첫 화면 셀렉트용: code, name, price, type만 읽기
+	public List<Dto.ItemDTO> findAllBasic() throws SQLException {
+	    String sql = "SELECT item_code, item_name, item_price, item_type FROM item ORDER BY item_code";
+	    List<Dto.ItemDTO> list = new ArrayList<>();
+
+	    try (Connection c = getConn();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Dto.ItemDTO dto = new Dto.ItemDTO();
+	            dto.setItem_code(rs.getString("item_code"));
+	            dto.setItem_name(rs.getString("item_name"));
+	            dto.setItem_price(rs.getString("item_price")); // DAO 정의가 String
+	            dto.setItem_type(rs.getInt("item_type"));      // DAO 정의가 int
+	            list.add(dto);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new SQLException(e);
+	    }
+	    return list;
+	}
+
+
 
 	// DB 접속 메소드
 	private Connection getConn() {
@@ -184,7 +214,7 @@ public class ItemDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = " update from item";
+			String query = " update item";
 			query += " set item_name = ?, ";
 			query += "     item_bigo = ?, ";
 			query += "     item_type = ?, ";
