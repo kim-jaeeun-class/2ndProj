@@ -2,24 +2,23 @@ package Dto;
 
 import java.sql.Date;
 
-public class OrderDTO {
+public class OrderListDTO {
 
-	private String order_key;		// 발주키
-	private String order_number;	// 발주번호
-	private Date order_date;		// 발주날짜
-	private Date order_pay;			// 결제일
-	private int order_state;		// 진행 상태
+	private String order_key;
+	private String order_number;
+	private Date order_date;
+	private String order_state;
+	private String client_id;
 
-	private String client_id;		// 거래처ID
+	private String worker_id;
+	private String worker_name;
 
-	private String dapart_ID2;		// 부서ID
-	private String depart_level;	// 부서명
+	private String dapart_ID2;
+	private String depart_level;
 
-	private String worker_id;		// 사번
-	private String worker_name; 	// 담당자 이름
+	private String totalQty;
+	private String totalAmt;
 	
-	private String totalQty;		// 총 수량
-	private String totalAmt; 		// 총 합계
 	
 	public String getOrder_key() {
 		return order_key;
@@ -39,16 +38,10 @@ public class OrderDTO {
 	public void setOrder_date(Date order_date) {
 		this.order_date = order_date;
 	}
-	public Date getOrder_pay() {
-		return order_pay;
-	}
-	public void setOrder_pay(Date order_pay) {
-		this.order_pay = order_pay;
-	}
-	public int getOrder_state() {
+	public String getOrder_state() {
 		return order_state;
 	}
-	public void setOrder_state(int order_state) {
+	public void setOrder_state(String order_state) {
 		this.order_state = order_state;
 	}
 	public String getClient_id() {
@@ -63,17 +56,17 @@ public class OrderDTO {
 	public void setWorker_id(String worker_id) {
 		this.worker_id = worker_id;
 	}
-	public String getDapart_ID2() {
-		return dapart_ID2;
-	}
-	public void setDapart_ID2(String dapart_ID2) {
-		this.dapart_ID2 = dapart_ID2;
-	}
 	public String getWorker_name() {
 		return worker_name;
 	}
 	public void setWorker_name(String worker_name) {
 		this.worker_name = worker_name;
+	}
+	public String getDapart_ID2() {
+		return dapart_ID2;
+	}
+	public void setDapart_ID2(String dapart_ID2) {
+		this.dapart_ID2 = dapart_ID2;
 	}
 	public String getDepart_level() {
 		return depart_level;
@@ -81,7 +74,6 @@ public class OrderDTO {
 	public void setDepart_level(String depart_level) {
 		this.depart_level = depart_level;
 	}
-		
 	public String getTotalQty() {
 		return totalQty;
 	}
@@ -95,22 +87,16 @@ public class OrderDTO {
 		this.totalAmt = totalAmt;
 	}
 	
+	
 	@Override
 	public String toString() {
-		return "OrderDTO [order_key=" + order_key + ", order_number=" + order_number + ", order_date=" + order_date
-				+ ", order_pay=" + order_pay + ", order_state=" + order_state + ", client_id=" + client_id
-				+ ", dapart_ID2=" + dapart_ID2 + ", depart_level=" + depart_level + ", worker_id=" + worker_id
-				+ ", worker_name=" + worker_name + ", totalQty=" + totalQty + ", totalAmt=" + totalAmt + "]";
-	}
+		return "OrderListDTO [order_key=" + order_key + ", order_number=" + order_number + ", order_date=" + order_date
+				+ ", order_state=" + order_state + ", client_id=" + client_id + ", worker_id=" + worker_id
+				+ ", worker_name=" + worker_name + ", dapart_ID2=" + dapart_ID2 + ", depart_level=" + depart_level
+				+ ", totalQty=" + totalQty + ", totalAmt=" + totalAmt + "]";
+	} 
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

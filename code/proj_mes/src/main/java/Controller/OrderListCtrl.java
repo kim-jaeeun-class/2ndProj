@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import Service.OrderService;
 
 
-@WebServlet("/order")
-public class OrderServlet extends HttpServlet {
-	
+@WebServlet("/orderList")
+public class OrderListCtrl extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("/order doGet 실행");
+	
+		System.out.println("/orderList doGet 실행");
 		
 		// 한글 깨짐 방지
 		request.setCharacterEncoding("utf-8");
@@ -24,23 +24,18 @@ public class OrderServlet extends HttpServlet {
 		
 		// DB 조회
 		OrderService orderService = new OrderService();
-		List list = orderService.getAllOrder();
+		List orderList = orderService.getAllOrder();
 		
-		// 목록 출력 하기
-		request.setAttribute("list", list);
-		request.getRequestDispatcher("orderlist.jsp").forward(request, response);
-	
+		
+		
+		// 목록 출력
+		request.setAttribute("orderList", orderList);
+		
+		request.getRequestDispatcher("07_orderList.jsp").forward(request, response);
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("/order doPost 실행");
-		
-		// 한글 깨짐 방지
-		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
 	
 	}
-	
 
 }
