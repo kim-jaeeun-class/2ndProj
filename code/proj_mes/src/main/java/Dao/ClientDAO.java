@@ -12,40 +12,32 @@ import Dto.ClientDTO;
 
 public class ClientDAO {
 
-
-    private Connection getConn() throws Exception {
-  
-    		Connection conn = null;
-    		
-    		try {
-    			
-    			Context ctx = new InitialContext();
-    			
-    			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
-    			
-    			// DB 접속
-    			conn = dataFactory.getConnection();
-    			
-    		} catch (Exception e) {
-    			e.printStackTrace();
-    		}
-    		
-    		return conn;
-    	
-
-    }
-
-    /** 전체 조회 */
+	private Connection getConn() {
+		Connection conn = null;
+		
+		try {
+			
+			Context ctx = new InitialContext();
+			
+			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
+			
+			// DB 접속
+			conn = dataFactory.getConnection();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return conn;
+	}
+    /** 목록 조회 */
     public List<ClientDTO> selectAll() {
         final String sql =
             "SELECT CLIENT_ID, CLIENT_NAME, CLIENT_PHONE, BUSINESS_NUMBER, " +
             "       BUSINESS_ITEM, CLIENT_ADDRESS, INOUT_DIVISION, WORKER_ID " +
-            "  FROM CLIENT " +
-            " ORDER BY CLIENT_ID";
+            "  FROM CLIENT ORDER BY CLIENT_ID";
 
         List<ClientDTO> list = new ArrayList<>();
-        int rowCount = 0;
-
         try (Connection con = getConn();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -61,10 +53,8 @@ public class ClientDAO {
                 d.setInout_division(rs.getString("INOUT_DIVISION"));
                 d.setWorker_id(rs.getString("WORKER_ID"));
                 list.add(d);
-                rowCount++;
             }
-            System.out.println("[ClientDAO] fetched rows = " + rowCount);
-
+            System.out.println("[ClientDAO] fetched rows = " + list.size());
         } catch (Exception e) {
             System.err.println("[ClientDAO] selectAll error");
             e.printStackTrace();
@@ -72,8 +62,7 @@ public class ClientDAO {
         return list;
     }
 
-
-    /** 등록 (시퀀스 없음, CLIENT_ID VARCHAR2(20) 제약 → 20자 PK 생성) */
+    /** 등록: PK는 20자, INOUT_DIVISION(NUMBER)은 setInt로 바인딩 */
     public int insert(ClientDTO d) {
         final String sql =
             "INSERT INTO CLIENT ( " +
@@ -82,17 +71,27 @@ public class ClientDAO {
             ") VALUES ( " +
             "  SUBSTR(RAWTOHEX(SYS_GUID()), 1, 20), ?, ?, ?, ?, ?, ?, ? " +
             ")";
+        
+        //자동키 생성 규칙
+       select 
 
         try (Connection con = getConn();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             int i = 1;
             ps.setString(i++, d.getClient_name());
-            ps.setString(i++, d.getClient_phone());
-            ps.setString(i++, d.getBusiness_number());
+            ps.setString(i++, d.getClient_phone());     // 전화번호는 VARCHAR2 권장
+            ps.setString(i++, d.getBusiness_number());  // 사업자번호도 VARCHAR2 권장
             ps.setString(i++, d.getBusiness_item());
             ps.setString(i++, d.getClient_address());
-            ps.setString(i++, d.getInout_division());
+
+            // 출고=-1, 공통=0, 발주=1 (NUMBER 컬럼)
+            if (d.getInout_division() == null || d.getInout_division().isBlank()) {
+                ps.setNull(i++, java.sql.Types.NUMERIC);
+            } else {
+                ps.setInt(i++, Integer.parseInt(d.getInout_division()));
+            }
+
             ps.setString(i++, d.getWorker_id());
 
             int r = ps.executeUpdate();
@@ -104,5 +103,76 @@ public class ClientDAO {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    /** ✅ 실제 DB에서 여러 건 삭제(트랜잭션/배치) */
+    public int deleteByIds(List<String> ids) {
+        if (ids == null || ids.isEmpty()) return 0;
+
+        final String sql = "DELETE FROM CLIENT WHERE CLIENT_ID = ?";
+        Connection con = null;
+        int sum = 0;
+
+        try {
+            con = getConn();
+            con.setAutoCommit(false); // 한꺼번에 처리(원자성)
+
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                for (String id : ids) {
+                    ps.setString(1, id);
+                    ps.addBatch();
+                }
+                int[] res = ps.executeBatch();
+
+                // 영향 받은 행 수 합산
+                for (int n : res) {
+                    if (n == Statement.SUCCESS_NO_INFO) sum += 1;
+                    else if (n == Statement.EXECUTE_FAILED) sum += 0;
+                    else sum += n;
+                }
+            }
+
+            con.commit();
+            System.out.println("[ClientDAO] delete rows = " + sum);
+            return sum;
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            // FK 제약 위반(ORA-02292 등) 시 롤백
+            safeRollback(con);
+            System.err.println("[ClientDAO] deleteByIds FK violation: " + e.getMessage());
+            return 0;
+        } catch (Exception e) {
+            safeRollback(con);
+            System.err.println("[ClientDAO] deleteByIds error");
+            e.printStackTrace();
+            return 0;
+        } finally {
+            safeClose(con);
+        }
+    }
+
+    /** 단건 삭제(옵션) */
+    public int deleteById(String id) {
+        if (id == null || id.isBlank()) return 0;
+        final String sql = "DELETE FROM CLIENT WHERE CLIENT_ID = ?";
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, id);
+            int r = ps.executeUpdate();
+            System.out.println("[ClientDAO] deleteById rows = " + r);
+            return r;
+        } catch (Exception e) {
+            System.err.println("[ClientDAO] deleteById error");
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // --- 유틸 ---
+    private void safeRollback(Connection con) {
+        if (con != null) try { con.rollback(); } catch (Exception ignore) {}
+    }
+    private void safeClose(Connection con) {
+        if (con != null) try { con.setAutoCommit(true); con.close(); } catch (Exception ignore) {}
     }
 }

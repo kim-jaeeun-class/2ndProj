@@ -34,49 +34,77 @@
   </div>
 
   <div class="wrap">
-    <div class="table-wrap">
-      <table class="tables">
-        <thead>
-          <tr>
-            <th>거래처ID</th>
-            <th>거래처명</th>
-            <th>연락번호</th>
-            <th>사업자번호</th>
-            <th>거래품목</th>
-            <th>주소</th>
-            <th>구분</th>
-            <th>담당자(사번)</th>
-          </tr>
-        </thead>
+    <!-- ✅ 삭제 전용 폼: 체크된 client_id들을 ids=... 로 전송, op=delete -->
+    <form id="deleteForm" method="post" action="${cPath}/Client">
+      <input type="hidden" name="op" value="delete" />
 
-        <tbody id="std-body">
-          <c:choose>
-            <c:when test="${not empty clients}">
-              <c:forEach var="row" items="${clients}">
-                <tr>
-                  <td><c:out value="${row.client_id}" /></td>
-                  <td><c:out value="${row.client_name}" /></td>
-                  <td><c:out value="${row.client_phone}" /></td>
-                  <td><c:out value="${row.business_number}" /></td>
-                  <td><c:out value="${row.business_item}" /></td>
-                  <td><c:out value="${row.client_address}" /></td>
-                  <td><c:out value="${row.inout_division}" /></td>
-                  <td><c:out value="${row.worker_id}" /></td>
-                </tr>
-              </c:forEach>
-            </c:when>
-            <c:otherwise>
-              <tr><td colspan="8" style="text-align:center;">데이터가 없습니다.</td></tr>
-            </c:otherwise>
-          </c:choose>
-        </tbody>
-      </table>
-    </div>
+      <div class="table-wrap">
+        <table class="tables">
+          <thead>
+            <tr>
+              <th style="width:48px;">
+                <!-- 전체 선택 체크박스 (편의 기능) -->
+                <input type="checkbox" id="checkAll" aria-label="전체선택" />
+              </th>
+              <th>거래처ID</th>
+              <th>거래처명</th>
+              <th>연락번호</th>
+              <th>사업자번호</th>
+              <th>거래품목</th>
+              <th>주소</th>
+              <th>구분</th>
+              <th>담당자(사번)</th>
+            </tr>
+          </thead>
+
+          <tbody id="std-body">
+            <c:choose>
+              <c:when test="${not empty clients}">
+                <c:forEach var="row" items="${clients}">
+                  <tr>
+                    <!-- ✅ 각 행 체크박스: name='ids' 로 서버에 배열 전송 -->
+                    <td>
+                      <input type="checkbox" class="row-check" name="ids" value="${row.client_id}" aria-label="선택" />
+                    </td>
+
+                    <td><c:out value="${row.client_id}" /></td>
+                    <td><c:out value="${row.client_name}" /></td>
+                    <td><c:out value="${row.client_phone}" /></td>
+                    <td><c:out value="${row.business_number}" /></td>
+                    <td><c:out value="${row.business_item}" /></td>
+                    <td><c:out value="${row.client_address}" /></td>
+
+                    <!-- ✅ 구분 매핑: -1=출고, 0=공통, 1=발주 (숫자/문자 모두 대응) -->
+                    <td>
+                      <c:choose>
+                        <c:when test="${row.inout_division == '-1' or row.inout_division == -1}">출고</c:when>
+                        <c:when test="${row.inout_division == '0'  or row.inout_division == 0 }">공통</c:when>
+                        <c:when test="${row.inout_division == '1'  or row.inout_division == 1 }">발주</c:when>
+                        <c:otherwise>
+                          <c:out value="${row.inout_division}" />
+                        </c:otherwise>
+                      </c:choose>
+                    </td>
+
+                    <td><c:out value="${row.worker_id}" /></td>
+                  </tr>
+                </c:forEach>
+              </c:when>
+              <c:otherwise>
+                <tr><td colspan="9" style="text-align:center;">데이터가 없습니다.</td></tr>
+              </c:otherwise>
+            </c:choose>
+          </tbody>
+        </table>
+      </div>
+    </form>
   </div>
 
   <div style="display:flex; justify-content:end;">
-    <button class="btn" type="button" id="std-search_0" style="margin-right:15px">뒤로가기</button>
-    <button class="btn" type="button" id="std-search_1" style="margin-right:5%">등록하기</button>
+    <!-- ✅ 삭제: 체크된 행들을 deleteForm으로 전송 -->
+    <button class="btn" type="button" id="std-delete" style="margin-right:1%">삭제하기</button>
+    <!-- 기존 등록 -->
+    <button class="btn" type="button" id="std-register" style="margin-right:15px">등록하기</button>
   </div>
 
   <!-- 등록 모달 -->
@@ -128,11 +156,12 @@
 
           <div class="field">
             <label for="division">구분</label>
+            <!-- DB NUMBER에 맞춰 -1/0/1 값 전송 -->
             <select id="division" name="inout_division">
               <option value="">선택</option>
-              <option value="출고">출고</option>
-              <option value="발주">발주</option>
-              <option value="공통">공통</option>
+              <option value="-1">출고</option>  <!-- 출고는 -1 -->
+              <option value="0">공통</option>   <!-- 공통은 0  -->
+              <option value="1">발주</option>   <!-- 발주는 1  -->
             </select>
           </div>
 
@@ -158,10 +187,11 @@
     </div>
   </dialog>
 
-  <!-- 모달/주소/제출 스크립트 -->
+  <!-- 모달/주소/삭제 스크립트 -->
   <script>
+    // 등록 모달 열기/닫기
     const partnerModal = document.getElementById('partnerModal');
-    document.getElementById('std-search_1').addEventListener('click', () => partnerModal.showModal());
+    document.getElementById('std-register').addEventListener('click', () => partnerModal.showModal());
     document.getElementById('pmClose').addEventListener('click', () => partnerModal.close());
     document.getElementById('pmCancel').addEventListener('click', () => partnerModal.close());
 
@@ -180,6 +210,24 @@
       const a1 = document.getElementById('addr').value.trim();
       const a2 = document.getElementById('addr2').value.trim();
       document.getElementById('client_address_hidden').value = (a1 + ' ' + a2).trim();
+    });
+
+    // ✅ 전체선택
+    const checkAll = document.getElementById('checkAll');
+    checkAll.addEventListener('change', (e) => {
+      document.querySelectorAll('.row-check').forEach(chk => chk.checked = e.target.checked);
+    });
+
+    // ✅ 삭제 버튼: 선택 확인 → confirm → 폼 제출
+    document.getElementById('std-delete').addEventListener('click', () => {
+      const checked = Array.from(document.querySelectorAll('.row-check:checked'));
+      if (checked.length === 0) {
+        alert('삭제할 항목을 선택하세요.');
+        return;
+      }
+      if (!confirm(checked.length + '건을 삭제하시겠어요?')) return;
+
+      document.getElementById('deleteForm').submit();
     });
   </script>
 
