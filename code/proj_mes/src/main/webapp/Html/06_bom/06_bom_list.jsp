@@ -103,6 +103,7 @@
 			</div>
 		</form>
 		
+		<!-- BOM 테이블 -->
 		<form method="post" action="bom">
 			<div class="table-container">
 	    		<table class="bom_tab">
@@ -141,6 +142,7 @@
            <h2>BOM 등록</h2>
            <form action="bom" method="post">
 	           <input type="hidden" name="action" value="add">
+	           <input type="hidden" name="bomID">
                <div class="form-group">
                    <label>완제품 품번</label>
                    <input type="text" name = "item-code-1">
@@ -159,5 +161,27 @@
                </div>
            </form>
        </div>
+		<!-- BOM 상세 모달 -->
+		<div id="bomDetailModal" class="modal hidden">
+		    <div class="modal-content">
+		        <span id="modalCloseBtn" class="close-btn">✕</span>
+		        <h2>BOM 상세</h2>
+		        <table>
+		            <tr><td>BOM No.</td><td id="bomID"></td></tr>
+		            <tr><td>완제품</td><td id="itemCode1"></td></tr>
+		            <tr><td>자재</td><td id="itemCode2"></td></tr>
+		            <tr><td>소요량</td><td id="requireAmount"></td></tr>
+		        </table>
+		        <div class="modal-actions">
+		            <form method="post" action="bom" style="display:inline-block;">
+		                <input type="hidden" name="action" value="delete">
+		                <input type="hidden" name="chk" id="modalDeleteID">
+		                <button type="submit">삭제</button>
+		            </form>
+		            <button id="modalEditBtn">수정</button>
+		        </div>
+		    </div>
+		</div>
+
 </body>
 </html>

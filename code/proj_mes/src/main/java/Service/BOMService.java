@@ -50,5 +50,10 @@ public class BOMService {
 	public int editBOM(BOMDTO dto) {
 		return dao.updateBOM(dto);
 	}
+	
+	// 수정용
+	public BOMDTO getBOMByID(String bomID) {
+	    return dao.selectBOMByID(bomID);
+	}
 
 }

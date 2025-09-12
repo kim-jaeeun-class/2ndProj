@@ -206,5 +206,29 @@ public class BOMDAO {
 	    return lastID;
 	}
 
+	// 수정용
+	public BOMDTO selectBOMByID(String bomID) {
+	    BOMDTO dto = null;
+	    try {
+	        Connection conn = getConn();
+	        String query = "SELECT bom_id, item_code_1, item_code_2, require_amount FROM bom WHERE bom_id = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, bomID);
+	        ResultSet rs = ps.executeQuery();
+	        if(rs.next()) {
+	            dto = new BOMDTO();
+	            dto.setBomID(rs.getString("bom_id"));
+	            dto.setItem_code_1(rs.getString("item_code_1"));
+	            dto.setItem_code_2(rs.getString("item_code_2"));
+	            dto.setRequire_amount(rs.getInt("require_amount"));
+	        }
+	        rs.close();
+	        ps.close();
+	        conn.close();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dto;
+	}
 
 }
