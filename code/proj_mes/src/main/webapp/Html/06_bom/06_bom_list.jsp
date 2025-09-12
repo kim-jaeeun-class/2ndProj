@@ -102,32 +102,38 @@
 				<input type="button" value="신규" class="newBOMBtn btn open-btn">
 			</div>
 		</form>
-
-		<div class="table-container">
-    		<table class="bom_tab">
-				<thead>
-					<tr>
-						<th>BOM No.</th>
-						<th>완제품</th>
-						<th>자재</th>
-						<th>소요량</th>
-					</tr>		
-				</thead>
-				<tbody>
-					<c:forEach var="bom" items="${list}">
+		
+		<form method="post" action="bom">
+			<div class="table-container">
+	    		<table class="bom_tab">
+					<thead>
 						<tr>
-							<td>${bom.bomID}</td>
-							<td>${bom.item_code_1}</td>
-							<td>${bom.item_code_2}</td>
-							<td>${bom.require_amount}</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-        </div>
-		<div class="bottomBtn">
-			<input type="button" value="수정" class="updateBOMBtn btn"></input>
-		</div>
+							<th></th>
+							<th>BOM No.</th>
+							<th>완제품</th>
+							<th>자재</th>
+							<th>소요량</th>
+						</tr>		
+					</thead>
+					<tbody>
+						<c:forEach var="bom" items="${list}">
+							<tr>
+								<td><input type="checkbox" value="${bom.bomID}" name="chk"></td>
+								<td>${bom.bomID}</td>
+								<td>${bom.item_code_1}</td>
+								<td>${bom.item_code_2}</td>
+								<td>${bom.require_amount}</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+	        </div>
+			<div class="bottomBtn">
+				<input type = "hidden" name="action" value="delete">
+				<input type="submit" value="삭제" name="delete" class="deleteBOMBtn btn"></input>
+			</div>		
+		</form>
+
 	</div>
 	<!-- 등록용 -->
     <div class="panel">
@@ -135,7 +141,6 @@
            <h2>BOM 등록</h2>
            <form action="bom" method="post">
 	           <input type="hidden" name="action" value="add">
-	           <input type="hidden" name="bomID" value="">
                <div class="form-group">
                    <label>완제품 품번</label>
                    <input type="text" name = "item-code-1">

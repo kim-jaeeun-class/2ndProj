@@ -108,12 +108,11 @@ public class BOMDAO {
 			
 			// SQL 준비
 			String query = "delete from bom"
-					+ "		where item_code_1 = ? and item_code_2 = ?";
+					+ "		where bom_id = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
 			
-			ps.setString(1, dto.getItem_code_1());
-			ps.setString(2, dto.getItem_code_2());
+			ps.setString(1, dto.getBomID());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -186,5 +185,26 @@ public class BOMDAO {
 		
 		return result;
 	}
+	
+	// 오늘 날짜 prefix로 마지막 BOM ID 조회
+	public String selectLastBOMID(String datePrefix) {
+	    String lastID = null;
+	    try {
+	        Connection conn = getConn();
+	        String query = "select max(bom_id) as last_id from bom where bom_id like ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, datePrefix + "%");
+	        ResultSet rs = ps.executeQuery();
+	        if(rs.next()) {
+	            lastID = rs.getString("last_id");
+	        }
+	        ps.close();
+	        conn.close();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lastID;
+	}
+
 
 }
