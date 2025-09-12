@@ -86,52 +86,79 @@
 	</div>
 
 	<div class="wrap">
-        
         <div class="topBox">
-			<div class="row">
-				<h2>불량 처리 입력</h2>
-			</div>
-			<div class="row">
-				<div class="item">
-					<div>검사 이력 코드</div> 
-					<div>검사 이력 코드 자동으로 DB에</div>
-				</div>
-				<div class="item">
-					<div>일자</div>
-					<div>오늘 날짜</div>
-				</div>
-				<div class="item">
-					<div>현재 공정</div>
-					<div>공정 선택 modal</div>
-				</div>
-				<div class="item">
-					<div>작업자</div>
-					<input type="text" id="workerInput">
-				</div>
-			</div>
-			<div class="row">
-				<div class="item">
-					<div>전체 수량</div>
-					<input type="number" id="total">
-				</div> 
-				<div class="item">
-					<div>불량 입력</div>
-					<input type="text" id="defectiveInput">
-				</div>
-			</div>
-			 
-        </div>
+		    <h2>불량 처리 입력</h2>
+		    <table class="inputTb" border="1" cellspacing="0" cellpadding="5" style="width:100%; border-collapse:collapse;">
+		        <tr>
+		            <td>검사 이력 코드</td>
+		            <td>검사 종류</td>
+		            <td>LOT 번호 선택</td>
+		            <td>현재 공정 선택</td>
+		        </tr>
+		        <tr>
+		            <td><input type="text" placeholder="검사 이력 코드 자동으로 DB에"></td>
+		            <td>
+		                <select>
+		                    <option value="1">전수</option>
+		                    <option value="2">샘플</option>
+		                    <option value="3">재검</option>
+		                </select>
+		            </td>
+     		        <td>
+		                <select>
+		                    <option selected>Lot 번호 선택</option>
+		                </select>
+		            </td>
+		            <td>
+		                <select>
+		                    <option selected>공정 선택</option>
+		                </select>
+		            </td>
+		        </tr>
+		        <tr>
+		            <td>일자</td>
+		            <td>검사 시작 시간</td>
+		            <td>검사 종료 시간</td>
+		            <td>작업자</td>
+		        </tr>
+		        <tr>
+		            <td><input type="date"></td>
+		            <td><input type="time"></td>
+		            <td><input type="time"></td>
+		            <td><input type="text"></td>
+		        </tr>
+		        <tr>
+		            <td>불량 사유 입력</td>
+		            <td>양품 개수</td>
+		            <td>불량 개수</td>
+		            <td>품질 상태</td>
+		        </tr>
+		        <tr>
+		            <td><input type="text"></td>
+		            <td><input type="number"></td>
+		            <td><input type="number"></td>
+		            <td>
+		            	<select>
+		            		<option>양품</option>
+		            		<option>재검 대기</option>
+		            		<option>폐기</option>
+		            	</select>
+		            <td>
+		        </tr>
+		    </table>
+		    <input type="button" class="inputBtn btn" value="입력">
+		</div>
 
         <div class="table-container">
     		<table class="insp_tab">
 				<thead>
 					<tr>
 						<th><input type="checkbox" id="allCheck"></th> <!-- 전체 선택 기능 -->
-						<th>검사 방법</th>
-						<th>Lot 번호</th>
-						<th>품명</th>
+						<th>검사 이력 코드</th>
+						<th>검사 종류</th>
+						<th>LOT 번호</th>
 						<th>공정</th>
-						<th>양품 수량</th>
+						<th>일자</th>
 						<th>불량 수량</th>
 						<th>불량명</th>
 						<th>비고</th>
@@ -155,60 +182,6 @@
 		<div class="bottomBtn">
             <input type="button" value="항목 삭제" class="deleteBtn btn"></input>
 			<input type="button" value="저장" class="saveBtn btn"></input>
-		</div>
-
-		<!-- 모달 -->
-		<div id="procModal" class="modal">
-			<div class="modal-content">
-				<span class="close">&times;</span>
-				<h1>Lot 선택</h1>
-				<div class="dateLookup">
-					<div>
-						일자 <input type="date">
-					</div>
-					<input type="button" class="dateBtn btn" value="조회">
-				</div>
-				<table class="modalInfo">
-					<thead>
-						<tr>
-							<th>선택</th>
-							<th>공정명</th>
-							<th>LOT 번호</th>
-							<th>품명</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>공정명1</td>
-							<td>LOT 번호1</td>
-							<td>품명 1</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>공정명2</td>
-							<td>LOT 번호2</td>
-							<td>품명 2</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>공정명3</td>
-							<td>LOT 번호3</td>
-							<td>품명 3</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>공정명4</td>
-							<td>LOT 번호4</td>
-							<td>품명 4</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="btmBtn">
-					<input type="button" value="선택 해제" class="cancleBtn btn"></input>
-					<input type="button" value="저장" class="saveBtn2 btn"></input>
-				</div>
-			</div>
 		</div>
 	</div>
 </body>

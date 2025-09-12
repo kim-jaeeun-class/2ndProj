@@ -1,22 +1,55 @@
 :root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #999;
-    --page-bg: #ffffff;
-    --radius: 7px;
+    /* 배경색 */
+    --body-bg: #f3f4f6;
+    --main-bg: #f3f4f6;
+    --card-bg: #ffffff;
+
+    /* 폰트 및 텍스트 색상 */
+    --primary-text: #1f2937; 
+    --secondary-text: #6b7280; 
+    --header-text: #ffffff;
+    --placeholder-text: #9ca3af;
+
+    /* 주요 색상 (버튼 및 하이라이트) */
+    --primary-blue: #2563eb; 
+    --primary-blue-hover: #1d4ed8;
+    --secondary-blue: #3b82f6;
+    --red: #ef4444; 
+    --red-hover: #dc2626; 
+    --yellow: #f59e0b; 
+    --yellow-hover: #d97706;
+    --green: #22c55e; 
+    --green-hover: #16a34a;
+    --gray-button: #9ca3af; 
+    --gray-button-hover: #6b7280;
+
+    /* 컴포넌트 색상 */
+    --header-bg: #002a40;
+    --nav-bg: #003751;
+    --info-bg: #dbeafe; 
+    --info-border: #3b82f6; 
+
+    /* 테두리 및 그림자 */
+    --border-color: #d1d5db; 
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+    --modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+
+    /* 기타 */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem; 
+    --radius-xl: 0.75rem; 
+    --radius-full: 9999px;
 }
-/* ///////////////////////////////// */
+/* ////////////////////////////////////////////////////////////////// */
 
 .wrap {
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
 }
 
 /* 제목 부분 */
 .titleBox {
-    background-color: var(--field-border);
+    background-color: var(--info-bg);
     height: 25px;
     margin: 0 auto;
     padding: 10px;
@@ -38,6 +71,7 @@
     margin-right: 10px;
 }
 
+
 /* 버튼 양식*/
 .btn {
     border-radius: var(--radius);
@@ -49,8 +83,9 @@
 
 /* 조회 부분 */
 .lookup {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: var(--info-bg);
     padding: 5px;
     margin: 10px 30px;
     display: flex;
@@ -75,8 +110,13 @@
 }
 
 .updateProcessBtn {
-    background-color: var(--button);
-    border: 1px solid var(--button);
+    background-color: var(--green);
+    border: 1px solid var(--green);
+}
+
+.updateProcessBtn: hover {
+    background-color: var(--green-hover);
+    border: 1px solid var(--green-hover);
 }
 
 

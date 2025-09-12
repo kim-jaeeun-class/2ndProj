@@ -18,7 +18,6 @@
             background-color: #f3f4f6;
         }
 
-        /* 차트 캔버스의 최대 높이 설정 */
         canvas {
             max-height: 200px;
         }
@@ -74,32 +73,36 @@
             <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
         </ul>
     </nav>
-	
-	<div class="titleBox"></div>
+    
+	<div class="titleBox">
+		<span>LOT 추적 관리</span>
+		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
+			<div class="toMainpage">
+				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
+				메인 화면으로
+			</div>
+		</a>
+	</div>
 
 	<div class="wrap">
 		<div class="lookup">
 			<div class="lookup_left">
-				<select> <!-- 공정별 검색 -->
-					<option value="" disabled selected>공정별</option>
-					<option>1</option>
+				품목 코드
+				<select>
+					<option selected>전체</option>
 					<option>2</option>
 					<option>3</option>
 					<option>4</option>
 				</select>
-				<!-- 일자별 검색 -->
 				일자 <input type="date">
+				공정
 				<select> <!-- 품명 검색 -->
-					<option value="" disabled selected>품명</option>
+					<option selected>전체</option>
 					<option>1</option>
 					<option>2</option>
 					<option>3</option>
 					<option>4</option>
 				</select>
-			</div>
-			<div>
-				<input type="text" placeholder="공정, 품명 검색...">
-				<input type="button" value="검색">
 			</div>
 		</div>
 
@@ -128,62 +131,6 @@
 						<td>Lot 번호2</td>
 						<td>품명2</td>
 						<td>공정2</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호3</td>
-						<td>품명3</td>
-						<td>공정3</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호4</td>
-						<td>품명4</td>
-						<td>공정4</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호5</td>
-						<td>품명5</td>
-						<td>공정5</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호6</td>
-						<td>품명6</td>
-						<td>공정6</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호7</td>
-						<td>품명7</td>
-						<td>공정7</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호8</td>
-						<td>품명8</td>
-						<td>공정8</td>
-						<td>가공 일자</td>
-						<td>수량</td>
-						<td>양품/불량/가공중</td>
-					</tr>
-					<tr>
-						<td>Lot 번호9</td>
-						<td>품명9</td>
-						<td>공정9</td>
 						<td>가공 일자</td>
 						<td>수량</td>
 						<td>양품/불량/가공중</td>

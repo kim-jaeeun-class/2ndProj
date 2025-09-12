@@ -121,11 +121,12 @@
 				        </c:forEach>
 					</select>
 				</div>
+				<div class="btnDiv">
+					<input type="button" value="수정" class="updateProcessBtn btn"></input>
+					<input type="button" value="신규" class="newProcessBtn btn"></input>
+				</div>
 			</div>
-			<div class="btnDiv">
-				<input type="button" value="수정" class="updateProcessBtn btn"></input>
-				<input type="button" value="신규" class="newProcessBtn btn"></input>
-			</div>
+
 		</form>
 		
 		<div class="table-container" style="display: <c:if test="${not empty processes}">block</c:if>">
