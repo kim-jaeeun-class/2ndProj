@@ -99,13 +99,9 @@
 					<tr>
 						<th style="width: 30px;">선택</th>
 						<th style="width: 33px;">No.</th>
-						<th>원재료명</th>
-						<th>용도</th>
-						<th>자재 코드</th>
-						<th>단가</th>
-						<th>단위</th>
+						<th>완제</th>
+						<th>자재</th>
 						<th>소요량</th>
-						<th>입고처</th>
 					</tr>		
 				</thead>
 				<tbody>

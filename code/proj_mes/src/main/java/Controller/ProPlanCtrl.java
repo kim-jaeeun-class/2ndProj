@@ -28,7 +28,8 @@ public class ProPlanCtrl extends HttpServlet {
 		request.setAttribute("list", basicList);
 		request.getRequestDispatcher("/Html/09_production/09_proPlan.jsp").forward(request, response);
 	}
-
+	// TODO : 지금 문제... 새로고침하면 똑같은 데이터가 input됨...
+	// 나중에 신경쓰고 작업 지시서나 하자
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 한글 깨짐 방지
 		request.setCharacterEncoding("utf-8");

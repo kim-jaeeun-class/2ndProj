@@ -88,7 +88,7 @@
     </nav>
         <div class="titleBox">
             <span>작업 지시서</span>
-            <a href="../02_main/mainpage.html">
+            <a href="mainpage">
                 <div class="toMainpage">
                     <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
                         style="transform: scaleX(-1);">
@@ -124,7 +124,7 @@
                     <div class="table-view">
                         <table>
                             <thead>
-                                <th></th>
+                                <th><input type="checkbox" class="select-all"></th>
                                 <th>작업지시번호</th>
                                 <th>지시일</th>
                                 <th>담당자명</th>
@@ -299,7 +299,7 @@
                     <div class="wrap-tableBtn">
                     	<input type="button" class="button" value="생산수량 입력">
                         <input type="button" class="button" value="수정">
-                        <input type="button" class="button delete" value="삭제">
+                        <input type="submit" class="button delete" value="삭제">
                     </div>
                 </form>
             </div>
@@ -310,13 +310,13 @@
                 <button class="modal-close">✕</button>
                 <h2>품목 추가</h2>
                 <form class="modal-form">
+                	<input type="hidden" name="action" value="addItem">
                     <div class="form-group modal-search">
                         <input type="text">
                         <input type="button" value="검색">
                     </div>
                     <div class ="form-group">
-                    	<input type="hidden" name="action" value="item-add">
-                        <div class = "wrap-table panel-table" style="height: 400px;">
+                        <div class="wrap-table panel-table" style="height: 400px;">
                             <table>
                                 <thead>
                                     <th></th>
@@ -324,12 +324,15 @@
                                     <th>품목명</th>
 
                                 </thead>
+                                <!-- 품목 여기에서 뜨도록 -->
                                 <tbody>
-                                    <tr>
-                                        <td><input type="radio" value="전달값" name="변수명"></td>
-                                        <td>#품목코드</td>
-                                        <td>#품목명</td>
-                                    </tr>
+									<c:forEach var="item" items="${itemList}">
+										<tr>
+											<td><input type="checkbox" value="${item.item_code}" name="chk"></td>
+											<td>${item.item_code}</td>
+											<td>${item.item_name}</td>
+										</tr>
+									</c:forEach>
                                 </tbody>
                             </table>                
                         </div>

@@ -45,7 +45,7 @@ public class WorkOrderCtrl extends HttpServlet {
 			dto.setWoNum(request.getParameter("wo_num"));
 			dto.setWoDate(Date.valueOf(request.getParameter("wo_date")));
 			dto.setWoDuedate(Date.valueOf(request.getParameter("wo_duedate")));
-			dto.setWorkerID(action)
+			dto.setWorkerID(action);
 		}
 		else if("delete".equals(action)) {
 			
@@ -59,7 +59,7 @@ public class WorkOrderCtrl extends HttpServlet {
 		
 	    List<WorkOrderDTO> basicList = service.getAllOrders();
 	    request.setAttribute("list", basicList);
-	    request.getRequestDispatcher("/Html/09_production/09_Work_order.jsp").forward(request, response);
+	    request.getRequestDispatcher("/Html/09_production/09_work_order.jsp").forward(request, response);
    }
 	    
 }

@@ -48,7 +48,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800" page="pro-plan">
 
     <!-- 헤더 섹션 -->
     <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
@@ -190,7 +190,8 @@
             <button class="close-btn">✕</button>
             <h2>생산 계획 등록</h2>
             <form action="proplan" method="post">
-             	<input type="hidden" name="action" value="add">
+            	<input type="hidden" name="action" value="add">
+                <input type="hidden" name="cpID" value="">
                 <div class="form-group">
                     <label>제품 번호</label>
                     <input type="text" name = "item-no">
@@ -275,7 +276,7 @@
                         </tbody>
                     </table>
                     <div class="wrap-tableBtn">
-                        <input type="button" name="detail-modify" class="button" value="수정">
+                        <input type="button" name="detail-modify" class="button edit" value="수정">
                         <input type="submit" name="detaile-delete" class="button delete" value="삭제">
                     </div>
                 </form>

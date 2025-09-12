@@ -106,113 +106,21 @@
 		</div>
 
 		<div class="table-container">
-    		<div class="writer">
-				작성자 :
-				<input type="text" value="작성자 이름" readonly>
-			</div>
     		<table class="bom_tab">
 				<thead>
 					<tr>
 						<th>No.</th>
-						<th>원재료명</th>
-						<th>용도</th>
-						<th>자재 코드</th>
-						<th>단가</th>
-						<th>단위</th>
+						<th>완제품</th>
+						<th>자재</th>
 						<th>소요량</th>
-						<th>입고처</th>
 					</tr>		
 				</thead>
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>원재료명</td>
-						<td>용도</td>
-						<td>자재 코드</td>
-						<td>단가</td>
-						<td>단위</td>
-						<td>EA</td>
-						<td>입고처</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>더미</td>
-						<td>EA</td>
-						<td>더미</td>
+						<td>완제품</td>
+						<td>자재 </td>
+						<td>소요량</td>
 					</tr>
 				</tbody>
 			</table>
