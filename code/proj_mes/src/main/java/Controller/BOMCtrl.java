@@ -71,18 +71,23 @@ public class BOMCtrl extends HttpServlet {
 		}
 		else if("search".equals(action)) {
 			// 필터링 검색 영역
+			String item1 = request.getParameter("filter-item1");
 			BOMDTO dto = new BOMDTO();
 			// 아래 코드 생각 좀 해보기
 			// TODO 필터링 name 설정할 때 잊지 말기!!! 이렇게 해놨으므로 jsp에도 그대로 적용
-			String bomID = request.getParameter("filter-bom-id");
+			dto.setItem_code_1(item1);
+			System.out.println(item1);
 			List<BOMDTO> filtered;
 			// 필터 입력 null 아니고 안 비어있으면 bomID로 서치 가능하게 세팅
-			if(bomID != null && !bomID.isEmpty()) {
-				dto.setBomID(bomID);
+			if(item1 != null && !item1.isEmpty() && !"all".equals(item1)) {
+				dto.setItem_code_1(item1); 
 				filtered = service.getFilBOM(dto);
 			}
-			else {
+			else if("all".equals(item1)) {
 				// 비어 있으면 전체로 나오라고 하기
+				filtered = service.getAllBOM();
+			}
+			else {
 				filtered = service.getAllBOM();
 			}
 			

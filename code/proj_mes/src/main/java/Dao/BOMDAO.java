@@ -73,11 +73,12 @@ public class BOMDAO {
 			String query = "select"
 					+ "     bom_id, item_code_1, item_code_2, require_amount"
 					+ "		from bom"
-					+ "		where item_code_1";
+					+ "		where item_code_1 = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
-			
+			ps.setString(1, dto.getItem_code_1());
 			ResultSet rs = ps.executeQuery();
+			
 			
 			while(rs.next()) {
 				BOMDTO filDto = new BOMDTO();
@@ -106,14 +107,13 @@ public class BOMDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = "select"
-					+ "     bom_id, item_code_1, item_code_2, require_amount"
-					+ "		from bom"
-					+ "		where item_code_1 = ?";
+			String query = "delete from bom"
+					+ "		where item_code_1 = ? and item_code_2 = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
 			
-			ps.setString(1, dto.getBomID());
+			ps.setString(1, dto.getItem_code_1());
+			ps.setString(2, dto.getItem_code_2());
 			
 			// SQL 실행
 			result = ps.executeUpdate();

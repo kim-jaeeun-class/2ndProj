@@ -81,23 +81,25 @@
 	<div class="titleBox"></div>
 
 	<div class="wrap">
-		<form class="lookup">
+		<form class="lookup" method="post" action="bom">
+		<input type="hidden" name="action" value="search">
 			<div class="lookup_left">
 				<div class = "lookup-title">품목(완제품) 코드</div>
-				<select>
+				<select name = "filter-item1">
 					<!-- TODO 지금 하드코딩 해놨는데 DB에서 따오도록 설정 바꿔두기 -->
 					<!-- 여기에서 name이든 뭐든 설정해야 하니까 아래 테이블처럼 설정해두기 -->
-					<option selected>FPPHS23</option>
-					<option>FPPHA17</option>
-					<option>FPNIN3D</option>
-					<option>FPNINLI</option>
-					<option>FPNVI05</option>
-					<option>FPNVI07</option>
+					<option value="all" selected>전체</option>
+					<option value="FPPHS23">FPPHS23</option>
+					<option value="FPPHA17">FPPHA17</option>
+					<option value="FPNIN3D">FPNIN3D</option>
+					<option value="FPNINLI">FPNINLI</option>
+					<option value="FPNVI05">FPNVI05</option>
+					<option value="FPNVI07">FPNVI07</option>
 				</select>
 			</div>
 			<div class="btnDiv">
-				<input type="submit" value="조회" class="lookupBtn btn"></input>
-				<input type="button" value="신규" class="newBOMBtn btn"></input>
+				<input type="submit" value="조회" class="lookupBtn btn">
+				<input type="button" value="신규" class="newBOMBtn btn open-btn">
 			</div>
 		</form>
 
@@ -127,5 +129,30 @@
 			<input type="button" value="수정" class="updateBOMBtn btn"></input>
 		</div>
 	</div>
+	<!-- 등록용 -->
+    <div class="panel">
+           <button class="close-btn">✕</button>
+           <h2>BOM 등록</h2>
+           <form action="bom" method="post">
+	           <input type="hidden" name="action" value="add">
+	           <input type="hidden" name="bomID" value="">
+               <div class="form-group">
+                   <label>완제품 품번</label>
+                   <input type="text" name = "item-code-1">
+               </div>
+               <div class="form-group">
+                   <label>자재 품번</label>
+                   <input type="text" name="item-code-2">
+               </div>
+               <div class="form-group">
+                   <label>자재 소요량</label>
+                   <input type="number" name="require-amount">
+               </div>             
+               <div class="form-actions">
+                   <input type = "button" name="panel-cancel" class="button cancel reset" value="취소">
+                   <button type="submit" name="panel-save" class="button panel-save">저장</button>
+               </div>
+           </form>
+       </div>
 </body>
 </html>
