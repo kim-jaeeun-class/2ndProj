@@ -56,6 +56,7 @@
     display: flex;
     justify-content: space-between; 
     align-items: center; 
+    padding: 30px 50px;
 }
 
 .lookup_left {
@@ -81,7 +82,7 @@
 .newBOMBtn {
     background-color: #0EB4FC;
     border: 1px solid #0EB4FC;
-    margin:5px;
+    margin: 5px;
 }
 
 /* 테이블 부분 */
@@ -92,7 +93,6 @@
     overflow-y: auto;
     position: relative;
     margin: 30px;
-    display: none;
 }
 
 /* 테이블 전체에 테두리 적용 */
@@ -123,9 +123,10 @@
 /* thead 고정 */
 .bom_tab thead th {
     position: sticky;
-    top: 30px;   /* writer div 높이만큼 조절 */
+    top: 0px;   /* writer div 높이만큼 조절 */
     background: #999;
     z-index: 2;
+    border: 1px solid var(--border);
 }
 
 /* 수정 버튼 */
@@ -139,5 +140,36 @@
     background-color: #000000;
     border: 1px solid #000000;
     display: none;
+}
+
+/* 사이드 패널 */
+.panel {
+    position: fixed;
+    top: 0;
+    right: -90%;
+    width: 85%;
+    height: 100%;
+    background: #f9f9f9;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#panel-down {
+    z-index: 500;
+}
+
+.panel.open {
+    right: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    float: right;
+    cursor: pointer;
 }
 

@@ -83,10 +83,9 @@
 /* 테이블 부분 */
 .table-container {
     border: 1px solid var(--border);
-    height: 400px; /* 고정된 세로 높이 설정 */
+    height: 600px; 
     overflow: auto; /* 내용이 넘칠 때 스크롤바가 생기도록 설정 */
     margin: 10px 30px;
-    display: none; /* 처음에는 숨김 */
 }
 
 /* 테이블 전체에 테두리 적용 */
@@ -104,4 +103,19 @@
 
 .proc_tab > thead {
     background-color: #999;
+}
+
+/* 이미지 확대 */
+/* 기본 이미지 크기 */
+.proc_tab img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* 확대 이미지 */
+.proc_tab img.expanded {
+    width: 150px;   /* 확대 시 너비 */
+    height: 150px;  /* 확대 시 높이 */
 }

@@ -77,7 +77,7 @@
     
 	<div class="titleBox">
 		<span>BOM / 등록 / 수정 / 삭제</span>
-		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
+		<a href="/mainpage">
 			<div class="toMainpage">
 				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
 				메인 화면으로

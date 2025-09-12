@@ -11,7 +11,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import Dto.BOMDTO;
-import Dto.WorkOrderDTO;
 
 public class BOMDAO {
 	Connection getConn() {
@@ -74,11 +73,12 @@ public class BOMDAO {
 			String query = "select"
 					+ "     bom_id, item_code_1, item_code_2, require_amount"
 					+ "		from bom"
-					+ "		where item_code_1";
+					+ "		where item_code_1 = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
-			
+			ps.setString(1, dto.getItem_code_1());
 			ResultSet rs = ps.executeQuery();
+			
 			
 			while(rs.next()) {
 				BOMDTO filDto = new BOMDTO();
@@ -98,8 +98,8 @@ public class BOMDAO {
 		return list;
 	}
 	
-	// TODO 삭제 : 체크박스 필요할 듯. BOM ID 기준으로 삼아서 삭제.
-	public int deleteWO(BOMDTO dto) {
+	// 삭제 : 체크박스 필요할 듯. BOM ID 기준 삭제.
+	public int deleteBOM(BOMDTO dto) {
 		
 		int result = -1;
 		try {
@@ -107,14 +107,13 @@ public class BOMDAO {
 			Connection conn = getConn();
 			
 			// SQL 준비
-			String query = "select"
-					+ "     bom_id, item_code_1, item_code_2, require_amount"
-					+ "		from bom"
-					+ "		where item_code_1 = ?";
+			String query = "delete from bom"
+					+ "		where item_code_1 = ? and item_code_2 = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
 			
-			ps.setString(1, dto.getBomID());
+			ps.setString(1, dto.getItem_code_1());
+			ps.setString(2, dto.getItem_code_2());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -129,10 +128,63 @@ public class BOMDAO {
 		return result;
 	}
 	
-	// TODO 수정 : update set 마찬가지로 BOM ID 기준으로 삼아서 수정 넣기
-	
+	// 수정 : BOM ID 기준 수정
+	public int updateBOM(BOMDTO dto) {
+		int result = -1;
+		try {
+			Connection conn = getConn();
+			
+			String query = "update bom"
+					+ "		set"
+					+ "    	item_code_1 = ?, item_code_2 = ?, require_amount = ?"
+					+ "		where bom_id = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setString(1, dto.getItem_code_1());
+			ps.setString(2, dto.getItem_code_2());
+			ps.setInt(3, dto.getRequire_amount());
+			ps.setString(4, dto.getBomID());
+			
+			result = ps.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	// TODO 등록 : bom id 제외 입력 필요. bomid는 B+오늘 날짜 6자리+2자리 숫자 구분자 넣기.
+	// 생산 계획 DAO 참고해서 작업 진행하기
+	public int insertBOM(BOMDTO dto) {
+		
+		int result = -1;
+		try {
+			
+			Connection conn = getConn();
+			
+			String query = "insert into bom"
+					+ "		(bom_id, item_code_1, item_code_2, require_amount)"
+					+ "		values (?, ?, ?, ?)";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setString(1, dto.getBomID());
+			ps.setString(2, dto.getItem_code_1());
+			ps.setString(3, dto.getItem_code_2());
+			ps.setInt(4, dto.getRequire_amount());
+			
+			// SQL 실행
+			result = ps.executeUpdate();
 
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
 }

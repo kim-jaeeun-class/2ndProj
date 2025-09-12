@@ -1,336 +1,212 @@
 package Dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import Dto.OrderDTO;
 import Dto.StockDTO;
 
 public class StockDAO {
 
-	// DB 접속 메소드
-	private Connection getConn() {
-		Connection conn = null;
-		
-		try {
-			
-			Context ctx = new InitialContext();
-			
-			DataSource dataFactory = (DataSource)ctx.lookup("java:/comp/env/jdbc/oracle"); 
-			
-			// DB 접속
-			conn = dataFactory.getConnection();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return conn;
-	}
-	
-	
+    // JNDI 연결
+    private Connection getConn() throws Exception {
+        Context ctx = new InitialContext();
+        DataSource dataFactory = (DataSource) ctx.lookup("java:/comp/env/jdbc/oracle");
+        return dataFactory.getConnection();
+    }
 
-//	select s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, i.ITEM_CODE, i.item_price
-//	from stock s
-//	join item i on s.item_code = i.item_code;
+    /** 목록 + ITEM 조인 + 파생 카테고리 */
+    public List<StockDTO> stock_list_menu() {
+        List<StockDTO> list = new ArrayList<>();
+        final String sql =
+            "SELECT s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, " +
+            "       i.ITEM_CODE, i.ITEM_NAME, i.ITEM_PRICE, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=2 THEN SUBSTR(i.ITEM_CODE,1,2) END AS BIG_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=4 THEN SUBSTR(i.ITEM_CODE,3,2) END AS MID_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=6 THEN SUBSTR(i.ITEM_CODE,5,2) END AS SMALL_CATEGORY " +
+            "  FROM STOCK s JOIN ITEM i ON s.ITEM_CODE = i.ITEM_CODE";
 
-	
-	
-	//////////////////////////////////  stock_list .html////////////////////////////////////////////////////////////
-	
-	//분류의 기준은 분명 품목 코드일 것이다.
-	//그럼 이걸 품목에서 추가해 주어야 하는가??
-	//그럼 이걸 품목에서 비고로 넣는건 어떨까??
-	//차라리 품목 코드를 가져온후 글자2의 크기로 잘라 맵핑하자 2/2/2+@
-	
-//	아니면 그냥 조건이 주어지면 대분류 + 중분류 + 소분류 = 품목코드니까 문자열 위치 찾기 같은 기능으로 분류가 가능했을듯....?
-			
-	
-	
-//	select s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, i.ITEM_CODE, i.item_price
-//	from stock s
-//	join item i on s.item_code = i.item_code;
-	
-	
-	// select
-	public List stock_list_menu() {
-		
-		List list = new ArrayList();
-		
-		try {
-			
-			// DB 접속
-			Connection con = getConn();
-			
-			// SQL 준비
-			//itemcode를 기반으로 item table 조인
-			//차라리 품목 코드를 가져온후 글자2의 크기로 잘라 맵핑하자 2/2/2+@
-			//목록에서 조회를 할떄 데분류 전체이면 대분류만 찾으면 됨, 그 이후 연산 x , 두번째 중분류가지만일떄도 소분류는 연산하지 않아도 됨
-			String query = 
-					" SELECT "
-					+ "  s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, "
-					+ "  i.ITEM_CODE, i.ITEM_PRICE, "
-					+ "  CASE WHEN LENGTH(i.ITEM_CODE)    >= 2 THEN SUBSTR(i.ITEM_CODE, 1, 2) END AS big_category, "
-					+ "  CASE WHEN LENGTH(i.ITEM_CODE)    >= 4 THEN SUBSTR(i.ITEM_CODE, 3, 2) END AS mid_category, "
-					+ "  CASE WHEN LENGTH(i.ITEM_CODE)    >= 5 THEN SUBSTR(i.ITEM_CODE, 5)     END AS small_category "
-					+ "FROM stock s "
-					+ "JOIN item  i ON s.item_code = i.item_code";
-			PreparedStatement ps = con.prepareStatement(query);
-			
-	
-			
-			
-			// SQL 실행
-			ResultSet rs = ps.executeQuery();
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-			// 결과 활용
-			while (rs.next()) {
-			    StockDTO dto = new StockDTO();
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
-			    dto.setStock_id(rs.getString("stock_id"));
-			    dto.setStock_date(rs.getDate("stock_date"));
-			    dto.setStock_loc(rs.getInt("stock_loc"));
-			    dto.setStock_div(rs.getInt("stock_div"));
-			    dto.setStock_number(rs.getInt("stock_number"));
-			    dto.setItem_code(rs.getString("item_code"));
+    /** 대/중/소로만 검색 */
+    public List<StockDTO> findStocks(String big, String mid, String small) {
+        return searchStocks(big, mid, small, null, null);
+    }
 
-		
-			 		    
-			    
-			    
-			    
-			    dto.setItem_price(rs.getString("item_price"));
+    /** 대/중/소 + 기간 검색 */
+    public List<StockDTO> searchStocks(String big, String mid, String small, Date from, Date to) {
+        List<StockDTO> list = new ArrayList<>();
 
-			    // 새로 추가된 파생 컬럼들
-			    dto.setBigCategory(rs.getString("big_category"));
-			    dto.setMidCategory(rs.getString("mid_category"));
-			    dto.setSmallCategory(rs.getString("small_category"));
+        String base =
+            "SELECT s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, " +
+            "       i.ITEM_CODE, i.ITEM_NAME, i.ITEM_PRICE, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=2 THEN SUBSTR(i.ITEM_CODE,1,2) END AS BIG_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=4 THEN SUBSTR(i.ITEM_CODE,3,2) END AS MID_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=6 THEN SUBSTR(i.ITEM_CODE,5,2) END AS SMALL_CATEGORY " +
+            "  FROM STOCK s JOIN ITEM i ON s.ITEM_CODE = i.ITEM_CODE ";
 
-			    list.add(dto);
-			}
-			
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	
-	
-	
-	
+        StringBuilder where = new StringBuilder(" WHERE 1=1 ");
+        List<Object> params = new ArrayList<>();
 
-	
+        if (nz(big))   { where.append(" AND SUBSTR(i.ITEM_CODE,1,2) = ? "); params.add(big); }
+        if (nz(mid))   { where.append(" AND SUBSTR(i.ITEM_CODE,3,2) = ? "); params.add(mid); }
+        if (nz(small)) { where.append(" AND SUBSTR(i.ITEM_CODE,5,2) = ? "); params.add(small); }
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+        if (from != null && to != null) {
+            where.append(" AND TRUNC(s.STOCK_DATE) BETWEEN ? AND ? ");
+            params.add(from); params.add(to);
+        } else if (from != null) {
+            where.append(" AND TRUNC(s.STOCK_DATE) >= ? ");
+            params.add(from);
+        } else if (to != null) {
+            where.append(" AND TRUNC(s.STOCK_DATE) <= ? ");
+            params.add(to);
+        }
 
+        String sql = base + where + " ORDER BY s.STOCK_DATE DESC, s.STOCK_ID DESC";
 
-	// select
-	public List selectAll() {
-		
-		List list = new ArrayList();
-		
-		try {
-			
-			// DB 접속
-			Connection con = getConn();
-			
-			// SQL 준비
-			String query = " select * from stock";
-			PreparedStatement ps = con.prepareStatement(query);
-			
-			// SQL 실행
-			ResultSet rs = ps.executeQuery();
-			
-			// 결과 활용
-			while(rs.next()) {
-				StockDTO dto = new StockDTO();
-				
-				dto.setStock_id(rs.getString("stock_id"));
-				dto.setStock_date(rs.getDate("stock_date"));
-				dto.setStock_loc(rs.getInt("stock_loc"));
-				dto.setStock_div(rs.getInt("stock_div"));
-				dto.setStock_number(rs.getInt("stock_number"));
-				dto.setItem_code(rs.getString("item_code"));
-				
-				list.add(dto);
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-	}
-	
-	// 상세페이지 하나만 조회
-	public StockDTO selectOneStock(StockDTO stockDTO) {
-		
-		StockDTO resultDTO = null;
-		
-		try {
-				
-			// DB 접속
-			Connection conn = getConn();
-			
-			// SQL 준비
-			String query = " select * from stock";
-				   query += " where stock_id = ?";
-				   
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
-			
-			// SQL 실행
-			ResultSet rs = ps.executeQuery();
-			
-			// 결과 활용
-			if(rs.next()) {
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-				// resultDTO가 null로 되어있어서 new 해줘야함
-				resultDTO = new StockDTO();
-				
-				resultDTO.setStock_id(rs.getString("stock_id"));
-				resultDTO.setStock_date(rs.getDate("stock_date"));
-				resultDTO.setStock_loc(rs.getInt("stock_loc"));
-				resultDTO.setStock_div(rs.getInt("stock_div"));
-				resultDTO.setStock_number(rs.getInt("stock_number"));
-				resultDTO.setItem_code(rs.getString("item_code"));
-			
-			}
-				
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		return resultDTO;
-		
-	}
-	
-	// delete
-	public int deleteStock(StockDTO stockDTO) {
-		
-		int result = -1;
-		
-		try {
-			
-			// DB 접속
-			Connection conn = getConn();
-			
-			// SQL 준비
-			String query = " delete from stock";
-				   query += " where stock_id = ?";
-		   
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
-			
-			// SQL 실행
-			result = ps.executeUpdate();
-		
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	// insert
-	public int insertStock(StockDTO stockDTO) {
-		
-		int result = -1;
-		
-		try {
-			
-			// DB 접속
-			Connection conn = getConn();
-			
-			// SQL 준비
-			String query = " insert into stock (stock_id, stock_date, stock_loc, stock_div, stock_number, item_code)";
-				   query += " values(?, ?, ?, ?, ?, ?)";
-			
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setString(1, stockDTO.getStock_id());
-			ps.setDate(2, stockDTO.getStock_date());
-			ps.setInt(3, stockDTO.getStock_loc());
-			ps.setInt(4, stockDTO.getStock_div());
-			ps.setInt(5, stockDTO.getStock_number());
-			ps.setString(6, stockDTO.getItem_code());
-			
-			// SQL 실행
-			result = ps.executeUpdate();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
-	
-	// update
-	public int updateStock(StockDTO stockDTO) {
-		
-		int result = -1;
-		
-		try {
-			
-			// DB 접속
-			Connection conn = getConn();
-			
-			// SQL 준비
-			String query = " update from stock";
-			query += " set stock_date = ?, ";
-			query += "     stock_loc = ?, ";
-			query += "     stock_div = ?, ";
-			query += "     stock_number = ?, ";
-			query += "     item_code = ? ";
-			query += " where stock_id = ?";
-			
-			PreparedStatement ps = conn.prepareStatement(query);
-			ps.setDate(1, stockDTO.getStock_date());
-			ps.setInt(2, stockDTO.getStock_loc());
-			ps.setInt(3, stockDTO.getStock_div());
-			ps.setInt(4, stockDTO.getStock_number());
-			ps.setString(5, stockDTO.getItem_code());
-			ps.setString(6, stockDTO.getStock_id());
-			
-			// SQL 실행
-			result = ps.executeUpdate();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
-	}
+            int idx = 1;
+            for (Object p : params) {
+                if (p instanceof Date) ps.setDate(idx++, (Date) p);
+                else                   ps.setString(idx++, p.toString());
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapRow(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /** 전건 조회 */
+    public List<StockDTO> selectAll() {
+        List<StockDTO> list = new ArrayList<>();
+        final String sql =
+            "SELECT s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, " +
+            "       i.ITEM_CODE, i.ITEM_NAME, i.ITEM_PRICE, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=2 THEN SUBSTR(i.ITEM_CODE,1,2) END AS BIG_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=4 THEN SUBSTR(i.ITEM_CODE,3,2) END AS MID_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=6 THEN SUBSTR(i.ITEM_CODE,5,2) END AS SMALL_CATEGORY " +
+            "  FROM STOCK s JOIN ITEM i ON s.ITEM_CODE = i.ITEM_CODE";
+
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
+
+    /** 상세 */
+    public StockDTO selectOneStock(StockDTO stockDTO) {
+        StockDTO resultDTO = null;
+        final String sql =
+            "SELECT s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, " +
+            "       i.ITEM_CODE, i.ITEM_NAME, i.ITEM_PRICE, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=2 THEN SUBSTR(i.ITEM_CODE,1,2) END AS BIG_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=4 THEN SUBSTR(i.ITEM_CODE,3,2) END AS MID_CATEGORY, " +
+            "       CASE WHEN LENGTH(i.ITEM_CODE)>=6 THEN SUBSTR(i.ITEM_CODE,5,2) END AS SMALL_CATEGORY " +
+            "  FROM STOCK s JOIN ITEM i ON s.ITEM_CODE = i.ITEM_CODE " +
+            " WHERE s.STOCK_ID = ?";
+
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, stockDTO.getStock_id());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) resultDTO = mapRow(rs);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return resultDTO;
+    }
+
+    /** 삭제 */
+    public int deleteStock(StockDTO stockDTO) {
+        final String sql = "DELETE FROM STOCK WHERE STOCK_ID = ?";
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, stockDTO.getStock_id());
+            return ps.executeUpdate();
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
+
+    /** 등록 */
+    public int insertStock(StockDTO stockDTO) {
+        final String sql =
+            "INSERT INTO STOCK (STOCK_ID, STOCK_DATE, STOCK_LOC, STOCK_DIV, STOCK_STAT, STOCK_NUMBER, ITEM_CODE) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, stockDTO.getStock_id());
+            ps.setDate(2, stockDTO.getStock_date());
+            ps.setInt(3, stockDTO.getStock_loc());
+            ps.setInt(4, stockDTO.getStock_div());
+            ps.setInt(5, stockDTO.getStock_stat());
+            ps.setInt(6, stockDTO.getStock_number());
+            ps.setString(7, stockDTO.getItem_code());
+            return ps.executeUpdate();
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
+
+    /** 수정 */
+    public int updateStock(StockDTO stockDTO) {
+        final String sql =
+            "UPDATE STOCK " +
+            "   SET STOCK_DATE = ?, STOCK_LOC = ?, STOCK_DIV = ?, STOCK_STAT = ?, " +
+            "       STOCK_NUMBER = ?, ITEM_CODE = ? " +
+            " WHERE STOCK_ID = ?";
+        try (Connection con = getConn();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDate(1, stockDTO.getStock_date());
+            ps.setInt(2, stockDTO.getStock_loc());
+            ps.setInt(3, stockDTO.getStock_div());
+            ps.setInt(4, stockDTO.getStock_stat());
+            ps.setInt(5, stockDTO.getStock_number());
+            ps.setString(6, stockDTO.getItem_code());
+            ps.setString(7, stockDTO.getStock_id());
+            return ps.executeUpdate();
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
+
+    // ---- 내부 유틸 ----
+    private static boolean nz(String s) { return s != null && !s.isEmpty(); }
+
+    private static StockDTO mapRow(ResultSet rs) throws SQLException {
+        StockDTO dto = new StockDTO();
+        dto.setStock_id(rs.getString("STOCK_ID"));
+        dto.setStock_date(rs.getDate("STOCK_DATE"));
+        dto.setStock_loc(rs.getInt("STOCK_LOC"));
+        dto.setStock_div(rs.getInt("STOCK_DIV"));
+        dto.setStock_stat(rs.getInt("STOCK_STAT"));
+        dto.setStock_number(rs.getInt("STOCK_NUMBER"));
+        dto.setItem_code(rs.getString("ITEM_CODE"));
+        dto.setItem_name(rs.getString("ITEM_NAME"));
+        dto.setItem_price(rs.getString("ITEM_PRICE"));
+        dto.setBigCategory(rs.getString("BIG_CATEGORY"));
+        dto.setMidCategory(rs.getString("MID_CATEGORY"));
+        dto.setSmallCategory(rs.getString("SMALL_CATEGORY"));
+        return dto;
+    }
 }
