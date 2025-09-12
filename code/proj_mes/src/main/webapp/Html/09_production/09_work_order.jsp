@@ -112,7 +112,7 @@
                     	<input type="hidden" name="action" value="search">
                         <div class="select-con">
                             <div class="select-title" name="wo-filter-title">조회일 입력</div>
-							<input type="date" name="wo-filter-date">
+							<input type="date"  name="wo-filter-date">
                         </div>
                         <div class="filter-submit">
                             <button type="submit" class="button">조회</button>
@@ -223,7 +223,7 @@
             <button class="close-btn">✕</button>
                 <h2>작업 지시서 상세</h2>
                 <form class="wrap-table panel-table" method = "get" action="workorder">
-                	<input type="hidden" name="action" value="delete">
+                	<input type="hidden" name="action" id="detail-delete-id" name = "action" value="delete">
                     <table class = "modal-table">
                     		<!--  여기는 메인 테이블 보고 자동으로 뜨도록 -->
 <!--                         <tr> -->
