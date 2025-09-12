@@ -51,10 +51,10 @@
             <th class="order_row_4">발주번호</th>
             <th class="order_row_5">부서</th>
             <th class="order_row_6">담당자</th>
-            <th class="order_row_7">총 수량</th>
+            <th class="order_row_7">품목 수</th>
             <th class="order_row_8">총 금액</th>
-            <th class="order_row_9">진행상태</th>
-            <th class="order_row_0"></th>
+            <!-- <th class="order_row_9">진행상태</th>
+            <th class="order_row_0"></th> -->
           </tr>
         </thead>
         <tbody class="tables_body">
@@ -81,7 +81,7 @@
               <td><fmt:formatNumber value="${o.totalQty}"/></td>
               <td><fmt:formatNumber value="${o.totalAmt}" pattern="#,##0"/></td>
 
-              <td class="row_state">
+              <%-- <td class="row_state">
                 <c:choose>
                   <c:when test="${o.order_state == 0}">임시저장</c:when>
                   <c:when test="${o.order_state == 1}">승인</c:when>
@@ -98,7 +98,7 @@
                     <button type="submit" class="recall">회수</button>
                   </form>
                 </c:if>
-              </td>
+              </td> --%>
             </tr>
           </c:forEach>
         </tbody>
@@ -114,7 +114,9 @@
       </form>
 
       <!-- 추가: 등록 화면으로 이동(GET). /orderAdd(POST 전용)로 가지 않도록! -->
-      <a class="add" href="<c:url value='/orderDetail'><c:param name='mode' value='add'/></c:url>">추가</a>
+      <a class="add" href="<c:url value='/orderDetail'><c:param name='mode' value='add'/></c:url>">
+      <button type="button">추가</button></a>
+   	  
     </div>
   </div>
 </div>

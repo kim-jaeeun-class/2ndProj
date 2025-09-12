@@ -39,7 +39,7 @@ public List<OrderDTO> selectAllWithSummary() throws Exception {
   String sql =
     "SELECT o.order_key, o.order_number, o.order_date, o.order_state, " +
     "       d.depart_level, w.worker_name, " +
-    "       NVL(SUM(NVL(od.quantity,0)), 0) AS totalQty, " +
+    "       COUNT(od.item_code) AS totalQty, " +
     "       NVL(SUM( NVL(od.quantity,0) * NVL(TO_NUMBER(REGEXP_REPLACE(od.item_price,'[^0-9.]','')),0) ), 0) AS totalAmt " +
     "FROM orders o " +
     "LEFT JOIN department d ON o.dapart_ID2 = d.dapart_ID2 " +
@@ -83,12 +83,13 @@ public OrderDTO selectOneByKey(String orderKey) throws Exception {
        PreparedStatement ps = con.prepareStatement(sql)) {
     ps.setString(1, orderKey);
     try (ResultSet rs = ps.executeQuery()) {
+    	
       if (!rs.next()) return null;
       OrderDTO dto = new OrderDTO();
       dto.setOrder_key(rs.getString("order_key"));
       dto.setOrder_number(rs.getString("order_number"));
       dto.setOrder_date(rs.getDate("order_date"));
-      dto.setOrder_pay(rs.getDate("order_pay"));         // 납기일
+      dto.setOrder_pay(rs.getDate("order_pay"));         
       dto.setOrder_state(rs.getInt("order_state"));
       dto.setBigo(rs.getString("bigo"));
       dto.setClient_id(rs.getString("client_id"));
@@ -99,6 +100,7 @@ public OrderDTO selectOneByKey(String orderKey) throws Exception {
       dto.setDepart_level(rs.getString("depart_level"));
       dto.setWorker_id(rs.getString("worker_id"));
       dto.setWorker_name(rs.getString("worker_name"));
+      
       return dto;
     }
   }
@@ -150,13 +152,13 @@ public String insertOrderDet(OrderDTO order, List<OrderDetDTO> details) throws E
     String today = new SimpleDateFormat("yyyyMMdd").format(new java.util.Date());
     String seq2  = String.format("%02d", nextVal % 100);
     String orderKey    = "A" + today + seq2; // PK
-    String orderNumber = "B" + today + seq2; // 비즈번호
+    String orderNumber = "B" + today + seq2; // 발주번호
 
     // 헤더 저장
     try (PreparedStatement ps = conn.prepareStatement(insOrderSql)) {
       ps.setString(1, orderKey);
       ps.setString(2, orderNumber);
-      ps.setDate  (3, order.getOrder_pay());         // nullable
+      ps.setDate  (3, order.getOrder_pay());   
       ps.setInt   (4, order.getOrder_state());
       ps.setString(5, order.getClient_id());
       ps.setString(6, order.getWorker_id());
@@ -187,7 +189,7 @@ public String insertOrderDet(OrderDTO order, List<OrderDetDTO> details) throws E
   }
 }
 
-//OrderDAO.java 에 추가
+
 public void deleteOrdersCascade(List<String> orderKeys) throws Exception {
  String delDetail = "DELETE FROM order_detail WHERE order_key = ?";
  String delHeader = "DELETE FROM orders       WHERE order_key = ?";
@@ -215,6 +217,52 @@ public void deleteOrdersCascade(List<String> orderKeys) throws Exception {
      psHdr.executeBatch();
      conn.commit();
  }
+}
+
+/** 헤더 + 상세 전체 업데이트(트랜잭션) */
+public void updateOrderFull(OrderDTO order, java.util.List<OrderDetDTO> details) throws Exception {
+  String updHdr =
+      "UPDATE orders SET " +
+      "  order_pay = ?, order_state = ?, client_id = ?, worker_id = ?, dapart_ID2 = ?, bigo = ? " +
+      "WHERE order_key = ?";
+  String delDtl = "DELETE FROM order_detail WHERE order_key = ?";
+  String insDtl = "INSERT INTO order_detail (order_key, item_code, item_price, quantity) VALUES (?, ?, ?, ?)";
+
+  try (Connection conn = getConn();
+       PreparedStatement psU = conn.prepareStatement(updHdr);
+       PreparedStatement psD = conn.prepareStatement(delDtl);
+       PreparedStatement psI = conn.prepareStatement(insDtl)) {
+
+    conn.setAutoCommit(false);
+
+    // 1) 헤더 업데이트
+    psU.setDate  (1, order.getOrder_pay());                    
+    psU.setInt   (2, order.getOrder_state());
+    psU.setString(3, order.getClient_id());
+    psU.setString(4, order.getWorker_id());
+    psU.setString(5, order.getDapart_ID2());
+    psU.setString(6, order.getBigo());
+    psU.setString(7, order.getOrder_key());
+    psU.executeUpdate();
+
+    // 2) 상세 교체
+    psD.setString(1, order.getOrder_key());
+    psD.executeUpdate();
+
+    if (details != null && !details.isEmpty()) {
+      for (OrderDetDTO d : details) {
+        if (d == null || d.getItem_code()==null || d.getItem_code().trim().isEmpty()) continue;
+        psI.setString(1, order.getOrder_key());
+        psI.setString(2, d.getItem_code().trim());
+        psI.setString(3, d.getItem_price()==null ? "0" : d.getItem_price().trim());
+        psI.setInt   (4, d.getQuantity());
+        psI.addBatch();
+      }
+      psI.executeBatch();
+    }
+
+    conn.commit();
+  }
 }
 
 

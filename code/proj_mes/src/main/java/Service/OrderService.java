@@ -24,6 +24,13 @@ public class OrderService {
     return orderDAO.insertOrderDet(orderDTO, details);
   }
 
+//헤더 + 상세 전체 업데이트(트랜잭션)
+public void updateOrderFull(OrderDTO order, java.util.List<OrderDetDTO> details) throws Exception {
+ if (order == null || isBlank(order.getOrder_key())) throw new IllegalArgumentException("order_key 필요");
+ if (details == null) details = java.util.Collections.emptyList();
+ orderDAO.updateOrderFull(order, details); // DAO에서 트랜잭션 처리
+}
+
   // 상세 교체 저장
   public void replaceOrderDetails(String orderKey, List<OrderDetDTO> details) throws Exception {
     if (isBlank(orderKey)) throw new IllegalArgumentException("order_key 필요");

@@ -64,7 +64,7 @@ public class OrderAddCtrl extends HttpServlet {
     // 3) 저장
     try {
       String newKey = new OrderService().addOrderDet(orderDTO, details);
-      resp.sendRedirect(req.getContextPath()+"/orderDetail?key="+newKey+"&mode=view");
+      resp.sendRedirect(req.getContextPath()+"/orderList");
     } catch (Exception e) {
       e.printStackTrace();
       resp.getWriter().write("등록 실패: " + e.getMessage());

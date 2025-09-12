@@ -19,11 +19,13 @@ public class OrderDetailCtrl extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-    req.setCharacterEncoding("utf-8");
-    resp.setContentType("text/html;charset=utf-8");
+    
+	  System.out.println("/orderDetail doGet 실행");
+	  req.setCharacterEncoding("utf-8");
+	  resp.setContentType("text/html;charset=utf-8");
 
-    String key  = trim(req.getParameter("key"));   // A2025...
-    String mode = trim(req.getParameter("mode"));  // add|edit|view
+    String key  = trim(req.getParameter("key"));   
+    String mode = trim(req.getParameter("mode"));  // add, edit, view
 
     OrderService svc = new OrderService();
     Client_Service cs = new Client_Service();

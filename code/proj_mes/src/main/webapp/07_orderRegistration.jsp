@@ -76,9 +76,8 @@
       <div class="box">
         <div class="item">
           <div>부서</div>
-          <input id="dept_input" class="main_input" type="text"
+          <input id="dept_input" class="main_input edit-only" type="text"
                  value="${order.depart_level}" placeholder="부서를 선택하세요" readonly>
-          <!-- 서버에서 기대하는 name = dapart_ID2 (오탈자 포함 일치) -->
           <input type="hidden" id="dept_id" name="dapart_ID2" value="${order.dapart_ID2}">
         </div>
 
@@ -151,7 +150,7 @@
           </thead>
 			<tbody class="order_list">
 				<c:forEach var="it" items="${orderItems}" varStatus="st">
-					<tr>
+					<tr data-price="${it.item_price}" data-qty="${it.quantity}">
 					  <!-- 체크박스(보기 모드에선 비활성) -->
 					  <td>
 					    <input type="checkbox" class="row_check" <c:if test="${mode eq 'view'}">disabled</c:if> >
@@ -160,10 +159,10 @@
 					  <!-- NO -->
 					  <td>${st.index + 1}</td>
 					
-					  <!-- 품목(지금 DAO는 item_code/item_price/quantity만 전달) -->
+					  <!-- 품목 -->
 					  <td class="col-code"><c:out value="${it.item_code}"/></td>
 					
-					  <!-- 단가(문자열일 수 있으므로 그대로 출력) -->
+					  <!-- 단가 -->
 					  <td class="col-price"><c:out value="${it.item_price}"/></td>
 					
 					  <!-- 수량 -->
@@ -345,6 +344,33 @@
     }
   });
 })();
+function _toNumber(s){ if(s==null) return 0; const n=parseFloat(String(s).replace(/[^0-9.]/g,'')); return isNaN(n)?0:n; }
+function _readCell(tr, sel, hiddenName, dataKey){
+  if (dataKey && tr.dataset && tr.dataset[dataKey]!=null) return _toNumber(tr.dataset[dataKey]);
+  const inp = tr.querySelector(`${sel} input[type="text"], ${sel} input[type="number"]`);
+  if (inp && inp.value) return _toNumber(inp.value);
+  if (hiddenName){
+    const hid = tr.querySelector(`input[name="${hiddenName}"],input[name="${hiddenName}[]"]`);
+    if (hid && hid.value) return _toNumber(hid.value);
+  }
+  const td = tr.querySelector(sel);
+  if (td && td.textContent) return _toNumber(td.textContent);
+  return 0;
+}
+function updateTotals(){
+  let totalQty=0, totalAmt=0;
+  document.querySelectorAll('.order_list tr').forEach(tr=>{
+    const qty   = _readCell(tr, '.col-qty', 'quantity', 'qty');
+    const price = _readCell(tr, '.col-price', 'item_price', 'price');
+    const sum = qty*price;
+    totalQty += qty; totalAmt += sum;
+    const cell = tr.querySelector('.col-sum'); if (cell) cell.textContent = new Intl.NumberFormat().format(sum);
+  });
+  const nf=new Intl.NumberFormat();
+  const tq=document.querySelector('.total_qty'); if(tq) tq.textContent = nf.format(totalQty);
+  const ta=document.querySelector('.total_amt'); if(ta) ta.textContent = nf.format(totalAmt);
+}
+document.addEventListener('DOMContentLoaded', updateTotals);
 </script>
 
 </body>
