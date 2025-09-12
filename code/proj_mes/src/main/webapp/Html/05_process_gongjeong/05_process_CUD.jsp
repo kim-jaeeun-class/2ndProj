@@ -86,13 +86,14 @@
 	</div>
 
 	<div class="wrap">		
-		<form id="processCUDForm" action="process" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="action" id="action">
-			<input type="hidden" name="procId" id="procId_hidden">
-			<div class="processInfo">
-				
-				<div class="table-container">
-					<table class="inputTb">
+	    <form id="processCUDForm" action="process" method="post" enctype="multipart/form-data">
+	        <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}">
+	        <input type="hidden" name="action" id="action">
+	        <input type="hidden" name="procId" id="procId_hidden">
+	
+	        <div class="processInfo">
+	            <div class="table-container">
+	                <table class="inputTb">
 						<tr>
 							<td>품목 코드</td>
 							<td>
@@ -110,15 +111,19 @@
 							</td>
 						</tr>
 						<tr>
+							<td>공정 코드</td>
+							<td><input type="text" id="procId" name="procId" value="${process.proc_id}">
+						</tr>
+						<tr>
 							<td>공정 순서</td>
-							<td><input type="text" id="procSeq" name="procSeq" value="${process.proc_seq}" <c:if test="${mode eq 'update'}">readonly</c:if>></td>
+							<td><input type="text" id="procSeq" name="procSeq" value="${process.proc_seq}"></td>
 						</tr>
 						<tr>
 						    <td>소속 부서</td>
 						    <td>
 						        <select id="departSelect" name="departLevel">
 								    <option value="">선택</option>
-								    <c:forEach var="departLevel" items="${departLevels}">
+								    <c:forEach var="departLevel" items="${departLevels}"> <!-- getUniqueDepartLevels() -->
 								        <option value="${departLevel}" <c:if test="${process.depart_level eq departLevel}">selected</c:if>>
 								            ${departLevel}
 								        </option>
@@ -129,14 +134,14 @@
 						<tr>
 							<td>공정</td>
 						    <td>                
-						        <select id="procNameSelect" name="procName">
-								    <option value="">선택</option>
-								    <c:forEach var="procName" items="${procNames}">
-								        <option value="${procName}" <c:if test="${process.proc_name eq procName}">selected</c:if>>
-								            ${procName}
-								        </option>
-								    </c:forEach>
-								</select>
+						        <select id="procNameSelect" name="procName" data-initial-proc="${process.proc_name}">
+							        <option value="">선택</option>
+							        <c:forEach var="procName" items="${procNames}">
+							            <option value="${procName}" <c:if test="${process.proc_name eq procName}">selected</c:if>>
+							                ${procName}
+							            </option>
+							        </c:forEach>
+							    </select>
 						    </td>
 						</tr>
 						<tr>
@@ -149,26 +154,26 @@
 				</div>
 				
 				<div class="imgDiv">
-				    공정이미지
-				    <div>
-				        <input type="file" name="procImage" id="procImageInput">
-				        <c:if test="${not empty process.proc_img}">
-				            <img src="${pageContext.request.contextPath}/${process.proc_img}" alt="공정 이미지" id="procImage">
-				            <button type="button" id="deleteImageBtn">이미지 삭제</button>
-				        </c:if>
-				        <c:if test="${empty process.proc_img}">
-				            <img src="" alt="공정 이미지" id="procImage" style="display:none;">
-				        </c:if>
-				        <input type="hidden" name="deleteImage" id="deleteImageHidden" value="false">
-				    </div>
-				</div>
-			</div>
+	                공정이미지
+	                <div>
+	                    <input type="file" name="procImage" id="procImageInput">
+	                    <c:if test="${not empty process.proc_img}">
+	                        <img src="${pageContext.request.contextPath}/${process.proc_img}" alt="공정 이미지" id="procImage">
+	                        <button type="button" id="deleteImageBtn">이미지 삭제</button>
+	                    </c:if>
+	                    <c:if test="${empty process.proc_img}">
+	                        <img src="" alt="공정 이미지" id="procImage" style="display:none;">
+	                    </c:if>
+	                    <input type="hidden" name="deleteImage" id="deleteImageHidden" value="false">
+	                </div>
+	            </div>
+        	</div>
 
-			<div class="bottomBtn">
-				<input type="button" value="삭제" class="deleteBtn btn"></input>
-				<input type="button" value="수정" class="updateBtn btn"></input>
-				<input type="button" value="등록" class="createBtn btn"></input>
-			</div>
+	        <div class="bottomBtn">
+	            <input type="button" value="삭제" class="deleteBtn btn"></input>
+	            <input type="button" value="수정" class="updateBtn btn"></input>
+	            <input type="button" value="등록" class="createBtn btn"></input>
+	        </div>
 		</form>
 	</div>
 </body>

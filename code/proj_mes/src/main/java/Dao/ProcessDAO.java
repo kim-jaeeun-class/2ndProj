@@ -35,26 +35,29 @@ public class ProcessDAO {
 	
 	// createProcess - 새로운 공정 등록
 	public boolean createProcess(ProcessDTO dto) {
-		String sql = "INSERT INTO process (item_code, dapart_id2, proc_name, proc_seq, proc_info, proc_img, process_check) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-		try (Connection conn = getConn();
-	        PreparedStatement pstmt = conn.prepareStatement(sql)) {
-	
-	       pstmt.setString(1, dto.getItem_code());
-	       pstmt.setString(2, dto.getDapart_id2());
-	       pstmt.setString(3, dto.getProc_name());
-	       pstmt.setInt(4, dto.getProc_seq());
-	       pstmt.setString(5, dto.getProc_info());
-	       pstmt.setString(6, dto.getProc_img());
-	       pstmt.setInt(7, dto.getProcess_check());
-	
-	       int result = pstmt.executeUpdate();
-	       return result > 0;
-	
-	   } catch (SQLException e) {
-	       e.printStackTrace();
-	       return false;
-	   }
+	    String sql = "INSERT INTO process"
+	               + " (proc_id, item_code, dapart_id2, proc_name, proc_seq, proc_info, proc_img, process_check)"
+	               + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+	    try (Connection conn = getConn();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, dto.getProc_id());      
+	        ps.setString(2, dto.getItem_code());
+	        ps.setString(3, dto.getDapart_id2());
+	        ps.setString(4, dto.getProc_name());
+	        ps.setInt(5, dto.getProc_seq());
+	        ps.setString(6, dto.getProc_info());
+	        ps.setString(7, dto.getProc_img());
+	        ps.setInt(8, dto.getProcess_check());
+
+	        int result = ps.executeUpdate();
+	        return result > 0;
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	
@@ -79,7 +82,9 @@ public class ProcessDAO {
 	// getProcessesBySearch - 품목 코드, 부서, 공정명으로 공정 목록 조회
 	public List<ProcessDTO> getProcessesBySearch(String itemCode, String departLevel, String procName) {
 		List<ProcessDTO> processes = new ArrayList<>();
-		StringBuilder sql = new StringBuilder("SELECT p.*, d.depart_level FROM process p INNER JOIN department d ON p.dapart_id2 = d.dapart_id2 WHERE 1=1");
+		StringBuilder sql = new StringBuilder(
+		        "SELECT p.*, d.depart_level FROM process p" 
+		        + " INNER JOIN department d ON p.dapart_id2 = d.dapart_id2 WHERE 1=1" );
 
 		if (departLevel != null && !departLevel.isEmpty()) {
 			sql.append(" AND d.depart_level = ?");
@@ -91,27 +96,26 @@ public class ProcessDAO {
 			sql.append(" AND p.proc_name = ?");
 		}
 		
-		sql.append(" ORDER BY p.proc_seq");
+		// 품목코드 전체 선택 시 공정 코드(proc_id) 기준 정렬
+	    if (itemCode == null || itemCode.isEmpty()) {
+	        sql.append(" ORDER BY p.proc_id");
+	    } else {
+	        sql.append(" ORDER BY p.proc_seq"); // 기존 정렬 유지
+	    }
 		
 		try (Connection conn = getConn();
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 			
 				int paramIndex = 1;
-				if (departLevel != null && !departLevel.isEmpty()) {
-					pstmt.setString(paramIndex++, departLevel);
-				}
-				if (itemCode != null && !itemCode.isEmpty()) {
-					pstmt.setString(paramIndex++, itemCode);
-				}
-				if (procName != null && !procName.isEmpty()) {
-					pstmt.setString(paramIndex++, procName);
-				}
-				
-				try (ResultSet rs = pstmt.executeQuery()) {
-					while (rs.next()) {
-						processes.add(createProcessDTO(rs));
-				}
-			}
+		        if (departLevel != null && !departLevel.isEmpty()) pstmt.setString(paramIndex++, departLevel);
+		        if (itemCode != null && !itemCode.isEmpty()) pstmt.setString(paramIndex++, itemCode);
+		        if (procName != null && !procName.isEmpty()) pstmt.setString(paramIndex++, procName);
+
+		        try (ResultSet rs = pstmt.executeQuery()) {
+		            while (rs.next()) {
+		                processes.add(createProcessDTO(rs));
+		            }
+		        }
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -158,7 +162,8 @@ public class ProcessDAO {
 	// getUniqueItemCodes - 유니크 품목코드 조회
 	public List<String> getUniqueItemCodes() {
 		List<String> itemCodes = new ArrayList<>();
-		String sql = "SELECT DISTINCT item_code FROM process WHERE item_code IS NOT NULL ORDER BY item_code";
+		String sql = "SELECT DISTINCT item_code FROM process"
+				   + " WHERE item_code IS NOT NULL ORDER BY item_code";
 		try (Connection conn = getConn();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery()) {
@@ -173,21 +178,30 @@ public class ProcessDAO {
 
 	// getUniqueDepartLevels - 유니크 부서 레벨 조회
 	public List<String> getUniqueDepartLevels() {
-		List<String> departLevels = new ArrayList<>();
-		String sql = "SELECT DISTINCT depart_level FROM department WHERE depart_level IS NOT NULL"
-		           + " AND depart_level NOT IN ('인사부', '자재관리')";
-		
-		try (Connection conn = getConn();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery()) {
-			
-			while (rs.next()) {
-				departLevels.add(rs.getString("depart_level"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return departLevels;
+	    List<String> departLevels = new ArrayList<>();
+	    
+	    // process에 존재하는 부서만 가져오고, 제외할 부서는 필터링
+	    String sql = "SELECT DISTINCT d.depart_level"
+	               + " FROM department d"
+	               + " JOIN (SELECT DISTINCT dapart_id2 FROM process) p ON d.dapart_id2 = p.dapart_id2"
+	               + " WHERE d.depart_level NOT IN ('인사부', '자재관리')"
+	               + " AND d.dapart_id2 IN (SELECT DISTINCT p.dapart_id2 FROM process p)"
+	               + " ORDER BY d.depart_level";
+	    
+	    try (Connection conn = getConn();
+	         PreparedStatement pstmt = conn.prepareStatement(sql);
+	         ResultSet rs = pstmt.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            departLevels.add(rs.getString("depart_level"));
+	            System.out.println("테스트: " + rs.getString("depart_level"));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return departLevels;
 	}
 	
 	// getDepartLevelsByItemCode - 품목 코드에 해당하는 부서 목록을 조회 (update 모드 전용)
@@ -215,7 +229,7 @@ public class ProcessDAO {
 	// getProcNamesFromProcTable - proc 테이블에서 전체 공정명 조회 (new 모드 전용)
 	public List<String> getUniqueProcNamesFromProcTable() {
 	    List<String> procNames = new ArrayList<>();
-	    String sql = "SELECT proc_name FROM process ORDER BY proc_name";
+	    String sql = "SELECT DISTINCT proc_name FROM process ORDER BY proc_name";
 	    try (Connection conn = getConn();
 	         PreparedStatement pstmt = conn.prepareStatement(sql);
 	         ResultSet rs = pstmt.executeQuery()) {
@@ -270,7 +284,6 @@ public class ProcessDAO {
 	public List<ProcessDTO> getProcNamesByItemAndDepart(String itemCode, String departLevel) {
 	    List<ProcessDTO> list = new ArrayList<>();
 	    
-	    // LEFT JOIN 사용: process 테이블에 부서가 없는 데이터도 조회 가능
 	    String sql = "SELECT p.proc_name, d.depart_level, p.item_code" 
 	               + " FROM process p " 
 	    		   + " LEFT JOIN department d ON p.dapart_id2 = d.dapart_id2" 

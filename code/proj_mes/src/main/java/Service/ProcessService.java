@@ -52,7 +52,6 @@ public class ProcessService {
     }
     
     public String getDepartIdByLevel(String departLevel) {
-        // DAO의 getDepartIdByLevel 메서드를 호출하여 부서 ID를 반환
         return processDAO.getDepartIdByLevel(departLevel);
     }
 

@@ -84,7 +84,7 @@
 			</div>
 		</a>
 	</div>
-
+	
 	<div class="wrap">
 		<form id="processForm" action="process" method="get">
 			<div class="lookup">
@@ -135,6 +135,7 @@
 						<th>선택</th>
 						<th>순번</th>
 						<th>품목 코드</th>
+						<th>공정 코드</th>
 						<th>부서</th>
 						<th>공정 순서</th>
 						<th>공정명</th>
@@ -144,7 +145,7 @@
 				</thead>
 				<tbody>
 					<c:if test="${empty processes}">
-						<tr><td colspan="8">조회된 공정 정보가 없습니다.</td></tr>
+						<tr><td colspan="9">조회된 공정 정보가 없습니다.</td></tr>
 					</c:if>
 					<c:if test="${not empty processes}">
 						<c:forEach var="proc" items="${processes}" varStatus="status">
@@ -152,13 +153,14 @@
 								<td><input type="radio" name="selectedProcId" value="${proc.proc_id}"></td>
 								<td><c:out value="${status.count}" /></td>
 								<td><c:out value="${proc.item_code}" /></td>
+								<td class="procIdCell"><c:out value="${proc.proc_id}" /></td>
 								<td class="departLevelCell"><c:out value="${proc.depart_level}" /></td>
 								<td class="procSeqCell"><c:out value="${proc.proc_seq}" /></td>
 								<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
 								<td class="procInfoCell"><c:out value="${proc.proc_info}" /></td>
 								<td>
 								    <c:if test="${not empty proc.proc_img}">
-								        <img src="${pageContext.request.contextPath}/${proc.proc_img}" alt="공정 이미지" style="width: 50px; height: 50px;">
+								        <img src="${pageContext.request.contextPath}/${proc.proc_img}" alt="공정 이미지">
 								    </c:if>
 								</td>
 							</tr>
