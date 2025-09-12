@@ -35,7 +35,7 @@ public class OrderDAO {
 
 
 /** 목록(총수량/총금액 포함) — item_price는 문자열이라 숫자 변환 */
-public List<OrderDTO> selectAllWithSummary() throws Exception {
+public List<OrderDTO> selectAll() throws Exception {
   String sql =
     "SELECT o.order_key, o.order_number, o.order_date, o.order_state, " +
     "       d.depart_level, w.worker_name, " +

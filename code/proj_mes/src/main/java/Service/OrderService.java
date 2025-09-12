@@ -11,7 +11,7 @@ public class OrderService {
 
   // 목록(합계 포함)
   public List<OrderDTO> getAllOrder() throws Exception {
-    return orderDAO.selectAllWithSummary();
+    return orderDAO.selectAll();
   }
 
   // 헤더 + 디테일 동시 저장
