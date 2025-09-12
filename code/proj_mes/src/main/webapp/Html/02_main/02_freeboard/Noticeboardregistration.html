@@ -3,163 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>자유게시판 수정/등록</title>
+  <title>자유게시판</title>
   <style>
-    :root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #a4a5a7;
-    --page-bg: #ffffff;
-    --radius: 10px;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
-        "Helvetica Neue", Arial, sans-serif;
-}
-
-/* 헤더 부분 */
-header {
-    background-color: #495057;
-    height : 50px;
-    border: 1px solid;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-header .corp {
-    display: flex;
-    align-items: center; 
-    padding-left: 10px;
-    gap: 10px;
-    font-size: 1.2rem;
-}
-
-header .search {
-    margin-left: auto;
-    margin-right: 10px;
-}
-
-/* 회원 아이콘 부분*/
-header .myIcon {
-    position: relative;
-    padding: 5px 10px 5px 0;
-}
-
-header ul.subList {
-    display: none;
-    background-color: turquoise;
-    position: absolute;
-    top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
-    right: 0;
-    list-style-type: none;
-    color: #333333;
-    font-weight: normal;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 150px; 
-    margin: 0; /* ul 기본 margin 제거 */
-    padding: 0; /* ul 기본 padding 제거 */
-}
-
-/* 마우스를 올리면 하위 메뉴 보이기 */
-header .myIcon:hover .subList {
-    display: flex;
-}
-
-/* GNB 부분 */
-.gnb {
-    background-color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.gnb ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-evenly;
-    padding-left: 0;
-}
-
-.gnb ul.subList {
-    background-color: #495057;
-    color: white;
-    border-radius: 5%;
-    position: absolute;
-    left: 0;
-    display: none;
-    font-weight: normal;
-    font-size: medium;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 130px; 
-}
-.gnb ul.mainList > li {
-    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
-    color: #333333;
-}
-.gnb ul.mainList > li:hover .subList {
-    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
-    margin-top: 0px;
-}
-
-.subList li {
-    padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
-    margin: 1px 1px;  /* 위아래 간격 추가 */
-}
-
-/* a 링크 양식 지정 */
-a, a:link, a:visited {
-    color: inherit;
-    text-decoration: none;
-}
-
-/* 제목 부분 */
-.titleBox {
-    background-color: var(--field-border);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.titleBox span {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
-}
-
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
-}
-
-/* 메인 몸통 부분 */
-.wrap {
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background-color: #ffffff;
-    width: 90%;
-    margin: 10px auto;
-}
-
-/* 모바일 반응형 */
-@media (max-width: 768px) {
-    /* 여기에 모바일 스타일 넣으시면 됩니다 */
-}
     body {
       font-family: '맑은 고딕', sans-serif;
       background-color: #f9f9f9;
@@ -175,7 +20,6 @@ a, a:link, a:visited {
       border: 1px solid #ccc;
     }
 
-    /* 헤더 */
     .header-top {
       display: flex;
       justify-content: space-between;
@@ -189,13 +33,6 @@ a, a:link, a:visited {
       margin: 0;
     }
 
-    .main-link {
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-    }
-
-    /* 게시글 정보 */
     .post-info {
       border: 1px solid #ccc;
       padding: 15px;
@@ -214,7 +51,6 @@ a, a:link, a:visited {
       color: #555;
     }
 
-    /* 본문 에디터 */
     .editor-toolbar {
       margin-bottom: 10px;
       border: 1px solid #ccc;
@@ -248,10 +84,8 @@ a, a:link, a:visited {
       font-size: 15px;
       resize: vertical;
       width: 100%;
-      font-family: '맑은 고딕', sans-serif;
     }
 
-    /* 첨부파일 */
     .file-upload {
       margin-bottom: 30px;
     }
@@ -267,7 +101,6 @@ a, a:link, a:visited {
       width: 100%;
     }
 
-    /* 하단 버튼 */
     .button-group {
       display: flex;
       justify-content: flex-end;
@@ -288,186 +121,71 @@ a, a:link, a:visited {
     .btn:hover {
       background-color: #555;
     }
-
-    .btn.gray {
-      background-color: #999;
-    }
   </style>
 </head>
 <body>
-  <header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
-
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-
-	<div class="titleBox">
-		<span>자유게시판</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
-
-	<div class="wrap">
-	</div>
   <div class="container">
     <div class="header-top">
-      <h1 class="board-title"></h1>
-      <a href="#" class="main-link"></a>
+      <h1 class="board-title">자유게시판</h1>
     </div>
 
     <div class="post-info">
-      <div class="post-title">[자유] : 2층 휴게실에서 휴대폰 주우신 분 계신가요?</div>
+      <div class="post-title">[자유] : </div>
       <div class="post-meta">작성자: 고현지 | 작성 시간: 2024-12-15 17:30</div>
     </div>
 
-  <div class="editor-toolbar">
-  <button type="button" id="insertImageBtn"disabled >사진</button>
-  <button type="button" id="insertScheduleBtn" disabled>일정</button>
+    <!-- ✅ 도구 모음 -->
+    <div class="editor-toolbar">
+      <button type="button" id="insertImageBtn">사진</button>
+      <button type="button" id="insertScheduleBtn">일정</button>
 
+      <select id="fontSelect">
+        <option value="">기본서체</option>
+        <option value="Gulim">굴림</option>
+        <option value="Malgun Gothic">맑은 고딕</option>
+        <option value="Dotum">돋움</option>
+        <option value="Arial">Arial</option>
+        <option value="Courier New">Courier New</option>
+      </select>
 
-   <select id="fontSelect" disabled>
-    <option value="">기본서체</option>
-    <option value="Gulim">굴림</option>
-    <option value="Malgun Gothic">맑은 고딕</option>
-    <option value="Dotum">돋움</option>
-    <option value="Arial">Arial</option>
-    <option value="Courier New">Courier New</option>
-  </select>
+      <select id="fontSizeSelect">
+        <option value="">글자크기</option>
+        <option value="1">1 (매우 작음)</option>
+        <option value="2">2</option>
+        <option value="3">3 (기본)</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7 (가장 큼)</option>
+      </select>
 
-  <!-- ✅ 드롭다운: 글자크기 -->
-  <select id="fontSizeSelect" disabled>
-    <option value="">글자크기</option>
-    <option value="1">1 (매우 작음)</option>
-    <option value="2">2</option>
-    <option value="3">3 (기본)</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7 (가장 큼)</option>
-  </select>
-  <button type="button" id="addTableBtn" disabled>표</button>
-  <button type="button" id="deleteTableBtn" disabled>표 삭제</button>
-</div>
+      <button type="button" id="addTableBtn">표</button>
+      <button type="button" id="deleteTableBtn">표 삭제</button>
+    </div>
 
-
+    <!-- ✅ 본문 입력 영역 -->
     <div class="post-content" contenteditable="true" id="editor">
-  2층 휴게실에서 휴대폰 주우신 분 계신가요?<br>
-  아무리 찾아도 안보입니다 ㅠㅠ<br>
-  혹시 찾으시면 010-****-****으로 연락 주세요!
-</div>
+      
+    </div>
 
     <div class="file-upload">
       <label for="file">첨부파일</label>
       <input type="file" id="file" />
     </div>
 
-    <div class="button-group">
-     <button id="editBtn" class="btn gray">수정</button>
-    <button id="deleteBtn" class="btn gray">삭제</button>
-    <button class="btn">등록</button>
-    </div>
-  </div>
+   <div class="button-group">
+  <a href="Noticeboardnext.html" class="btn">등록</a>
+</div>
+
   <script>
 (() => {
   const editor = document.getElementById("editor");
-  const editBtn = document.getElementById("editBtn");
-
-  // 편집 도구 버튼 ID 목록
-  const controlIds = [
-    "insertImageBtn",
-    "insertScheduleBtn",
-    "fontSelect",
-    "fontSizeSelect",
-    "addTableBtn",
-    "deleteTableBtn"
-  ];
-  const controls = controlIds.map(id => document.getElementById(id));
-
-  // 편집 가능 상태 설정 함수 (토글)
-  const setEditingEnabled = (enabled) => {
-    editor.contentEditable = enabled.toString();
-    controls.forEach(ctrl => ctrl.disabled = !enabled);
-    editBtn.textContent = enabled ? "수정 중" : "수정";
-  };
+  editor.contentEditable = "true"; // 항상 수정 가능
 
   let selectedTable = null;
 
-  // 수정 버튼 클릭 시 편집 모드 토글
-  editBtn.addEventListener("click", () => {
-    setEditingEnabled(!editor.isContentEditable);
-  });
-
   // 표 삽입
-  const addTableBtn = document.getElementById("addTableBtn");
-  addTableBtn.addEventListener("click", () => {
+  document.getElementById("addTableBtn").addEventListener("click", () => {
     const tableHTML = `
       <table border="1" style="width: 100%; margin-top: 10px; border-collapse: collapse;">
         <tr><th>항목</th><th>내용</th></tr>
@@ -478,7 +196,7 @@ a, a:link, a:visited {
     editor.insertAdjacentHTML('beforeend', tableHTML);
   });
 
-  // 표 선택 (클릭한 표 강조)
+  // 표 선택 & 강조
   editor.addEventListener("click", (e) => {
     const clickedTable = e.target.closest("table");
     if (clickedTable) {
@@ -494,8 +212,7 @@ a, a:link, a:visited {
   });
 
   // 표 삭제
-  const deleteTableBtn = document.getElementById("deleteTableBtn");
-  deleteTableBtn.addEventListener("click", () => {
+  document.getElementById("deleteTableBtn").addEventListener("click", () => {
     if (selectedTable) {
       selectedTable.remove();
       selectedTable = null;
@@ -511,8 +228,7 @@ a, a:link, a:visited {
   fileInput.style.display = 'none';
   document.body.appendChild(fileInput);
 
-  const insertImageBtn = document.getElementById("insertImageBtn");
-  insertImageBtn.addEventListener("click", () => fileInput.click());
+  document.getElementById("insertImageBtn").addEventListener("click", () => fileInput.click());
 
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0];
@@ -523,56 +239,43 @@ a, a:link, a:visited {
       };
       reader.readAsDataURL(file);
     }
-    fileInput.value = ''; // 초기화
+    fileInput.value = '';
   });
 
-  // 일정 삽입 (일정 버튼 바로 밑에 달력 input 띄우기)
-  const insertScheduleBtn = document.getElementById("insertScheduleBtn");
-  insertScheduleBtn.addEventListener("click", () => {
+  // 일정 삽입
+  document.getElementById("insertScheduleBtn").addEventListener("click", () => {
     const dateInput = document.createElement('input');
     dateInput.type = 'date';
-
     Object.assign(dateInput.style, {
       position: 'fixed',
       zIndex: '10000',
-      fontSize: '16px',
-      transform: 'none'
+      fontSize: '16px'
     });
 
-    document.body.appendChild(dateInput);
-
-    // 일정 버튼 위치 기준으로 달력 위치 지정
     const btnRect = insertScheduleBtn.getBoundingClientRect();
-    const top = btnRect.bottom + window.scrollY;
-    const left = btnRect.left + window.scrollX;
+    dateInput.style.top = `${btnRect.bottom + window.scrollY}px`;
+    dateInput.style.left = `${btnRect.left + window.scrollX}px`;
 
-    dateInput.style.top = `${top}px`;
-    dateInput.style.left = `${left}px`;
-
+    document.body.appendChild(dateInput);
     dateInput.focus();
 
     dateInput.addEventListener('change', () => {
       const selectedDate = dateInput.value;
       if (selectedDate) {
-        const formattedDate = new Date(selectedDate).toLocaleDateString('ko-KR', {
+        const formatted = new Date(selectedDate).toLocaleDateString('ko-KR', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
           weekday: 'short'
         });
 
-        editor.focus();
-
         const selection = window.getSelection();
         if (!selection.rangeCount) return;
         const range = selection.getRangeAt(0);
         range.deleteContents();
-
-        const textNode = document.createTextNode(`🗓️ ${formattedDate} `);
+        const textNode = document.createTextNode(`🗓️ ${formatted} `);
         range.insertNode(textNode);
-
         range.setStartAfter(textNode);
-        range.setEndAfter(textNode);
         selection.removeAllRanges();
         selection.addRange(range);
       }
@@ -580,9 +283,8 @@ a, a:link, a:visited {
     });
   });
 
-  // 폰트 변경
-  const fontSelect = document.getElementById("fontSelect");
-  fontSelect.addEventListener("change", function () {
+  // 글꼴 변경
+  document.getElementById("fontSelect").addEventListener("change", function () {
     if (this.value) {
       document.execCommand("fontName", false, this.value);
     }
@@ -590,19 +292,13 @@ a, a:link, a:visited {
   });
 
   // 글자 크기 변경
-  const fontSizeSelect = document.getElementById("fontSizeSelect");
-  fontSizeSelect.addEventListener("change", function () {
+  document.getElementById("fontSizeSelect").addEventListener("change", function () {
     if (this.value) {
       document.execCommand("fontSize", false, this.value);
     }
     this.selectedIndex = 0;
   });
-
-  // 초기 상태: 편집 불가
-  setEditingEnabled(false);
 })();
-
-
-</script>
+  </script>
 </body>
 </html>
