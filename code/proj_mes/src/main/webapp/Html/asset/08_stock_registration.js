@@ -5,156 +5,133 @@ function init() {
 }
 
 function bindstock_reg() {
+  // JSP에서 내려준 모드 플래그
+  const RO      = !!window.RO;       // view 모드일 때 true
+  const IS_EDIT = !!window.IS_EDIT;  // edit 모드일 때 true
 
-    // 숫자 유틸
-    function toInt(v) {
-        const n = parseInt(String(v).replace(/[^0-9.-]/g, ''), 10);
-        return isNaN(n) ? 0 : n;
+  // 숫자 유틸
+  const toInt = (v) => {
+    const n = parseInt(String(v).replace(/[^0-9.-]/g, ''), 10);
+    return isNaN(n) ? 0 : n;
+  };
+
+  // 요소
+  const itemInput     = document.querySelector('#item_input');
+  const itemNameInput = document.querySelector('#item_name_input');
+  const priceInput    = document.querySelector('#stock_price_input');   // name=stock_stat
+  const qtyInput      = document.querySelector('#stock_number_input');
+  const itemModal     = document.querySelector('#item_modal');
+
+  // ===== View 모드 보호 =====
+  // - 어떤 값도 변경/포맷하지 않음
+  // - 품목코드 필드는 클릭/포커스 둘 다 막음(모달 X)
+  if (RO) {
+    if (itemInput) {
+      itemInput.readOnly = true;
+      itemInput.style.pointerEvents = 'none';
+      itemInput.style.cursor = 'default';
     }
-    function fmt(n) {
-        return (Number(n) || 0).toLocaleString();
-    }
+    if (qtyInput)   qtyInput.readOnly   = true;
+    if (priceInput) priceInput.readOnly = true;
+    return; // ← 여기서 끝! (아무 로직도 수행하지 않음)
+  }
 
-    // 공통 함수: 모달 오픈, 검색, 클로즈
-    function modalHandler(openBtn, modal, onConfirm) {
-        const searchInput = modal.querySelector('.m_search');
-        const list        = modal.querySelector('.list');
-        const Confirm     = modal.querySelector('.confirm');
-        const Cancel      = modal.querySelector('.cancel');
+  // ===== Edit/Add 모드에서만 모달 연결 =====
+  if (!IS_EDIT && !window.IS_ADD) return;
 
-        // 열기
-        openBtn.addEventListener('click', () => {
-        modal.classList.remove('hide');
-        if (searchInput) {
-            searchInput.value = '';
-            filterTableRows(list, '');
-        }
-        });
-
-        // 검색
-        if (searchInput) {
-        searchInput.addEventListener('input', () => {
-            filterTableRows(list, searchInput.value);
-        });
-        }
-
-        // 행 클릭 라디오 체크
-        list.addEventListener('click', (e) => {
-            const tr = e.target.closest('tr');
-            if (!tr || tr.style.display === 'none') return;
-            
-            const r = tr.querySelector('input[type="radio"]');
-            if (r) r.checked = true;
-        });
-
-        // 확인
-        Confirm.addEventListener('click', () => {
-            const checked = list.querySelector('input[type="radio"]:checked');
-            if (!checked) { alert('항목을 선택하세요.'); return; }
-            onConfirm(checked.closest('tr'));
-            modal.classList.add('hide');
-        });
-
-        // 취소
-        Cancel.addEventListener('click', () => modal.classList.add('hide'));
-    }
-
-    // ===== 품목 모달 =====
-    const itemInput     = document.querySelector('.item_input');       // 품목코드 입력칸
-    const itemNameInput = document.querySelector('.itemName_input');   // 품목명/모델명 입력칸
-    const priceInput    = document.querySelector('.unitPrice_input');  // 단가 입력칸
-    const qtyInput      = document.querySelector('.qty_input');        // 수량 입력칸
-    const totalInput    = document.querySelector('.total_input');      // 합계 입력칸
-    const itemModal     = document.querySelector('#item_modal');       // 모달 자체
-
-    // 입력 보호
-    if (itemInput)     itemInput.readOnly = true;
-    if (itemNameInput) itemNameInput.readOnly = true;
-    if (priceInput)    priceInput.readOnly = true;
-    if (totalInput)    totalInput.readOnly = true;
-
-    // 합계 재계산
-    function recalcTotal() {
-        if (!qtyInput || !priceInput || !totalInput) return;
-        const qty   = toInt(qtyInput.value);
-        const price = toInt(priceInput.value);
-        totalInput.value = fmt(qty * price);
-    }
-
-    // 수량 입력 시 숫자만 유지 + 합계 갱신
-    if (qtyInput) {
-        qtyInput.addEventListener('input', () => {
-            qtyInput.value = qtyInput.value.replace(/[^\d]/g, ''); // 정수만
-            recalcTotal();
-        });
-    }
-    // (필요 시) 단가 입력이 바뀌어도 합계 갱신
-    if (priceInput) {
-        priceInput.addEventListener('input', () => {
-            priceInput.value = priceInput.value.replace(/[^\d]/g, '');
-            recalcTotal();
-        });
-    }
-
-    // 모달 연결
-    if (itemInput && itemModal) {
-        modalHandler(itemInput, itemModal, function (tr) {
-            // [0:라디오][1:품목코드][2:품목명][3:유형][4:단가]
-            const code  = tr.children[1].textContent.trim();
-            const name  = tr.children[2].textContent.trim();
-            const price = toInt(tr.children[4].textContent.trim());
-
-            itemInput.value     = code;
-            itemNameInput.value = name;
-            priceInput.value    = fmt(price);
-
-            // 기본 수량을 1로 세팅
-            if (qtyInput && !qtyInput.value) {
-                qtyInput.value = 1;
-            }
-
-            // 품목 선택 직후 현재 수량 기준으로 합계 갱신
-            recalcTotal();
-        });
-    }
-}
-
-// 테이블에서 검색해서 가져오기
-function filterTableRows(tableList, query) {
+  // 공용: 테이블 필터
+  function filterTableRows(tableList, query) {
     const q = (query || '').toLowerCase();
     const rows = tableList.querySelectorAll('tr');
     let any = false;
 
-    // 안내행 제거
     const oldEmpty = tableList.querySelector('.empty-row');
     if (oldEmpty) oldEmpty.remove();
 
     rows.forEach((tr) => {
-        const text = tr.textContent.toLowerCase();
-        const match = q === '' || text.includes(q);
-
-        tr.style.display = match ? '' : 'none';
-
-        if (!match) {
+      const text = tr.textContent.toLowerCase();
+      const match = q === '' || text.includes(q);
+      tr.style.display = match ? '' : 'none';
+      if (!match) {
         const r = tr.querySelector('input[type="radio"]');
         if (r) r.checked = false;
-        }
-
-        if (match) any = true;
+      }
+      if (match) any = true;
     });
 
     if (!any) {
-        const table = tableList.closest('table');
-        const thCount = table ? table.querySelectorAll('thead th').length : 1;
-        const trEmpty = document.createElement('tr');
-        trEmpty.className = 'empty-row';
-
-        const td = document.createElement('td');
-        td.colSpan = thCount;
-        td.style.textAlign = 'center';
-        td.textContent = '검색 결과가 없습니다.';
-
-        trEmpty.appendChild(td);
-        tableList.appendChild(trEmpty);
+      const table = tableList.closest('table');
+      const thCount = table ? table.querySelectorAll('thead th').length : 1;
+      const trEmpty = document.createElement('tr');
+      trEmpty.className = 'empty-row';
+      const td = document.createElement('td');
+      td.colSpan = thCount;
+      td.style.textAlign = 'center';
+      td.textContent = '검색 결과가 없습니다.';
+      trEmpty.appendChild(td);
+      tableList.appendChild(trEmpty);
     }
+  }
+
+  function bindModal(openBtn, modal, onConfirm) {
+    if (!openBtn || !modal) return;
+
+    const searchInput = modal.querySelector('.m_search');
+    const list        = modal.querySelector('.list');
+    const btnOk       = modal.querySelector('#item_modal_confirm');
+    const btnCancel   = modal.querySelector('#item_modal_cancel');
+    const qtyInModal  = modal.querySelector('.m_quantity');
+
+    const open = () => {
+      modal.classList.remove('hide');
+      modal.style.display = 'block';
+      if (searchInput) {
+        searchInput.value = '';
+        filterTableRows(list, '');
+      }
+      if (qtyInModal) qtyInModal.value = '1';
+    };
+
+    openBtn.addEventListener('click', open);
+    openBtn.addEventListener('focus', open);
+
+    if (list) {
+      list.addEventListener('click', (e) => {
+        const tr = e.target.closest('tr');
+        if (!tr || tr.style.display === 'none') return;
+        const r = tr.querySelector('input[type="radio"]');
+        if (r) r.checked = true;
+      });
+    }
+
+    btnOk.addEventListener('click', () => {
+      const checked = list ? list.querySelector('input[type="radio"]:checked') : null;
+      if (!checked) { alert('항목을 선택하세요.'); return; }
+      onConfirm(checked.closest('tr'));
+      modal.classList.add('hide');
+      modal.style.display = 'none';
+    });
+
+    btnCancel.addEventListener('click', () => {
+      modal.classList.add('hide');
+      modal.style.display = 'none';
+    });
+  }
+
+  // 모달 연결 (Edit/Add 모드에서만)
+  bindModal(itemInput, itemModal, function (tr) {
+    // [0]라디오 [1]코드 [2]이름 [3]유형 [4]단가(천단위 콤마 가능)
+    const code      = tr.children[1].textContent.trim();
+    const name      = tr.children[2].textContent.trim();
+    const unitPrice = toInt(tr.children[4].textContent.trim());
+
+    const qtyFromModalEl = itemModal.querySelector('.m_quantity');
+    let qty = toInt(qtyFromModalEl ? qtyFromModalEl.value : '');
+    if (!qty || qty <= 0) qty = 1;
+
+    if (itemInput)     itemInput.value     = code;
+    if (itemNameInput) itemNameInput.value = name;
+    if (priceInput)    priceInput.value    = String(unitPrice); // 서버로 숫자 전달
+    if (qtyInput)      qtyInput.value      = String(qty);
+  });
 }
