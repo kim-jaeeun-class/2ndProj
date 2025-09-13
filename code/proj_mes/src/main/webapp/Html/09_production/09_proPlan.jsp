@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<c:set var="cPath" value="${pageContext.request.contextPath}" />
+<% String ctx = request.getContextPath(); %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,92 +15,18 @@
         <script src="/proj_mes/Html/asset/template_load.js"></script>
         
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 동적 차트를 위한 Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-        }
-
-        /* 차트 캔버스의 최대 높이 설정 */
-        canvas {
-            max-height: 200px;
-        }
-
-        .header-bg {
-            background-color: #002a40;
-        }
-
-        .nav-bg {
-            background-color: #003751;
-        }
-
-        .mainList, #noticeContent, #boardContent {
-            cursor: pointer;
-        }
-        
-        /* 메인 내비게이션 목록의 호버 배경색을 파란색으로 변경하여 글씨가 잘 보이게 수정 */
-        .mainList li:hover {
-            background-color: #3b82f6;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .header-bg { background-color: #002a40; }
+        .nav-bg { background-color: #003751; }
+        .mainList li:hover { background-color: #3b82f6; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800" page="pro-plan">
-
-    <!-- 헤더 섹션 -->
-    <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
-    <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
-        <div class="flex items-center space-x-2">
-            <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
-            <h3 class="text-xl font-bold">J2P4</h3>
-        </div>
-        <div class="flex items-center space-x-4 sm:space-x-8">
-            <div class="search cursor-pointer">
-                <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
-            </div>
-            <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
-                <form id="logoutForm" method="post" style="display:none"></form>
-				<a href="#" id="logoutLink">로그아웃</a>
-            </div>
-            <div class="myIcon relative">
-                <a href="javascript:void(0);" id="myIconBtn">
-                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- 메인 내비게이션 -->
-    <!-- Tailwind 클래스 대신 직접 정의한 nav-bg 클래스 적용 -->
-    <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
-        <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
-        </ul>
-    </nav>
-        <!-- 타이틀 -->
-        <div class="titleBox">
-            <span>생산 계획</span>
-            <a href="">
-                <div class="toMainpage">
-                    <img
-                        src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png"
-                        width="13"
-                        alt="메인 화면으로 가는 화살표"
-                        style="transform:scaleX(-1);"/>
-                    메인 화면으로
-                </div>
-            </a>
-        </div>
+    <div id="header-slot"></div>
+    <div id="nav-slot"></div>
         <div class="sidenwrap">
             <div class="side">
                 <!-- a 링크 나중에 달기 -->
@@ -108,6 +34,9 @@
                 <a href="workorder"><div class="side-menu">작업 지시서</div></a>
             </div>
             <div class="wrap">
+                <div class="wrap-title">
+                    생산 계획
+                </div>
                 <!-- 여기 왜 sts에서 조건 wrap css가 안 먹냐? -->
                 <div class="wrap-select">
                     <form class="date-filter" action="proplan" method="post">
@@ -188,7 +117,7 @@
         <!-- 사이드 패널 : 입력란 좀 안 비어보이게(버튼은 조금 내리고), 품번 서치 가능하게 -->
         <div class="panel">
             <button class="close-btn">✕</button>
-            <h2>생산 계획 등록</h2>
+            <div class="slide-title">작업 지시서 등록</div>
             <form action="proplan" method="post">
             	<input type="hidden" name="action" value="add">
                 <input type="hidden" name="cpID" value="">
@@ -282,7 +211,56 @@
                 </form>
             </div>
         </div>
+        <script>
+            //템플릿의 header/nav만 로드
+                (async function () {
+                try {
+                    const url = '<%= ctx %>/Html/00_template/template.html';
+                    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
+                    const doc  = new DOMParser().parseFromString(text, 'text/html');
+                    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+                    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
+                    const headerSlot = document.getElementById('header-slot');
+                    const navSlot    = document.getElementById('nav-slot');
+                    if (header && headerSlot) headerSlot.replaceWith(header);
+                    if (nav && navSlot)       navSlot.replaceWith(nav);
+                } catch (e) {
+                    console.error('템플릿 로드 실패:', e);
+                }
+                })();
 
+                (function() {
+                    // 전체 선택
+                    const checkAll = document.getElementById('check_all');
+                    const body = document.querySelector('.tables_body');
+                    if (checkAll && body) {
+                    checkAll.addEventListener('change', () => {
+                        body.querySelectorAll('.row_check').forEach(cb => cb.checked = checkAll.checked);
+                    });
+                    }
+
+                    // 삭제
+                    const deleteBtn  = document.getElementById('deleteBtn');
+                    const deleteKeys = document.getElementById('delete_keys');
+                    const deleteForm = document.getElementById('deleteForm');
+
+                    if (deleteBtn && deleteKeys && deleteForm) {
+                    deleteBtn.addEventListener('click', () => {
+                        const keys = Array.from(document.querySelectorAll('.row_check:checked'))
+                        .map(cb => cb.value)
+                        .filter(Boolean);
+
+                        if (keys.length === 0) {
+                        alert('삭제할 항목을 선택하세요.');
+                        return;
+                        }
+                        deleteKeys.value = keys.join(',');
+                        deleteForm.submit();
+                    });
+                    }
+                    
+                })();
+        </script>
         <script src="<c:url value='/Html/asset/09_common.js'/>"></script>
     </body>
 </html>

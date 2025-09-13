@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Dto.BOMDTO;
 import Dto.ProPlanDTO;
 import Dto.WorkOrderDTO;
 import Service.WorkOrderService;
@@ -23,11 +24,16 @@ public class WorkOrderCtrl extends HttpServlet {
 		// 한글 깨짐 방지
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		// 전체 조회
+		// 전체 조회 및 품목 조회
 		WorkOrderService service = new WorkOrderService();
+		WorkOrderDTO dto = new WorkOrderDTO();
+		
 		List<WorkOrderDTO> basicList = service.getAllOrders();
 		
+		List<WorkOrderDTO> itemList = service.getItemsWO(dto);
+		
 		request.setAttribute("list", basicList);
+		request.setAttribute("itemAll", itemList);
 		request.getRequestDispatcher("/Html/09_production/09_work_order.jsp").forward(request, response);
 	}
 
@@ -48,13 +54,23 @@ public class WorkOrderCtrl extends HttpServlet {
 			dto.setWorkerID(action);
 		}
 		else if("delete".equals(action)) {
-			
-		}
+		    String[] ids = request.getParameterValues("chk");
+		    int delCount = 0;
+		    if(ids != null) {
+		        for(String id : ids) {
+		            WorkOrderDTO dto = new WorkOrderDTO();
+		            dto.setWoNum(id); 
+		            delCount += service.removeWorkOrder(dto);
+		            System.out.println("일단 null은 아님");
+		        }
+		    }
+		    request.setAttribute("msg", delCount + "건 삭제");
+		}		    
 		else if("search".equals(action)) {
-			
+			System.out.println();
 		}
 		else if("item-add".equals(action)) {
-			
+			System.out.println();
 		}
 		
 	    List<WorkOrderDTO> basicList = service.getAllOrders();

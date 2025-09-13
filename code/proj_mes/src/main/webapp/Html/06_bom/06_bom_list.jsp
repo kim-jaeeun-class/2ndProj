@@ -78,109 +78,126 @@
         </ul>
     </nav>
     
-	<div class="titleBox"></div>
-
-	<div class="wrap">
-		<form class="lookup" method="post" action="bom">
-		<input type="hidden" name="action" value="search">
-			<div class="lookup_left">
-				<div class = "lookup-title">품목(완제품) 코드</div>
-				<select name = "filter-item1">
-					<!-- TODO 지금 하드코딩 해놨는데 DB에서 따오도록 설정 바꿔두기 -->
-					<!-- 여기에서 name이든 뭐든 설정해야 하니까 아래 테이블처럼 설정해두기 -->
-					<option value="all" selected>전체</option>
-					<option value="FPPHS23">FPPHS23</option>
-					<option value="FPPHA17">FPPHA17</option>
-					<option value="FPNIN3D">FPNIN3D</option>
-					<option value="FPNINLI">FPNINLI</option>
-					<option value="FPNVI05">FPNVI05</option>
-					<option value="FPNVI07">FPNVI07</option>
-				</select>
-			</div>
-			<div class="btnDiv">
-				<input type="submit" value="조회" class="lookupBtn btn">
-				<input type="button" value="신규" class="newBOMBtn btn open-btn">
-			</div>
-		</form>
-		
-		<!-- BOM 테이블 -->
-		<form method="post" action="bom">
-			<div class="table-container">
-	    		<table class="bom_tab">
-					<thead>
-						<tr>
-							<th></th>
-							<th>BOM No.</th>
-							<th>완제품</th>
-							<th>자재</th>
-							<th>소요량</th>
-						</tr>		
-					</thead>
-					<tbody>
-						<c:forEach var="bom" items="${list}">
+	<div class="titleBox">
+		<span>BOM 목록</span>
+		<div class="wrap">
+			<form class="lookup" method="post" action="bom">
+			<input type="hidden" name="action" value="search">
+				<div class="lookup_left">
+					<div class = "lookup-title">품목(완제품) 코드</div>
+					<select name = "filter-item1">
+						<!-- TODO 지금 하드코딩 해놨는데 DB에서 따오도록 설정 바꿔두기 -->
+						<!-- 여기에서 name이든 뭐든 설정해야 하니까 아래 테이블처럼 설정해두기 -->
+						<option value="all" selected>전체</option>
+						<option value="FPPHS23">FPPHS23</option>
+						<option value="FPPHA17">FPPHA17</option>
+						<option value="FPNIN3D">FPNIN3D</option>
+						<option value="FPNINLI">FPNINLI</option>
+						<option value="FPNVI05">FPNVI05</option>
+						<option value="FPNVI07">FPNVI07</option>
+					</select>
+				</div>
+				<div class="btnDiv">
+					<input type="submit" value="조회" class="lookupBtn btn">
+					<input type="button" value="신규" class="newBOMBtn btn open-btn">
+				</div>
+			</form>
+		</div>
+		<div class="wrap wrap-list">
+			<!-- BOM 테이블 -->
+			<form method="post" action="bom">
+				<div class="table-container">
+					<table class="bom_tab">
+						<thead>
 							<tr>
-								<td><input type="checkbox" value="${bom.bomID}" name="chk"></td>
-								<td>${bom.bomID}</td>
-								<td>${bom.item_code_1}</td>
-								<td>${bom.item_code_2}</td>
-								<td>${bom.require_amount}</td>
+								<th>
+									<input type="checkbox" value="${bom.bomID}" name="chk">
+								</th>
+								<th>BOM No.</th>
+								<th>완제품</th>
+								<th>자재</th>
+								<th>소요량</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-	        </div>
-			<div class="bottomBtn">
-				<input type = "hidden" name="action" value="delete">
-				<input type="submit" value="삭제" name="delete" class="deleteBOMBtn btn"></input>
-			</div>		
-		</form>
-
+						</thead>
+						<tbody>
+							<c:forEach var="bom" items="${list}">
+								<tr>
+									<td>
+										<input type="checkbox" value="${bom.bomID}" name="chk">
+									</td>
+									<td>${bom.bomID}</td>
+									<td>${bom.item_code_1}</td>
+									<td>${bom.item_code_2}</td>
+									<td>${bom.require_amount}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<div class="bottomBtn">
+					<input type="hidden" name="action" value="delete">
+					<input type="submit" value="삭제" name="delete" class="deleteBOMBtn btn"></input>
+				</div>
+			</form>
+		</div>
 	</div>
 	<!-- 등록용 -->
-    <div class="panel">
-           <button class="close-btn">✕</button>
-           <h2>BOM 등록</h2>
-           <form action="bom" method="post">
-	           <input type="hidden" name="action" value="add">
-	           <input type="hidden" name="bomID">
-               <div class="form-group">
-                   <label>완제품 품번</label>
-                   <input type="text" name = "item-code-1">
-               </div>
-               <div class="form-group">
-                   <label>자재 품번</label>
-                   <input type="text" name="item-code-2">
-               </div>
-               <div class="form-group">
-                   <label>자재 소요량</label>
-                   <input type="number" name="require-amount">
-               </div>             
-               <div class="form-actions">
-                   <input type = "button" name="panel-cancel" class="button cancel reset" value="취소">
-                   <button type="submit" name="panel-save" class="button panel-save">저장</button>
-               </div>
-           </form>
-       </div>
+		<div class="panel">
+			<button class="close-btn">✕</button>
+			<div class="slide-title">BOM 등록</div>
+			<form action="bom" method="post">
+				<input type="hidden" name="action" value="add">
+				<input type="hidden" name="bomID">
+				<div class="form-group">
+					<label>완제품 품번</label>
+					<input type="text" name="item-code-1">
+				</div>
+				<div class="form-group">
+					<label>자재 품번</label>
+					<input type="text" name="item-code-2">
+				</div>
+				<div class="form-group">
+					<label>자재 소요량</label>
+					<input type="number" name="require-amount">
+				</div>
+				<div class="form-actions">
+					<input type="button" name="panel-cancel" class="button cancel reset" value="취소">
+					<button type="submit" name="panel-save" class="button panel-save">저장</button>
+				</div>
+			</form>
+		</div>
 		<!-- BOM 상세 모달 -->
 		<div id="bomDetailModal" class="modal hidden">
-		    <div class="modal-content">
-		        <span id="modalCloseBtn" class="close-btn">✕</span>
-		        <h2>BOM 상세</h2>
-		        <table>
-		            <tr><td>BOM No.</td><td id="bomID"></td></tr>
-		            <tr><td>완제품</td><td id="itemCode1"></td></tr>
-		            <tr><td>자재</td><td id="itemCode2"></td></tr>
-		            <tr><td>소요량</td><td id="requireAmount"></td></tr>
-		        </table>
-		        <div class="modal-actions">
-		            <form method="post" action="bom" style="display:inline-block;">
-		                <input type="hidden" name="action" value="delete">
-		                <input type="hidden" name="chk" id="modalDeleteID">
-		                <button type="submit">삭제</button>
-		            </form>
-		            <button id="modalEditBtn">수정</button>
-		        </div>
-		    </div>
+			<div class="modal-content">
+				<span id="modalCloseBtn" class="close-btn">✕</span>
+				<div class = "modal-title">BOM 상세</div>
+				<table class = "modal-table">
+					<tr>
+						<td>BOM No.</td>
+						<td id="bomID"></td>
+					</tr>
+					<tr>
+						<td>완제품</td>
+						<td id="itemCode1"></td>
+					</tr>
+					<tr>
+						<td>자재</td>
+						<td id="itemCode2"></td>
+					</tr>
+					<tr>
+						<td>소요량</td>
+						<td id="requireAmount"></td>
+					</tr>
+				</table>
+				<div class="modal-actions">
+					<form method="post" action="bom" style="display:inline-block;">
+						<input type="hidden" name="action" value="delete">
+						<input type="hidden" name="chk" id="modalDeleteID">
+						<button type="submit">삭제</button>
+					</form>
+					<button id="modalEditBtn">수정</button>
+				</div>
+			</div>
 		</div>
 
 </body>

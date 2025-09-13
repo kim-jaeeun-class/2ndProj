@@ -115,49 +115,49 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // 테이블 행 생성
-            const tr = document.createElement('tr');
-            tr.classList.add('data');
+            // // 테이블 행 생성
+            // const tr = document.createElement('tr');
+            // tr.classList.add('data');
 
-            // 체크박스
-            const tdCheckbox = document.createElement('td');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            tdCheckbox.appendChild(checkbox);
-            tr.appendChild(tdCheckbox);
+            // // 체크박스
+            // const tdCheckbox = document.createElement('td');
+            // const checkbox = document.createElement('input');
+            // checkbox.type = 'checkbox';
+            // tdCheckbox.appendChild(checkbox);
+            // tr.appendChild(tdCheckbox);
 
-            // 작업지시번호
-            const tdWoNo = document.createElement('td');
-            tdWoNo.textContent = `${orderDateInput.value.replace(/-/g,'')}-${orderNoInput.value}`;
-            tr.appendChild(tdWoNo);
+            // // 작업지시번호
+            // const tdWoNo = document.createElement('td');
+            // tdWoNo.textContent = `${orderDateInput.value.replace(/-/g,'')}-${orderNoInput.value}`;
+            // tr.appendChild(tdWoNo);
 
-            // 일자
-            const tdDate = document.createElement('td');
-            tdDate.textContent = new Date().toISOString().split('T')[0];
-            tr.appendChild(tdDate);
+            // // 일자
+            // const tdDate = document.createElement('td');
+            // tdDate.textContent = new Date().toISOString().split('T')[0];
+            // tr.appendChild(tdDate);
 
-            // 거래처명
-            const tdClient = document.createElement('td');
-            tdClient.textContent = person.value;
-            tr.appendChild(tdClient);
+            // // 거래처명
+            // const tdClient = document.createElement('td');
+            // tdClient.textContent = person.value;
+            // tr.appendChild(tdClient);
 
-            // 담당자명
-            const tdPerson = document.createElement('td');
-            tdPerson.textContent = personInput.value;
-            tr.appendChild(tdPerson);
+            // // 담당자명
+            // const tdPerson = document.createElement('td');
+            // tdPerson.textContent = personInput.value;
+            // tr.appendChild(tdPerson);
 
-            // 납기일
-            const tdGive = document.createElement('td');
-            tdGive.textContent = duedate.value;
-            tr.appendChild(tdGive);
+            // // 납기일
+            // const tdGive = document.createElement('td');
+            // tdGive.textContent = duedate.value;
+            // tr.appendChild(tdGive);
 
-            // 빈 행 (품목 등)
-            tr.appendChild(document.createElement('td'));
-            tr.appendChild(document.createElement('td'));
-            tr.appendChild(document.createElement('td'));
+            // // 빈 행 (품목 등)
+            // tr.appendChild(document.createElement('td'));
+            // tr.appendChild(document.createElement('td'));
+            // tr.appendChild(document.createElement('td'));
 
-            mainTable.appendChild(tr);
-            checkbox.addEventListener('click', e => e.stopPropagation());
+            // mainTable.appendChild(tr);
+            // checkbox.addEventListener('click', e => e.stopPropagation());
 
             // 패널 닫기 + 폼 리셋
             panel.classList.remove('open');
