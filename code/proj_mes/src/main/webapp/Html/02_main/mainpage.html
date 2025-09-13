@@ -55,15 +55,21 @@
     <!-- Tailwind 클래스 대신 직접 정의한 header-bg 클래스를 적용 -->
     <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
         <div class="flex items-center space-x-2">
+        <a  href = "/proj_mes/mainpage">
             <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
+                       </a>
+                       
+          <a  href = "/proj_mes/mainpage">
             <h3 class="text-xl font-bold">J2P4</h3>
+             </a>
+ 
         </div>
         <div class="flex items-center space-x-4 sm:space-x-8">
             <div class="search cursor-pointer">
                 <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
             </div>
             <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
-                <form method="post" action="/../logout">
+                <form method="post" action="/proj_mes/logout">
                     <button type="submit">로그아웃</button>
                 </form>
             </div>
@@ -89,10 +95,10 @@
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
             <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/StandardCtrl">기준 관리</a></li>
             <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/process">공정 관리</a></li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/bom">BOM 관리</a></li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/orderList">발주 관리</a></li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/Stock">재고 관리</a></li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md"><a href = "/proj_mes/proplan">생산 관리</a></li>
             <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
         </ul>
     </nav>
