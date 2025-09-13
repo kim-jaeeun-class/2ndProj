@@ -18,7 +18,16 @@
   <title>기준 목록</title>
 <!--   <link rel="stylesheet" href="/proj_mes/Html/asset/mainpage.css" /> -->
 <link rel="stylesheet" href="<c:url value='/Html/asset/04_standard_list.css'/>" />
-<link rel="stylesheet" href="<c:url value='/Html/asset/mainpage.css'/>" />
+<%-- <link rel="stylesheet" href="<c:url value='/Html/asset/mainpage.css'/>" /> --%>
+
+<style>
+.main{
+	width : 90%;
+	margin : 5%;
+}
+
+</style> 
+
 </head>
 <body>
 	<div id="header-slot"></div>
