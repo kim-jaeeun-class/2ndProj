@@ -32,6 +32,7 @@ public class StockDAO {
 
     // 목록 
     public List<StockDTO> selectAll() throws Exception {
+    	System.out.println("111111111111");
 
         List<StockDTO> list = new ArrayList();
         

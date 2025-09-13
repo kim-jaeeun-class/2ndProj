@@ -6,8 +6,10 @@ import Dao.ProPlanDAO;
 import Dao.ProcessDAO;
 import Dao.StockDAO;
 import Dto.OrderDTO;
+import Dto.ProPlanDTO;
 import Dto.ProcessDTO;
 import Dto.StockDTO;
+//import Service.StandardService.TableProvider;
 
 /**
  * 선택된 분류(category)에 맞춰
@@ -57,8 +59,8 @@ public class StandardService {
     public StandardService() {
         // 기본 등록: 발주(orders)
         providers.put("발주", new OrderProvider());
-//        providers.put("재고", new StockProvider());
-//        providers.put("공정", new ProcProvider());
+        providers.put("재고", new StockProvider());
+        providers.put("공정", new ProcProvider());
 //        providers.put("BOM", new ProcProvider());
 //        providers.put("생산", new ProplanProvider());
 //        providers.put("품질", new ProcProvider());
@@ -162,6 +164,8 @@ public class StandardService {
             List<Map<String,Object>> rows = new ArrayList<>();
             // dao.selectAll()이 throws Exception 이므로 여기서 처리
             final List<StockDTO> list;
+
+           
             try {
                 // DAO가 raw List를 반환한다면 캐스팅 필요
                 list = (List<StockDTO>) dao.selectAll();
@@ -189,6 +193,121 @@ public class StandardService {
         private static String nz(String s) { return s == null ? "" : s; }
     }
     
+
+    
+    
+    /* =========================
+    Provider 구현: 공정(Process)
+    ========================= */    
+
+    private static class ProcProvider implements TableProvider {
+        private final ProcessDAO dao = new ProcessDAO();
+
+        @Override
+        public List<Column> columns() {
+            List<Column> cols = new ArrayList<>();
+            cols.add(new Column("proc_id",     "공정ID"));
+            cols.add(new Column("proc_name",   "공정이름"));
+            cols.add(new Column("item_code",   "품목코드"));
+            cols.add(new Column("dapart_id2",  "부서ID"));   // 키 이름 통일!
+            cols.add(new Column("proc_info",   "공정정보"));
+            return cols;
+        }
+
+        @Override
+        public List<Map<String, Object>> data() {
+            List<Map<String, Object>> rows = new ArrayList<>();
+
+            // ① ProcessDAO에 getAllProcesses()가 있으면 이 라인 사용
+            List<ProcessDTO> list = dao.getAllProcesses();
+
+            // ② 없다면 이 라인으로 전체 조회 대체 가능 (INNER JOIN 기준)
+            // List<ProcessDTO> list = dao.getProcessesBySearch(null, null, null);
+
+            for (ProcessDTO d : list) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("proc_id",     nz(d.getProc_id()));
+                row.put("proc_name",   nz(d.getProc_name()));
+                row.put("item_code",   nz(d.getItem_code()));
+                row.put("dapart_id2",  nz(d.getDapart_id2())); // columns()와 동일 키
+                row.put("proc_info",   nz(d.getProc_info()));
+                rows.add(row);
+            }
+            return rows;
+        }
+
+        private static String nz(String s) { return s == null ? "" : s; }
+    }
+ 
+    
+    
+   
+    
+    
+    
+    /* =========================
+    Provider 구현: 생산계획(ProPlan)
+    ========================= */    
+
+    
+    
+    
+    private static class ProplanProvider implements TableProvider {
+        private final ProPlanDAO dao = new ProPlanDAO(); // 주어진 DAO 그대로 사용
+        
+        @Override
+        public List<Column> columns() {
+            List<Column> cols = new ArrayList<>();
+            cols.add(new Column("cp_id",   "재고ID"));
+            cols.add(new Column("cp_count","공정이름"));
+            cols.add(new Column("star_date",   "품목 코드"));
+            cols.add(new Column("end_date",   "부서"));
+            cols.add(new Column("cp_rate", "공정정보"));            
+            cols.add(new Column("success_rate", "공정정보"));            
+            cols.add(new Column("defect_rate", "공정정보"));            
+            cols.add(new Column("bigo", "공정정보"));            
+            cols.add(new Column("item_code", "공정정보"));            
+           
+           
+            
+            return cols;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<Map<String, Object>> data() {
+            List<Map<String,Object>> rows = new ArrayList<>();
+            List<?> list = dao.selectAllPP(); // 원 DAO 시그니처 유지(raw List)
+            for (Object o : list) {
+            	ProPlanDTO d = (ProPlanDTO) o;
+                Map<String,Object> row = new LinkedHashMap<>();
+                row.put("cp_id",    nz(d.getCpID()));
+                row.put("cp_count", d.getCpCount());
+                row.put("start_date",   d.getStartDate()); // java.sql.Date 그대로
+                row.put("end_date",    d.getEndDate());
+                row.put("cp_rate",  d.getCpRate());
+                row.put("success_rate",  d.getSuccessRate());
+                row.put("defect_rate",  d.getDefectRate());
+                row.put("bigo",  d.getBigo());
+                row.put("item_code",  d.getItemCode());
+
+
+                rows.add(row);
+            }
+            return rows;
+        }
+
+        private static String nz(String s) { return s == null ? "" : s; }
+    }    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 }
@@ -201,52 +320,7 @@ public class StandardService {
     
 
     
-    /* =========================
-    Provider 구현: 공정(Process)
-    ========================= */    
-
-    
-    
-    
-//    private static class ProcProvider implements TableProvider {
-//        private final ProcessDAO dao = new ProcessDAO(); // 주어진 DAO 그대로 사용
-//        
-//        @Override
-//        public List<Column> columns() {
-//            List<Column> cols = new ArrayList<>();
-//            cols.add(new Column("proc_id",   "재고ID"));
-//            cols.add(new Column("proc_name","공정이름"));
-//            cols.add(new Column("item_code",   "품목 코드"));
-//            cols.add(new Column("dapart_id2",   "부서"));
-//            cols.add(new Column("proc_info", "공정정보"));            
-//           
-//           
-//            
-//            return cols;
-//        }
-//
-//        @SuppressWarnings("unchecked")
-//        @Override
-//        public List<Map<String, Object>> data() {
-//            List<Map<String,Object>> rows = new ArrayList<>();
-//            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
-//            for (Object o : list) {
-//            	ProcessDTO d = (ProcessDTO) o;
-//                Map<String,Object> row = new LinkedHashMap<>();
-//                row.put("proc_id",    nz(d.getProc_id()));
-//                row.put("proc_name", d.getProc_name());
-//                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
-//                row.put("depart_id2",    d.getDapart_id2());
-//                row.put("proc_info",  d.getProc_info());
-//
-//
-//                rows.add(row);
-//            }
-//            return rows;
-//        }
-//
-//        private static String nz(String s) { return s == null ? "" : s; }
-//    }
+ 
 
     
     
