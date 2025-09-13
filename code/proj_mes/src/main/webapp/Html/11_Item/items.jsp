@@ -179,6 +179,43 @@
       });
     });
   })();
+  
+  
+  
+  function initUserMenuHandlers() {
+	    const myIconBtn = document.getElementById('myIconBtn');
+	    const userMenu  = document.getElementById('userMenu');
+	    if (!myIconBtn || !userMenu) return; // 템플릿 구조 변경 대비
+
+	    function closeUserMenu() {
+	      userMenu.classList.add('hidden');
+	      myIconBtn.setAttribute('aria-expanded', 'false');
+	    }
+	    function toggleMenu(e) {
+	      e && e.stopPropagation();
+	      userMenu.classList.toggle('hidden');
+	      myIconBtn.setAttribute('aria-expanded',
+	        userMenu.classList.contains('hidden') ? 'false' : 'true');
+	    }
+
+	    myIconBtn.addEventListener('click', toggleMenu);
+	    userMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+	    document.addEventListener('click', closeUserMenu);
+	    document.addEventListener('keydown', function (e) {
+	      if (e.key === 'Escape') closeUserMenu();
+	    });
+	  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 </script>
 </body>
 </html>
