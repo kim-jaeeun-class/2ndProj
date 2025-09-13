@@ -57,8 +57,8 @@ public class StandardService {
     public StandardService() {
         // 기본 등록: 발주(orders)
         providers.put("발주", new OrderProvider());
-        providers.put("재고", new StockProvider());
-        providers.put("공정", new ProcProvider());
+//        providers.put("재고", new StockProvider());
+//        providers.put("공정", new ProcProvider());
 //        providers.put("BOM", new ProcProvider());
 //        providers.put("생산", new ProplanProvider());
 //        providers.put("품질", new ProcProvider());
@@ -106,9 +106,19 @@ public class StandardService {
         @Override
         public List<Map<String, Object>> data() {
             List<Map<String,Object>> rows = new ArrayList<>();
-            List<?> list = dao.selectAll(); // 원 DAO 시그니처 유지(raw List)
-            for (Object o : list) {
-                OrderDTO d = (OrderDTO) o;
+
+            // dao.selectAll()이 throws Exception 이므로 여기서 처리
+            final List<OrderDTO> list;
+            try {
+                // DAO가 raw List를 반환한다면 캐스팅 필요
+                list = (List<OrderDTO>) dao.selectAll();
+            } catch (Exception e) {
+
+                throw new IllegalStateException("발주 목록 조회 중 오류", e);
+            }
+
+            // 제네릭이 있으니 캐스팅 없이 바로 사용
+            for (OrderDTO d : list) {
                 Map<String,Object> row = new LinkedHashMap<>();
                 row.put("order_key",    nz(d.getOrder_key()));
                 row.put("order_number", nz(d.getOrder_number()));
@@ -128,10 +138,7 @@ public class StandardService {
     
     /* =========================
     Provider 구현: 재고(Stock)
-    ========================= */    
-
-    
-    
+    ========================= */ 
     
     private static class StockProvider implements TableProvider {
         private final StockDAO dao = new StockDAO(); // 주어진 DAO 그대로 사용
@@ -153,7 +160,17 @@ public class StandardService {
         @Override
         public List<Map<String, Object>> data() {
             List<Map<String,Object>> rows = new ArrayList<>();
-            List<?> list = dao.selectAll(); // 원 DAO 시그니처 유지(raw List)
+            // dao.selectAll()이 throws Exception 이므로 여기서 처리
+            final List<StockDTO> list;
+            try {
+                // DAO가 raw List를 반환한다면 캐스팅 필요
+                list = (List<StockDTO>) dao.selectAll();
+            } catch (Exception e) {
+
+                throw new IllegalStateException("발주 목록 조회 중 오류", e);
+            }
+
+            
             for (Object o : list) {
             	StockDTO d = (StockDTO) o;
                 Map<String,Object> row = new LinkedHashMap<>();
@@ -172,6 +189,18 @@ public class StandardService {
         private static String nz(String s) { return s == null ? "" : s; }
     }
     
+    
+    
+}
+
+    
+   
+
+    
+    
+    
+
+    
     /* =========================
     Provider 구현: 공정(Process)
     ========================= */    
@@ -179,45 +208,45 @@ public class StandardService {
     
     
     
-    private static class ProcProvider implements TableProvider {
-        private final ProcessDAO dao = new ProcessDAO(); // 주어진 DAO 그대로 사용
-        
-        @Override
-        public List<Column> columns() {
-            List<Column> cols = new ArrayList<>();
-            cols.add(new Column("proc_id",   "재고ID"));
-            cols.add(new Column("proc_name","공정이름"));
-            cols.add(new Column("item_code",   "품목 코드"));
-            cols.add(new Column("dapart_id2",   "부서"));
-            cols.add(new Column("proc_info", "공정정보"));            
-           
-           
-            
-            return cols;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public List<Map<String, Object>> data() {
-            List<Map<String,Object>> rows = new ArrayList<>();
-            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
-            for (Object o : list) {
-            	ProcessDTO d = (ProcessDTO) o;
-                Map<String,Object> row = new LinkedHashMap<>();
-                row.put("proc_id",    nz(d.getProc_id()));
-                row.put("proc_name", d.getProc_name());
-                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
-                row.put("depart_id2",    d.getDapart_id2());
-                row.put("proc_info",  d.getProc_info());
-
-
-                rows.add(row);
-            }
-            return rows;
-        }
-
-        private static String nz(String s) { return s == null ? "" : s; }
-    }
+//    private static class ProcProvider implements TableProvider {
+//        private final ProcessDAO dao = new ProcessDAO(); // 주어진 DAO 그대로 사용
+//        
+//        @Override
+//        public List<Column> columns() {
+//            List<Column> cols = new ArrayList<>();
+//            cols.add(new Column("proc_id",   "재고ID"));
+//            cols.add(new Column("proc_name","공정이름"));
+//            cols.add(new Column("item_code",   "품목 코드"));
+//            cols.add(new Column("dapart_id2",   "부서"));
+//            cols.add(new Column("proc_info", "공정정보"));            
+//           
+//           
+//            
+//            return cols;
+//        }
+//
+//        @SuppressWarnings("unchecked")
+//        @Override
+//        public List<Map<String, Object>> data() {
+//            List<Map<String,Object>> rows = new ArrayList<>();
+//            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
+//            for (Object o : list) {
+//            	ProcessDTO d = (ProcessDTO) o;
+//                Map<String,Object> row = new LinkedHashMap<>();
+//                row.put("proc_id",    nz(d.getProc_id()));
+//                row.put("proc_name", d.getProc_name());
+//                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
+//                row.put("depart_id2",    d.getDapart_id2());
+//                row.put("proc_info",  d.getProc_info());
+//
+//
+//                rows.add(row);
+//            }
+//            return rows;
+//        }
+//
+//        private static String nz(String s) { return s == null ? "" : s; }
+//    }
 
     
     
@@ -283,4 +312,4 @@ public class StandardService {
     
     
     
-}
+

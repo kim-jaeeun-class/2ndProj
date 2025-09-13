@@ -27,6 +27,7 @@ public class StandardCtrl extends HttpServlet {
         super.init();
         // 통합 서비스 1회 초기화
         standardService = new StandardService();
+//        standardService.register("공정", new StandardService.ProcProvider());
         // 필요 시 여기서 표준 외 Provider 추가 등록 가능:
         // standardService.register("공정", new StandardService.ProcessProvider(...));
         // standardService.register("BOM",  new StandardService.BomProvider(...));
