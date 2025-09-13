@@ -63,6 +63,48 @@ public class ProcessDAO {
 	
 	// Read (조회) =========================
 	
+	
+	
+	
+	// process 전체 목록 조회 (부서 없더라도 포함)
+	public List<ProcessDTO> getAllProcesses() {
+	    List<ProcessDTO> list = new ArrayList<>();
+	    String sql = "SELECT p.*, d.depart_level " +
+	                 "FROM process p " +
+	                 "LEFT JOIN department d ON p.dapart_id2 = d.dapart_id2 " +
+	                 "ORDER BY p.item_code NULLS LAST, p.proc_seq NULLS LAST, p.proc_id";
+
+	    try (Connection conn = getConn();
+	         PreparedStatement pstmt = conn.prepareStatement(sql);
+	         ResultSet rs = pstmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            list.add(createProcessDTO(rs));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// item 테이블에서 item_code 모두 조회
 	public List<String> getAllItemCodes() {
 		List<String> itemCodes = new ArrayList<>();
