@@ -32,7 +32,6 @@ public class StockDAO {
 
     // 목록 
     public List<StockDTO> selectAll() throws Exception {
-    	System.out.println("111111111111");
 
         List<StockDTO> list = new ArrayList();
         
@@ -245,6 +244,96 @@ public class StockDAO {
     }
 
 
+
+    /* 대/중/소(코드 기준) + 기간 검색 */
+    public List<StockDTO> searchStocks(String big, String mid, String small, java.sql.Date from, java.sql.Date to) {
+        
+    	List<StockDTO> list = new ArrayList<>();
+    	
+        try {
+            Connection con = getConn();
+
+            String base =	"SELECT s.STOCK_ID, s.STOCK_DATE, s.STOCK_LOC, s.STOCK_DIV, s.STOCK_STAT, s.STOCK_NUMBER, " 
+        				+	"       i.ITEM_CODE, NVL(i.ITEM_NAME, i.ITEM_CODE) AS ITEM_NAME, i.ITEM_PRICE, " 
+        				+	"       b.BIG_NAME, m.MID_NAME, sm.SM_NAME " 
+        				+	"  FROM STOCK s " 
+        				+	"  JOIN ITEM i ON i.ITEM_CODE = s.ITEM_CODE " 
+        				+	"  LEFT JOIN TB_BIG_CATEGORY   b  ON b.BIG_CODE = SUBSTR(i.ITEM_CODE,1,2) " 
+        				+	"  LEFT JOIN TB_MID_CATEGORY   m  ON m.MID_CODE = SUBSTR(i.ITEM_CODE,3,2) " 
+        				+	"  LEFT JOIN TB_SMALL_CATEGORY sm ON sm.SM_CODE = SUBSTR(i.ITEM_CODE,5,2) " 
+        				+	" WHERE 1=1 ";
+
+            StringBuilder where = new StringBuilder();
+            List<Object> params = new ArrayList<>();
+
+            if (nz(big))   { 
+            	where.append(" AND SUBSTR(i.ITEM_CODE,1,2) = ?"); 
+            	params.add(big); 
+        	}
+            if (nz(mid))   { 
+            	where.append(" AND SUBSTR(i.ITEM_CODE,3,2) = ?"); 
+            	params.add(mid); 
+        	}
+            if (nz(small)) { 
+            	where.append(" AND SUBSTR(i.ITEM_CODE,5,2) = ?"); 
+            	params.add(small); 
+        	}
+
+            if (from != null && to != null) {
+                where.append(" AND TRUNC(s.STOCK_DATE) BETWEEN ? AND ? ");
+                params.add(from); 
+                params.add(to);
+            } else if (from != null) {
+                where.append(" AND TRUNC(s.STOCK_DATE) >= ? ");
+                params.add(from);
+            } else if (to != null) {
+                where.append(" AND TRUNC(s.STOCK_DATE) <= ? ");
+                params.add(to);
+            }
+
+            String sql = base + where + " ORDER BY s.STOCK_DATE DESC, s.STOCK_ID DESC";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            int idx = 1;
+            for (Object p : params) {
+                if (p instanceof java.sql.Date) ps.setDate(idx++, (java.sql.Date)p);
+                else                            ps.setString(idx++, p.toString());
+            }
+
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                StockDTO d = new StockDTO();
+                
+                d.setStock_id(rs.getString("STOCK_ID"));
+                d.setStock_date(rs.getDate("STOCK_DATE"));
+                d.setStock_loc(rs.getInt("STOCK_LOC"));
+                d.setStock_div(rs.getInt("STOCK_DIV"));
+                d.setStock_stat(rs.getInt("STOCK_STAT"));
+                d.setStock_number(rs.getInt("STOCK_NUMBER"));
+
+                d.setItem_code(rs.getString("ITEM_CODE"));
+                d.setItem_name(rs.getString("ITEM_NAME"));
+                d.setItem_price(rs.getString("ITEM_PRICE"));
+
+                d.setBigCategory(rs.getString("BIG_NAME"));
+                d.setMidCategory(rs.getString("MID_NAME"));
+                d.setSmallCategory(rs.getString("SM_NAME"));
+
+                list.add(d);
+            }
+            rs.close(); 
+            ps.close(); 
+            con.close();
+        } catch (Exception e) { 
+        	e.printStackTrace(); 
+    	}
+        
+        return list;
+    }
+
+    private static boolean nz(String s){ return s != null && !s.trim().isEmpty(); }
     // 유틸 
     private static boolean isBlank(String s){ return s == null || s.trim().isEmpty(); }
     private static String nvl(String s){ return s == null ? "" : s.trim(); }

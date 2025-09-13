@@ -53,26 +53,15 @@
 }
 /* body 시작 */
 /* 필터 적용부분 */
-.main {
-    width: 90%;
-    margin: 16px auto;
-    padding: 14px 10px;
-    border: 1px solid #2f2f2f;
-    border-radius: 10px;
-    background: #fff;
-    display: flex;
-    flex-direction: column; /* 두 줄로 배치 */
-    gap: 14px; /* 줄 간격 */
-}
-
 /* select 필터 줄 */
 .filter {
     display: flex;
     flex-wrap: wrap; /* 화면 줄어들면 자동 줄바꿈 */
     gap: 12px 18px;  /* 위아래 12px / 좌우 18px */
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
+
 .filter_btn{
     background-color: var(--blue);
     color: #ffffff;
@@ -81,9 +70,14 @@
 .box {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
-
+.box_filter {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    padding-bottom: 24px;
+}
 .filter select {
     min-width: 140px;
     height: 36px;
@@ -99,10 +93,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    padding-top: 8px;
-    border-top: 1px solid #ddd; /* 시각적으로 두 줄 구분 */
+    /* padding-top: 24px; */
+    /* border-top: 1px solid #ddd;  */
 }
-
 .date_filter .date {
     display: flex;
     align-items: center;
@@ -147,7 +140,7 @@
     border: 1px solid #9aa3af;
     border-radius: 6px;
 }      
-.order_period {
+.period {
     border: 1px solid grey;
     background-color: grey;
     border-radius: 7px;
@@ -185,15 +178,7 @@
     font-weight: 700;
     cursor: pointer;
 }
-.period {
-    border: 1px solid grey;
-    background-color: grey;
-    border-radius: 7px;
-    width: 70px;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
-}
+
 #start_date,
 #end_date {
     width: 100%;

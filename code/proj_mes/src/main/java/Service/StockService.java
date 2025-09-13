@@ -1,8 +1,11 @@
 package Service;
 
+import java.sql.Date;
 import java.util.List;
 
+import Dao.CategoryDAO;
 import Dao.StockDAO;
+import Dto.CategoryDTO;
 import Dto.StockDTO;
 
 public class StockService {
@@ -69,6 +72,21 @@ public class StockService {
         }
     }
 
+    /* 필터 적용 */
+    public List<StockDTO> searchStocks(String big, String mid, String small, Date from, Date to) {
+        return new StockDAO().searchStocks(big, mid, small, from, to);
+    }
+
+    public List<CategoryDTO> getBigList() {
+        return new CategoryDAO().getBigList();
+    }
+    public List<CategoryDTO> getMidListByBig(String bigCode) {
+        return new CategoryDAO().getMidListByBig(bigCode);
+    }
+    public List<CategoryDTO> getSmallListByMid(String midCode) {
+        return new CategoryDAO().getSmallListByMid(midCode);
+    }
+    
     // ===== util =====
     private static boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();

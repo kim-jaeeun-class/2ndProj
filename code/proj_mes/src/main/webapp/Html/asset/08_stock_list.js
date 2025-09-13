@@ -1,62 +1,142 @@
-// /Html/asset/08_stock_list.js
 window.addEventListener('load', init);
 
 function init() {
   bindstock_list();
+  bindStockFilter();
 }
 
 function bindstock_list() {
   const table = document.querySelector('.tables');
-  if (!table) return;
+  const tbody = document.querySelector('.tables_body');
+  if (!table || !tbody) return;
 
-  // tbody는 .tables_body 우선, 없으면 첫 번째 TBODY
-  const tbody = table.querySelector('.tables_body') || table.tBodies[0];
-  if (!tbody) return;
+  // UI refs
+  const filterForm = document.querySelector('.date_filter'); // 조회 폼
+  const startInput = document.getElementById('start_date');
+  const endInput   = document.getElementById('end_date');
+  const checkAll   = document.getElementById('check_all');
 
-  // 헤더 체크박스: #check_all 우선, 없으면 thead의 첫 번째 체크박스
-  const headerCb =
-    document.getElementById('check_all') ||
-    table.querySelector('thead input[type="checkbox"]');
+  const deleteBtn   = document.getElementById('deleteBtn');
+  const deleteForm  = document.getElementById('deleteForm');
+  const deleteIds   = document.getElementById('delete_ids');
 
-  const deleteForm   = document.getElementById('deleteForm');
-  const deleteHidden = document.getElementById('delete_ids');
-  const deleteBtn    = document.getElementById('deleteBtn');
+  // ===== 유틸 =====
+  const thCount = table.querySelectorAll('thead th').length;
 
-  // tbody 안의 사용 가능한(비활성 아님) 행 체크박스들
-  const rowBoxes = () =>
-    Array.from(tbody.querySelectorAll('input.row_check[type="checkbox"]'))
-      .filter(cb => !cb.disabled);
+  const isVisible = (tr) => tr && tr.style.display !== 'none';
+  const visibleRows = () =>
+    Array.from(tbody.querySelectorAll('tr'))
+      .filter(tr => isVisible(tr) && !tr.classList.contains('empty-row'));
 
-  // 모두 체크일 때만 헤더 체크, 아니면 해제 (indeterminate 미사용)
-  const syncHeaderStrict = () => {
-    if (!headerCb) return;
-    const boxes = rowBoxes();
-    headerCb.checked = boxes.length > 0 && boxes.every(cb => cb.checked);
-  };
-
-  // 헤더 → 전체 토글
-  if (headerCb) {
-    headerCb.addEventListener('change', () => {
-      const v = headerCb.checked;
-      rowBoxes().forEach(cb => { cb.checked = v; });
-      syncHeaderStrict();
+  function renumberVisible() {
+    const rows = visibleRows();
+    rows.forEach((tr, i) => {
+      const noCell = tr.children[1]; // NO 컬럼
+      if (noCell) noCell.textContent = i + 1;
     });
   }
 
-  // 개별 체크 → 헤더 동기화 (이벤트 위임)
+  function removeEmptyRow() {
+    const old = tbody.querySelector('.empty-row');
+    if (old) old.remove();
+  }
+
+  function showEmptyRowIfNeeded() {
+    const anyVisible = visibleRows().length > 0;
+    removeEmptyRow();
+    if (!anyVisible) {
+      const tr = document.createElement('tr');
+      tr.className = 'empty-row';
+      const td = document.createElement('td');
+      td.colSpan = thCount;
+      td.style.textAlign = 'center';
+      td.textContent = '조건에 맞는 재고가 없습니다.';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    }
+  }
+
+  function clearHeaderSelect() {
+    if (checkAll) {
+      checkAll.checked = false;
+      checkAll.indeterminate = false;
+    }
+  }
+
+  // ===== 날짜 min/max 제약 (동일 로직) =====
+  function applyDateConstraints() {
+    if (startInput && endInput) {
+      // 시작일 → 종료일 min
+      endInput.min = startInput.value || '';
+      if (startInput.value && endInput.value && endInput.value < startInput.value) {
+        endInput.value = startInput.value;
+      }
+      // 종료일 → 시작일 max
+      startInput.max = endInput.value || '';
+      if (startInput.value && endInput.value && startInput.value > endInput.value) {
+        startInput.value = endInput.value;
+      }
+    }
+  }
+
+  // ===== 기간 필터 (동일 로직) =====
+  function applyFilter(evt) {
+    if (evt) evt.preventDefault();
+    applyDateConstraints();
+
+    const start = startInput && startInput.value ? startInput.value : '';
+    const end   = endInput   && endInput.value   ? endInput.value   : '';
+
+    // 날짜는 3번째 컬럼(index 2), yyyy-MM-dd 가정
+    tbody.querySelectorAll('tr').forEach(tr => {
+      if (tr.classList.contains('empty-row')) return;
+
+      const dateCell = tr.children[2];
+      const dateStr  = dateCell ? dateCell.textContent.trim() : '';
+      let show = true;
+
+      if (start) show = show && (dateStr >= start);
+      if (end)   show = show && (dateStr <= end);
+
+      tr.style.display = show ? '' : 'none';
+    });
+
+    clearHeaderSelect();
+    renumberVisible();
+    showEmptyRowIfNeeded();
+  }
+
+  // ===== 전체선택(보이는 행만) (동일 로직) =====
+  if (checkAll) {
+    checkAll.addEventListener('change', () => {
+      const checked = checkAll.checked;
+      visibleRows().forEach(tr => {
+        const cb = tr.querySelector('input.row_check[type="checkbox"]');
+        if (cb) cb.checked = checked;
+      });
+    });
+  }
+
+  // 개별 체크 → 헤더 체크 동기화 (동일 로직)
   tbody.addEventListener('change', (e) => {
     const t = e.target;
-    if (!(t instanceof HTMLInputElement)) return;
-    if (t.type !== 'checkbox' || !t.classList.contains('row_check')) return;
-    syncHeaderStrict();
+    if (!(t instanceof HTMLInputElement) || t.type !== 'checkbox' || !t.classList.contains('row_check')) return;
+
+    if (!checkAll) return;
+    const rows = visibleRows();
+    const allChecked = rows.length > 0 && rows.every(tr => {
+      const cb = tr.querySelector('input.row_check[type="checkbox"]');
+      return cb && cb.checked;
+    });
+    checkAll.checked = allChecked;
+    checkAll.indeterminate = false;
   });
 
-  // 삭제: 체크된 값들을 CSV로 합쳐 hidden에 넣고 제출
-  if (deleteBtn && deleteForm && deleteHidden) {
+  // ===== 삭제(서버 전송: CSV) (동일 로직) =====
+  if (deleteBtn && deleteForm && deleteIds) {
     deleteBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const ids = rowBoxes()
-        .filter(cb => cb.checked)
+      const ids = Array.from(tbody.querySelectorAll('.row_check:checked'))
         .map(cb => cb.value)
         .filter(Boolean);
 
@@ -64,200 +144,54 @@ function bindstock_list() {
         alert('삭제할 항목을 선택하세요.');
         return;
       }
-      deleteHidden.value = ids.join(',');
+      deleteIds.value = ids.join(',');
       deleteForm.submit();
     });
   }
 
-  // 초기 1회 헤더 상태 정합
-  syncHeaderStrict();
+  // ===== 바인딩 =====
+  if (startInput) startInput.addEventListener('change', applyDateConstraints);
+  if (endInput)   endInput.addEventListener('change', applyDateConstraints);
+  if (filterForm) filterForm.addEventListener('submit', applyFilter);
+
+  // 초기값 존재 시 즉시 필터
+  applyDateConstraints();
+  if ((startInput && startInput.value) || (endInput && endInput.value)) {
+    applyFilter();
+  }
 }
 
 
+function bindStockFilter(){
+  const form = document.getElementById('filterForm');
+  if(!form) return;
 
-// window.addEventListener('load', init);
+  const big   = form.querySelector('select[name="big"]');
+  const mid   = form.querySelector('select[name="mid"]');
+  const small = form.querySelector('select[name="small"]');
 
-// function init() {
-//   bindstock_list();
-// }
+  // 대분류 변경 → 중/소 초기화 후 서브밋(컨트롤러가 midList 채워줌)
+  if(big){
+    big.addEventListener('change', ()=>{
+      if(mid)   mid.value = '';
+      if(small) small.value = '';
+      form.submit();
+    });
+  }
 
-// function bindstock_list() {
-//   const table = document.querySelector('.tables');
-//   if (!table) return;
+  // 중분류 변경 → 소분류 초기화 후 서브밋(컨트롤러가 smallList 채워줌)
+  if(mid){
+    mid.addEventListener('change', ()=>{
+      if(small) small.value = '';
+      form.submit();
+    });
+  }
 
-//   const tbody = table.querySelector('tbody');
-//   const tfoot = table.querySelector('tfoot');
-//   if (!tbody) return;
+  // 소분류는 서브밋 없이 선택만 두고 싶으면 주석 처리
+  if(small){
+    small.addEventListener('change', ()=>{
+      form.submit(); // 필요 없으면 지워도 됨
+    });
+  }
+}
 
-//   // 헤더 전체선택 체크박스 (thead > input[type=checkbox] 또는 #check_all 지원)
-//   const headerCb = table.querySelector('thead input[type="checkbox"]') || document.getElementById('check_all');
-
-//   // --- 필터 select ---
-//   const majorSelect  = document.querySelector('.big');      // 대분류
-//   const middleSelect = document.querySelector('.middle');   // 중분류
-//   const minorSelect  = document.querySelector('.small');    // 소분류
-//   const typeSelect   = document.querySelector('.type');     // 구분
-
-//   // --- 날짜 input & 조회 버튼 ---
-//   const dateMinInput = document.getElementById('start_date');
-//   const dateMaxInput = document.getElementById('end_date');
-//   const searchBtn    = document.querySelector('.date_filter button'); // 선택사항
-
-//   // --- 숫자 유틸 ---
-//   function toInt(v) {
-//     const n = parseInt(String(v).replace(/[^0-9.-]/g, ''), 10);
-//     return isNaN(n) ? 0 : n;
-//   }
-//   function fmt(n) {
-//     return (Number(n) || 0).toLocaleString();
-//   }
-
-//   // --- 컬럼 인덱스 (표 구조에 맞게 유지) ---
-//   const COL = { NO:0, DATE:1, TYPE:6, QTY:7, PRICE:8 };
-
-//   // YYYYMMDD → Date
-//   function parseCellDate(yyyymmdd) {
-//     const s = String(yyyymmdd || '').trim();
-//     if (!/^\d{8}$/.test(s)) return null;
-//     const y = parseInt(s.slice(0, 4), 10);
-//     const m = parseInt(s.slice(4, 6), 10) - 1;
-//     const d = parseInt(s.slice(6, 8), 10);
-//     return new Date(y, m, d);
-//   }
-//   // input[type="date"] → Date
-//   function parseInputDate(value) {
-//     if (!value) return null;
-//     const parts = value.split('-').map(Number);
-//     if (parts.length !== 3) return null;
-//     return new Date(parts[0], parts[1] - 1, parts[2]);
-//   }
-//   // 시작/종료 교정
-//   function normalizeDateRange(minDate, maxDate) {
-//     if (minDate && maxDate && minDate > maxDate) {
-//       const t = minDate; minDate = maxDate; maxDate = t;
-//     }
-//     return { minDate, maxDate };
-//   }
-
-//   // ===== 체크박스(보이는 행 기준) =====
-//   function isVisibleRow(tr) {
-//     return tr && getComputedStyle(tr).display !== 'none';
-//   }
-//   function visibleBoxes() {
-//     return Array.from(tbody.querySelectorAll('input.row_check[type="checkbox"]'))
-//       .filter(cb => isVisibleRow(cb.closest('tr')) && !cb.disabled);
-//   }
-//   // 모두 체크일 때만 헤더 체크, 아니면 해제 (indeterminate 사용 안 함)
-//   function syncHeaderStrict() {
-//     if (!headerCb) return;
-//     const boxes = visibleBoxes();
-//     const total = boxes.length;
-//     const allChecked = total > 0 && boxes.every(cb => cb.checked);
-//     headerCb.checked = allChecked;
-//     headerCb.indeterminate = false;
-//   }
-//   // 헤더 → 보이는 행 전체 토글
-//   if (headerCb) {
-//     headerCb.addEventListener('change', () => {
-//       const v = headerCb.checked;
-//       visibleBoxes().forEach(cb => cb.checked = v);
-//       // 헤더 상태는 이미 v로 설정됨
-//     });
-//   }
-//   // 개별 체크 → 헤더 동기화
-//   tbody.addEventListener('change', e => {
-//     const t = e.target;
-//     if (!(t instanceof HTMLInputElement)) return;
-//     if (t.type !== 'checkbox' || !t.classList.contains('row_check')) return;
-//     syncHeaderStrict();
-//   });
-
-//   // ===== 필터 적용 =====
-//   function applyFilter() {
-//     const rows = tbody.querySelectorAll('tr');
-
-//     const majorValue  = majorSelect ? String(majorSelect.value || '').trim()  : '전체';
-//     const middleValue = middleSelect ? String(middleSelect.value || '').trim() : '전체';
-//     const minorValue  = minorSelect ? String(minorSelect.value || '').trim()  : '전체';
-//     const typeValue   = typeSelect ? String(typeSelect.value || '').trim()    : '전체';
-
-//     let minDate = parseInputDate(dateMinInput ? dateMinInput.value : '');
-//     let maxDate = parseInputDate(dateMaxInput ? dateMaxInput.value : '');
-//     ({ minDate, maxDate } = normalizeDateRange(minDate, maxDate));
-
-//     let visibleIndex = 0;
-//     let totalQty = 0;
-//     let totalAmt = 0;
-
-//     rows.forEach(tr => {
-//       const tds = tr.children;
-//       let ok = true;
-
-//       const rowText = tr.textContent || '';
-
-//       // 1) 대/중/소분류 (포함 매칭)
-//       if (majorValue  !== '전체' && rowText.indexOf(majorValue)  === -1) ok = false;
-//       if (middleValue !== '전체' && rowText.indexOf(middleValue) === -1) ok = false;
-//       if (minorValue  !== '전체' && rowText.indexOf(minorValue)  === -1) ok = false;
-
-//       // 2) 구분(정확 일치)
-//       const rowType = tds[COL.TYPE] ? String(tds[COL.TYPE].textContent || '').trim() : '';
-//       if (typeValue !== '전체' && rowType !== typeValue) ok = false;
-
-//       // 3) 날짜 범위
-//       const cellDateStr = tds[COL.DATE] ? String(tds[COL.DATE].textContent || '').trim() : '';
-//       const rowDate = parseCellDate(cellDateStr);
-//       if (minDate && rowDate && rowDate < minDate) ok = false;
-//       if (maxDate && rowDate && rowDate > maxDate) ok = false;
-
-//       // 4) 표시/숨김
-//       tr.style.display = ok ? '' : 'none';
-
-//       // 5) 보이는 행만 NO/합계
-//       if (ok) {
-//         if (tds[COL.NO]) tds[COL.NO].textContent = ++visibleIndex;
-
-//         const qty   = toInt(tds[COL.QTY]   ? tds[COL.QTY].textContent   : 0);
-//         const price = toInt(tds[COL.PRICE] ? tds[COL.PRICE].textContent : 0);
-
-//         totalQty += qty;
-//         totalAmt += qty * price;
-//       }
-//     });
-
-//     // 6) 합계 갱신
-//     if (tfoot) {
-//       const footRow = tfoot.querySelector('tr');
-//       if (footRow) {
-//         const ftds = footRow.children;
-//         if (ftds.length >= 3) {
-//           ftds[ftds.length - 2].textContent = fmt(totalQty);
-//           ftds[ftds.length - 1].textContent = fmt(totalAmt);
-//         }
-//       }
-//     }
-
-//     // 7) 필터 후 헤더 체크박스 상태 재동기화(보이는 행 기준)
-//     syncHeaderStrict();
-//   }
-
-//   // --- 이벤트 연결 ---
-//   if (majorSelect)  majorSelect.addEventListener('change', applyFilter);
-//   if (middleSelect) middleSelect.addEventListener('change', applyFilter);
-//   if (minorSelect)  minorSelect.addEventListener('change', applyFilter);
-//   if (typeSelect)   typeSelect.addEventListener('change', applyFilter);
-//   if (dateMinInput) dateMinInput.addEventListener('change', applyFilter);
-//   if (dateMaxInput) dateMaxInput.addEventListener('change', applyFilter);
-
-//   if (searchBtn) {
-//     searchBtn.addEventListener('click', e => {
-//       e.preventDefault();
-//       applyFilter();
-//     });
-//   }
-
-//   // 초기 실행
-//   applyFilter();
-//   // (초기에도 헤더 상태 정합)
-//   syncHeaderStrict();
-// }

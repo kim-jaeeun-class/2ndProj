@@ -1,6 +1,3 @@
-// /Html/asset/07_order_list.js
-
-// 진입점
 window.addEventListener('load', init);
 
 function init() {
@@ -91,10 +88,8 @@ function bindOrderList() {
     const start = startInput && startInput.value ? startInput.value : '';
     const end   = endInput   && endInput.value   ? endInput.value   : '';
 
-    // 날짜는 3번째 컬럼(index 2), yyyy-MM-dd 문자열 비교 가능
+   // 날짜는 3번째 컬럼(index 2), 형식: yyyy-MM-dd 가정
     tbody.querySelectorAll('tr').forEach(tr => {
-      if (tr.classList.contains('empty-row')) return;
-
       const dateCell = tr.children[2];
       const dateStr  = dateCell ? dateCell.textContent.trim() : '';
       let show = true;
@@ -155,10 +150,7 @@ function bindOrderList() {
   // ===== 바인딩 =====
   if (startInput) startInput.addEventListener('change', applyDateConstraints);
   if (endInput)   endInput.addEventListener('change', applyDateConstraints);
-
-  if (filterForm) {
-    filterForm.addEventListener('submit', applyFilter);
-  }
+  if (filterForm) filterForm.addEventListener('submit', applyFilter);
 
   // 초기값 존재 시 즉시 필터
   applyDateConstraints();

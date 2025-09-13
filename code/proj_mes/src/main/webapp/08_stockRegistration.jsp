@@ -1,15 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
+<% String ctx = request.getContextPath(); %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>재고 등록/상세</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	<script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="<c:url value='/Html/asset/registration.css'/>">
   <script defer src="<c:url value='/Html/asset/08_stock_registration.js'/>"></script>
+<style>
+	body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+	.header-bg { background-color: #002a40; }
+	.nav-bg { background-color: #003751; }
+.mainList li:hover { background-color: #3b82f6; }
+</style>
 </head>
 <body>
+
+<!--  여기 두 줄이 템플릿에서 끌어올 자리 -->
+<div id="header-slot"></div>
+<div id="nav-slot"></div>
 
 <%-- 모드/readonly 플래그 --%>
 <c:set var="mode"   value="${empty mode ? (empty stock ? 'add' : 'view') : mode}"/>
@@ -184,6 +199,44 @@
     <button class="confirm m_button" type="button" id="item_modal_confirm">확인</button>
   </div>
 </div>
+<script>
+	//템플릿의 header/nav만 로드
+	(async function () {
+	  try {
+	    const url = '<%= ctx %>/Html/00_template/template.html';
+	    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
+	    const doc  = new DOMParser().parseFromString(text, 'text/html');
+	    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+	    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
+	    const headerSlot = document.getElementById('header-slot');
+	    const navSlot    = document.getElementById('nav-slot');
+	    if (header && headerSlot) headerSlot.replaceWith(header);
+	    if (nav && navSlot)       navSlot.replaceWith(nav);
+	  } catch (e) {
+	    console.error('템플릿 로드 실패:', e);
+	  }
+	})();
+	/* ---------- 사람 아이콘 드롭다운 ---------- */
+    const myIconBtn = document.getElementById('myIconBtn');
+    const userMenu  = document.getElementById('userMenu');
 
+    function closeUserMenu() {
+        userMenu.classList.add('hidden');
+        myIconBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    myIconBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userMenu.classList.toggle('hidden');
+        myIconBtn.setAttribute('aria-expanded',
+            userMenu.classList.contains('hidden') ? 'false' : 'true');
+    });
+
+    userMenu.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', closeUserMenu);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeUserMenu();
+    });
+</script>
 </body>
 </html>

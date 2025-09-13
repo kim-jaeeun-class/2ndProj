@@ -33,7 +33,7 @@
     <!-- 필터 -->
     <form class="box order_filter" method="get" action="<c:url value='/orderList'/>">
       <div class="order_date box">
-        <div class="order_period">기간</div>
+        <div class="period">기간</div>
         <input type="date" id="start_date" name="startDate" value="${param.startDate}">
         <span>~</span>
         <input type="date" id="end_date" name="endDate" value="${param.endDate}">
