@@ -77,8 +77,8 @@ public class StockDAO {
     // 하나 조회
     public StockDTO selectOneStock(String stockId) throws Exception {
 
-    	StockDTO resultDTO = null;
-    	
+		StockDTO resultDTO = null;
+
         try {
         	Connection conn = getConn();
         	
@@ -94,22 +94,24 @@ public class StockDAO {
         	
         	ResultSet rs = ps.executeQuery();
         	
-        	if (!rs.next()) return null;
+        	if (rs.next()) {
+        		
+        		resultDTO = new StockDTO();
+        		
+        		resultDTO.setStock_id(rs.getString("stock_id"));
+        		resultDTO.setStock_date(rs.getDate("stock_date"));
+        		resultDTO.setStock_loc(rs.getInt("stock_loc"));
+        		resultDTO.setStock_div(rs.getInt("stock_div"));
+        		resultDTO.setStock_number(rs.getInt("stock_number"));
+        		resultDTO.setItem_code(rs.getString("item_code"));
+        		
+        		// ITEM 테이블에서 가져온 값들
+        		resultDTO.setItem_name(rs.getString("item_name"));
+        		
+        		// item_price 컬럼
+        		resultDTO.setItem_price(rs.getString("item_price"));
+        	}
         	
-        	StockDTO dto = new StockDTO();
-        	
-        	dto.setStock_id(rs.getString("stock_id"));
-        	dto.setStock_date(rs.getDate("stock_date"));
-        	dto.setStock_loc(rs.getInt("stock_loc"));
-        	dto.setStock_div(rs.getInt("stock_div"));
-        	dto.setStock_number(rs.getInt("stock_number"));
-        	dto.setItem_code(rs.getString("item_code"));
-        	
-        	// ITEM 테이블에서 가져온 값들
-        	dto.setItem_name(rs.getString("item_name"));
-        	
-        	// item_price 컬럼
-        	dto.setItem_price(rs.getString("item_price"));
         
 
         
@@ -203,6 +205,7 @@ public class StockDAO {
         				+	" WHERE TRIM(stock_id) = TRIM(?)";
         	
         	PreparedStatement ps = con.prepareStatement(sql);
+        	
     		ps.setInt(1, nz(dto.getStock_loc()));
     		ps.setInt(2, nz(dto.getStock_div()));
     		ps.setInt(3, nz(dto.getStock_stat()));
@@ -210,7 +213,7 @@ public class StockDAO {
     		ps.setString(5, nvl(dto.getItem_code()));
     		ps.setString(6, nvl(dto.getStock_id()));
     		
-    		ps.executeUpdate();
+    		result = ps.executeUpdate();
     		
         }catch (Exception e) {
         	e.printStackTrace();

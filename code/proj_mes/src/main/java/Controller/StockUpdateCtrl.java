@@ -48,7 +48,7 @@ public class StockUpdateCtrl extends HttpServlet {
         return;
       }
       // 성공 → 상세(view)로
-      resp.sendRedirect(req.getContextPath() + "/stockDetail?id=" + enc(stock_id) + "&mode=view");
+      resp.sendRedirect(req.getContextPath() + "/stockDetail?stock_id=" + enc(stock_id) + "&mode=view");
 
     } catch (IllegalArgumentException iae) {
       // 검증 실패 → 다시 edit 화면
@@ -61,8 +61,7 @@ public class StockUpdateCtrl extends HttpServlet {
 
   /* ===== 내부 유틸 ===== */
 
-  private void forwardBackToEdit(HttpServletRequest req, HttpServletResponse resp,
-                                 StockDTO dto, String msg)
+  private void forwardBackToEdit(HttpServletRequest req, HttpServletResponse resp, StockDTO dto, String msg)
       throws ServletException, IOException {
     req.setAttribute("mode", "edit");
     req.setAttribute("error", msg);

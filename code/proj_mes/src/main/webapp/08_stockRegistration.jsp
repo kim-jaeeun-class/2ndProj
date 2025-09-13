@@ -54,7 +54,7 @@
 
             <c:when test="${isView}">
               <a href="<c:url value='/stockDetail'>
-                         <c:param name='id' value='${stock.stock_id}'/>
+                         <c:param name='stock_id' value='${stock.stock_id}'/>
                          <c:param name='mode' value='edit'/>
                        </c:url>">
                 <button type="button" class="primary">수정</button>
@@ -65,7 +65,7 @@
             <c:when test="${isEdit}">
               <button type="submit" class="primary">저장</button>
               <a href="<c:url value='/stockDetail'>
-                         <c:param name='id' value='${stock.stock_id}'/>
+                         <c:param name='stock_id' value='${stock.stock_id}'/>
                          <c:param name='mode' value='view'/>
                        </c:url>">
                 <button type="button">수정취소</button>
@@ -80,7 +80,7 @@
         <div class="item">
           <div>재고 ID</div>
           <input id="stock_id_input" name="stock_id" class="main_input" type="text"
-                 value="${isAdd ? (empty param.stock_id ? '선택 후 자동생성' : param.stock_id) : stock.stock_id}"
+                 value="${isAdd ? (empty param.stock_id ? '품목을 선택 하시면 자동입력됩니다.' : param.stock_id) : stock.stock_id}"
                  readonly>
         </div>
 

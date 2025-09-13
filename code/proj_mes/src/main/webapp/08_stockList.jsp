@@ -7,31 +7,8 @@
   <meta charset="UTF-8">
   <title>재고 목록</title>
   <link rel="stylesheet" href="<c:url value='/Html/asset/list.css'/>">
-  <script>
-    // 체크박스 전체선택 & 일괄삭제용 키 합치기
-    document.addEventListener('DOMContentLoaded', function(){
-      const checkAll = document.getElementById('check_all');
-      const body = document.querySelector('.tables_body');
-      if (checkAll && body) {
-        checkAll.addEventListener('change', ()=>{
-          body.querySelectorAll('.row_check').forEach(cb => cb.checked = checkAll.checked);
-        });
-      }
-      const delForm = document.getElementById('deleteForm');
-      const delHidden = document.getElementById('delete_ids');
-      const delBtn = document.getElementById('deleteBtn');
-      if (delForm && delHidden && delBtn) {
-        delBtn.addEventListener('click', function(e){
-          e.preventDefault();
-          const ids = Array.from(document.querySelectorAll('.row_check:checked'))
-            .map(cb => cb.value).filter(Boolean);
-          if (ids.length === 0) { alert('삭제할 항목을 선택하세요.'); return; }
-          delHidden.value = ids.join(',');
-          delForm.submit();
-        });
-      }
-    });
-  </script>
+  <script defer src="<c:url value='/Html/asset/08_stock_list.js'/>"></script>
+  
 </head>
 <body>
 
@@ -74,7 +51,7 @@
 
               <td>
                 <c:url var="detailUrl" value="/stockDetail">
-                  <c:param name="id" value="${s.stock_id}"/>
+                  <c:param name="stock_id" value="${s.stock_id}"/>
                   <c:param name="mode" value="view"/>
                 </c:url>
                 <a href="${detailUrl}">${s.stock_id}</a>

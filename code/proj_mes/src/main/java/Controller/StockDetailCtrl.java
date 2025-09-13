@@ -18,7 +18,7 @@ public class StockDetailCtrl extends HttpServlet {
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
  req.setCharacterEncoding("utf-8");
 
- String id   = req.getParameter("id");   // stock_id
+ String id   = req.getParameter("stock_id");   // stock_id
  String mode = req.getParameter("mode"); // add | edit | view
 
  try {

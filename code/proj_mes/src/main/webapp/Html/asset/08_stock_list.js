@@ -1,3 +1,4 @@
+// /Html/asset/08_stock_list.js
 window.addEventListener('load', init);
 
 function init() {
@@ -5,24 +6,28 @@ function init() {
 }
 
 function bindstock_list() {
-  const table       = document.querySelector('.tables');
+  const table = document.querySelector('.tables');
   if (!table) return;
 
-  const tbody       = table.querySelector('.tables_body');
-  const headerCb    = document.getElementById('check_all');
-
-  const deleteForm  = document.getElementById('deleteForm');
-  const deleteHidden= document.getElementById('delete_ids');
-  const deleteBtn   = document.getElementById('deleteBtn');
-
+  // tbody는 .tables_body 우선, 없으면 첫 번째 TBODY
+  const tbody = table.querySelector('.tables_body') || table.tBodies[0];
   if (!tbody) return;
 
-  // tbody 안의 사용 가능한 행 체크박스들
+  // 헤더 체크박스: #check_all 우선, 없으면 thead의 첫 번째 체크박스
+  const headerCb =
+    document.getElementById('check_all') ||
+    table.querySelector('thead input[type="checkbox"]');
+
+  const deleteForm   = document.getElementById('deleteForm');
+  const deleteHidden = document.getElementById('delete_ids');
+  const deleteBtn    = document.getElementById('deleteBtn');
+
+  // tbody 안의 사용 가능한(비활성 아님) 행 체크박스들
   const rowBoxes = () =>
     Array.from(tbody.querySelectorAll('input.row_check[type="checkbox"]'))
-         .filter(cb => !cb.disabled);
+      .filter(cb => !cb.disabled);
 
-  // 모두 체크일 때만 헤더 체크, 아니면 해제(회색 상태 사용 안 함)
+  // 모두 체크일 때만 헤더 체크, 아니면 해제 (indeterminate 미사용)
   const syncHeaderStrict = () => {
     if (!headerCb) return;
     const boxes = rowBoxes();
@@ -34,11 +39,11 @@ function bindstock_list() {
     headerCb.addEventListener('change', () => {
       const v = headerCb.checked;
       rowBoxes().forEach(cb => { cb.checked = v; });
-      // 헤더 상태는 이미 v로 설정됨
+      syncHeaderStrict();
     });
   }
 
-  // 개별 체크 → 헤더 동기화
+  // 개별 체크 → 헤더 동기화 (이벤트 위임)
   tbody.addEventListener('change', (e) => {
     const t = e.target;
     if (!(t instanceof HTMLInputElement)) return;
@@ -67,6 +72,7 @@ function bindstock_list() {
   // 초기 1회 헤더 상태 정합
   syncHeaderStrict();
 }
+
 
 
 // window.addEventListener('load', init);
