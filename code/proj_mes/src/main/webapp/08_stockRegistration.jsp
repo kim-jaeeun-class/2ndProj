@@ -26,29 +26,37 @@
 <div id="header-slot"></div>
 <div id="nav-slot"></div>
 
-<%-- 모드/readonly 플래그 --%>
+<div class="titleBox">
+<%-- 모드 결정 --%>
 <c:set var="mode"   value="${empty mode ? (empty stock ? 'add' : 'view') : mode}"/>
 <c:set var="isAdd"  value="${mode eq 'add'}"/>
 <c:set var="isEdit" value="${mode eq 'edit'}"/>
 <c:set var="isView" value="${mode eq 'view'}"/>
 <c:set var="ro"     value="${not isAdd and not isEdit}"/>
+	<span>재고 ${isAdd ? '등록' : '상세'}</span>
 
-<%-- JS에서 모드 인지 --%>
-<script>
-  window.IS_ADD  = ${isAdd};
-  window.IS_EDIT = ${isEdit};
-  window.RO      = ${ro};
-</script>
-
-<%-- 폼 action --%>
+<%-- form action --%>
 <c:choose>
   <c:when test="${isAdd}">
     <c:url var="formAction" value="/stockAdd"/>
   </c:when>
-  <c:otherwise>
+  <c:when test="${isEdit}">
     <c:url var="formAction" value="/stockUpdate"/>
+  </c:when>
+  <c:otherwise>
+    <c:set var="formAction" value=""/>
   </c:otherwise>
 </c:choose>
+
+<%-- 링크 URL은 var로 미리 생성 --%>
+<c:url var="editLink" value="/stockDetail">
+  <c:param name="stock_id"  value="${stock.stock_id}"/>
+  <c:param name="mode" value="edit"/>
+</c:url>
+<c:url var="viewLink" value="/stockDetail">
+  <c:param name="stock_id"  value="${stock.stock_id}"/>
+  <c:param name="mode" value="view"/>
+</c:url>
 
 <form id="mainForm" method="post" action="${formAction}">
   <c:if test="${isEdit}">
@@ -59,34 +67,30 @@
     <!-- 헤더 -->
     <div class="main">
       <div class="box header_row">
-        <div>재고 ${isAdd ? '등록' : '상세'}</div>
+        
 
         <div class="action">
+        
           <c:choose>
-            <c:when test="${isAdd}">
-              <button type="submit" class="primary">등록</button>
-            </c:when>
+			  <c:when test="${isView}">
+			    <a href="${editLink}">
+			      <button type="button" class="primary" id="btnedit">수정</button>
+			    </a>
+			    <button type="submit" class="danger" id="btndelete" form="delForm">삭제</button>
+			  </c:when>
+			
+			  <c:when test="${isEdit}">
+			    <a href="${viewLink}">
+			      <button type="button" id="editdel">취소</button>
+			    </a>
+			    <button type="submit" class="primary" id="btnsave">저장</button>
+			  </c:when>
+			
+			  <c:when test="${isAdd}">
+			    <button type="submit" class="primary" id="btnsave">등록</button>
+			  </c:when>
+		</c:choose>
 
-            <c:when test="${isView}">
-              <a href="<c:url value='/stockDetail'>
-                         <c:param name='stock_id' value='${stock.stock_id}'/>
-                         <c:param name='mode' value='edit'/>
-                       </c:url>">
-                <button type="button" class="primary">수정</button>
-              </a>
-              <button type="button" class="danger" id="deleteBtn">삭제</button>
-            </c:when>
-
-            <c:when test="${isEdit}">
-              <button type="submit" class="primary">저장</button>
-              <a href="<c:url value='/stockDetail'>
-                         <c:param name='stock_id' value='${stock.stock_id}'/>
-                         <c:param name='mode' value='view'/>
-                       </c:url>">
-                <button type="button">수정취소</button>
-              </a>
-            </c:when>
-          </c:choose>
         </div>
       </div>
 
@@ -102,7 +106,7 @@
         <div class="item">
           <div>위치</div>
           <input name="stock_loc" class="main_input" type="number"
-                 value="${isAdd ? param.stock_loc : stock.stock_loc}"
+                 value="${stock.stock_loc}"
                  <c:if test="${ro}">readonly</c:if>>
         </div>
       </div>
@@ -135,8 +139,7 @@
         <div class="item">
           <div>단가</div>
           <input id="stock_price_input" name="item_price" class="main_input" type="text"
-                 value="${isAdd ? param.item_price : stock.item_price}"
-                 <c:if test="${ro}">readonly</c:if>>
+                 value="${stock.item_price}"readonly>
         </div>
       </div>
     </div>
@@ -144,19 +147,13 @@
     <!-- 하단 버튼 -->
     <div class="bottom">
       <a href="<c:url value='/stockList'/>"><button type="button">목록</button></a>
-      <c:if test="${isAdd}">
-        <button type="submit" class="primary">등록</button>
-      </c:if>
-      <c:if test="${isEdit}">
-        <button type="submit" class="primary">저장</button>
-      </c:if>
     </div>
 
   </div>
 </form>
-
+</div>
 <!-- 삭제 숨김 폼 -->
-<form id="deleteForm" method="post" action="<c:url value='/stockDel'/>" style="display:none">
+<form id="delForm" method="post" action="<c:url value='/stockDel'/>" style="display:none">
   <input type="hidden" name="stock_id" value="${stock.stock_id}">
 </form>
 

@@ -26,7 +26,7 @@ public class OrderUpdateCtrl extends HttpServlet {
 		req.setCharacterEncoding("utf-8");
 		resp.setContentType("text/html;charset=utf-8");
 		    
-		 // 1) 헤더 파라미터 수집
+		 // 파라미터 수집
 		String orderKey = trim(req.getParameter("order_key"));
 		
 		if (isBlank(orderKey)) {
@@ -50,7 +50,7 @@ public class OrderUpdateCtrl extends HttpServlet {
 		  order.setOrder_pay(null); // 비우면 NULL로 저장
 		}
 		
-		// 2) 상세(품목) 파라미터 수집 (item_code[] / item_price[] / quantity[])
+		// 상세(품목) 파라미터 수집 (item_code[] / item_price[] / quantity[])
 		String[] codes  = params(req, "item_code");
 		String[] prices = params(req, "item_price");
 		String[] qtys   = params(req, "quantity");
@@ -61,11 +61,12 @@ public class OrderUpdateCtrl extends HttpServlet {
 		    String code = trim(codes[i]);
 		    if (isBlank(code)) continue;
 		
-		    String price = (prices != null && i < prices.length) ? trim(prices[i]) : "0";
+		String price = (prices != null && i < prices.length) ? trim(prices[i]) : "0";
 		String qtyS  = (qtys   != null && i < qtys.length)   ? trim(qtys[i])   : "0";
 		int qty = parseInt(qtyS, 0);
 		
 		OrderDetDTO d = new OrderDetDTO();
+		
 		d.setItem_code(enforceLen(code, 20));    // ORA-12899 방지
 		d.setItem_price(price == null ? "0" : price);
 		    d.setQuantity(qty);
@@ -73,13 +74,13 @@ public class OrderUpdateCtrl extends HttpServlet {
 		  }
 		}
 		
-		// (선택) 최소 1개 검증 — 필요 없으면 주석 처리
+		// 최소 1개 검증
 		if (details.isEmpty()) {
 		  resp.getWriter().write("저장 실패: 품목 1개 이상 필요");
 		  return;
 		}
 		
-		// 3) 저장 (헤더 업데이트 + 상세 전체 교체)
+		// 헤더 업데이트 + 상세 전체 교체
 		try {
 		  new OrderService().updateOrderFull(order, details);
 		  resp.sendRedirect(req.getContextPath() + "/orderDetail?key=" + orderKey + "&mode=view");

@@ -62,11 +62,7 @@
     justify-content: flex-start;
 }
 
-.filter_btn{
-    background-color: var(--blue);
-    color: #ffffff;
-    border: 1px solid var(--blue);
-}
+
 .box {
     display: flex;
     align-items: center;
@@ -112,11 +108,12 @@
 
 /* 조회 버튼 */
 .date_filter button {
-    height: 36px;
+    height: var(--btnheight);
+    width: var(--btnwidth);
     padding: 0 16px;
-    border-radius: 8px;
-    border: 1px solid #666;
-    background: #7a7d81;
+    border-radius: var(--btnradius);
+    border: 1px solid var(--blue);
+    background-color: var(--blue);
     color: #fff;
     font-weight: 700;
     cursor: pointer;

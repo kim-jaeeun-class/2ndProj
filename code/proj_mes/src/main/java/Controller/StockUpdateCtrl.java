@@ -23,7 +23,7 @@ public class StockUpdateCtrl extends HttpServlet {
     req.setCharacterEncoding("utf-8");
     resp.setContentType("text/html;charset=utf-8");
 
-    // 파라미터 수집 (DTO 필드와 1:1)
+    // 파라미터 수집
     String stock_id     = trim(req.getParameter("stock_id"));   // hidden
     String item_code    = trim(req.getParameter("item_code"));
     int stock_number    = parseInt(req.getParameter("stock_number"), 0);

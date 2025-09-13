@@ -58,14 +58,14 @@
   <div class="wrap_list">
   	<!-- 액션 -->
     <div class="action">
-      <!-- 삭제: 선택된 key들을 CSV로 hidden에 담아 POST -->
       <form id="deleteForm" method="post" action="<c:url value='/orderDel'/>">
         <input type="hidden" name="order_key" id="delete_keys">
         <button type="button" class="delete" id="deleteBtn">삭제</button>
 
-      <!-- 추가: 등록 화면으로 이동(GET). /orderAdd(POST 전용)로 가지 않도록! -->
-      <a class="add" href="<c:url value='/orderDetail'><c:param name='mode' value='add'/></c:url>">
-      <button type="button" class="item_add">추가</button></a>
+      <a class="add" href="<c:url value='/orderDetail'>
+      	<c:param name='mode' value='add'/></c:url>">
+      	<button type="button" class="item_add">추가</button>
+      </a>
    	  
       </form>
     </div>
@@ -139,22 +139,43 @@
 </div>
 
 <script>
-//템플릿의 header/nav만 로드
-(async function () {
-  try {
-    const url = '<%= ctx %>/Html/00_template/template.html';
-    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
-    const doc  = new DOMParser().parseFromString(text, 'text/html');
-    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
-    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
-    const headerSlot = document.getElementById('header-slot');
-    const navSlot    = document.getElementById('nav-slot');
-    if (header && headerSlot) headerSlot.replaceWith(header);
-    if (nav && navSlot)       navSlot.replaceWith(nav);
-  } catch (e) {
-    console.error('템플릿 로드 실패:', e);
-  }
-})();
+	//템플릿의 header/nav만 로드
+	(async function () {
+	  try {
+	    const url = '<%= ctx %>/Html/00_template/template.html';
+	    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
+	    const doc  = new DOMParser().parseFromString(text, 'text/html');
+	    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+	    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
+	    const headerSlot = document.getElementById('header-slot');
+	    const navSlot    = document.getElementById('nav-slot');
+	    if (header && headerSlot) headerSlot.replaceWith(header);
+	    if (nav && navSlot)       navSlot.replaceWith(nav);
+	  } catch (e) {
+	    console.error('템플릿 로드 실패:', e);
+	  }
+	})();
+	/* ---------- 사람 아이콘 드롭다운 ---------- */
+	const myIconBtn = document.getElementById('myIconBtn');
+	const userMenu  = document.getElementById('userMenu');
+	
+	function closeUserMenu() {
+	    userMenu.classList.add('hidden');
+	    myIconBtn.setAttribute('aria-expanded', 'false');
+	}
+	
+	myIconBtn.addEventListener('click', (e) => {
+	    e.stopPropagation();
+	    userMenu.classList.toggle('hidden');
+	    myIconBtn.setAttribute('aria-expanded',
+	        userMenu.classList.contains('hidden') ? 'false' : 'true');
+	});
+	
+	userMenu.addEventListener('click', (e) => e.stopPropagation());
+	document.addEventListener('click', closeUserMenu);
+	document.addEventListener('keydown', (e) => {
+	    if (e.key === 'Escape') closeUserMenu();
+	});
 
   (function() {
     // 전체 선택

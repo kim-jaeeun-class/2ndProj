@@ -77,17 +77,19 @@
 			  		<button type="submit" id="filter_btn">조회</button>
 		  		</div>
 			</div>
-	</form>
+		</form>
 	</div>
 	<div class="wrap_list">
         <!-- 액션 -->
 	    <div class="action">
-	      <form id="deleteForm" method="post" action="<c:url value='/stockDel'/>" style="display:inline;">
+	      <form id="deleteForm" method="post" action="<c:url value='/stockDel'/>">
 	        <input type="hidden" name="stock_id" id="delete_ids">
 	        <button type="submit" class="delete" id="deleteBtn">삭제</button>
-	      <a href="<c:url value='/stockAdd'/>">
-	        <button type="button" class="add">추가</button>
-	      </a>
+	      	
+	      	<a class="add" href="<c:url value='/stockDetail'>
+		      	<c:param name='mode' value='add'/></c:url>">
+		        <button type="button" class="item_add">추가</button>
+	      	</a>
 	      </form>
 	    </div>
 	    <div class="table-wrap" tabindex="0">
@@ -143,7 +145,7 @@
 	    
 	  </div>
 	</div>
-</div>
+
 <script>
 	// 템플릿의 header/nav만 로드
 	(async function () {

@@ -16,26 +16,39 @@ import Service.ItemService;
 public class StockDetailCtrl extends HttpServlet {
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
- req.setCharacterEncoding("utf-8");
+	req.setCharacterEncoding("utf-8");
+	resp.setContentType("text/html;charset=utf-8");
 
- String id   = req.getParameter("stock_id");   // stock_id
- String mode = req.getParameter("mode"); // add | edit | view
-
- try {
-   StockService ss = new StockService();
-   ItemService  is = new ItemService();  // 모달용 목록
-
-   StockDTO stock = ss.getOneStock(id);      // ★ 여기서 item_price까지 채워짐
-   List<ItemDTO> itemList = is.getAllItem(); // 모달용
-
-   req.setAttribute("mode",  mode == null ? (stock == null ? "add" : "view") : mode);
-   req.setAttribute("stock", stock);
-   req.setAttribute("itemList", itemList);
-
-   req.getRequestDispatcher("/08_stockRegistration.jsp").forward(req, resp);
- } catch (Exception e) {
-   e.printStackTrace();
-   throw new ServletException("재고 상세 조회 실패: " + e.getMessage());
- }
-}
-}
+	String mode    = nvl(req.getParameter("mode"));      // add | edit | view
+	String stockId = nvl(req.getParameter("stock_id"));  // ← 통일
+	
+	try {
+	   StockService ss = new StockService();
+	   ItemService  is = new ItemService();
+	
+	   StockDTO stock = null;
+	   if (!"add".equalsIgnoreCase(mode)) {
+	     if (stockId.isEmpty()) throw new IllegalArgumentException("stock_id가 필요합니다.");
+	     stock = ss.getOneStock(stockId);
+	     if (stock == null) throw new IllegalArgumentException("존재하지 않는 재고입니다.");
+	   }
+	
+	   // 모달 목록은 항상 바인딩
+	   java.util.List<Dto.ItemDTO> itemList = is.getAllItem();
+	
+	   if (mode.isEmpty()) mode = (stock == null ? "add" : "view");
+	
+	   req.setAttribute("mode", mode);
+	   req.setAttribute("stock", stock);
+	   req.setAttribute("itemList", itemList);
+	
+	   req.getRequestDispatcher("/08_stockRegistration.jsp").forward(req, resp);
+	
+	 } catch (Exception e) {
+	   e.printStackTrace();
+	   throw new ServletException("재고 상세 조회 실패: " + e.getMessage(), e);
+	 }
+	}
+	
+	private static String nvl(String s){ return s==null ? "" : s.trim(); }
+	}

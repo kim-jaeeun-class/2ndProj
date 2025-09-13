@@ -25,7 +25,7 @@
 <div id="header-slot"></div>
 <div id="nav-slot"></div>
 
-    <div class="titleBox">
+<div class="titleBox">
 	
 <%-- 모드 결정 --%>
 <c:set var="mode" value="${empty mode ? (empty order ? 'add' : 'view') : mode}"/>
@@ -33,7 +33,7 @@
 <c:set var="isEdit" value="${mode eq 'edit'}"/>
 <c:set var="isView" value="${mode eq 'view'}"/>
 <c:set var="ro"     value="${not isAdd and not isEdit}"/>
-        <span>발주 ${isAdd ? '등록' : '상세'}</span>         
+	<span>발주 ${isAdd ? '등록' : '상세'}</span>         
 
 <%-- form action --%>
 <c:choose>
@@ -88,7 +88,6 @@
 		        	<button type="submit" class="primary" id="btnsave">등록</button>
 		      	</c:when>
 			</c:choose>
-			<%-- isAdd에서는 상단에 submit 두지 않고 하단 버튼만 사용 --%>
 
         </div>
       </div>
@@ -208,10 +207,9 @@
     <!-- 하단 버튼  -->
     <div class="bottom">
       <a href="<c:url value='/orderList'/>"><button type="button">목록</button></a>
-      
-      
     </div>
   </div>
+  
 </form>
 </div>
 <%-- 삭제 전용 분리 폼 (중첩 form 금지) --%>
@@ -329,85 +327,107 @@
 
 <!-- ===== 제출 직전 품목 hidden 생성(서버는 [] 없는 name으로 받음) ===== -->
 <script>
-// 템플릿의 header/nav만 로드
-(async function () {
-  try {
-    const url = '<%= ctx %>/Html/00_template/template.html';
-    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
-    const doc  = new DOMParser().parseFromString(text, 'text/html');
-    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
-    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
-    const headerSlot = document.getElementById('header-slot');
-    const navSlot    = document.getElementById('nav-slot');
-    if (header && headerSlot) headerSlot.replaceWith(header);
-    if (nav && navSlot)       navSlot.replaceWith(nav);
-  } catch (e) {
-    console.error('템플릿 로드 실패:', e);
-  }
-})();
-(function(){
-  const form = document.getElementById('orderForm');
-  if(!form) return;
+	// 템플릿의 header/nav만 로드
+	(async function () {
+	  try {
+	    const url = '<%= ctx %>/Html/00_template/template.html';
+	    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
+	    const doc  = new DOMParser().parseFromString(text, 'text/html');
+	    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+	    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
+	    const headerSlot = document.getElementById('header-slot');
+	    const navSlot    = document.getElementById('nav-slot');
+	    if (header && headerSlot) headerSlot.replaceWith(header);
+	    if (nav && navSlot)       navSlot.replaceWith(nav);
+	  } catch (e) {
+	    console.error('템플릿 로드 실패:', e);
+	  }
+	})();
+	/* ---------- 사람 아이콘 드롭다운 ---------- */
+	const myIconBtn = document.getElementById('myIconBtn');
+	const userMenu  = document.getElementById('userMenu');
+	
+	function closeUserMenu() {
+	    userMenu.classList.add('hidden');
+	    myIconBtn.setAttribute('aria-expanded', 'false');
+	}
+	
+	myIconBtn.addEventListener('click', (e) => {
+	    e.stopPropagation();
+	    userMenu.classList.toggle('hidden');
+	    myIconBtn.setAttribute('aria-expanded',
+	        userMenu.classList.contains('hidden') ? 'false' : 'true');
+	});
+	
+	userMenu.addEventListener('click', (e) => e.stopPropagation());
+	document.addEventListener('click', closeUserMenu);
+	document.addEventListener('keydown', (e) => {
+	    if (e.key === 'Escape') closeUserMenu();
+	});
 
-  form.addEventListener('submit', function(e){
-    // 기존 자동 생성분 제거
-    form.querySelectorAll('.auto-hidden').forEach(n => n.remove());
-
-    const rows = form.querySelectorAll('.order_list tr');
-    let count = 0;
-
-    rows.forEach((tr, idx) => {
-      // 우선 data-attr → 클래스 → 셀 인덱스 순으로 안전하게 읽기
-      const code  = (tr.dataset.code  || tr.querySelector('.col-code') ?.textContent || tr.cells[2]?.textContent || '').trim();
-      const price = (tr.dataset.price || tr.querySelector('.col-price')?.textContent || tr.cells[3]?.textContent || '').trim();
-      const qty   = (tr.dataset.qty   || tr.querySelector('.col-qty')  ?.textContent || tr.cells[4]?.textContent || '').trim();
-
-      if(!code) return;
-
-      [['item_code',code],['item_price',price],['quantity',qty]].forEach(([name,val])=>{
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;       // [] 없이 다중 같은 name → getParameterValues("item_code")
-        input.value= val || '';
-        input.className = 'auto-hidden';
-        form.appendChild(input);
-      });
-      count++;
-    });
-
-    if ((${isAdd or isEdit} && count===0)) {
-      e.preventDefault();
-      alert('품목을 추가하세요.');
-    }
-  });
-})();
-function _toNumber(s){ if(s==null) return 0; const n=parseFloat(String(s).replace(/[^0-9.]/g,'')); return isNaN(n)?0:n; }
-function _readCell(tr, sel, hiddenName, dataKey){
-  if (dataKey && tr.dataset && tr.dataset[dataKey]!=null) return _toNumber(tr.dataset[dataKey]);
-  const inp = tr.querySelector(`${sel} input[type="text"], ${sel} input[type="number"]`);
-  if (inp && inp.value) return _toNumber(inp.value);
-  if (hiddenName){
-    const hid = tr.querySelector(`input[name="${hiddenName}"],input[name="${hiddenName}[]"]`);
-    if (hid && hid.value) return _toNumber(hid.value);
-  }
-  const td = tr.querySelector(sel);
-  if (td && td.textContent) return _toNumber(td.textContent);
-  return 0;
-}
-function updateTotals(){
-  let totalQty=0, totalAmt=0;
-  document.querySelectorAll('.order_list tr').forEach(tr=>{
-    const qty   = _readCell(tr, '.col-qty', 'quantity', 'qty');
-    const price = _readCell(tr, '.col-price', 'item_price', 'price');
-    const sum = qty*price;
-    totalQty += qty; totalAmt += sum;
-    const cell = tr.querySelector('.col-sum'); if (cell) cell.textContent = new Intl.NumberFormat().format(sum);
-  });
-  const nf=new Intl.NumberFormat();
-  const tq=document.querySelector('.total_qty'); if(tq) tq.textContent = nf.format(totalQty);
-  const ta=document.querySelector('.total_amt'); if(ta) ta.textContent = nf.format(totalAmt);
-}
-document.addEventListener('DOMContentLoaded', updateTotals);
+	(function(){
+	  const form = document.getElementById('orderForm');
+	  if(!form) return;
+	
+	  form.addEventListener('submit', function(e){
+	    // 기존 자동 생성분 제거
+	    form.querySelectorAll('.auto-hidden').forEach(n => n.remove());
+	
+	    const rows = form.querySelectorAll('.order_list tr');
+	    let count = 0;
+	
+	    rows.forEach((tr, idx) => {
+	      // 우선 data-attr → 클래스 → 셀 인덱스 순으로 안전하게 읽기
+	      const code  = (tr.dataset.code  || tr.querySelector('.col-code') ?.textContent || tr.cells[2]?.textContent || '').trim();
+	      const price = (tr.dataset.price || tr.querySelector('.col-price')?.textContent || tr.cells[3]?.textContent || '').trim();
+	      const qty   = (tr.dataset.qty   || tr.querySelector('.col-qty')  ?.textContent || tr.cells[4]?.textContent || '').trim();
+	
+	      if(!code) return;
+	
+	      [['item_code',code],['item_price',price],['quantity',qty]].forEach(([name,val])=>{
+	        const input = document.createElement('input');
+	        input.type = 'hidden';
+	        input.name = name;       // [] 없이 다중 같은 name → getParameterValues("item_code")
+	        input.value= val || '';
+	        input.className = 'auto-hidden';
+	        form.appendChild(input);
+	      });
+	      count++;
+	    });
+	
+	    if ((${isAdd or isEdit} && count===0)) {
+	      e.preventDefault();
+	      alert('품목을 추가하세요.');
+	    }
+	  });
+	})();
+	function _toNumber(s){ if(s==null) return 0; const n=parseFloat(String(s).replace(/[^0-9.]/g,'')); return isNaN(n)?0:n; }
+	function _readCell(tr, sel, hiddenName, dataKey){
+	  if (dataKey && tr.dataset && tr.dataset[dataKey]!=null) return _toNumber(tr.dataset[dataKey]);
+	  const inp = tr.querySelector(`${sel} input[type="text"], ${sel} input[type="number"]`);
+	  if (inp && inp.value) return _toNumber(inp.value);
+	  if (hiddenName){
+	    const hid = tr.querySelector(`input[name="${hiddenName}"],input[name="${hiddenName}[]"]`);
+	    if (hid && hid.value) return _toNumber(hid.value);
+	  }
+	  const td = tr.querySelector(sel);
+	  if (td && td.textContent) return _toNumber(td.textContent);
+	  return 0;
+	}
+	function updateTotals(){
+	  let totalQty=0, totalAmt=0;
+	  document.querySelectorAll('.order_list tr').forEach(tr=>{
+	    const qty   = _readCell(tr, '.col-qty', 'quantity', 'qty');
+	    const price = _readCell(tr, '.col-price', 'item_price', 'price');
+	    const sum = qty*price;
+	    totalQty += qty; totalAmt += sum;
+	    const cell = tr.querySelector('.col-sum'); if (cell) cell.textContent = new Intl.NumberFormat().format(sum);
+	  });
+	  const nf=new Intl.NumberFormat();
+	  const tq=document.querySelector('.total_qty'); if(tq) tq.textContent = nf.format(totalQty);
+	  const ta=document.querySelector('.total_amt'); if(ta) ta.textContent = nf.format(totalAmt);
+	}
+	document.addEventListener('DOMContentLoaded', updateTotals);
 </script>
 
 </body>

@@ -16,25 +16,6 @@ import Service.ItemService;
 @WebServlet("/stockAdd")
 public class StockAddCtrl extends HttpServlet {
 
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-
-    req.setCharacterEncoding("utf-8");
-    resp.setContentType("text/html;charset=utf-8");
-
-    // 등록 폼 모드
-    req.setAttribute("mode", "add");
-
-    // 품목 모달용 목록 (있으면 사용, 실패해도 화면은 뜨도록 무시)
-    try {
-      List<ItemDTO> itemList = new ItemService().getAllItem();
-      req.setAttribute("itemList", itemList);
-    } catch (Throwable ignore) {}
-
-    // 등록 폼 JSP
-    req.getRequestDispatcher("/08_stockRegistration.jsp").forward(req, resp);
-  }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
