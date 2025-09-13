@@ -12,7 +12,8 @@
         <title>J2P4 :: 생산 계획</title>
         <link rel="stylesheet" href="<c:url value='/Html/asset/font.css'/>">
         <link rel="stylesheet" href="<c:url value='/Html/asset/09_common.css'/>">
-        <script src="/proj_mes/Html/asset/template_load.js"></script>
+<!--         <script src="/proj_mes/Html/asset/template_load.js"></script> -->
+                <script src ="../asset/template_load.js" ></script>
         
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
