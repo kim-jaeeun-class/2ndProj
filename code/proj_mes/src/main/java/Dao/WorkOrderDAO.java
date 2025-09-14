@@ -340,7 +340,7 @@ public class WorkOrderDAO {
 			Connection conn = getConn();
 			
 			String query = "update work_order"
-					+ "		wo_duedate = ?,"
+					+ "		set wo_duedate = ?,"
 					+ "    	wo_pq = ?, worker_id = ?, item_code = ?"
 					+ "		where wo_num = ?";
 			

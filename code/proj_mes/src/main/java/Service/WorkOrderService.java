@@ -38,7 +38,11 @@ public class WorkOrderService {
     
     // 전체 수정
     public int editAll(WorkOrderDTO dto) {
-        return dao.updateAllWO(dto);
+    	int cnt = dao.updateAllWO(dto);
+    	if(cnt == 0) {
+    	    System.out.println("update 실패: wo_num=" + dto.getWoNum());
+    	}
+    	return cnt;
     }
     
     // 실제 생산량 수정

@@ -113,27 +113,28 @@ public class WorkOrderCtrl extends HttpServlet {
 
         }
         else if ("update".equals(action)) {
+            String woNum = request.getParameter("wo_num");
+            String dueDateStr = request.getParameter("wo_duedate");
+            String pqStr = request.getParameter("wo_pq");
+
+            // 필수 값 체크
+            if(woNum == null || woNum.isEmpty() || dueDateStr == null || dueDateStr.isEmpty() || pqStr == null || pqStr.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "필수 파라미터 누락");
+                return;
+            }
+
             WorkOrderDTO dto = new WorkOrderDTO();
-            dto.setWoNum(request.getParameter("wo_num"));
-            dto.setWoDuedate(Date.valueOf(request.getParameter("wo_duedate")));
+            dto.setWoNum(woNum);
+            dto.setWoDuedate(Date.valueOf(dueDateStr)); // yyyy-MM-dd 형식 확인
             dto.setWorkerID(request.getParameter("worker_id"));
-            dto.setWoPQ(Integer.parseInt(request.getParameter("wo_pq")));
+            dto.setWoPQ(Integer.parseInt(pqStr));
             dto.setItem_code(request.getParameter("item_code"));
 
             String bomId = request.getParameter("bom_id");
-            if (bomId == null || bomId.isEmpty()) {
-                dto.setBom_id("0");
-            }
-            else {
-                dto.setBom_id(bomId);
-            }
+            dto.setBom_id((bomId == null || bomId.isEmpty()) ? "0" : bomId);
+
             String procId = request.getParameter("proc_id");
-            if (procId == null || procId.isEmpty()) {
-                dto.setProc_id("0");
-            }
-            else {
-                dto.setProc_id(procId);
-            }
+            dto.setProc_id((procId == null || procId.isEmpty()) ? "0" : procId);
 
             service.editAll(dto);
 

@@ -168,17 +168,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if (editAllBtn) {
             editAllBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const woNum = row
-                    .querySelector('.wo-link')
-                    .textContent
-                    .trim();
-                location.href = `workorder?wo_num=${woNum}`;
-                if (!woNum) {
-                    alert('수정할 항목이 선택되지 않았습니다.');
-                    return;
-                }
+
+                // 현재 상세 데이터 가져오기
+                const woNum = editAllBtn.dataset.woNum;
+                const row = document.querySelector(`.wrap-table tr[data-wo-num="${woNum}"]`);
+                
+                // 패널 전환
+                panelDown.classList.remove('open');
+                panelAdd.classList.add('open');
+
+                // 등록 패널을 수정 모드로 전환
+                actionInput.value = 'update';
+                woNumHidden.value = woNum;
+                panelTitle.textContent = '작업 지시서 수정';
+
+                // 기존 데이터 채워 넣기 (상세 패널에서 읽거나 row dataset 이용)
+                panelForm.querySelector('input[name="wo_date"]').value = row.dataset.woDate;
+                panelForm.querySelector('input[name="wo_duedate"]').value = row.dataset.woDuedate;
+                panelForm.querySelector('input[name="worker_id"]').value = row.dataset.workerId;
+                panelForm.querySelector('input[name="wo_pq"]').value = row.dataset.woPq;
+                panelForm.querySelector(`input[name="item_code"][value="${row.dataset.itemCode}"]`).checked = true;
+
+                // hidden 값
+                hiddenBOM.value = row.dataset.bomId || "0";
+                hiddenPROC.value = row.dataset.procId || "0";
             });
         }
+
 
 
         // -------------------------------
