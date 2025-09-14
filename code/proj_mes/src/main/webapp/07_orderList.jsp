@@ -22,14 +22,14 @@
 </head>
 <body>
 
-<!--  여기 두 줄이 템플릿에서 끌어올 자리 -->
+<!-- 템플릿(header/nav) 삽입 위치 -->
 <div id="header-slot"></div>
 <div id="nav-slot"></div>
 
 <div class="titleBox">
-        <span>발주 목록</span>         
-	
-<div class="wrap">
+  <span>발주 목록</span>
+
+  <div class="wrap">
     <!-- 필터 -->
     <form class="box order_filter" method="get" action="<c:url value='/orderList'/>">
       <div class="order_date box">
@@ -39,36 +39,28 @@
         <input type="date" id="end_date" name="endDate" value="${param.endDate}">
       </div>
 
-      <%-- <div class="box state">
-        <div>진행상태</div>
-        <select id="state_select" name="state">
-          <option value=""  <c:if test="${empty param.state}">selected</c:if>>전체</option>
-          <option value="0" <c:if test="${param.state=='0'}">selected</c:if>>임시저장</option>
-          <option value="1" <c:if test="${param.state=='1'}">selected</c:if>>승인</option>
-          <option value="2" <c:if test="${param.state=='2'}">selected</c:if>>승인 대기</option>
-          <option value="3" <c:if test="${param.state=='3'}">selected</c:if>>반려</option>
-        </select>
-      </div> --%>
+      <%-- 상태 필터 주석 유지 --%>
 
       <div>
         <button type="submit" id="filter_btn">조회</button>
       </div>
     </form>
   </div>
+
   <div class="wrap_list">
-  	<!-- 액션 -->
+    <!-- 액션 -->
     <div class="action">
       <form id="deleteForm" method="post" action="<c:url value='/orderDel'/>">
         <input type="hidden" name="order_key" id="delete_keys">
         <button type="button" class="delete" id="deleteBtn">삭제</button>
 
-      <a class="add" href="<c:url value='/orderDetail'>
-      	<c:param name='mode' value='add'/></c:url>">
-      	<button type="button" class="item_add">등록</button>
-      </a>
-   	  
+        <c:url var="addUrl" value="/orderDetail">
+          <c:param name="mode" value="add"/>
+        </c:url>
+        <a class="add item_add" href="${addUrl}">등록</a>
       </form>
     </div>
+
     <!-- 목록 -->
     <div class="table-wrap" tabindex="0">
       <table class="tables">
@@ -110,73 +102,66 @@
               <td><fmt:formatNumber value="${o.totalQty}"/></td>
               <td><fmt:formatNumber value="${o.totalAmt}" pattern="#,##0"/></td>
 
-              <%-- <td class="row_state">
-                <c:choose>
-                  <c:when test="${o.order_state == 0}">임시저장</c:when>
-                  <c:when test="${o.order_state == 1}">승인</c:when>
-                  <c:when test="${o.order_state == 2}">승인대기</c:when>
-                  <c:when test="${o.order_state == 3}">반려</c:when>
-                  <c:otherwise>알수없음</c:otherwise>
-                </c:choose>
-              </td>
-
-              <td>
-                <c:if test="${o.order_state == 2 || o.order_state == 0}">
-                  <form method="post" action="<c:url value='/order/recall'/>" style="margin:0;">
-                    <input type="hidden" name="key" value="${o.order_key}">
-                    <button type="submit" class="recall">회수</button>
-                  </form>
-                </c:if>
-              </td> --%>
+              <%-- 상태/회수 버튼 주석 유지 --%>
             </tr>
           </c:forEach>
         </tbody>
       </table>
     </div>
-
-    
-</div>
+  </div>
 </div>
 
 <script>
-	//템플릿의 header/nav만 로드
-	(async function () {
-	  try {
-	    const url = '<%= ctx %>/Html/00_template/template.html';
-	    const text = await (await fetch(url, { credentials: 'same-origin' })).text();
-	    const doc  = new DOMParser().parseFromString(text, 'text/html');
-	    const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
-	    const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
-	    const headerSlot = document.getElementById('header-slot');
-	    const navSlot    = document.getElementById('nav-slot');
-	    if (header && headerSlot) headerSlot.replaceWith(header);
-	    if (nav && navSlot)       navSlot.replaceWith(nav);
-	  } catch (e) {
-	    console.error('템플릿 로드 실패:', e);
-	  }
-	})();
-	/* ---------- 사람 아이콘 드롭다운 ---------- */
-	const myIconBtn = document.getElementById('myIconBtn');
-	const userMenu  = document.getElementById('userMenu');
-	
-	function closeUserMenu() {
-	    userMenu.classList.add('hidden');
-	    myIconBtn.setAttribute('aria-expanded', 'false');
-	}
-	
-	myIconBtn.addEventListener('click', (e) => {
-	    e.stopPropagation();
-	    userMenu.classList.toggle('hidden');
-	    myIconBtn.setAttribute('aria-expanded',
-	        userMenu.classList.contains('hidden') ? 'false' : 'true');
-	});
-	
-	userMenu.addEventListener('click', (e) => e.stopPropagation());
-	document.addEventListener('click', closeUserMenu);
-	document.addEventListener('keydown', (e) => {
-	    if (e.key === 'Escape') closeUserMenu();
-	});
+  // 1) 템플릿 로드 → DOM에 삽입된 뒤에 드롭다운 이벤트 바인딩
+  (async function () {
+    try {
+      const url   = '<%= ctx %>/Html/00_template/template.html';
+      const text  = await (await fetch(url, { credentials: 'same-origin' })).text();
+      const doc   = new DOMParser().parseFromString(text, 'text/html');
 
+      const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+      const nav    = doc.querySelector('nav.nav-bg')       || doc.querySelector('nav');
+
+      const headerSlot = document.getElementById('header-slot');
+      const navSlot    = document.getElementById('nav-slot');
+
+      if (header && headerSlot) headerSlot.replaceWith(header);
+      if (nav && navSlot)       navSlot.replaceWith(nav);
+    } catch (e) {
+      console.error('템플릿 로드 실패:', e);
+    } finally {
+      initUserMenu(); // ← 삽입 완료 후 바인딩
+    }
+  })();
+
+  // 2) 사람 아이콘 드롭다운 초기화 (안전한 널 가드 포함)
+  function initUserMenu() {
+    const myIconBtn = document.getElementById('myIconBtn');
+    const userMenu  = document.getElementById('userMenu');
+    if (!myIconBtn || !userMenu) return;
+
+    function closeUserMenu() {
+      userMenu.classList.add('hidden');
+      myIconBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    myIconBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userMenu.classList.toggle('hidden');
+      myIconBtn.setAttribute(
+        'aria-expanded',
+        userMenu.classList.contains('hidden') ? 'false' : 'true'
+      );
+    });
+
+    userMenu.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', closeUserMenu);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeUserMenu();
+    });
+  }
+
+  // 3) 체크박스 전체 선택 & 삭제 처리 (기존 로직 유지)
   (function() {
     // 전체 선택
     const checkAll = document.getElementById('check_all');
