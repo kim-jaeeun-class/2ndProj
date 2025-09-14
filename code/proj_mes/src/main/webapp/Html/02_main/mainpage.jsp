@@ -101,16 +101,22 @@
           </div>
 
           <div id="noticeContent" class="tab-content space-y-2 mt-4">
-            <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[안내]</span> <span class="text-gray-800">2025년 하반기 생산 목표 공지</span></p>
+            <a href = "Html/02_main/02_freeboard/Noticeboard.html">
+            	<p class="py-2 px-1 rounded-md"><span class="text-gray-500">[안내]</span>
+            	 <span class="text-gray-800">2025년 하반기 생산 목표 공지</span></p></a>
             <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[긴급]</span> <span class="text-gray-800">라인2 설비 점검 일정 변경</span></p>
             <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[공유]</span> <span class="text-gray-800">안전 수칙 교육 일정 안내</span></p>
           </div>
-
+		
+		
           <div id="boardContent" class="tab-content hidden space-y-2 mt-4">
-            <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[공지]</span> <span class="text-gray-800">2025년 하반기 생산 목표 공지</span></p>
+            <a href = "Html/02_main/02_freeboard/Noticeboard.html">
+            <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[공지]</span>
+             <span class="text-gray-800">2025년 하반기 생산 목표 공지</span></p></a>
             <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[공지]</span> <span class="text-gray-800">라인2 설비 점검 일정 변경</span></p>
             <p class="py-2 px-1 rounded-md"><span class="text-gray-500">[질문]</span> <span class="text-gray-800">MES 접속이 안되는데 어떻게...</span></p>
           </div>
+      
         </div>
       </div>
     </div>
