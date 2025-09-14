@@ -9,7 +9,7 @@
   }
 
   // ----- 페이지 로직(간단 샘플) -----
-  $(function () {
+  (function () {
     // 전체선택
     $('#check-all').on('change', function () {
       const checked = $(this).is(':checked');
