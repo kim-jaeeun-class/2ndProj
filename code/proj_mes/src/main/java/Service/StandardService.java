@@ -3,11 +3,13 @@ package Service;
 import java.util.*;
 
 import Dao.BOMDAO;
+import Dao.InspectionDAO;
 import Dao.OrderDAO;
 import Dao.ProPlanDAO;
 import Dao.ProcessDAO;
 import Dao.StockDAO;
 import Dto.BOMDTO;
+import Dto.InspectionDTO;
 import Dto.OrderDTO;
 import Dto.ProPlanDTO;
 import Dto.ProcessDTO;
@@ -59,9 +61,9 @@ public class StandardService {
         providers.put("발주", new OrderProvider());
         providers.put("재고", new StockProvider());
         providers.put("공정", new ProcProvider());
-        providers.put("BOM",  new BOMProvider());
+        providers.put("BOM", new BOMProvider());
         providers.put("생산", new ProplanProvider());
-        // providers.put("품질", new QualityProvider()); // 추후 추가
+        providers.put("품질", new QualityProvider());
     }
 
     /** 확장용 수동 등록 API(원하면 외부에서 주입) */
@@ -119,8 +121,8 @@ public class StandardService {
                         addRow(rows, "BOM", r.get("bom_id"), "소요량 : " + nz(r.get("require_amount")));
                     break;
                 case "품질":
-                    // 품질 Provider 구현 시, 아이디/상세 키에 맞춰 아래를 추가
-                    // addRow(rows, "품질", r.get("qc_id"), "품질 : " + nz(r.get("qc_name")));
+                	for (Map<String,Object> r : list)
+                        addRow(rows, "품질", r.get("IR_ID"), "시작일 : " + nz(r.get("start_time")));
                     break;
                 default:
                     break;
@@ -345,4 +347,66 @@ public class StandardService {
 
         private static String nz(String s) { return s == null ? "" : s; }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* =========================
+    Provider 구현: inspection
+    ========================= */
+ private static class QualityProvider implements TableProvider {
+     private final InspectionDAO dao = new InspectionDAO();
+
+     @Override
+     public List<Column> columns() {
+         List<Column> cols = new ArrayList<>();
+         cols.add(new Column("IR_ID",        "검사ID"));
+         cols.add(new Column("IR_TYPE",   "검사유형"));
+         cols.add(new Column("start_time",   "검사 시작일"));
+         cols.add(new Column("end_time", "검사 종료일"));
+//         cols.add(new Column("cp_id", "생산계획 ID"));
+//         cols.add(new Column("worker_id", "담당자 사번"));
+         
+         return cols;
+     }
+
+     @Override
+     public List<Map<String, Object>> data() {
+         List<Map<String,Object>> rows = new ArrayList<>();
+         List<?> list = dao.getInspectionResults();
+         for (Object o : list) {
+        	 InspectionDTO d = (InspectionDTO) o;
+             Map<String,Object> row = new LinkedHashMap<>();
+             row.put("IR_ID",         nz(d.getIr_id()));
+             row.put("IR_TYPE",    d.getIr_type());
+             row.put("start_time",    d.getStart_time());
+             row.put("end_time", d.getEnd_time());
+//             row.put("cp_id", d.getCp_id());
+//             row.put("worker_id", d.getWorker_id());
+             rows.add(row);
+         }
+         return rows;
+     }
+
+     private static String nz(String s) { return s == null ? "" : s; }
+ }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

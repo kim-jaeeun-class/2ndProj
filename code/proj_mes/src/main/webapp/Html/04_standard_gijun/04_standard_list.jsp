@@ -152,7 +152,7 @@
       '재고': 'stock',
       'BOM' : 'bom',
       '생산': 'proplan',
-      '품질': '품질'
+      '품질': 'inspection'
     };
 
     function goCreate() {
