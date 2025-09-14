@@ -29,15 +29,22 @@
   <div id="nav-slot"></div>
 
   <div class="titleBox">
-    <span>거래처 관리</span>
-  </div>
+    <span>거래처 목록</span>
+
 
   <div class="wrap">
     <!-- 삭제 전용 폼 -->
     <form id="deleteForm" method="post" action="<c:url value='/Client'/>">
       <input type="hidden" name="op" value="delete" />
 
-      <div class="table-wrap">
+      <div class="action">
+      	<div>
+		    <button class="btn delete_btn" type="button" id="std-delete" >삭제</button>
+		</div>
+		<div>    
+		    <button class="btn add_btn" type="button" id="btn-insert">등록</button>
+		</div>
+   	</div>
         <table class="tables">
           <thead>
             <tr>
@@ -93,14 +100,12 @@
             </c:choose>
           </tbody>
         </table>
-      </div>
+
     </form>
+   </div>
   </div>
 
-  <div style="display:flex; justify-content:end;">
-    <button class="btn" type="button" id="std-delete" style="margin-right:1%">삭제하기</button>
-    <button class="btn" type="button" id="btn-insert" style="margin-right:15px">등록하기</button>
-  </div>
+ 
 
   <!-- 등록/수정 모달 (공용) -->
   <dialog id="partnerModal" aria-labelledby="pmTitle">
@@ -174,8 +179,8 @@
       </form>
 
       <div class="modal-footer">
-        <button type="button" class="btn" id="pmCancel">취소</button>
-        <button type="submit" form="partnerForm" class="btn primary" id="pmSave">저장</button>
+        <button type="button" class="btn back_btn" id="pmCancel">취소</button>
+        <button type="submit" form="partnerForm" class="btn primary confirm_btn" id="pmSave">저장</button>
       </div>
     </div>
   </dialog>
@@ -202,8 +207,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn" id="dmEdit">수정</button>
-        <button type="button" class="btn" id="dmOk">닫기</button>
+        <button type="button" class="btn btnEdit" id="dmEdit">수정</button>
+        <button type="button" class="btn back_btn" id="dmOk">닫기</button>
       </div>
     </div>
   </dialog>
@@ -247,7 +252,7 @@
     function toUpdateMode(data) {
       pmTitle.textContent = '거래처 수정';
       pmOp.value = 'update';
-      pmSave.textContent = '수정 저장';
+      pmSave.textContent = '저장';
       f.id.value = data.id || '';
       f.name.value = data.name || '';
       f.biz.value = data.bizno || '';

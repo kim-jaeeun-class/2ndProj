@@ -9,6 +9,8 @@
     --red-hover:#dc2626;    /* 빨간버튼 호버 */
     --green:#22c55e;        /* 초록버튼 (등록, 추가)*/
     --green-hover:#16a34a;  /* 초록버튼 호버 */
+    --yellow: #f59e0b;      /* 노란버튼(수정)*/
+    --yellow-hover: #d97706;/* 노란버튼 호버*/ 
     --badbtn: #9ca3af;      /* 중요하지 않은 버튼? */
     --btnwidth: 80px;         /* 버튼 width */  
     --btnheight: 40px;        /* 버튼 height */  
