@@ -45,4 +45,37 @@ public class WorkOrderService {
     public int editAQ(WorkOrderDTO dto) {
     	return dao.updateAQWO(dto);
     }
+    
+	// 특정 품목의 BOM 정보 조회
+    public WorkOrderDTO getBOMInfo(String itemCode) {
+        WorkOrderDTO dto = new WorkOrderDTO();
+        dto.setItem_code(itemCode);
+
+        List<WorkOrderDTO> list = dao.selectBOM(dto);
+        if (list.isEmpty()) {
+            dto.setBom_id("0"); // 없는 경우 0 처리
+        } else {
+            dto.setBom_id(list.get(0).getBom_id());
+        }
+
+        return dto;
+    }
+
+    // 특정 품목의 공정 정보 조회
+    public WorkOrderDTO getProcInfo(String itemCode) {
+        WorkOrderDTO dto = new WorkOrderDTO();
+        dto.setItem_code(itemCode);
+
+        List<WorkOrderDTO> list = dao.selectProc(dto);
+        if (list.isEmpty()) {
+            dto.setProc_id("0"); // 없는 경우 0 처리
+            dto.setProc_name("0");
+        } else {
+            dto.setProc_id(list.get(0).getProc_id());
+            dto.setProc_name(list.get(0).getProc_name());
+        }
+
+        return dto;
+    }
+
 }

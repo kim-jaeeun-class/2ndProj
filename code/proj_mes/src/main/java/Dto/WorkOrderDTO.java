@@ -17,7 +17,11 @@ public class WorkOrderDTO {
 	private String item_name;	// 품목명 : 품목 추가 영역에서 필요
 	
 	private String bom_id;		// 품목에 맞는 bom 확인 및 조회
+	private int bom_reqAm;		// bom 소요량
 	private String cp_id;		// 품목에 맞는 생산 계획 확인 및 조회
+	private String proc_id;		// 공정 불러오기용
+	private String proc_name;	// 공정 이름
+	
 	public String getWoNum() {
 		return woNum;
 	}
@@ -84,12 +88,36 @@ public class WorkOrderDTO {
 	public void setCp_id(String cp_id) {
 		this.cp_id = cp_id;
 	}
+	
+	
+	public int getBom_reqAm() {
+		return bom_reqAm;
+	}
+	public void setBom_reqAm(int bom_reqAm) {
+		this.bom_reqAm = bom_reqAm;
+	}
+	public String getProc_id() {
+		return proc_id;
+	}
+	public void setProc_id(String proc_id) {
+		this.proc_id = proc_id;
+	}
+	public String getProc_name() {
+		return proc_name;
+	}
+	public void setProc_name(String proc_name) {
+		this.proc_name = proc_name;
+	}
 	@Override
 	public String toString() {
 		return "WorkOrderDTO [woNum=" + woNum + ", woDate=" + woDate + ", woDuedate=" + woDuedate + ", woPQ=" + woPQ
 				+ ", woAQ=" + woAQ + ", workerID=" + workerID + ", item_code=" + item_code + ", worker_name="
-				+ worker_name + ", item_name=" + item_name + ", bom_id=" + bom_id + ", cp_id=" + cp_id + "]";
+				+ worker_name + ", item_name=" + item_name + ", bom_id=" + bom_id + ", bom_reqAm=" + bom_reqAm
+				+ ", cp_id=" + cp_id + ", proc_id=" + proc_id + ", proc_name=" + proc_name + "]";
 	}
+
+	
+	
 	
 	
 	

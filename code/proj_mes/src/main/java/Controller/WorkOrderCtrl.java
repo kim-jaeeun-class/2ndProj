@@ -50,7 +50,7 @@ public class WorkOrderCtrl extends HttpServlet {
 		System.out.println("action: " + request.getParameter("action"));
 		
 		if("add".equals(action)) {
-			// 등록 영역
+		    // 등록 영역
 		    WorkOrderDTO dto = new WorkOrderDTO();
 		    dto.setWoNum(request.getParameter("wo_num"));
 		    dto.setWoDate(Date.valueOf(request.getParameter("wo_date")));
@@ -58,8 +58,27 @@ public class WorkOrderCtrl extends HttpServlet {
 		    dto.setWorkerID(request.getParameter("worker_id"));
 		    dto.setWoPQ(Integer.parseInt(request.getParameter("wo_pq")));
 		    dto.setItem_code(request.getParameter("item_code"));
+
+		    // 추가: bom_id / proc_id
+		    String bomId = request.getParameter("bom_id");
+		    String procId = request.getParameter("proc_id");
+
+		    if(bomId == null || bomId.isEmpty()) {
+		        dto.setBom_id("0");
+		    }
+		    else {
+		        dto.setBom_id(bomId);
+		    }
+
+		    if(procId == null || procId.isEmpty()) {
+		        dto.setProc_id("0");
+		    }
+		    else {
+		        dto.setProc_id(procId);
+		    }
+
 		    service.addWorkOrder(dto);
-		    
+
 		    List<WorkOrderDTO> itemList = service.getItemsWO(new WorkOrderDTO());
 		    request.setAttribute("itemAll", itemList);
 		}

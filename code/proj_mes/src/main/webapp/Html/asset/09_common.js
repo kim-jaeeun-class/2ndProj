@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const form = document.createElement('form');
                 form.method = 'post';
 
-                // 페이지 구분에 따라 action 설정
                 if (page === 'pro-plan') {
                     form.action = 'proplan';
                 } else if (page === 'wo') {
@@ -84,46 +83,62 @@ document.addEventListener("DOMContentLoaded", () => {
         if (panelForm) {
             saveBtn = panelForm.querySelector('.panel-save');
         }
-        if (!panelForm || !saveBtn) 
-            return;
-
+        if (!panelForm || !saveBtn) return;
         if (!panelForm || !mainTable || !panel || !panelDown) return;
 
+        // -------------------------------
+        // 작업지시 번호 자동 생성 함수
+        // -------------------------------
+        const woNum = panelForm.querySelector('input[name="wo_num"]');
+        const woDate = panelForm.querySelector('input[name="wo_date"]');
+        const woDuedate = panelForm.querySelector('input[name="wo_duedate"]');
+        const workerId = panelForm.querySelector('input[name="worker_id"]');
+        const woPQ = panelForm.querySelector('input[name="wo_pq"]');
+        const itemCode = panelForm.querySelector('input[name="item_code"]:checked');
+        const woNumHidden = panelForm.querySelector('input[name="wo_num_hidden"]');
+        const woNumDisplay = panelForm.querySelector('input[name="wo_num_display"]'); // readonly 표시용
 
-        // 확인용
-        console.log('panelForm:', panelForm);
-        console.log('saveBtn:', saveBtn);
+        async function setWoNum() {
+            if (!woDate.value) return;
+            const dateVal = woDate.value.replace(/-/g, '');
+            try {
+                const res = await fetch(`/workorder?action=getWoCount&date=${dateVal}`);
+                const count = await res.json(); // 0~98
+                const seq = String(count + 1).padStart(2, '0');
+                const newWoNum = `${dateVal}-${seq}`;
+
+                woNum.value = newWoNum;        // 실제 hidden에 저장
+                woNumDisplay.value = newWoNum; // 화면 표시
+            } catch (err) {
+                console.error('작업지시번호 생성 실패:', err);
+            }
+        }
+
+        woDate.addEventListener('change', setWoNum);
+        if (woDate.value) setWoNum();
 
         // -------------------------------
         // 슬라이딩 저장 → 메인 테이블 추가
         // -------------------------------
-        saveBtn.addEventListener('click', (e) => {
-            // e.preventDefault();
+        saveBtn.addEventListener('click', async (e) => {
+            e.preventDefault(); // 기본 제출 막기
 
-            const woNum = panelForm.querySelector('input[name="wo_num"]');
-            const woDate = panelForm.querySelector('input[name="wo_date"]');
-            const woDuedate = panelForm.querySelector('input[name="wo_duedate"]');
-            const workerId = panelForm.querySelector('input[name="worker_id"]');
-            const woPQ = panelForm.querySelector('input[name="wo_pq"]');
-            const itemCode = panelForm.querySelector('input[name="item_code"]:checked');
+            // 작업지시 번호 fetch 완료
+            await setWoNum();
 
-            const requiredInputs = [woNum, woDate, woDuedate, workerId, woPQ, itemCode];
+            const itemCodeChecked = panelForm.querySelector('input[name="item_code"]:checked');
+            const requiredInputs = [woNum, woDate, woDuedate, workerId, woPQ, itemCodeChecked];
             let allValid = true;
-
             requiredInputs.forEach(input => {
                 if (!input || (input.tagName === 'INPUT' && (input.type === 'radio' ? !input.checked : !input.value))) {
                     allValid = false;
                 }
             });
             if (!allValid) {
-                    alert('필수 항목을 모두 입력해주세요.');
-                    return;
-                }
-
-            if (woNum.value < 1 || woNum.value > 5) {
-                alert('주문번호는 1~5까지 입력 가능합니다.');
+                alert('필수 항목을 모두 입력해주세요.');
                 return;
             }
+
             if (woPQ.value < 1) {
                 alert('수량은 1 이상 입력해야 합니다.');
                 return;
@@ -134,17 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            if (!itemCode) {
+            if (!itemCodeChecked) {
                 alert('품목을 선택해주세요.');
                 return;
             }
 
+            // hidden 값 세팅
+            woNumHidden.value = woNum.value;
+            hiddenBOM.value = itemCodeChecked.dataset.bomId || '';
+            hiddenPROC.value = itemCodeChecked.dataset.procId || '';
+
             // 서버 전송 / 패널 닫기
             panel.classList.remove('open');
             panelForm.submit();
-
-            // // 폼 리셋
-            // panelForm.reset();
         });
 
         // -------------------------------
@@ -181,13 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const panel = document.querySelector('.panel');
         const mainTable = document.querySelector('.wrap-table tbody');
         const panelDown = document.querySelector('#panel-down');
-        let editingRow = null; // 수정 중인 행 저장
+        let editingRow = null;
 
         if (!panelForm || !saveBtn || !mainTable) return;
 
-        // ===============================
-        // 등록/수정 버튼 클릭
-        // ===============================
         saveBtn.addEventListener('click', (e) => {
             e.preventDefault();
 
@@ -197,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const planEnd = panelForm.querySelector('input[name="plan-end"]');
             const bigo = panelForm.querySelector('input[name="bigo"]');
 
-            // 필수값 체크
             if (!itemNo.value || !planAmount.value || !planStart.value || !planEnd.value) {
                 alert('필수 항목을 모두 입력해주세요.');
                 return;
@@ -207,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // 수정 모드라면 hidden에 수정 대상 ID 삽입
             if (editingRow) {
                 let hiddenId = panelForm.querySelector('input[name="cpID"]');
                 if (!hiddenId) {
@@ -219,95 +231,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 hiddenId.value = editingRow.dataset.cpId;
             }
 
-            // 서버 전송
             panelForm.submit();
         });
-
-        // ===============================
-        // 메인 테이블 클릭 → 상세 패널
-        // ===============================
-        if (mainTable && panelDown) {
-            mainTable.addEventListener('click', (e) => {
-                const row = e.target.closest('tr.data');
-                if (!row || e.target.closest('input[type="checkbox"]')) return;
-
-                const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
-                const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
-
-                rowTds.forEach((td, i) => {
-                    if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
-                });
-
-                const hiddenInput = panelDown.querySelector('#detail-delete-id');
-                hiddenInput.value = row.dataset.cpId || row.querySelector('td:nth-child(2)').textContent.trim();
-
-                panelDown.classList.add('open');
-
-                // 수정 버튼
-                const editBtn = panelDown.querySelector('.edit');
-                if (editBtn) {
-                    editBtn.onclick = () => {
-                        panelDown.classList.remove('open');
-                        panel.classList.add('open');
-
-                        // 기존 데이터 input 채우기
-                        panelForm.querySelector('input[name="item-no"]').value = rowTds[1]?.textContent.trim() || '';
-                        panelForm.querySelector('input[name="plan-amount"]').value = rowTds[2]?.textContent.trim() || '';
-                        const dateRange = rowTds[3]?.textContent.trim().split(' ~ ') || [];
-                        panelForm.querySelector('input[name="plan-start"]').value = dateRange[0] || '';
-                        panelForm.querySelector('input[name="plan-end"]').value = dateRange[1] || '';
-                        panelForm.querySelector('input[name="bigo"]').value = rowTds[7]?.textContent.trim() || '';
-
-                        // 수정 대상 row 저장
-                        editingRow = row;
-                    };
-                }
-            });
-
-            const panelDownCloseBtn = panelDown.querySelector('.close-btn');
-            if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
-            panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
-
-            // 상세 삭제
-            const deleteBtn = panelDown.querySelector('.delete');
-            if (deleteBtn) {
-                deleteBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const cpID = panelDown.querySelector('#detail-delete-id').value;
-                    if (!cpID) return;
-                    if (!confirm('정말 이 항목을 삭제하시겠습니까?')) return;
-
-                    const form = document.createElement('form');
-                    form.method = 'post';
-                    form.action = 'proplan';
-
-                    const actionInput = document.createElement('input');
-                    actionInput.type = 'hidden';
-                    actionInput.name = 'action';
-                    actionInput.value = 'delete';
-                    form.appendChild(actionInput);
-
-                    const idInput = document.createElement('input');
-                    idInput.type = 'hidden';
-                    idInput.name = 'cpID';
-                    idInput.value = cpID;
-                    form.appendChild(idInput);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                });
-            }
-        }
     };
-
 
     // ===============================
     // 초기화
     // ===============================
-    // initPanel();
-    // initSelectAll();
     initTableDelete();
-
     if (page === 'wo') initWorkOrder();
     if (page === 'pro-plan') initProduction();
 });

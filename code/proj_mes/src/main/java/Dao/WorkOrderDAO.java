@@ -166,6 +166,76 @@ public class WorkOrderDAO {
 		
 	}
 	
+	// 조회 : 상세에서 bom 정보 확인용
+	public List<WorkOrderDTO> selectBOM(WorkOrderDTO dto) {
+		List<WorkOrderDTO> list = new ArrayList<WorkOrderDTO>();
+		
+		try {
+			Connection conn = getConn();
+			
+			String query = "select bom_id, item_code_2, require_amount"
+					+ "		from bom"
+					+ "		where item_code_2 = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setString(1, dto.getItem_code());
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+		           WorkOrderDTO tempDto = new WorkOrderDTO();
+		            tempDto.setBom_id(rs.getString("bom_id"));       // DTO에 bom_id 추가 필요
+		            tempDto.setItem_code(rs.getString("item_code"));
+		            tempDto.setBom_reqAm(rs.getInt("require_amount"));
+		            
+
+		            list.add(tempDto);
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	// 조회 : 상세에서 공정 정보 조회용
+	public List<WorkOrderDTO> selectProc(WorkOrderDTO dto) {
+		List<WorkOrderDTO> list = new ArrayList<WorkOrderDTO>();
+		
+		try {
+			Connection conn = getConn();
+			
+			String query = "select proc_id, proc_name"
+					+ "		from process"
+					+ "		where item_code = ?";
+			
+			PreparedStatement ps = conn.prepareStatement(query);
+			
+			ps.setString(1, dto.getItem_code());
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+		           WorkOrderDTO tempDto = new WorkOrderDTO();
+		            tempDto.setProc_id(rs.getString("proc_id"));       // DTO에 bom_id 추가 필요
+		            tempDto.setProc_name(rs.getString("proc_name"));
+		            tempDto.setItem_code(rs.getString("item_code"));
+
+		            list.add(tempDto);
+			}
+			rs.close();
+			ps.close();
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}	
 	
 	// 등록
 	//	- 입력되는 값
@@ -181,9 +251,9 @@ public class WorkOrderDAO {
 			// TODO SQL 준비 : 지금 거래처 날리면서 여기도 수정해야함... 아마 됨?
 			String query = "INSERT INTO WORK_ORDER"
 					+ "     (wo_num, wo_date, wo_duedate, wo_pq,"
-					+ "		worker_id, item_code)"
+					+ "		worker_id, item_code, bom_id, proc_id)"
 					+ "	    VALUES"
-					+ "     (?, ?, ?, ?, ?, ?)";
+					+ "     (?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(query);
 
 			ps.setString(1, dto.getWoNum());
@@ -192,6 +262,19 @@ public class WorkOrderDAO {
 			ps.setInt(4, dto.getWoPQ());
 			ps.setString(5, dto.getWorkerID());
 			ps.setString(6, dto.getItem_code());
+			// bom_id
+			if (dto.getBom_id() == null || dto.getBom_id().isEmpty()) {
+			    ps.setString(7, "0");
+			} else {
+			    ps.setString(7, dto.getBom_id());
+			}
+
+			// proc_id
+			if (dto.getProc_id() == null || dto.getProc_id().isEmpty()) {
+			    ps.setString(8, "0");
+			} else {
+			    ps.setString(8, dto.getProc_id());
+			}
 			
 			// SQL 실행
 			result = ps.executeUpdate();

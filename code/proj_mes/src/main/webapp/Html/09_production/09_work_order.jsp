@@ -76,7 +76,7 @@
                                     <td>${wo.woDate}</td>
                                     <td>${wo.workerID}</td>
                                     <td>${wo.woDuedate}</td>
-                                    <td>${wo.item_name}</td>
+                                    <td>${wo.item_code}</td>
                                     <td>${wo.woPQ}</td>
                                     <td>${wo.woAQ}</td>
                                 </tr>
@@ -97,10 +97,9 @@
             <div class="slide-title">작업 지시서 등록</div>
             <form method = "post" action = "workorder" id="form-add" class="wrap-table">
                 <input type="hidden" name="action" value="add">
-                <div class="form-group">
-                    <label>작업지시NO.</label>
-                    <input type="number" name="wo_num" min="1" max="5" placeholder="작업지시 번호 입력">
-                </div>
+                <input type="hidden" name="bom_id" id="hidden-bom-id">
+                <input type="hidden" name="proc_id" id="hidden-proc-id">
+                <input type="hidden" name="wo_num_hidden">
                 <div class="form-group">
                     <label>지시일</label>
                     <input type="date" name="wo_date">
@@ -131,7 +130,9 @@
                                 	<c:forEach var="item" items="${itemAll}">
 	                                    <tr>
 	                                        <td>
-	                                        	<input type="radio" name="item_code" value="${item.item_code}">
+	                                        	<input type="radio" name="item_code"
+                                                value="${item.item_code}" data-bom-id="${item.bom_id}" 
+                                                data-proc-id="${item.proc_id}">
 	                                        </td>
 	                                        <td>${item.item_code}</td>
 	                                        <td>${item.item_name}</td>
@@ -163,7 +164,6 @@
 	                            <tr>
 	                                <th style="width: 30%">BOM ID</th>
 	                                <th>사용 용도</th>
-	                                <th style="width: 15%;">단위</th>
 	                                <th style="width: 15%;">소요량</th>
 	                            </tr>
 	                        </thead>
@@ -171,7 +171,6 @@
 	                            <tr>
 	                                <td>#ID</td>
 	                                <td>#용도</td>
-	                                <td>#단위</td>
 	                                <td>#소요량</td>
 	                            </tr>
 	                        </tbody>
@@ -183,14 +182,12 @@
 	                            <tr>
 	                                <th style="width: 30%">공정 ID</th>
 	                                <th>공정명</th>
-	                                <th style="width: 15%;">단위</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>
 	                            <tr>
 	                                <td>#ID</td>
 	                                <td>#용도</td>
-	                                <td>#단위</td>
 	                            </tr>
 	                        </tbody>
 	                    </table>
