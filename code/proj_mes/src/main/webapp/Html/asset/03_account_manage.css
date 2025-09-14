@@ -9,6 +9,8 @@
     --red-hover:#dc2626;    /* 빨간버튼 호버 */
     --green:#22c55e;        /* 초록버튼 (등록, 추가)*/
     --green-hover:#16a34a;  /* 초록버튼 호버 */
+    --yellow: #f59e0b;      /* 노란버튼(수정)*/
+    --yellow-hover: #d97706;/* 노란버튼 호버*/ 
     --badbtn: #9ca3af;      /* 중요하지 않은 버튼? */
     --btnwidth: 80px;         /* 버튼 width */  
     --btnheight: 40px;        /* 버튼 height */  
@@ -18,103 +20,134 @@
     --shadow: 0 20px 40px rgba(0,0,0,0.06), 0 2px 10px rgba(0,0,0,0.04);    /* 큰 박스 그림자*/
 }
 
-.box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px 20px;
-    align-items: flex-start;
-    margin: 10px 0;
-    justify-content: flex-end;
-}
+	.box {
+	    display: flex;
+	    flex-wrap: wrap;
+	    gap: 14px 20px;
+	    align-items: flex-start;
+	    margin: 10px 0;
+	    justify-content: flex-end;
+	}
+	
+	/* 메인 몸통 부분 */
+	.wrap {
+	    border-radius: var(--radius);
+	    background-color: #ffffff;
+	    width: 100%;
+	    margin: 10px auto;
+	    box-shadow: var(--shadow);
+	    padding: 15px 24px;
+	    margin-bottom: 24px;
+	
+	}
+	
+	.wrap_list {
+	    border-radius: 5px;
+	    background-color: #ffffff;
+	    width: 100%;
+	    margin: 10px auto;
+	    box-shadow: var(--shadow);
+	    padding: 24px;
+	
+	}
+	
+	.titleBox {
+	  box-sizing: content-box;
+	  width: 90%;
+	  margin: 0 auto;
+	  padding: 24px;
+	}
+	.titleBox > span:first-child {
+	  font-size: 30px;
+	  font-weight: bold;
+	}
 
-/* 메인 몸통 부분 */
-.wrap {
-    border-radius: var(--radius);
-    background-color: #ffffff;
-    width: 100%;
-    margin: 10px auto;
-    box-shadow: var(--shadow);
-    padding: 24px;
-    margin-bottom: 24px;
+	#searchInput {
+	    width: 100%;
+	    height: 40px;
+	    padding: 8px 10px;
+	    border: 1px solid var(--border);
+	    border-radius: var(--inputradius);
+	    background: #fff;
+	    outline: 0;
+	}
+	
+	.confirm_btn,
+	.filter_btn {
+	    height: var(--btnheight);
+	    width: var(--btnwidth);
+	    padding: 0 16px;
+	    border-radius: var(--btnradius);
+	    border: 1px solid var(--blue);
+	    background-color: var(--blue);
+	    color: #fff;
+	    font-weight: 700;
+	    cursor: pointer;
+	}
+	
+	.btnEdit {
+	    height: var(--btnheight);
+	    width: var(--btnwidth);
+	    padding: 0 16px;
+	    border-radius: var(--btnradius);
+	    border: 1px solid var(--yellow);
+	    background-color: var(--yellow);
+	    color: #fff;
+	    font-weight: 700;
+	    cursor: pointer;
+	}
+	.delete_btn {
+	    height: var(--btnheight);
+	    width: var(--btnwidth);
+	    padding: 0 16px;
+	    border-radius: var(--btnradius);
+	    border: 1px solid var(--red);
+	    background-color: var(--red);
+	    color: #fff;
+	    font-weight: 700;
+	    cursor: pointer;
+	}
+	.add_btn {
+	    height: var(--btnheight);
+	    width: var(--btnwidth);
+	    padding: 0 16px;
+	    border-radius: var(--btnradius);
+	    border: 1px solid var(--green);
+	    background-color: var(--green);
+	    color: #fff;
+	    font-weight: 700;
+	    cursor: pointer;
+	}
 
-}
-
-.wrap_list {
-    border-radius: 5px;
-    background-color: #ffffff;
-    width: 100%;
-    margin: 10px auto;
-    box-shadow: var(--shadow);
-    padding: 24px;
-
-}
-
-.titleBox {
-  box-sizing: content-box;
-  width: 90%;
-  margin: 0 auto;
-  padding: 24px;
-}
-.titleBox > span:first-child {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-#searchInput {
-    width: 100%;
-    height: 40px;
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--inputradius);
-    background: #fff;
-    outline: 0;
-}
-
-.filter_btn {
-    height: var(--btnheight);
-    width: var(--btnwidth);
-    padding: 0 16px;
-    border-radius: var(--btnradius);
-    border: 1px solid var(--blue);
-    background-color: var(--blue);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.btnEdit {
-    height: var(--btnheight);
-    width: var(--btnwidth);
-    padding: 0 16px;
-    border-radius: var(--btnradius);
-    border: 1px solid var(--yellow);
-    background-color: var(--yellow);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-}
-.delete_btn {
-    height: var(--btnheight);
-    width: var(--btnwidth);
-    padding: 0 16px;
-    border-radius: var(--btnradius);
-    border: 1px solid var(--red);
-    background-color: var(--red);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-}
-.add_btn {
-    height: var(--btnheight);
-    width: var(--btnwidth);
-    padding: 0 16px;
-    border-radius: var(--btnradius);
-    border: 1px solid var(--green);
-    background-color: var(--green);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-}
+	.back_btn {
+	    height: var(--btnheight);
+	    width: var(--btnwidth);
+	    padding: 0 16px;
+	    border-radius: var(--btnradius);
+	    border: 1px solid var(--badbtn);
+	    background-color: var(--badbtn);
+	    color: #fff;
+	    font-weight: 700;
+	    cursor: pointer;
+	}
+	.m_input {
+	    width: 100%;
+	    height: 40px;
+	    padding: 8px 10px;
+	    border: 1px solid #9aa3af;
+	    border-radius: var(--inputradius);
+	    background: #fff;
+	    outline: 0;
+	}
+	#editRole {
+		width: 60%;
+	    height: 40px;
+	    padding: 8px 10px;
+	    border: 1px solid #9aa3af;
+	    border-radius: var(--inputradius);
+	    background: #fff;
+	    outline: 0;
+	}
 
 
 /* 상단 탭 영역 */
@@ -261,38 +294,116 @@
   background: #fcfcfc;
 } 
 
-.modal_bg {
+.modal {
+    border: 1px solid #2f2f2f;
+    border-radius: var(--radius);
+    background: #fff;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 500px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
 
-display: none;
-width: 100%;
-height: 100%;
-position: fixed; 
-top: 0;
-left: 0;
-right: 0;
-background: rgba(0, 0, 0, 0.6);
-z-index: 999; 
+.bottom {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  text-align: center;
 
 }
+
+.bottom button {
+    width: 90px;
+    height: 45px;
+}
+
+.modal_bg {
+
+	display: none;
+	width: 100%;
+	height: 100%;
+	position: fixed; 
+	top: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 999; 
+
+}
+
+#deleteModalText {
+	text-align: center;
+	font-size: 25px;
+}
+
 
 .modal_wrap {
 
-display: none;
-position: absolute; 
-top: 50%;
-left: 50%;
-transform:translate(-50%,-50%);
-width: 400px;
-height: 400px;
-background: #fff;
-z-index: 1000; 
+    border-radius: var(--radius);
+    background: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 500px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 12px;
+    z-index: 1000;
 
+}
+.m_wrap {
+    border-radius: var(--radius);
+    background-color: #ffffff;
+    width: 80%;
+    margin: 10px auto;
+    box-shadow: var(--shadow);
+    padding: 10px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.m_delwrap {
+    border-radius: var(--radius);
+    background-color: #ffffff;
+    width: 80%;
+    margin: 10px auto;
+    box-shadow: var(--shadow);
+    padding: 40px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+.m_title {
+	width:80%;
+ 	font-size: 30px;
+ 	font-weight: bold;
+ 	margin: 0 auto;
+}
+.m_row {
+	margin: 20px 0;
+	display: flex;
+	
+}
+.label {
+	width: 20%;
 }
 
 
-
 /* 팝업 버튼 */
-.btn_box .btn_open {
+/* .btn_box .btn_open {
 
 display: block; 
 width: 150px;
@@ -303,7 +414,7 @@ background: #333;
 text-align: center; 
 box-sizing: border-box; 
 
-} 
+}  */
 	
 
 

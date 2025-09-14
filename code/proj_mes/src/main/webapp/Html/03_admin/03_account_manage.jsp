@@ -105,37 +105,59 @@
       <!-- 삭제 모달 -->
       <div class="modal_bg" id="deleteModalBg" style="display:none;"></div>
       <div class="modal_wrap" id="deleteModal" style="display:none;">
-        선택한 계정을 삭제할까요?
-        <div id="deleteModalText"></div>
-        <div >
-          <button class="modal_close" id="btnConfirmDelete" type="button">예, 삭제</button>
-          <button class="modal_close" id="btnCancelDelete" type="button">아니요</button>
+      	<div class="m_delwrap">
+        	<div id="deleteModalText"></div>
+	    	<div id="deleteModalText" class="ment">선택한 계정을 삭제할까요?</div>
+      	</div>
+        <div class="bottom">
+          <button class="modal_close delete_btn" id="btnConfirmDelete" type="button">예</button>
+          <button class="modal_close confirm_btn" id="btnCancelDelete" type="button">아니요</button>
         </div>
       </div>
 
       <!-- 수정 모달 -->
       <div class="modal_bg" id="editModalBg" style="display:none;"></div>
       <div class="modal_wrap" id="editModal" style="display:none;">
-        <div >계정 수정</div>
-        <div>사번: <span id="editEmpNo" ></span></div>
-        <div>이름: <span id="editName"></span></div>
+      	<div class="m_title">
+	        <div>계정 수정</div>
+      	</div>
+      	<div class="m_wrap">
+	        <div class="m_row">
+	        	<div class="label">
+		        	사번 : 
+	        	</div> 
+	        	<div id="editEmpNo" ></div>
+        	</div>
+	        <div class="m_row">
+				<div class="label">
+		        	이름 : 
+	        	</div> 
+	        	<div id="editName"></div>
+        	</div>
+	
+	        <div class="m_row">
+		        <div class="label">
+		          부서ID : 
+		        </div>
+		        <div>
+		          <input id="editDept" type="text" class="m_input" placeholder="예: D001" >
+		        </div>
+			</div>
+	        <div class="m_row">
+		        <div class="label">
+		          권한 : 
+		        </div>
+		          <select id="editRole">
+		            <option value="USER">USER</option>
+		            <option value="MANAGER">MANAGER</option>
+		            <option value="ADMIN">ADMIN</option>
+		          </select>
+	        </div>
+      	</div>
 
-        <label style="display:block;">
-          부서ID
-          <input id="editDept" type="text" placeholder="예: D001" >
-        </label>
-        <label style="display:block;">
-          권한
-          <select id="editRole" >
-            <option value="USER">USER</option>
-            <option value="MANAGER">MANAGER</option>
-            <option value="ADMIN">ADMIN</option>
-          </select>
-        </label>
-
-        <div style="display:flex; gap:8px; justify-content:flex-end;">
-          <button class="modal_close" id="btnEditSave" type="button">저장</button>
-          <button class="modal_close" id="btnEditCancel" type="button">취소</button>
+        <div class="bottom">
+          <button class="modal_close confirm_btn" id="btnEditSave" type="button">저장</button>
+          <button class="modal_close back_btn" id="btnEditCancel" type="button">취소</button>
         </div>
       </div>
 
@@ -161,7 +183,7 @@
       const ids = getCheckedIds();
       if (!ids.length){ alert('삭제할 계정을 선택하세요.'); return; }
       const list = ids.slice(0,10).join(', ') + (ids.length>10 ? ` 외 ${ids.length-10}건` : ``);
-      $('#deleteModalText').html(`다음 사번이 삭제됩니다: ${list}.<br>이 작업은 되돌릴 수 없습니다.`);
+      $('#deleteModalText').html(`다음 사번이 삭제됩니다<br><${list}><br>이 작업은 되돌릴 수 없습니다.`);
       $('#deleteModalBg, #deleteModal').show();
     });
     $('#btnCancelDelete, #deleteModalBg').on('click', () => $('#deleteModalBg, #deleteModal').hide());
