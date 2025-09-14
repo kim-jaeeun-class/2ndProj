@@ -25,7 +25,7 @@
   <div class="wrap">
       <!-- 상단 툴바 -->
       <div class="toolbar" role="region" aria-label="검색 및 등록">
-      	<div>
+      	<div class="box">
 	        <label for="std-category">분류</label>
 	        <div class="select">
 	          <select id="std-category">

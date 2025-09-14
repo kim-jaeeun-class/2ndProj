@@ -57,11 +57,11 @@
     font-size: 30px;
     font-weight: bold;
 }
-/* .box {
+.box {
     display: flex;
     align-items: center;
     gap: 10px;
-} */
+}
 /* 조회 버튼 */
 .filter_btn {
     height: var(--btnheight);
@@ -78,11 +78,11 @@
 .toolbar label{
   margin-right:10px;
 }
-.select{
+/* .select{
   position:relative;
   display:inline-flex;
   align-items:center;
-}
+} */
 .toolbar select{
     min-width: 140px;
     height: 36px;
@@ -91,7 +91,7 @@
     border-radius: 6px;
     background: #fff;
 }
-.select::after{
+/* .select::after{
   content:"";
   position:absolute;
   right:10px; top:50%;
@@ -100,7 +100,7 @@
   border-right:6px solid transparent;
   border-top:7px solid #333;
   pointer-events:none;
-}
+} */
 .spacer{ flex:1 1 auto; }
 
 /* .btn{
