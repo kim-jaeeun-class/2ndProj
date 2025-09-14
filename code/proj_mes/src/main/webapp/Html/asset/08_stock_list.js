@@ -1,3 +1,4 @@
+// 08_stock_list.js (교체본)
 window.addEventListener('load', init);
 
 function init() {
@@ -11,14 +12,14 @@ function bindstock_list() {
   if (!table || !tbody) return;
 
   // UI refs
-  const filterForm = document.querySelector('.date_filter'); // 조회 폼
+  const filterForm = document.getElementById('filterForm'); // ✅ 폼을 정확히 선택
   const startInput = document.getElementById('start_date');
   const endInput   = document.getElementById('end_date');
   const checkAll   = document.getElementById('check_all');
 
-  const deleteBtn   = document.getElementById('deleteBtn');
-  const deleteForm  = document.getElementById('deleteForm');
-  const deleteIds   = document.getElementById('delete_ids');
+  const deleteBtn  = document.getElementById('deleteBtn');
+  const deleteForm = document.getElementById('deleteForm');
+  const deleteIds  = document.getElementById('delete_ids');
 
   // ===== 유틸 =====
   const thCount = table.querySelectorAll('thead th').length;
@@ -63,7 +64,7 @@ function bindstock_list() {
     }
   }
 
-  // ===== 날짜 min/max 제약 (동일 로직) =====
+  // ===== 날짜 min/max 제약 =====
   function applyDateConstraints() {
     if (startInput && endInput) {
       // 시작일 → 종료일 min
@@ -79,8 +80,9 @@ function bindstock_list() {
     }
   }
 
-  // ===== 기간 필터 (동일 로직) =====
+  // ===== 기간 필터(화면에서만 가려보기) =====
   function applyFilter(evt) {
+    // 참고: 이 함수는 '로컬 미리보기용'입니다. submit에 붙이지 않습니다.
     if (evt) evt.preventDefault();
     applyDateConstraints();
 
@@ -106,7 +108,7 @@ function bindstock_list() {
     showEmptyRowIfNeeded();
   }
 
-  // ===== 전체선택(보이는 행만) (동일 로직) =====
+  // ===== 전체선택(보이는 행만) =====
   if (checkAll) {
     checkAll.addEventListener('change', () => {
       const checked = checkAll.checked;
@@ -117,7 +119,7 @@ function bindstock_list() {
     });
   }
 
-  // 개별 체크 → 헤더 체크 동기화 (동일 로직)
+  // 개별 체크 → 헤더 체크 동기화
   tbody.addEventListener('change', (e) => {
     const t = e.target;
     if (!(t instanceof HTMLInputElement) || t.type !== 'checkbox' || !t.classList.contains('row_check')) return;
@@ -132,7 +134,7 @@ function bindstock_list() {
     checkAll.indeterminate = false;
   });
 
-  // ===== 삭제(서버 전송: CSV) (동일 로직) =====
+  // ===== 삭제(서버 전송: CSV) =====
   if (deleteBtn && deleteForm && deleteIds) {
     deleteBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -152,15 +154,21 @@ function bindstock_list() {
   // ===== 바인딩 =====
   if (startInput) startInput.addEventListener('change', applyDateConstraints);
   if (endInput)   endInput.addEventListener('change', applyDateConstraints);
-  if (filterForm) filterForm.addEventListener('submit', applyFilter);
 
-  // 초기값 존재 시 즉시 필터
+  // ✅ 조회 버튼(폼 제출) 때는 서버로 보냄 — preventDefault 안 함
+  if (filterForm) {
+    filterForm.addEventListener('submit', () => {
+      applyDateConstraints(); // 제출 전에 값 정리만
+      // 여기서 기본 동작을 막지 않습니다. (서버로 GET 제출)
+    });
+  }
+
+  // 초기값 존재 시 화면에서만 날짜 미리 필터
   applyDateConstraints();
   if ((startInput && startInput.value) || (endInput && endInput.value)) {
-    applyFilter();
+    applyFilter(); // 이벤트 없이 호출 → 로컬 미리보기
   }
 }
-
 
 function bindStockFilter(){
   const form = document.getElementById('filterForm');
@@ -170,28 +178,25 @@ function bindStockFilter(){
   const mid   = form.querySelector('select[name="mid"]');
   const small = form.querySelector('select[name="small"]');
 
-  // 대분류 변경 → 중/소 초기화 후 서브밋(컨트롤러가 midList 채워줌)
-  if(big){
-    big.addEventListener('change', ()=>{
-      if(mid)   mid.value = '';
-      if(small) small.value = '';
-      form.submit();
+  // 대분류 변경 → 중/소 초기화 (자동 제출 없음)
+  if (big) {
+    big.addEventListener('change', () => {
+      if (mid)   mid.value = '';
+      if (small) small.value = '';
     });
   }
 
-  // 중분류 변경 → 소분류 초기화 후 서브밋(컨트롤러가 smallList 채워줌)
-  if(mid){
-    mid.addEventListener('change', ()=>{
-      if(small) small.value = '';
-      form.submit();
+  // 중분류 변경 → 소분류 초기화 (자동 제출 없음)
+  if (mid) {
+    mid.addEventListener('change', () => {
+      if (small) small.value = '';
     });
   }
 
-  // 소분류는 서브밋 없이 선택만 두고 싶으면 주석 처리
-  if(small){
-    small.addEventListener('change', ()=>{
-      form.submit(); // 필요 없으면 지워도 됨
+  // 소분류 변경 — 자동 제출 없음
+  if (small) {
+    small.addEventListener('change', () => {
+      // no-op
     });
   }
 }
-
