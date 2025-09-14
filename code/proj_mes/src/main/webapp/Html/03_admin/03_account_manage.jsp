@@ -183,7 +183,11 @@
       const ids = getCheckedIds();
       if (!ids.length){ alert('삭제할 계정을 선택하세요.'); return; }
       const list = ids.slice(0,10).join(', ') + (ids.length>10 ? ` 외 ${ids.length-10}건` : ``);
-      $('#deleteModalText').html(`다음 사번이 삭제됩니다<br><${list}><br>이 작업은 되돌릴 수 없습니다.`);
+//       $('#deleteModalText').html(`다음 사번이 삭제됩니다<br><${list}><br>이 작업은 되돌릴 수 없습니다.`);
+//       $('#deleteModalText').html(`다음 사번이 삭제됩니다<br>&lt;${list}&gt;<br>이 작업은 되돌릴 수 없습니다.`);
+		 $('#deleteModalText').eq(0).html('다음 사번이 삭제됩니다<br><span class="font-mono"></span><br>이 작업은 되돌릴 수 없습니다.').find('span').text('<' + list + '>');
+
+
       $('#deleteModalBg, #deleteModal').show();
     });
     $('#btnCancelDelete, #deleteModalBg').on('click', () => $('#deleteModalBg, #deleteModal').hide());
