@@ -34,22 +34,24 @@
                 <div class="side-menu">작업 지시서</div>
             </a>
         </div>
+
         <div class="wrap">
-            <div class="wrap-title">
-                작업 지시서
-            </div>
+            <div class="wrap-title">작업 지시서</div>
+
             <div class="wrap-select">
+                <!-- 날짜 필터: value 접근은 param['wo-filter-date'] 로 안전하게 -->
                 <form class="date-filter" method="get" action="workorder">
                     <input type="hidden" name="action" value="search">
                     <div class="select-con">
                         <div class="select-title" name="wo-filter-title">지시일</div>
-                        <input type="date" name="wo-filter-date" value="${param.wo-filter-date}">
+                        <input type="date" name="wo-filter-date" value="${param['wo-filter-date']}">
                     </div>
                     <div class="filter-submit">
                         <button type="submit" class="button">조회</button>
                     </div>
                 </form>
             </div>
+
             <!-- 테이블 - 메인 -->
             <form class="wrap-table" method="post" action="workorder">
                 <input type="hidden" name="action" value="delete">
@@ -66,14 +68,12 @@
                             <th>생산수량</th>
                         </thead>
                         <tbody>
-                            <!-- DTO에 있는 거 wo라고 이름 지어서 꺼내는 것!!! -->
-                            <!-- 근데 지금 client 테이블 조인을... 내일 얘기하자 -->
                             <c:forEach var="wo" items="${list}">
-                                <tr class = "data">
-                                    <!-- 구분용으로 date, num 다 넣음 -->
+                                <tr class="data">
                                     <td><input type="checkbox" value="${wo.woNum}" name="chk"></td>
+                                    <!-- 서버 주도: 클릭하면 servlet으로 요청(wo_num 전달) -> doGet에서 detailWO/detailBOM/detailPROC 세팅 -->
                                     <td>
-                                        <a href="workorder?action=view&wo_num=${wo.woNum}">${wo.woNum}</a>
+                                        <a href="workorder?wo_num=${wo.woNum}&amp;action=view" class="wo-link">${wo.woNum}</a>
                                     </td>
                                     <td>${wo.woDate}</td>
                                     <td>${wo.workerID}</td>
@@ -86,137 +86,166 @@
                         </tbody>
                     </table>
                 </div>
-            <div class="wrap-tableBtn">
-                <input type="submit" name="main-sel-delete" class="button delete-btn" value="삭제">
-                <input type="button" name="main-apply" class="button open-btn" value="등록">
-            </div>
-        </form>
-    </div>
 
-        <!-- TODO : 사이드 패널 - 여기부터 jsp 변환 작업 진행해야 함 -->
+                <div class="wrap-tableBtn">
+                    <input type="submit" name="main-sel-delete" class="button delete-btn" value="삭제">
+                    <input type="button" name="main-apply" class="button open-btn" value="등록">
+                </div>
+            </form>
+        </div>
+
+        <!-- 등록 / 수정 패널 (같은 패널을 재사용) -->
         <div class="panel" id="panel-add">
             <button class="close-btn">✕</button>
             <div class="slide-title">작업 지시서 등록</div>
-            <form method = "post" action = "workorder" id="form-add" class="wrap-table">
-                <input type="hidden" name="action" id="action-input" value="add">
-                <input type="hidden" name="bom_id" id="hidden-bom-id">
-                <input type="hidden" name="proc_id" id="hidden-proc-id">
-                <input type="hidden" name="wo_num_hidden" id="wo-num-hidden">
+
+            <form method="post" action="workorder" id="form-add" class="wrap-table">
+                <!-- action 히든을 view/edit 상태에 따라 동적으로 출력 -->
+                <c:choose>
+                    <c:when test="${param.action == 'edit' || not empty editMode}">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="wo_num" value="${detailWO.woNum}">
+                    </c:when>
+                    <c:otherwise>
+                        <input type="hidden" name="action" value="add">
+                    </c:otherwise>
+                </c:choose>
+
+                <input type="hidden" name="bom_id" id="hidden-bom-id" value="${detailWO.bom_id}">
+                <input type="hidden" name="proc_id" id="hidden-proc-id" value="${detailWO.proc_id}">
+
                 <div class="form-group">
                     <label>지시일</label>
-                    <input type="date" name="wo_date" id="wo-date-input">
+                    <input type="date" name="wo_date" id="wo-date-input" value="${detailWO.woDate}">
                 </div>
                 <div class="form-group">
                     <label>납기일</label>
-                    <input type="date" name="wo_duedate">
+                    <input type="date" name="wo_duedate" value="${detailWO.woDuedate}">
                 </div>
                 <div class="form-group">
                     <label>담당자</label>
-                    <input type="text" name = "worker_id" placeholder="담당자명 입력">
+                    <input type="text" name="worker_id" placeholder="담당자명 입력" value="${detailWO.workerID}">
                 </div>
                 <div class="form-group">
                     <label>지시 수량</label>
-                    <input type="number" name="wo_pq" min="1" placeholder="지시 수량 입력">
+                    <input type="number" name="wo_pq" min="1" placeholder="지시 수량 입력" value="${detailWO.woPQ}">
                 </div>
-                <!-- 품목 선택 영역 -->
-                <div class ="form-group">
-                    <div class = "wrap-table panel-table">
-                        <div class = "panel-table-wrap">
+
+                <!-- 품목 선택 영역 (radio). edit 상황이면 해당 라디오를 checked 처리 -->
+                <div class="form-group">
+                    <div class="wrap-table panel-table">
+                        <div class="panel-table-wrap">
                             <table>
                                 <thead>
-                                	<th>선택</th>
+                                    <th>선택</th>
                                     <th>품목코드</th>
                                     <th>품목명</th>
                                 </thead>
                                 <tbody>
-                                	<c:forEach var="item" items="${itemAll}">
-	                                    <tr>
-	                                        <td>
-	                                        	<input type="radio" name="item_code"
-                                                value="${item.item_code}" data-bom-id="${item.bom_id}" 
-                                                data-proc-id="${item.proc_id}">
-	                                        </td>
-	                                        <td>${item.item_code}</td>
-	                                        <td>${item.item_name}</td>
-	                                    </tr>
+                                    <c:forEach var="item" items="${itemAll}">
+                                        <tr>
+                                            <td>
+                                              <input type="radio" name="item_code"
+                                                     value="${item.item_code}"
+                                                     data-bom-id="${item.bom_id}"
+                                                     data-proc-id="${item.proc_id}"
+                                                     <c:if test="${not empty detailWO and detailWO.item_code eq item.item_code}">checked</c:if>>
+                                            </td>
+                                            <td>${item.item_code}</td>
+                                            <td>${item.item_name}</td>
+                                        </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
                 <div class="form-actions">
                     <button type="submit" class="button panel-save">저장</button>
                 </div>
             </form>
         </div>
-        <!-- 작업 지시서 상세로 가는중~~~ -->
+
+        <!-- 상세 패널 (서버에서 detailWO/detailBOM/detailPROC 세팅하면 이 영역이 렌더되고, 아래 스크립트가 열어줌) -->
         <div class="panel" id="panel-down">
             <button class="close-btn">✕</button>
             <div class="slide-title">작업 지시서 상세</div>
-                <form class="wrap-table panel-table" method = "get" action="workorder">
-                <input type="hidden" name="action" name = "action" value="">
-                    <table class = "modal-table">
+
+            <form class="wrap-table panel-table" method="get" action="workorder">
+                <input type="hidden" name="action" value="">
+                <input type="hidden" id="detail-wo-num" value="${detailWO.woNum}">
+                <div class="wrap-tableBtn">
+                    <table class="item-table bom">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">BOM ID</th>
+                                <th>사용 용도</th>
+                                <th style="width: 15%;">소요량</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- detailBOM은 List<WorkOrderDTO>로 전달되어야 함 -->
+                            <c:if test="${not empty detailBOM}">
+                                <c:forEach var="b" items="${detailBOM}">
+                                    <tr>
+                                        <td>${b.bom_id}</td>
+                                        <td>${b.item_code}</td>
+                                        <td>${b.bom_reqAm}</td>
+                                    </tr>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty detailBOM}">
+                                <tr><td colspan="3">BOM 정보 없음</td></tr>
+                            </c:if>
+                        </tbody>
                     </table>
-                    <!-- 여기에 있는 item-table은 클릭하면 자동으로 id에 맞는 조건만 나오도록 필터링 된
-                        BOM, 공정 목록(내지는 상세) 페이지로 이동 -->
-                    <div class="wrap-tableBtn">
-                        <table class="item-table bom">
-	                        <thead>
-	                            <tr>
-	                                <th style="width: 30%">BOM ID</th>
-	                                <th>사용 용도</th>
-	                                <th style="width: 15%;">소요량</th>
-	                            </tr>
-	                        </thead>
-	                        <tbody>
-                                <c:if test="${not empty detailBOM}">
+                </div>
+
+                <div class="wrap-tableBtn">
+                    <table class="item-table proc">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">공정 ID</th>
+                                <th>공정명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:if test="${not empty detailPROC}">
+                                <c:forEach var="p" items="${detailPROC}">
                                     <tr>
-                                        <td>${detailBOM.bom_id}</td>
-                                        <td>${detailBOM.item_code}</td>
-                                        <td>${detailBOM.bom_reqAm}</td>
+                                        <td>${p.proc_id}</td>
+                                        <td>${p.proc_name}</td>
                                     </tr>
-                                </c:if>
-	                        </tbody>
-	                    </table>
+                                </c:forEach>
+                            </c:if>
+                            <c:if test="${empty detailPROC}">
+                                <tr><td colspan="2">공정 정보 없음</td></tr>
+                            </c:if>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="wrap-tableBtn">
+                    <!-- 서버 주도: 수정은 action=edit 으로 same servlet에 요청 (doGet에서 editMode 처리 필요) -->
+                    <a href="workorder?action=edit&amp;wo_num=${detailWO.woNum}" class="button edit-all-btn">수정</a>
+                    <input type="button" class="button" id="edit-aq-btn" value="생산수량 입력">
+                </div>
+
+                <div class="form-group">
+                    <label>생산 수량</label>
+                    <p class="production-quantity-display">${detailWO.woAQ}</p>
+                    <div class="edit-aq-area" style="display: none;">
+                        <input type="number" id="edit-aq-input" value="${detailWO.woAQ}">
+                        <button type="button" class="button complete-aq-btn">완료</button>
                     </div>
-                    <div class="wrap-tableBtn">
-	                    <table class="item-table proc">
-	                        <thead>
-	                            <tr>
-	                                <th style="width: 30%">공정 ID</th>
-	                                <th>공정명</th>
-	                            </tr>
-	                        </thead>
-	                        <tbody>
-                                <c:if test="${not empty detailPROC}">
-                                    <tr>
-                                        <td>${detailPROC.proc_id}</td>
-                                        <td>${detailPROC.proc_name}</td>
-                                    </tr>
-                                </c:if>
-	                        </tbody>
-	                    </table>
-                    </div>
-                    <div class="wrap-tableBtn">
-                    	<input type="button" class="button" value="생산수량 입력" id="edit-aq-btn">
-                        <input type="button" class="button edit-all-btn" value="수정" data-wo-num="${detailWO.woNum}">
-                    </div>
-                    <div class="form-group">
-                        <label>생산 수량</label>
-                        <p class="production-quantity-display">${detailWO.woAQ}</p>
-                        <div class="edit-aq-area" style="display: none;">
-                            <input type="number" id="edit-aq-input" value="${detailWO.woAQ}">
-                            <button type="button" class="button complete-aq-btn">완료</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
 
+        <!-- header/nav 템플릿 로드 (기존 로직 유지) -->
         <script>
-            //템플릿의 header/nav만 로드
-                (async function () {
+            (async function () {
                 try {
                     const url = '<%= ctx %>/Html/00_template/template.html';
                     const text = await (await fetch(url, { credentials: 'same-origin' })).text();
@@ -230,40 +259,29 @@
                 } catch (e) {
                     console.error('템플릿 로드 실패:', e);
                 }
-                })();
-
-                (function() {
-                    // 전체 선택
-                    const checkAll = document.getElementById('check_all');
-                    const body = document.querySelector('.tables_body');
-                    if (checkAll && body) {
-                    checkAll.addEventListener('change', () => {
-                        body.querySelectorAll('.row_check').forEach(cb => cb.checked = checkAll.checked);
-                    });
-                    }
-
-                    // 삭제
-                    const deleteBtn  = document.getElementById('deleteBtn');
-                    const deleteKeys = document.getElementById('delete_keys');
-                    const deleteForm = document.getElementById('deleteForm');
-
-                    if (deleteBtn && deleteKeys && deleteForm) {
-                    deleteBtn.addEventListener('click', () => {
-                        const keys = Array.from(document.querySelectorAll('.row_check:checked'))
-                        .map(cb => cb.value)
-                        .filter(Boolean);
-
-                        if (keys.length === 0) {
-                        alert('삭제할 항목을 선택하세요.');
-                        return;
-                        }
-                        deleteKeys.value = keys.join(',');
-                        deleteForm.submit();
-                    });
-                    }
-                    
-                })();
+            })();
         </script>
+
+        <!-- 서버에서 viewMode=true 이면 상세패널 열기 -->
+        <c:if test="${not empty viewMode || param.action == 'view'}">
+            <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                    var p = document.querySelector('#panel-down');
+                    if (p) p.classList.add('open');
+                });
+            </script>
+        </c:if>
+
+        <!-- 서버에서 editMode (또는 ?action=edit) 이면 등록/수정 패널 열기 -->
+        <c:if test="${not empty editMode || param.action == 'edit'}">
+            <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                    var p = document.querySelector('#panel-add');
+                    if (p) p.classList.add('open');
+                });
+            </script>
+        </c:if>
+
         <script src="<c:url value='/Html/asset/09_common.js'/>"></script>
     </body>
 </html>

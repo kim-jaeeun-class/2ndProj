@@ -24,43 +24,35 @@ public class WorkOrderCtrl extends HttpServlet {
         WorkOrderService service = new WorkOrderService();
         WorkOrderDTO dto = new WorkOrderDTO();
 
+        List<WorkOrderDTO> basicList;
         String action = request.getParameter("action");
-        List<WorkOrderDTO> basicList = null;
+        String dateStr = request.getParameter("wo-filter-date");
 
-        if ("search".equals(action)) {
-            String dateStr = request.getParameter("wo-filter-date");
-            if (dateStr != null && !dateStr.isEmpty()) {
-                dto.setWoDate(Date.valueOf(dateStr));
-                basicList = service.getFilteredOrders(dto);
-            }
-            else {
-                basicList = service.getAllOrders();
-            }
-        }
-        else {
+
+        // 전체 / 필터 조회
+        if ("search".equals(action) && dateStr != null && !dateStr.isEmpty()) {
+            basicList = service.getFilteredOrders(new WorkOrderDTO(){{
+                setWoDate(Date.valueOf(dateStr));
+            }});
+        } else {
             basicList = service.getAllOrders();
         }
 
         // 품목 목록
         List<WorkOrderDTO> itemList = service.getItemsWO(new WorkOrderDTO());
 
-        // 상세 조회 또는 수정폼 진입
+        // 단일 조회
         String reqWoNum = request.getParameter("wo_num");
         if (reqWoNum != null && !reqWoNum.isEmpty()) {
             WorkOrderDTO single = service.getWorkOrder(reqWoNum);
             if (single != null) {
-                WorkOrderDTO bomInfo = service.getBOMInfo(single.getItem_code());
-                WorkOrderDTO procInfo = service.getProcInfo(single.getItem_code());
+                List<WorkOrderDTO> bomList = service.getBOMList(single.getItem_code());
+                List<WorkOrderDTO> procList = service.getPROCList(single.getItem_code());
 
                 request.setAttribute("detailWO", single);
-                request.setAttribute("detailBOM", bomInfo);
-                request.setAttribute("detailPROC", procInfo);
-            }
-            if ("edit".equals(action)) {
-                request.setAttribute("editMode", "true");
-            }
-            else {
-                request.setAttribute("viewMode", "true");
+                request.setAttribute("detailBOM", bomList);
+                request.setAttribute("detailPROC", procList);
+                request.setAttribute("viewMode", true); // 상세 패널 열기
             }
         }
 
