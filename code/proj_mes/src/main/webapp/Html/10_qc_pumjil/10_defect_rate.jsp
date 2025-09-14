@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -17,7 +18,6 @@
             background-color: #f3f4f6;
         }
 
-        /* 차트 캔버스의 최대 높이 설정 */
         canvas {
             max-height: 200px;
         }
@@ -78,128 +78,100 @@
 
 	<div class="wrap">
         <div class="lookup">
-			<div class="lookup_left">
-				<select> <!-- 공정별 검색 -->
-					<option value="" disabled selected>공정별</option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-				</select>
-				<!-- 일자별 검색 -->
-				일자 <input type="date">
-				<select> <!-- 품명 검색 -->
-					<option value="" disabled selected>품명</option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-				</select>
-			</div>
-			<div>
-				<input type="text" placeholder="공정, 품명 검색...">
-				<input type="button" value="검색">
-			</div>
-        </div>
+		    <form method="get" action="${pageContext.request.contextPath}/defectRate">
+		        <!-- 품목 검색 -->
+		        품명:
+		        <select name="itemCode">
+		            <option value="">전체</option>
+		            <c:forEach var="item" items="${itemList}">
+		                <option value="${item.item_code}" 
+		                    <c:if test="${selectedItemCode == item.item_code}">selected</c:if>>
+		                    ${item.item_code} (${item.item_name})
+		                </option>
+		            </c:forEach>
+		        </select>
+		
+		        <!-- 공정 검색 -->
+		        공정별:
+			<select name="procId">
+			    <option value="">전체</option>
+			    <c:forEach var="proc" items="${processList}">
+			        <option value="${proc.proc_id}" 
+			            <c:if test="${selectedProcId == proc.proc_id}">selected</c:if>>
+			            ${proc.proc_name}
+			        </option>
+			    </c:forEach>
+			</select>
+		
+		        <!-- 일자 검색 -->
+		        일자:
+		        <input type="date" name="date" value="${selectedDate}">
+		
+		        <button type="submit">검색</button>
+		    </form>
+		</div>
 
+		<!-- 불량률 현황 테이블 -->
 		<div class="table-container">
-    		<table class="lot_tab">
-				<thead>
-					<tr>
-						<th>공정명</th>
-						<th>일자</th>
-						<th>품명</th>
-						<th>생산 수량</th>
-						<th>불량 수량</th>
-						<th>불량률</th>
-					</tr>		
-				</thead>
-				<tbody>
-					<tr>
-						<td>공정명1</td>
-						<td>일자1</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명2</td>
-						<td>일자2</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명3</td>
-						<td>일자3</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명4</td>
-						<td>일자4</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명5</td>
-						<td>일자5</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명6</td>
-						<td>일자6</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명7</td>
-						<td>일자7</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명8</td>
-						<td>일자8</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
-					<tr>
-						<td>공정명9</td>
-						<td>일자9</td>
-						<td>품명</td>
-						<td>생산 수량</td>
-						<td>불량 수량</td>
-						<td>불량률</td>
-					</tr>
+		    <table class="lot_tab">
+		        <thead>
+		            <tr>
+		                <th>공정명</th>
+		                <th>일자</th>
+		                <th>품목 ID</th>   <!-- ✅ "품명" → "품목 ID" -->
+		                <th>생산 수량</th>
+		                <th>불량 수량</th>
+		                <th>불량률</th>
+		            </tr>       
+		        </thead>
+		        <tbody>
+		            <c:set var="totalProduction" value="0" />
+		            <c:set var="totalDefect" value="0" />
+		
+		            <c:forEach var="dr" items="${defectRates}">
+		                <tr>
+		                    <td>${dr.procName}</td>
+		                    <td>${dr.inspectionDate}</td>
+		                    <td>${dr.itemCode}</td>   <!-- ✅ itemName → itemCode -->
+		                    <td>
+		                        ${dr.productionQty}
+		                        <c:set var="totalProduction" value="${totalProduction + dr.productionQty}" />
+		                    </td>
+		                    <td>
+		                        ${dr.defectQty}
+		                        <c:set var="totalDefect" value="${totalDefect + dr.defectQty}" />
+		                    </td>
+		                    <td>
+		                        <fmt:formatNumber value="${dr.defectRate}" type="number" maxFractionDigits="2" />%
+		                    </td>
+		                </tr>
+		            </c:forEach>
+
+				    <c:if test="${empty defectRates}">
+				        <tr>
+				            <td colspan="6" style="text-align:center;">검색 결과가 없습니다.</td>
+				        </tr>
+				    </c:if>
 				</tbody>
+
 				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>총 생산 수량</td>
-						<td>총 불량 수량</td>
-						<td>총 불량률</td>
-					</tr>
+				    <tr style="font-weight:bold; background:#f3f4f6;">
+				        <td colspan="3" style="text-align:right;">총 합계</td>
+				        <td>${totalProduction}</td>
+				        <td>${totalDefect}</td>
+				        <td>
+				            <c:choose>
+				                <c:when test="${totalProduction > 0}">
+				                    <fmt:formatNumber value="${(totalDefect * 100.0 / totalProduction)}" 
+				                                      type="number" maxFractionDigits="2" />%
+				                </c:when>
+				                <c:otherwise>0.00%</c:otherwise>
+				            </c:choose>
+				        </td>
+				    </tr>
 				</tfoot>
 			</table>
 		</div>
 	</div>
 </body>
-</html></html>
+</html>
