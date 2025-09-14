@@ -171,7 +171,7 @@ public class WorkOrderDAO {
 	//	- 입력되는 값
 	//		+ 지시일, 작업지시NO, 담당자, 납기일, 지시 수량, 첨부, 품목(품목 테이블과 join)
     // 		TODO + 품목 목록을 봐야 하니 품목 테이블 join도 필요할 듯. 그리고 js에서 지시 수량 입력 제한 추가해야 함.
-	public int insertWO(WorkOrderDTO workOrderDTO) {
+	public int insertWO(WorkOrderDTO dto) {
 		
 		int result = -1;
 		try {
@@ -183,16 +183,15 @@ public class WorkOrderDAO {
 					+ "     (wo_num, wo_date, wo_duedate, wo_pq,"
 					+ "		worker_id, item_code)"
 					+ "	    VALUES"
-					+ "     (?, ?, ?, ?, ?, ?, ?)";
+					+ "     (?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = conn.prepareStatement(query);
 
-			ps.setString(1, workOrderDTO.getWoNum());
-			ps.setDate(2, workOrderDTO.getWoDate());
-			ps.setDate(3, workOrderDTO.getWoDuedate());
-			ps.setInt(4, workOrderDTO.getWoPQ());
-			ps.setInt(5, workOrderDTO.getWoAQ());
-			ps.setString(6, workOrderDTO.getWorkerID());
-			ps.setString(7, workOrderDTO.getItem_code());
+			ps.setString(1, dto.getWoNum());
+			ps.setDate(2, dto.getWoDate());
+			ps.setDate(3, dto.getWoDuedate());
+			ps.setInt(4, dto.getWoPQ());
+			ps.setString(5, dto.getWorkerID());
+			ps.setString(6, dto.getItem_code());
 			
 			// SQL 실행
 			result = ps.executeUpdate();

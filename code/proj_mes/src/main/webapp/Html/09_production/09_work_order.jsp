@@ -12,7 +12,6 @@
         <title>J2P4 :: 작업 지시서</title>
         <link rel="stylesheet" href="<c:url value='/Html/asset/font.css'/>">
         <link rel="stylesheet" href="<c:url value='/Html/asset/09_common.css'/>">
-        <script src ="../asset/template_load.js" ></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -51,7 +50,8 @@
                     </div>
                 </form>
             </div>
-            <form class="wrap-table" method="get" action="workorder">
+            <!-- 테이블 - 메인 -->
+            <form class="wrap-table" method="post" action="workorder">
                 <input type="hidden" name="action" value="delete">
                 <div class="table-view">
                     <table>
@@ -92,57 +92,58 @@
     </div>
 
         <!-- TODO : 사이드 패널 - 여기부터 jsp 변환 작업 진행해야 함 -->
-        <div class="panel">
+        <div class="panel" id="panel-add">
             <button class="close-btn">✕</button>
             <div class="slide-title">작업 지시서 등록</div>
-            <form method = "post" action = "workorder">
+            <form method = "post" action = "workorder" id="form-add" class="wrap-table">
                 <input type="hidden" name="action" value="add">
                 <div class="form-group">
                     <label>작업지시NO.</label>
-                    <input type="number" name="order-no" min="1" max="5" placeholder="작업지시 번호 입력">
+                    <input type="number" name="wo_num" min="1" max="5" placeholder="작업지시 번호 입력">
                 </div>
                 <div class="form-group">
                     <label>지시일</label>
-                    <input type="date" name="order-date">
+                    <input type="date" name="wo_date">
                 </div>
                 <div class="form-group">
                     <label>납기일</label>
-                    <input type="date" name="duedate">
+                    <input type="date" name="wo_duedate">
                 </div>
                 <div class="form-group">
                     <label>담당자</label>
-                    <input type="text" name = "person" placeholder="담당자명 입력">
+                    <input type="text" name = "worker_id" placeholder="담당자명 입력">
                 </div>
                 <div class="form-group">
                     <label>지시 수량</label>
-                    <input type="number" name="order-amount" min="1" placeholder="지시 수량 입력">
+                    <input type="number" name="wo_pq" min="1" placeholder="지시 수량 입력">
                 </div>
+                <!-- 품목 선택 영역 -->
                 <div class ="form-group">
                     <div class = "wrap-table panel-table">
-                        <div class = "wrap-tableBtn">
-                            <input type="button" name = "item-add" class="button" value="품목 추가">
-                            <input type="button" name = "item-delete" class="button delete" value="품목 삭제">                       
-                        </div>
                         <div class = "panel-table-wrap">
                             <table>
                                 <thead>
+                                	<th>선택</th>
                                     <th>품목코드</th>
                                     <th>품목명</th>
-                                    <th>수량</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                	<c:forEach var="item" items="${itemAll}">
+	                                    <tr>
+	                                        <td>
+	                                        	<input type="radio" name="item_code" value="${item.item_code}">
+	                                        </td>
+	                                        <td>${item.item_code}</td>
+	                                        <td>${item.item_name}</td>
+	                                    </tr>
+                                    </c:forEach>
                                 </tbody>
-                            </table>  
+                            </table>
                         </div>
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" name="add-apply" class="button panel-save">저장</button>
+                    <button type="submit" class="button panel-save">저장</button>
                 </div>
             </form>
         </div>
@@ -203,50 +204,50 @@
             </div>
         </div>
         <!-- 품목 추가 모달 -->
-        <div class="modal-overlay">
-            <div class="modal">
-                <button class="modal-close">✕</button>
-                <h2>품목 추가</h2>
-                <form class="modal-form">
-                	<input type="hidden" name="action" value="addItem">
-                    <div class="form-group modal-search">
-                        <input type="text">
-                        <input type="button" value="검색">
-                    </div>
-                    <div class ="form-group">
-                        <div class="wrap-table panel-table" style="height: 400px;">
-                            <table>
-                                <thead>
-                                    <th></th>
-                                    <th>품목코드</th>
-                                    <th>품목명</th>
+<!--         <div class="modal-overlay"> -->
+<!--             <div class="modal"> -->
+<!--                 <button class="modal-close">✕</button> -->
+<!--                 <h2>품목 추가</h2> -->
+<!--                 <form class="modal-form"> -->
+<!--                 	<input type="hidden" name="action" value="addItem"> -->
+<!--                     <div class="form-group modal-search"> -->
+<!--                         <input type="text"> -->
+<!--                         <input type="button" value="검색"> -->
+<!--                     </div> -->
+<!--                     <div class ="form-group"> -->
+<!--                         <div class="wrap-table panel-table" style="height: 400px;"> -->
+<!--                             <table> -->
+<!--                                 <thead> -->
+<!--                                     <th></th> -->
+<!--                                     <th>품목코드</th> -->
+<!--                                     <th>품목명</th> -->
 
-                                </thead>
-                                <!-- 품목 여기에서 뜨도록 -->
-                                <tbody>
-									<c:forEach var="item" items="${itemList}">
-										<tr>
-											<td><input type="checkbox" value="${item.item_code}" name="chk"></td>
-											<td>${item.item_code}</td>
-											<td>${item.item_name}</td>
-										</tr>
-									</c:forEach>
-                                </tbody>
-                            </table>                
-                        </div>
-                    </div>
-                    <div class ="form-group">
-                        <div>수량 입력</div>
-                        <input type="number">
-                        <input type="button" value="수량 입력">
-                    </div>
-                    <div class="wrap-tableBtn">
-                        <input type="button" class="button reset" value="선택 해제">
-                        <button type="submit" class="button save">저장</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<!--                                 </thead> -->
+<!--                                 품목 여기에서 뜨도록 -->
+<!--                                 <tbody> -->
+<%-- 									<c:forEach var="item" items="${itemList}"> --%>
+<!-- 										<tr> -->
+<%-- 											<td><input type="checkbox" value="${item.item_code}" name="chk"></td> --%>
+<%-- 											<td>${item.item_code}</td> --%>
+<%-- 											<td>${item.item_name}</td> --%>
+<!-- 										</tr> -->
+<%-- 									</c:forEach> --%>
+<!--                                 </tbody> -->
+<!--                             </table>                 -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                     <div class ="form-group"> -->
+<!--                         <div>수량 입력</div> -->
+<!--                         <input type="number"> -->
+<!--                         <input type="button" value="수량 입력"> -->
+<!--                     </div> -->
+<!--                     <div class="wrap-tableBtn"> -->
+<!--                         <input type="button" class="button reset" value="선택 해제"> -->
+<!--                         <button type="submit" class="button save">저장</button> -->
+<!--                     </div> -->
+<!--                 </form> -->
+<!--             </div> -->
+<!--         </div> -->
         <script>
             //템플릿의 header/nav만 로드
                 (async function () {

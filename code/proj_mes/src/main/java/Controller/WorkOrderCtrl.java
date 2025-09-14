@@ -29,7 +29,6 @@ public class WorkOrderCtrl extends HttpServlet {
 		WorkOrderDTO dto = new WorkOrderDTO();
 		
 		List<WorkOrderDTO> basicList = service.getAllOrders();
-		
 		List<WorkOrderDTO> itemList = service.getItemsWO(dto);
 		
 		request.setAttribute("list", basicList);
@@ -38,6 +37,8 @@ public class WorkOrderCtrl extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("doPost 진입");
+
 		// 한글 깨짐 방지
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
@@ -45,26 +46,34 @@ public class WorkOrderCtrl extends HttpServlet {
 		WorkOrderService service = new WorkOrderService();
 		String action = request.getParameter("action");
 		
+		// 왜 안 되니
+		System.out.println("action: " + request.getParameter("action"));
+		
 		if("add".equals(action)) {
 			// 등록 영역
-			WorkOrderDTO dto = new WorkOrderDTO();
-			dto.setWoNum(request.getParameter("wo_num"));
-			dto.setWoDate(Date.valueOf(request.getParameter("wo_date")));
-			dto.setWoDuedate(Date.valueOf(request.getParameter("wo_duedate")));
-			dto.setWorkerID(action);
+		    WorkOrderDTO dto = new WorkOrderDTO();
+		    dto.setWoNum(request.getParameter("wo_num"));
+		    dto.setWoDate(Date.valueOf(request.getParameter("wo_date")));
+		    dto.setWoDuedate(Date.valueOf(request.getParameter("wo_duedate")));
+		    dto.setWorkerID(request.getParameter("worker_id"));
+		    dto.setWoPQ(Integer.parseInt(request.getParameter("wo_pq")));
+		    dto.setItem_code(request.getParameter("item_code"));
+		    service.addWorkOrder(dto);
+		    
+		    List<WorkOrderDTO> itemList = service.getItemsWO(new WorkOrderDTO());
+		    request.setAttribute("itemAll", itemList);
 		}
 		else if("delete".equals(action)) {
-		    String[] ids = request.getParameterValues("chk");
-		    int delCount = 0;
-		    if(ids != null) {
-		        for(String id : ids) {
-		            WorkOrderDTO dto = new WorkOrderDTO();
-		            dto.setWoNum(id); 
-		            delCount += service.removeWorkOrder(dto);
-		            System.out.println("일단 null은 아님");
-		        }
-		    }
-		    request.setAttribute("msg", delCount + "건 삭제");
+            String[] ids = request.getParameterValues("chk");
+            int delCount = 0;
+            if(ids != null) {
+                for(String id : ids) {
+                    WorkOrderDTO dto = new WorkOrderDTO();
+                    dto.setWoNum(id); 
+                    delCount += service.removeWorkOrder(dto);
+                }
+            }
+            request.setAttribute("msg", delCount + "건 삭제");
 		}		    
 		else if("search".equals(action)) {
 			System.out.println();
