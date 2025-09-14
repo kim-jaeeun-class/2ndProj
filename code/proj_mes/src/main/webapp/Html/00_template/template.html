@@ -37,6 +37,17 @@
         .mainList li:hover {
             background-color: #3b82f6;
         }
+        
+        .drop {
+        	text-align:center; 
+        	font-weight: bold; 
+        	height: 150px; 
+        	font-size: 20px;
+        	padding: 8px;
+        }
+        .row {
+        	margin: 10px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -72,10 +83,16 @@
 
                 <!-- 드롭다운 메뉴 -->
                 <div id="userMenu"
-                    class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-lg border hidden z-50">
-                    <a href="/proj_mes/AccountManage">계정관리</a><br>
-                    <a href="/proj_mes/IssueCtrl">이슈처리</a><br>
-                    <a href="/proj_mes/Client">거래처 관리</a>
+                    class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-lg border hidden z-50 drop" >
+                    <div class="row">
+                    	<a href="/proj_mes/AccountManage">계정관리</a><br>
+                    </div>
+                    <div class="row">
+                    	<a href="/proj_mes/IssueCtrl">이슈처리</a><br>
+                    </div>
+                    <div class="row">
+                    	<a href="/proj_mes/Client">거래처 관리</a>
+                    </div>
                 </div>
             </div>
         </div>
