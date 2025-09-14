@@ -42,6 +42,7 @@ public class ClientCtrl extends HttpServlet {
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String op = req.getParameter("op");
+        String ctx = req.getContextPath();
 
         if ("insert".equalsIgnoreCase(op)) {
             ClientDTO d = new ClientDTO();
@@ -57,19 +58,45 @@ public class ClientCtrl extends HttpServlet {
 
             int ins = clientService.insert(d);
             System.out.println("[ClientCtrl] insert result = " + ins);
-            resp.sendRedirect(req.getContextPath() + "/Client");
+            resp.sendRedirect(ctx + "/Client");
+            return;
+        }
+
+        if ("update".equalsIgnoreCase(op)) {
+            // ⚠️ 반드시 client_id가 있어야 업데이트 가능
+            String clientId = req.getParameter("client_id");
+            if (clientId == null || clientId.trim().isEmpty()) {
+                System.out.println("[ClientCtrl] update skipped: client_id is empty");
+                resp.sendRedirect(ctx + "/Client");
+                return;
+            }
+
+            ClientDTO d = new ClientDTO();
+            d.setClient_id(clientId.trim());
+            d.setClient_name(req.getParameter("client_name"));
+            d.setClient_phone(req.getParameter("client_phone"));
+            d.setBusiness_number(req.getParameter("business_number"));
+            d.setBusiness_item(req.getParameter("business_item"));
+            d.setClient_address(req.getParameter("client_address"));
+
+            Integer div = resolveDivision(req.getParameter("inout_division"));
+            d.setInout_division(div == null ? null : String.valueOf(div));
+            d.setWorker_id(req.getParameter("worker_id"));
+
+            int upd = clientService.update(d);  // ← Service/DAO에 update 구현 필요
+            System.out.println("[ClientCtrl] update result = " + upd);
+            resp.sendRedirect(ctx + "/Client");
             return;
         }
 
         if ("delete".equalsIgnoreCase(op)) {
-            // 체크박스로 넘어온 client_id 배열(name="ids")
             String[] ids = req.getParameterValues("ids");
             int deleted = 0;
             if (ids != null && ids.length > 0) {
                 deleted = clientService.deleteByIds(Arrays.asList(ids));
             }
             System.out.println("[ClientCtrl] deleted count = " + deleted);
-            resp.sendRedirect(req.getContextPath() + "/Client");
+            resp.sendRedirect(ctx + "/Client");
             return;
         }
 

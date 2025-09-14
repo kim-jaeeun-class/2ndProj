@@ -31,81 +31,79 @@
   <div class="titleBox">
     <span>거래처 목록</span>
 
-
   <div class="wrap">
     <!-- 삭제 전용 폼 -->
     <form id="deleteForm" method="post" action="<c:url value='/Client'/>">
       <input type="hidden" name="op" value="delete" />
 
       <div class="action">
-      	<div>
-		    <button class="btn delete_btn" type="button" id="std-delete" >삭제</button>
-		</div>
-		<div>    
-		    <button class="btn add_btn" type="button" id="btn-insert">등록</button>
-		</div>
-   	</div>
-        <table class="tables">
-          <thead>
-            <tr>
-              <th style="width:48px;">
-                <input type="checkbox" id="checkAll" aria-label="전체선택" />
-              </th>
-              <th>거래처ID</th>
-              <th>거래처명</th>
-              <th>사업자번호</th>
-              <th>거래품목</th>
-              <th>구분</th>
-            </tr>
-          </thead>
+        <div>
+          <button class="btn delete_btn" type="button" id="std-delete">삭제</button>
+        </div>
+        <div>
+          <button class="btn add_btn" type="button" id="btn-insert">등록</button>
+        </div>
+      </div>
 
-          <tbody id="std-body">
-            <c:choose>
-              <c:when test="${not empty clients}">
-                <c:forEach var="row" items="${clients}">
-                  <tr class="data-row"
-                      data-id="${row.client_id}"
-                      data-name="${fn:escapeXml(row.client_name)}"
-                      data-phone="${row.client_phone}"
-                      data-bizno="${row.business_number}"
-                      data-item="${row.business_item}"
-                      data-address="${fn:escapeXml(row.client_address)}"
-                      data-division="${row.inout_division}"
-                      data-worker="${row.worker_id}">
-                    <td>
-                      <input type="checkbox" class="row-check" name="ids" value="${row.client_id}" aria-label="선택" />
-                    </td>
+      <table class="tables">
+        <thead>
+          <tr>
+            <th style="width:48px;">
+              <input type="checkbox" id="checkAll" aria-label="전체선택" />
+            </th>
+            <th>거래처ID</th>
+            <th>거래처명</th>
+            <th>사업자번호</th>
+            <th>거래품목</th>
+            <th>구분</th>
+          </tr>
+        </thead>
 
-                    <td><c:out value="${row.client_id}" /></td>
-                    <td><c:out value="${row.client_name}" /></td>
-                    <td><c:out value="${row.business_number}" /></td>
-                    <td><c:out value="${row.business_item}" /></td>
+        <tbody id="std-body">
+          <c:choose>
+            <c:when test="${not empty clients}">
+              <c:forEach var="row" items="${clients}">
+                <tr class="data-row"
+                    data-id="${row.client_id}"
+                    data-name="${fn:escapeXml(row.client_name)}"
+                    data-phone="${row.client_phone}"
+                    data-bizno="${row.business_number}"
+                    data-item="${row.business_item}"
+                    data-address="${fn:escapeXml(row.client_address)}"
+                    data-division="${row.inout_division}"
+                    data-worker="${row.worker_id}">
+                  <td>
+                    <input type="checkbox" class="row-check" name="ids" value="${row.client_id}" aria-label="선택" />
+                  </td>
 
-                    <td>
-                      <c:choose>
-                        <c:when test="${row.inout_division == '-1' or row.inout_division == -1}">출고</c:when>
-                        <c:when test="${row.inout_division == '0'  or row.inout_division == 0 }">공통</c:when>
-                        <c:when test="${row.inout_division == '1'  or row.inout_division == 1 }">발주</c:when>
-                        <c:otherwise>
-                          <c:out value="${row.inout_division}" />
-                        </c:otherwise>
-                      </c:choose>
-                    </td>
-                  </tr>
-                </c:forEach>
-              </c:when>
-              <c:otherwise>
-                <tr><td colspan="9" style="text-align:center;">데이터가 없습니다.</td></tr>
-              </c:otherwise>
-            </c:choose>
-          </tbody>
-        </table>
+                  <td><c:out value="${row.client_id}" /></td>
+                  <td><c:out value="${row.client_name}" /></td>
+                  <td><c:out value="${row.business_number}" /></td>
+                  <td><c:out value="${row.business_item}" /></td>
+
+                  <td>
+                    <c:choose>
+                      <c:when test="${row.inout_division == '-1' or row.inout_division == -1}">출고</c:when>
+                      <c:when test="${row.inout_division == '0'  or row.inout_division == 0 }">공통</c:when>
+                      <c:when test="${row.inout_division == '1'  or row.inout_division == 1 }">발주</c:when>
+                      <c:otherwise>
+                        <c:out value="${row.inout_division}" />
+                      </c:otherwise>
+                    </c:choose>
+                  </td>
+                </tr>
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <tr><td colspan="9" style="text-align:center;">데이터가 없습니다.</td></tr>
+            </c:otherwise>
+          </c:choose>
+        </tbody>
+      </table>
 
     </form>
    </div>
   </div>
-
- 
 
   <!-- 등록/수정 모달 (공용) -->
   <dialog id="partnerModal" aria-labelledby="pmTitle">
@@ -220,6 +218,16 @@
     const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
     const mapDivision = (v) => ({ '-1': '출고', '0': '공통', '1': '발주' }[String(v)] || (v ?? ''));
 
+    // 셀렉트 안전 설정(값/라벨 모두 시도, 없으면 임시 옵션 생성)
+    function setSelectValue(sel, value) {
+      const v = value == null ? '' : String(value);
+      sel.value = v;                          // 1) value 직접 매칭
+      if (sel.value === v) return;
+      const opt = Array.from(sel.options).find(o => o.textContent === v);
+      if (opt) { sel.value = opt.value; return; }
+      if (v !== '') sel.add(new Option(v, v, true, true));  // 3) 임시 옵션 추가
+    }
+
     // ========== 등록/수정 모달 제어 ==========
     const partnerModal = $('#partnerModal');
     const pmTitle = $('#pmTitle');
@@ -253,14 +261,14 @@
       pmTitle.textContent = '거래처 수정';
       pmOp.value = 'update';
       pmSave.textContent = '저장';
-      f.id.value = data.id || '';
-      f.name.value = data.name || '';
-      f.biz.value = data.bizno || '';
-      f.item.value = data.item || '';
-      f.worker.value = data.worker || '';
-      f.tel.value = data.phone || '';
-      f.div.value = (data.division ?? '');
-      f.addr.value = data.address || '';
+      f.id.value    = data.id || '';
+      f.name.value  = data.name || '';
+      f.biz.value   = data.bizno || '';
+      setSelectValue(f.item, data.item);
+      f.worker.value= data.worker || '';
+      f.tel.value   = data.phone || '';
+      setSelectValue(f.div, data.division);
+      f.addr.value  = data.address || '';
       f.addr2.value = '';
       f.addrHidden.value = data.address || '';
     }
@@ -283,11 +291,16 @@
       }).open();
     });
 
-    // 제출 직전 주소 합치기
+    // 제출 직전 주소 합치기 & 모드 보정
     form.addEventListener('submit', function () {
       const a1 = f.addr.value.trim();
       const a2 = f.addr2.value.trim();
       f.addrHidden.value = (a1 + ' ' + a2).trim();
+
+      // id가 있으면 update로 보정 (혹시 insert로 덮였어도 안전)
+      if (f.id.value && pmOp.value !== 'update') {
+        pmOp.value = 'update';
+      }
     });
 
     // ========== 상세 모달 ==========
@@ -323,6 +336,7 @@
     $('#dmEdit').addEventListener('click', () => {
       const data = JSON.parse(detailModal.dataset.selected || '{}');
       detailModal.close();
+      pmOp.value = 'update';          // 확실히 update로
       toUpdateMode(data);
       partnerModal.showModal();
     });
