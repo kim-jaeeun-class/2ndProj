@@ -1,13 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
+<% String ctx = request.getContextPath(); %>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>계정 관리 페이지</title>
-
+	
   <!-- 정적 리소스 -->
-  <link rel="stylesheet" href="<c:url value='/Html/asset/template.css'/>">
   <link rel="stylesheet" href="<c:url value='/Html/asset/03_account_manage.css'/>">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <!-- Inter 폰트 & Tailwind -->
@@ -16,6 +18,12 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+	body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+	.header-bg { background-color: #002a40; }
+	.nav-bg { background-color: #003751; }
+.mainList li:hover { background-color: #3b82f6; }
+</style>
 </head>
 
 <body>
@@ -24,16 +32,8 @@
   <div id="nav-slot"></div>
 
   <div class="titleBox">
-    <span>마이 페이지</span>
-  </div>
+    <span>계정 목록</span>
 
-  <div class="wrap">
-    <main class="main">
-
-
-      <section class="card">
-        <div id="acc-title" class="card-header">계정목록</div>
-        <div class="card-body">
           <!-- 삭제/수정 제출 폼 -->
           <form id="deleteForm" method="post" action="<c:url value='/AccountManage/delete'/>">
             <div id="hiddenIds"></div>
@@ -43,38 +43,43 @@
             <input type="hidden" name="dapartId2"   id="updDept">
             <input type="hidden" name="workerCando" id="updRole">
           </form>
-
-          <!-- 액션 바 -->
-          <div class="actions" style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-            <input id="searchInput" type="text" placeholder="이름/사번/부서 검색" style="padding:6px 8px;">
-            <button id="btnSearch" class="btn" type="button">검색</button>
-            <button id="btnRefresh" class="btn" type="button">새로고침</button>
-
-            <div style="margin-left:auto; display:flex; gap:8px;">
+  <div class="wrap">
+	<div class="box">
+       <!-- 액션 바 -->
+       <div>
+         <input id="searchInput" type="text" placeholder="이름/사번/부서 검색">
+ 	   </div>
+ 	   
+       <div>
+        <button id="btnSearch" class="btn filter_btn" type="button">검색</button>
+        <!-- <button id="btnRefresh" class="btn reset_btn" type="button">새로고침</button> -->
+       </div>
+	</div>
+  </div>
+<div class="wrap_list">
+            <div class="box">
               <!-- 계정생성 -->
-              <a href="<c:url value='/AccountCreate'/>"><button class="btn" type="button">계정생성</button></a>
-              <button id="btnAskDelete" class="btn" type="button">선택 삭제</button>
+              <button id="btnAskDelete" class="btn delete_btn" type="button">삭제</button>
+              <a href="<c:url value='/AccountCreate'/>"><button class="btn add_btn" type="button">생성</button></a>
             </div>
-          </div>
-
           <!-- 테이블 -->
           <div class="table-wrap" tabindex="0">
             <table class="tables" id="accountTable">
               <thead>
                 <tr>
-                  <th style="width:44px; text-align:center;"><input type="checkbox" id="selectAll"></th>
+                  <th><input type="checkbox" id="selectAll"></th>
                   <th scope="col">사번</th>
                   <th scope="col">이름</th>
                   <th scope="col">부서ID</th>
                   <th scope="col">직급</th>
                   <th scope="col">권한</th>
-                  <th scope="col" style="width:90px;">액션</th>
+                  <th scope="col">액션</th>
                 </tr>
               </thead>
               <tbody>
                 <c:forEach var="acc" items="${accounts}">
                   <tr data-empno="${acc.workerId}" data-name="${acc.workerName}">
-                    <td style="text-align:center;">
+                    <td>
                       <input type="checkbox" class="rowCheck" data-empno="${acc.workerId}" data-name="${acc.workerName}">
                     </td>
                     <td><c:out value="${acc.workerId}"/></td>
@@ -88,15 +93,21 @@
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
-
+      <!-- 감사 로그 -->
+      <div class="list">
+        <div id="audit-title" class="box header_list" >
+	        <div>감사 로그(Audit)</div>
+	          <textarea id="audit" class="audit-textarea" placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+      	</div>
+      </div>
+  </div>
+</div>
       <!-- 삭제 모달 -->
       <div class="modal_bg" id="deleteModalBg" style="display:none;"></div>
       <div class="modal_wrap" id="deleteModal" style="display:none;">
         선택한 계정을 삭제할까요?
-        <div id="deleteModalText" style="margin:8px 0 12px;"></div>
-        <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <div id="deleteModalText"></div>
+        <div >
           <button class="modal_close" id="btnConfirmDelete" type="button">예, 삭제</button>
           <button class="modal_close" id="btnCancelDelete" type="button">아니요</button>
         </div>
@@ -105,17 +116,17 @@
       <!-- 수정 모달 -->
       <div class="modal_bg" id="editModalBg" style="display:none;"></div>
       <div class="modal_wrap" id="editModal" style="display:none;">
-        <div style="font-weight:700; margin-bottom:8px;">계정 수정</div>
-        <div style="margin-bottom:6px;">사번: <span id="editEmpNo" style="font-weight:600;"></span></div>
-        <div style="margin-bottom:12px;">이름: <span id="editName"></span></div>
+        <div >계정 수정</div>
+        <div>사번: <span id="editEmpNo" ></span></div>
+        <div>이름: <span id="editName"></span></div>
 
-        <label style="display:block; margin-bottom:8px;">
+        <label style="display:block;">
           부서ID
-          <input id="editDept" type="text" placeholder="예: D001" style="width:90%; padding:6px 8px; margin:0 auto;">
+          <input id="editDept" type="text" placeholder="예: D001" >
         </label>
-        <label style="display:block; margin-bottom:12px;">
+        <label style="display:block;">
           권한
-          <select id="editRole" style="width:100%; padding:6px 8px; margin-top:4px;">
+          <select id="editRole" >
             <option value="USER">USER</option>
             <option value="MANAGER">MANAGER</option>
             <option value="ADMIN">ADMIN</option>
@@ -128,15 +139,6 @@
         </div>
       </div>
 
-      <!-- 감사 로그 -->
-      <section class="card">
-        <div id="audit-title" class="card-header audit-header" style="text-align:center;">감사 로그(Audit)</div>
-        <div class="card-body">
-          <textarea id="audit" class="audit-textarea" placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
-        </div>
-      </section>
-    </main>
-  </div>
 
   <!-- 페이지 스크립트 (jQuery 그대로 유지) -->
   <script>

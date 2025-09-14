@@ -200,7 +200,7 @@
     border: 1px solid var(--red);
     border-radius: var(--btnradius);
     color: #ffffff;
-    width: 60px;
+    width: var(--btnwidth);
     height: var(--btnheight);
 }
 .item_add {
@@ -208,7 +208,7 @@
     border: 1px solid var(--green);
     border-radius: var(--btnradius);
     color: #ffffff;
-    width: 60px;
+    width: var(--btnwidth);
     height: var(--btnheight);
     margin: 0 0 0 8px;
 }
