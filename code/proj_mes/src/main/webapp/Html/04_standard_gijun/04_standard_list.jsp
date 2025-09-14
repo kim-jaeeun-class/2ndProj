@@ -18,29 +18,38 @@
 <body>
   <div id="header-slot"></div>
   <div id="nav-slot"></div>
-
+  
+<div class="titleBox">
+        <span>기준 관리</span> 
+        
   <div class="wrap">
-    <main class="main">
       <!-- 상단 툴바 -->
       <div class="toolbar" role="region" aria-label="검색 및 등록">
-        <label for="std-category">분류</label>
-        <div class="select">
-          <select id="std-category">
-            <!-- ★ '선택하세요' 제거, '전체'를 첫 옵션으로 -->
-            <option>전체</option>
-            <option>공정</option>
-            <option>BOM</option>
-            <option>발주</option>
-            <option>재고</option>
-            <option>생산</option>
-            <option>품질</option>
-          </select>
+      	<div>
+	        <label for="std-category">분류</label>
+	        <div class="select">
+	          <select id="std-category">
+	            <!-- ★ '선택하세요' 제거, '전체'를 첫 옵션으로 -->
+	            <option>전체</option>
+	            <option>공정</option>
+	            <option>BOM</option>
+	            <option>발주</option>
+	            <option>재고</option>
+	            <option>생산</option>
+	            <option>품질</option>
+	          </select>
+	        </div>
+      	</div>
+        <div>
+        <button class="btn filter_btn" type="button" id="std-search  ">조회</button>
         </div>
-        <button class="btn" type="button" id="std-search">조회</button>
-        <div class="spacer"></div>
-        <button class="btn" type="button" id="std-create">등록하기</button>
+        <!-- <div class="spacer"></div> --><!-- 필요하신 건가요? -->
       </div>
-
+ </div>
+	<div class="wrap_list">
+	<div class="action">
+        <button class="btn item_add" type="button" id="std-create">등록</button>
+    </div>  
       <!-- 표 -->
       <section aria-label="기준 목록 표">
         <div class="table-wrap" tabindex="0">
@@ -61,7 +70,7 @@
               </tr>
             </thead>
 
-            <tbody id="std-body">
+            <tbody id="std-body" class="tables_body">
               <c:choose>
                 <c:when test="${empty data}">
                   <tr>
@@ -85,7 +94,7 @@
           </table>
         </div>
       </section>
-    </main>
+    </div>
   </div>
 
 <script>

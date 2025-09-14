@@ -65,7 +65,6 @@
 
   <div class="wrap">
     <!-- 헤더 -->
-    <div class="main">
       <div class="box header_row">
         
 
@@ -87,6 +86,7 @@
 			  </c:when>
 			
 			  <c:when test="${isAdd}">
+			    <a href="<c:url value='/stockList'/>"><button type="button" id="back">취소</button></a>
 			    <button type="submit" class="primary" id="btnsave">등록</button>
 			  </c:when>
 		</c:choose>
@@ -142,14 +142,7 @@
                  value="${stock.item_price}"readonly>
         </div>
       </div>
-    </div>
-
-    <!-- 하단 버튼 -->
-    <div class="bottom">
-      <a href="<c:url value='/stockList'/>"><button type="button">목록</button></a>
-    </div>
-
-  </div>
+    
 </form>
 </div>
 <!-- 삭제 숨김 폼 -->

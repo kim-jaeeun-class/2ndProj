@@ -276,7 +276,7 @@
 
 /* 2) 헤더 고정 */
 .tables thead th {
- position: sticky;
+    position: sticky;
     top: 0;
     z-index: 1;
     background: #eef5ff;     
@@ -294,11 +294,10 @@
 }
 /* 3) 셀 기본 패딩/라인 */
 .tables td {
-  padding: 16px 24px;
-}
-.tables td {
+    padding: 16px 24px;
     border-top: 0.5px solid var(--border);
 }
+
 /* 4) 커스텀 스크롤바 (질문에 주신 것 유지) */
 .table-wrap::-webkit-scrollbar { 
     width: 10px;

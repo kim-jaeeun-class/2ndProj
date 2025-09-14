@@ -88,7 +88,7 @@
 	      	
 	      	<a class="add" href="<c:url value='/stockDetail'>
 		      	<c:param name='mode' value='add'/></c:url>">
-		        <button type="button" class="item_add">추가</button>
+		        <button type="button" class="item_add">등록</button>
 	      	</a>
 	      </form>
 	    </div>
