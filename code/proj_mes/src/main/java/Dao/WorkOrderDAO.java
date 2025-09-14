@@ -235,7 +235,23 @@ public class WorkOrderDAO {
 			e.printStackTrace();
 		}
 		return list;
-	}	
+	}
+	
+	// 등록 - 작업지시서 번호 변경용
+    public String generateWoNum(String date) throws Exception {
+        String woNum = null;
+        String query = "select count(*) from work_order where wo_date = ?";
+        try (Connection conn = getConn();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, date);
+            ResultSet rs = ps.executeQuery();
+            int count = 0;
+            if (rs.next()) count = rs.getInt(1);
+            String seq = String.format("%02d", count + 1);
+            woNum = date.replace("-", "") + "-" + seq;
+        }
+        return woNum;
+    }
 	
 	// 등록
 	//	- 입력되는 값
@@ -364,5 +380,57 @@ public class WorkOrderDAO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	// 단일 작업지시 조회 (wo_num 기준)
+	public WorkOrderDTO selectWOByNum(String woNum) {
+	    WorkOrderDTO dto = null;
+	    try {
+	        Connection conn = getConn();
+	        String query = "select wo_num, wo_date, wo_duedate, "
+	        		+ "		wo_pq, wo_aq, worker_id, item_code, bom_id, proc_id"
+	                + " 	from work_order where wo_num = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, woNum);
+	        ResultSet rs = ps.executeQuery();
+	        if (rs.next()) {
+	            dto = new WorkOrderDTO();
+	            dto.setWoNum(rs.getString("wo_num"));
+	            dto.setWoDate(rs.getDate("wo_date"));
+	            dto.setWoDuedate(rs.getDate("wo_duedate"));
+	            dto.setWoPQ(rs.getInt("wo_pq"));
+	            dto.setWoAQ(rs.getInt("wo_aq"));
+	            dto.setWorkerID(rs.getString("worker_id"));
+	            dto.setItem_code(rs.getString("item_code"));
+	            dto.setBom_id(rs.getString("bom_id"));
+	            dto.setProc_id(rs.getString("proc_id"));
+	        }
+	        rs.close();
+	        ps.close();
+	        conn.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dto;
+	}
+
+	// 생산수량만 업데이트 (wo_aq)
+	public int updateAQByWoNum(String woNum, int woAQ) {
+	    int result = -1;
+	    try {
+	        Connection conn = getConn();
+	        String query = "update work_order "
+	        		+ "		set wo_aq = ?"
+	        		+ "		where wo_num = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setInt(1, woAQ);
+	        ps.setString(2, woNum);
+	        result = ps.executeUpdate();
+	        ps.close();
+	        conn.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return result;
 	}
 }

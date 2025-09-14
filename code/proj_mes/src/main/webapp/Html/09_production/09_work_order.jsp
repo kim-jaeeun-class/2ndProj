@@ -39,11 +39,11 @@
                 작업 지시서
             </div>
             <div class="wrap-select">
-                <form class="date-filter" action="workorder">
+                <form class="date-filter" method="get" action="workorder">
                     <input type="hidden" name="action" value="search">
                     <div class="select-con">
                         <div class="select-title" name="wo-filter-title">지시일</div>
-                        <input type="date" name="wo-filter-date">
+                        <input type="date" name="wo-filter-date" value="${param.wo-filter-date}">
                     </div>
                     <div class="filter-submit">
                         <button type="submit" class="button">조회</button>
@@ -72,7 +72,9 @@
                                 <tr class = "data">
                                     <!-- 구분용으로 date, num 다 넣음 -->
                                     <td><input type="checkbox" value="${wo.woNum}" name="chk"></td>
-                                    <td>${wo.woNum}</td>
+                                    <td>
+                                        <a href="workorder?action=view&wo_num=${wo.woNum}">${wo.woNum}</a>
+                                    </td>
                                     <td>${wo.woDate}</td>
                                     <td>${wo.workerID}</td>
                                     <td>${wo.woDuedate}</td>
@@ -153,7 +155,7 @@
             <button class="close-btn">✕</button>
             <div class="slide-title">작업 지시서 상세</div>
                 <form class="wrap-table panel-table" method = "get" action="workorder">
-                <input type="hidden" name="action" id="detail-delete-id" name = "action" value="delete">
+                <input type="hidden" name="action" name = "action" value="">
                     <table class = "modal-table">
                     </table>
                     <!-- 여기에 있는 item-table은 클릭하면 자동으로 id에 맞는 조건만 나오도록 필터링 된
@@ -168,11 +170,13 @@
 	                            </tr>
 	                        </thead>
 	                        <tbody>
-	                            <tr>
-	                                <td>#ID</td>
-	                                <td>#용도</td>
-	                                <td>#소요량</td>
-	                            </tr>
+                                <c:if test="${not empty detailBOM}">
+                                    <tr>
+                                        <td>${detailBOM.bom_id}</td>
+                                        <td>${detailBOM.item_code}</td>
+                                        <td>${detailBOM.bom_reqAm}</td>
+                                    </tr>
+                                </c:if>
 	                        </tbody>
 	                    </table>
                     </div>
@@ -185,17 +189,18 @@
 	                            </tr>
 	                        </thead>
 	                        <tbody>
-	                            <tr>
-	                                <td>#ID</td>
-	                                <td>#용도</td>
-	                            </tr>
+                                <c:if test="${not empty detailPROC}">
+                                    <tr>
+                                        <td>${detailPROC.proc_id}</td>
+                                        <td>${detailPROC.proc_name}</td>
+                                    </tr>
+                                </c:if>
 	                        </tbody>
 	                    </table>
                     </div>
                     <div class="wrap-tableBtn">
                     	<input type="button" class="button" value="생산수량 입력">
                         <input type="button" class="button" value="수정">
-                        <input type="submit" class="button delete" value="삭제">
                     </div>
                 </form>
             </div>

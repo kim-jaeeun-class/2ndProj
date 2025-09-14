@@ -73,121 +73,84 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===============================
     // 작업 지시서 페이지 기능
     // ===============================
-    const initWorkOrder = () => {
-        const panelForm = document.querySelector('#form-add');
-        const mainTable = document.querySelector('.wrap-table tbody');
-        const panel = document.querySelector('.panel');
-        let saveBtn = null;
-        const panelDown = document.querySelector('#panel-down');
+const initWorkOrder = () => {
+    const panelForm = document.querySelector('#form-add');
+    const mainTable = document.querySelector('.wrap-table tbody');
+    const panel = document.querySelector('#panel-add');
+    const panelDown = document.querySelector('#panel-down');
 
-        if (panelForm) {
-            saveBtn = panelForm.querySelector('.panel-save');
-        }
-        if (!panelForm || !saveBtn) return;
-        if (!panelForm || !mainTable || !panel || !panelDown) return;
+    if (!panelForm || !mainTable || !panel || !panelDown) return;
 
-        // -------------------------------
-        // 작업지시 번호 자동 생성 함수
-        // -------------------------------
-        const woNum = panelForm.querySelector('input[name="wo_num"]');
+    const saveBtn = panelForm.querySelector('.panel-save');
+    const hiddenBOM = panelForm.querySelector('input[name="bom_id"]');
+    const hiddenPROC = panelForm.querySelector('input[name="proc_id"]');
+
+    // -------------------------------
+    // 저장 버튼 클릭
+    // -------------------------------
+    saveBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
         const woDate = panelForm.querySelector('input[name="wo_date"]');
         const woDuedate = panelForm.querySelector('input[name="wo_duedate"]');
         const workerId = panelForm.querySelector('input[name="worker_id"]');
         const woPQ = panelForm.querySelector('input[name="wo_pq"]');
         const itemCode = panelForm.querySelector('input[name="item_code"]:checked');
-        const woNumHidden = panelForm.querySelector('input[name="wo_num_hidden"]');
-        const woNumDisplay = panelForm.querySelector('input[name="wo_num_display"]'); // readonly 표시용
 
-        async function setWoNum() {
-            if (!woDate.value) return;
-            const dateVal = woDate.value.replace(/-/g, '');
-            try {
-                const res = await fetch(`/workorder?action=getWoCount&date=${dateVal}`);
-                const count = await res.json(); // 0~98
-                const seq = String(count + 1).padStart(2, '0');
-                const newWoNum = `${dateVal}-${seq}`;
-
-                woNum.value = newWoNum;        // 실제 hidden에 저장
-                woNumDisplay.value = newWoNum; // 화면 표시
-            } catch (err) {
-                console.error('작업지시번호 생성 실패:', err);
-            }
+        // 필수 항목 체크
+        if (!woDate.value || !woDuedate.value || !workerId.value || !woPQ.value || !itemCode) {
+            alert('필수 항목을 모두 입력해주세요.');
+            return;
         }
 
-        woDate.addEventListener('change', setWoNum);
-        if (woDate.value) setWoNum();
+        // 수량 체크
+        if (parseInt(woPQ.value) < 1) {
+            alert('수량은 1 이상 입력해야 합니다.');
+            return;
+        }
 
-        // -------------------------------
-        // 슬라이딩 저장 → 메인 테이블 추가
-        // -------------------------------
-        saveBtn.addEventListener('click', async (e) => {
-            e.preventDefault(); // 기본 제출 막기
+        // 지시일/납기일 체크
+        if (new Date(woDate.value) > new Date(woDuedate.value)) {
+            alert('지시일이 납기일보다 늦을 수 없습니다.');
+            return;
+        }
 
-            // 작업지시 번호 fetch 완료
-            await setWoNum();
+        // 선택된 품목에 따른 BOM/PROC hidden 세팅
+        hiddenBOM.value = itemCode.dataset.bomId || '0';
+        hiddenPROC.value = itemCode.dataset.procId || '0';
 
-            const itemCodeChecked = panelForm.querySelector('input[name="item_code"]:checked');
-            const requiredInputs = [woNum, woDate, woDuedate, workerId, woPQ, itemCodeChecked];
-            let allValid = true;
-            requiredInputs.forEach(input => {
-                if (!input || (input.tagName === 'INPUT' && (input.type === 'radio' ? !input.checked : !input.value))) {
-                    allValid = false;
-                }
-            });
-            if (!allValid) {
-                alert('필수 항목을 모두 입력해주세요.');
-                return;
-            }
+        // 서버에 submit
+        panelForm.submit();
+        panel.classList.remove('open');
+    });
 
-            if (woPQ.value < 1) {
-                alert('수량은 1 이상 입력해야 합니다.');
-                return;
-            }
+    // -------------------------------
+    // 메인 테이블 클릭 → 상세 패널
+    // -------------------------------
+    mainTable.addEventListener('click', (e) => {
+        const row = e.target.closest('tr.data');
+        if (!row || e.target.closest('input[type="checkbox"]')) return;
 
-            if (new Date(woDate.value) > new Date(woDuedate.value)) {
-                alert('지시일이 납기일보다 늦을 수 없습니다.');
-                return;
-            }
-
-            if (!itemCodeChecked) {
-                alert('품목을 선택해주세요.');
-                return;
-            }
-
-            // hidden 값 세팅
-            woNumHidden.value = woNum.value;
-            hiddenBOM.value = itemCodeChecked.dataset.bomId || '';
-            hiddenPROC.value = itemCodeChecked.dataset.procId || '';
-
-            // 서버 전송 / 패널 닫기
-            panel.classList.remove('open');
-            panelForm.submit();
+        const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
+        const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
+        rowTds.forEach((td, i) => {
+            if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
         });
 
-        // -------------------------------
-        // 메인 테이블 클릭 → 상세 패널
-        // -------------------------------
-        mainTable.addEventListener('click', (e) => {
-            const row = e.target.closest('tr.data');
-            if (!row || e.target.closest('input[type="checkbox"]')) return;
+        const hiddenInput = panelDown.querySelector('#detail-delete-id');
+        hiddenInput.value = row.querySelector('td:nth-child(2)').textContent.trim();
 
-            const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
-            const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
+        panelDown.classList.add('open');
+    });
 
-            rowTds.forEach((td, i) => {
-                if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
-            });
+    // -------------------------------
+    // 상세 패널 닫기
+    // -------------------------------
+    const panelDownCloseBtn = panelDown.querySelector('.close-btn');
+    if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
+    panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
+};
 
-            const hiddenInput = panelDown.querySelector('#detail-delete-id');
-            hiddenInput.value = row.querySelector('td:nth-child(2)').textContent.trim();
-
-            panelDown.classList.add('open');
-        });
-
-        const panelDownCloseBtn = panelDown.querySelector('.close-btn');
-        if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
-        panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
-    };
 
     // ===============================
     // 생산 계획 페이지

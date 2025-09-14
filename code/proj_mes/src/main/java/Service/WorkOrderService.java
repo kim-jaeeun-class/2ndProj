@@ -78,4 +78,19 @@ public class WorkOrderService {
         return dto;
     }
 
+    public String generateWoNum(String date) throws Exception {
+        return dao.generateWoNum(date);
+    }
+
+    // 한 건만 조회 (wo_num 기준)
+    public WorkOrderDTO getWorkOrder(String woNum) {
+        return dao.selectWOByNum(woNum);
+    }
+
+    // 생산수량 변경 호출
+    public int updateWorkOrderAQ(String woNum, int woAQ) {
+        return dao.updateAQByWoNum(woNum, woAQ);
+    }
+
+
 }
