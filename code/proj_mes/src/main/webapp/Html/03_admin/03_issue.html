@@ -17,7 +17,7 @@
   <!-- Chart.js (필요 시 유지) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" />
+  <!-- <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" /> -->
   <link rel="stylesheet" href="/proj_mes/Html/asset/03_issue.css" />
 
   <style>
@@ -101,99 +101,112 @@
     </ul>
   </nav>
 
-  <div class="wrap">
-    <main class="main p-4 grid grid-cols-1 xl:grid-cols-3 gap-4 max-w-7xl mx-auto">
-      <!-- 이슈 목록 카드 -->
-      <section class="card xl:col-span-2">
-        <header id="issue-title" class="card-header">이슈 처리</header>
-        <div class="card-body">
-          <div class="table-wrap" tabindex="0">
-            <table class="tables" id="issue-table">
-              <thead>
-                <tr>
-                  <th scope="col" class="w-10 text-center"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
-                  <th scope="col">유형</th>
-                  <th scope="col">키값</th>
-                  <th scope="col">처리상태</th>
-                  <th scope="col">요청자</th>
-                  <th scope="col">요청일</th>
-                  <th scope="col" class="w-40">처리</th>
-                </tr>
-              </thead>
-              <tbody id="issue-tbody">
-                <tr>
-                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
-                  <td>Line A scrap spike</td>
-                  <td>재열 처리 원인 분석 필요</td>
-                  <td><a href="#" class="status-link" data-status="open">open</a></td>
-                  <td>품질보증팀</td>
-                  <td>2025.08.30</td>
-                  <td class="space-x-1">
-                    <button class="btn btn-approve" type="button">승인</button>
-                    <button class="btn btn-delete" type="button" data-name="Line A scrap spike">삭제</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
-                  <td>공정 B 불량률 급증</td>
-                  <td>설비 교정 및 파라미터 점검</td>
-                  <td><a href="#" class="status-link" data-status="open">open</a></td>
-                  <td>생산기술팀</td>
-                  <td>2025.08.29</td>
-                  <td class="space-x-1">
-                    <button class="btn btn-approve" type="button">승인</button>
-                    <button class="btn btn-delete" type="button">삭제</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
-                  <td>라인 C 안전센서 오류</td>
-                  <td>교체 필요 여부 판단</td>
-                  <td><a href="#" class="status-link" data-status="open">open</a></td>
-                  <td>안전관리팀</td>
-                  <td>2025.08.28</td>
-                  <td class="space-x-1">
-                    <button class="btn btn-approve" type="button">승인</button>
-                    <button class="btn btn-delete" type="button" data-name="라인 C 안전센서 오류">삭제</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+<div class="titleBox">
+        <span>이슈 처리</span> 
+	<div class="box">
+	  <div class="wrap_list_1">
+	      <!-- 이슈 목록 카드 -->
+	      <section class="card xl:col-span-2">
+	        <header id="issue-title" class="top card-header">
+	        	<div>발생 이슈</div>
+	        <div>
+	        <div class="flex flex-wrap gap-2">
+	            <button class="btn add_btn" type="button" id="btn-add">문제추가</button>
+	            <button class="btn confirm_btn" type="button" id="btn-bulk-approve" disabled>선택 승인</button>
+	            <button class="btn delete_btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
+	          </div>
+	        </div>
+	        </header>
+	        <div class="card-body">
+	          <div class="table-wrap" tabindex="0">
+	            <table class="tables" id="issue-table">
+	              <thead>
+	                <tr>
+	                  <th scope="col" class="text-center"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
+	                  <th scope="col">유형</th>
+	                  <th scope="col">키값</th>
+	                  <th scope="col">처리상태</th>
+	                  <th scope="col">요청자</th>
+	                  <th scope="col">요청일</th>
+	                  <th scope="col" class="w-40 row_7">처리</th>
+	                </tr>
+	              </thead>
+	              <tbody id="issue-tbody">
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>Line A scrap spike</td>
+	                  <td>재열 처리 원인 분석 필요</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>품질보증팀</td>
+	                  <td>2025.08.30</td>
+	                  <td class="issue_td row_7">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button" data-name="Line A scrap spike">삭제</button>
+	                  </td>
+	                </tr>
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>공정 B 불량률 급증</td>
+	                  <td>설비 교정 및 파라미터 점검</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>생산기술팀</td>
+	                  <td>2025.08.29</td>
+	                  <td class="issue_td">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button">삭제</button>
+	                  </td>
+	                </tr>
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>라인 C 안전센서 오류</td>
+	                  <td>교체 필요 여부 판단</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>안전관리팀</td>
+	                  <td>2025.08.28</td>
+	                  <td class="issue_td">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button" data-name="라인 C 안전센서 오류">삭제</button>
+	                  </td>
+	                </tr>
+	              </tbody>
+	            </table>
+	          </div>
+	
+	          <!-- 하단 액션 -->
+	          
+	        </div>
+	      </section>
+		</div>
+		
+		
+		<div class="wrap_list_2">
+	      <!-- 선택된 항목(체크 시 삽입 · 체크 해제/삭제 시 제거) -->
+	      <aside class="card selected-panel">
+	        <header class="card-header flex items-center justify-between">
+	          <span>선택된 항목</span>
+	          <div class="flex gap-2">
+	            <button id="btn-clear-selected" class="btn btn-outline back_btn" type="button">비우기</button>
+	          </div>
+	        </header>
+	        <div class="card-body space-y-2">
+	          <p class="text-sm text-gray-500">체크박스를 선택하면 이 패널에 자동으로 추가됩니다.</p>
+	          <div id="selected-list" class="space-y-2 "></div>
+	        </div>
+	      </aside>
+	
+	      <!-- 모달 -->
+	      <div class="modal_bg" onclick="popClose();"></div>
+	      <div class="modal_wrap">
+	        <div class="modal_message"><span id="modal-target">선택한</span> 항목을 정말 삭제하시겠습니까?</div>
+	        <div class="modal_actions">
+	          <button class="modal_close" id="modal-yes">예</button>
+	          <button class="modal_close" onclick="popClose();">아니요</button>
+	        </div>
+	      </div>
+		</div>
+	</div>
 
-          <!-- 하단 액션 -->
-          <div class="actions mt-3 flex flex-wrap gap-2">
-            <button class="btn" type="button" id="btn-add">문제추가</button>
-            <button class="btn" type="button" id="btn-bulk-approve" disabled>선택 승인</button>
-            <button class="btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- 선택된 항목(체크 시 삽입 · 체크 해제/삭제 시 제거) -->
-      <aside class="card selected-panel">
-        <header class="card-header flex items-center justify-between">
-          <span>선택된 항목</span>
-          <div class="flex gap-2">
-            <button id="btn-clear-selected" class="btn btn-outline" type="button">비우기</button>
-          </div>
-        </header>
-        <div class="card-body space-y-2">
-          <p class="text-sm text-gray-500">체크박스를 선택하면 이 패널에 자동으로 추가됩니다.</p>
-          <div id="selected-list" class="space-y-2"></div>
-        </div>
-      </aside>
-
-      <!-- 모달 -->
-      <div class="modal_bg" onclick="popClose();"></div>
-      <div class="modal_wrap">
-        <div class="modal_message"><span id="modal-target">선택한</span> 항목을 정말 삭제하시겠습니까?</div>
-        <div class="modal_actions">
-          <button class="modal_close" id="modal-yes">예</button>
-          <button class="modal_close" onclick="popClose();">아니요</button>
-        </div>
-      </div>
-
+	<div class="wrap">
       <!-- 감사 로그 카드 -->
       <section class="card xl:col-span-3" style = "width : 100%">
         <header id="audit-title" class="card-header audit-header">
@@ -208,7 +221,7 @@
           <p class="mt-2 text-xs text-gray-500">포맷: <code>ISO8601, ACTION, ISSUE, REQUESTER, PREV_STATUS, NEW_STATUS, NOTE</code></p>
         </div>
       </section>
-    </main>
+  </div>
   </div>
 
   <script src="/proj_mes/Html/asset/03_issue.js"></script>
@@ -274,14 +287,14 @@
     // ===== 선택 패널 동기화 =====
     function renderSelectedItem(meta){
       return $(
-        `<div class="selected-item" data-issue-id="${meta.id}">
+        `<div class="selected-item issue" data-issue-id="${meta.id}">
           <div class="meta">
             <div class="font-semibold">${meta.type}</div>
             <div class="text-xs text-gray-500">요청자: ${meta.requester} · 상태: ${meta.statusText}</div>
           </div>
           <div class="flex gap-1">
-            <button class="btn btn-outline btn-uncheck" type="button" title="체크 해제">해제</button>
-            <button class="btn btn-delete btn-remove-row" type="button" title="행 삭제">삭제</button>
+            <button class="btn btn-outline btn-uncheck back_btn" type="button" title="체크 해제">해제</button>
+            <button class="btn btn-delete btn-remove-row delete_btn" type="button" title="행 삭제">삭제</button>
           </div>
         </div>`
       );
@@ -421,9 +434,9 @@
             <td><a href="#" class="status-link" data-status="open">open</a></td>
             <td>관리자</td>
             <td>${today}</td>
-            <td class="space-x-1">
-              <button class="btn btn-approve" type="button">승인</button>
-              <button class="btn btn-delete" type="button" data-name="신규 이슈">삭제</button>
+            <td class="issue_td">
+              <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+              <button class="btn btn-delete delete_btn_row" type="button" data-name="신규 이슈">삭제</button>
             </td>
           </tr>`;
         $('#issue-tbody').prepend(tpl);
