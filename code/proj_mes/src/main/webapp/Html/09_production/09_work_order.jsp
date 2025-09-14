@@ -98,13 +98,13 @@
             <button class="close-btn">✕</button>
             <div class="slide-title">작업 지시서 등록</div>
             <form method = "post" action = "workorder" id="form-add" class="wrap-table">
-                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="action" id="action-input" value="add">
                 <input type="hidden" name="bom_id" id="hidden-bom-id">
                 <input type="hidden" name="proc_id" id="hidden-proc-id">
-                <input type="hidden" name="wo_num_hidden">
+                <input type="hidden" name="wo_num_hidden" id="wo-num-hidden">
                 <div class="form-group">
                     <label>지시일</label>
-                    <input type="date" name="wo_date">
+                    <input type="date" name="wo_date" id="wo-date-input">
                 </div>
                 <div class="form-group">
                     <label>납기일</label>
@@ -199,57 +199,21 @@
 	                    </table>
                     </div>
                     <div class="wrap-tableBtn">
-                    	<input type="button" class="button" value="생산수량 입력">
-                        <input type="button" class="button" value="수정">
+                    	<input type="button" class="button" value="생산수량 입력" id="edit-aq-btn">
+                        <input type="button" class="button edit-all-btn" value="수정" data-wo-num="${detailWO.woNum}">
+                    </div>
+                    <div class="form-group">
+                        <label>생산 수량</label>
+                        <p class="production-quantity-display">${detailWO.woAQ}</p>
+                        <div class="edit-aq-area" style="display: none;">
+                            <input type="number" id="edit-aq-input" value="${detailWO.woAQ}">
+                            <button type="button" class="button complete-aq-btn">완료</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
-        <!-- 품목 추가 모달 -->
-<!--         <div class="modal-overlay"> -->
-<!--             <div class="modal"> -->
-<!--                 <button class="modal-close">✕</button> -->
-<!--                 <h2>품목 추가</h2> -->
-<!--                 <form class="modal-form"> -->
-<!--                 	<input type="hidden" name="action" value="addItem"> -->
-<!--                     <div class="form-group modal-search"> -->
-<!--                         <input type="text"> -->
-<!--                         <input type="button" value="검색"> -->
-<!--                     </div> -->
-<!--                     <div class ="form-group"> -->
-<!--                         <div class="wrap-table panel-table" style="height: 400px;"> -->
-<!--                             <table> -->
-<!--                                 <thead> -->
-<!--                                     <th></th> -->
-<!--                                     <th>품목코드</th> -->
-<!--                                     <th>품목명</th> -->
 
-<!--                                 </thead> -->
-<!--                                 품목 여기에서 뜨도록 -->
-<!--                                 <tbody> -->
-<%-- 									<c:forEach var="item" items="${itemList}"> --%>
-<!-- 										<tr> -->
-<%-- 											<td><input type="checkbox" value="${item.item_code}" name="chk"></td> --%>
-<%-- 											<td>${item.item_code}</td> --%>
-<%-- 											<td>${item.item_name}</td> --%>
-<!-- 										</tr> -->
-<%-- 									</c:forEach> --%>
-<!--                                 </tbody> -->
-<!--                             </table>                 -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                     <div class ="form-group"> -->
-<!--                         <div>수량 입력</div> -->
-<!--                         <input type="number"> -->
-<!--                         <input type="button" value="수량 입력"> -->
-<!--                     </div> -->
-<!--                     <div class="wrap-tableBtn"> -->
-<!--                         <input type="button" class="button reset" value="선택 해제"> -->
-<!--                         <button type="submit" class="button save">저장</button> -->
-<!--                     </div> -->
-<!--                 </form> -->
-<!--             </div> -->
-<!--         </div> -->
         <script>
             //템플릿의 header/nav만 로드
                 (async function () {
