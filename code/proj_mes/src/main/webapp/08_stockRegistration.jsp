@@ -142,9 +142,12 @@
                  value="${stock.item_price}"readonly>
         </div>
       </div>
-    
 </form>
 </div>
+ <div class="bottom">
+ 	<a href="<c:url value='/stockList' />"><button type="button" class="back_btn">목록</button></a>
+ </div>
+    
 <!-- 삭제 숨김 폼 -->
 <form id="delForm" method="post" action="<c:url value='/stockDel'/>" style="display:none">
   <input type="hidden" name="stock_id" value="${stock.stock_id}">

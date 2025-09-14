@@ -204,6 +204,10 @@
   		</table>
    </div>
 </div>
+</div>
+<div class="bottom">
+	<a href="<c:url value='/orderList' />"><button type="button" class="back_btn">목록</button></a>
+</div>
 </form>
 </div>
 <%-- 삭제 전용 분리 폼 (중첩 form 금지) --%>

@@ -341,7 +341,7 @@ body{
 }
 
 
-.bottom > .cancel {
+.back_btn {
     height: 40px;
     width: var(--btnwidth);
     padding: 0 16px;
@@ -353,6 +353,7 @@ body{
     font-size: 18px;
     cursor: pointer;
     transition: .15s;
+    margin-top: 30px;
 }
 .bottom > .confirm {
     height: 40px;
