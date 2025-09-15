@@ -49,126 +49,127 @@
         </ul>
     </nav>
     
+    <div class="titleBox">
+        <span>LOT 추적 관리</span>
+        <a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
+            <div class="toMainpage">
+                <img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인으로" style="transform: scaleX(-1);">
+                메인 화면으로
+            </div>
+        </a>
+    </div>
 
-     <div class="sidenwrap">
-        <div class="side">
-            <a href="/proj_mes/lotTracking"><div class="side-menu">LOT 추적 관리</div></a>
-            <a href="/proj_mes/inspection"><div class="side-menu">품질 검사 입력</div></a>
-            <a href="/proj_mes/defectRate"><div class="side-menu">불량률 현황</div></a>
+    <div class="wrap">
+        <!-- 검색 조건 -->
+        <div class="lookup">
+            <form method="get" action="${pageContext.request.contextPath}/lotTracking">
+                품목 코드:
+                <select name="itemCode">
+                    <option value="">전체</option>
+                    <c:forEach var="item" items="${itemList}">
+                        <option value="${item.item_code}" 
+                            <c:if test="${selectedItemCode == item.item_code}">selected</c:if>>
+                            ${item.item_code}
+                        </option>
+                    </c:forEach>
+                </select>
+
+                일자:
+                <input type="date" name="date" value="${selectedDate}">
+                <button type="submit">검색</button>
+            </form>
         </div>
 
-	    <div class="wrap">
-			<div class="wrap-title">LOT 추적 관리</div>
-	        <div class="lookup">
-	            <form method="get" action="${pageContext.request.contextPath}/lotTracking">
-	                품목 코드:
-	                <select name="itemCode">
-	                    <option value="">전체</option>
-	                    <c:forEach var="item" items="${itemList}">
-	                        <option value="${item.item_code}" 
-	                            <c:if test="${selectedItemCode == item.item_code}">selected</c:if>>
-	                            ${item.item_code}
-	                        </option>
-	                    </c:forEach>
-	                </select>
-	
-	                일자:
-	                <input type="date" name="date" value="${selectedDate}">
-	                <button type="submit">검색</button>
-	            </form>
-	        </div>
-	
-	        <!-- 메인 LOT 표 -->
-	        <div class="table-container">
-	            <table class="lot_tab">
-	                <thead>
-	                    <tr>
-	                        <th>Lot 번호</th>
-	                        <th>품목 코드</th>
-	                        <th>품명</th>
-	                        <th>수량</th>
-	                        <th>입고일</th>
-	                    </tr>        
-	                </thead>
-	                <tbody>
-	                    <c:forEach var="lot" items="${lotList}">
-	                        <tr>
-	                        	<td>
-									<a href="#" class="lotLink"
-									   data-lot="${lot.lotId}" 
-									   data-item="${lot.itemName}" 
-									   data-itemcode="${lot.itemCode}"  
-									   data-date="${lot.startTime}">
-									   ${lot.lotId}
-									</a>
-	                            </td>
-	                            <td>${lot.itemCode}</td>
-	                            <td>${lot.itemName}</td>
-	                            <td>${lot.quantity}</td>
-	                            <td>${lot.startTime}</td>
-	                        </tr>
-	                    </c:forEach>
-	
-	                    <c:if test="${empty lotList}">
-	                        <tr>
-	                            <td colspan="5" style="text-align:center;">검색 결과가 없습니다.</td>
-	                        </tr>
-	                    </c:if>
-	                </tbody>
-	            </table>
-	        </div>
-	    
-	        <!-- LOT 상세 모달 -->
-	        <div id="lotModal" class="modal">
-	            <div class="modal-content">
-	                <span id="modalClose">&times;</span> <!-- ✅ ID 변경 -->
-	                <h2>LOT 상세 내역</h2>
-	        
-	                <!-- LOT 기본 스펙 -->
-	                <table class="modalInfo">
-	                    <tr><td>LOT 번호</td><td id="modalLotId"></td></tr>
-	                    <tr>
-						    <td>품명</td>
-						    <td><span id="modalItemCode"></span> (<span id="modalItem"></span>)</td>
-						</tr>
-	                    <tr><td>가공 일자</td><td id="modalDate"></td></tr>
-	                </table>
-	        
-	                <div class="info2">
-	                    <!-- 공정 이력 -->
-	                    <h3>공정 이력</h3>
-	                    <table>
-	                        <thead>
-	                            <tr>
-	                                <th>공정명</th>
-	                                <th>시작 시간</th>
-	                                <th>종료 시간</th>
-	                                <th>작업자</th>
-	                            </tr>
-	                        </thead>
-	                        <tbody id="procHistoryBody"></tbody>
-	                    </table>
-	        
-	                    <!-- 검사 결과 -->
-	                    <h3>검사 결과</h3>
-	                    <table>
-	                        <thead>
-	                            <tr>
-	                                <th>공정명</th>
-	                                <th>검사 유형</th>
-	                                <th>불량 유형</th>
-	                                <th>개수</th>
-	                                <th>검사자</th>
-	                                <th>검사 시간</th>
-	                            </tr>
-	                        </thead>
-	                        <tbody id="inspectionResultBody"></tbody>
-	                    </table>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+        <!-- 메인 LOT 표 -->
+        <div class="table-container">
+            <table class="lot_tab">
+                <thead>
+                    <tr>
+                        <th>Lot 번호</th>
+                        <th>품목 코드</th>
+                        <th>품명</th>
+                        <th>수량</th>
+                        <th>입고일</th>
+                    </tr>        
+                </thead>
+                <tbody>
+                    <c:forEach var="lot" items="${lotList}">
+                        <tr>
+                        	<td>
+								<a href="#" class="lotLink"
+								   data-lot="${lot.lotId}" 
+								   data-item="${lot.itemName}" 
+								   data-itemcode="${lot.itemCode}"  
+								   data-date="${lot.startTime}">
+								   ${lot.lotId}
+								</a>
+                            </td>
+                            <td>${lot.itemCode}</td>
+                            <td>${lot.itemName}</td>
+                            <td>${lot.quantity}</td>
+                            <td>${lot.startTime}</td>
+                        </tr>
+                    </c:forEach>
+
+                    <c:if test="${empty lotList}">
+                        <tr>
+                            <td colspan="5" style="text-align:center;">검색 결과가 없습니다.</td>
+                        </tr>
+                    </c:if>
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- LOT 상세 모달 -->
+        <div id="lotModal" class="modal">
+            <div class="modal-content">
+                <span id="modalClose">&times;</span> <!-- ✅ ID 변경 -->
+                <h2>LOT 상세 내역</h2>
+        
+                <!-- LOT 기본 스펙 -->
+                <table class="modalInfo">
+                    <tr><td>LOT 번호</td><td id="modalLotId"></td></tr>
+                    <tr>
+					    <td>품명</td>
+					    <td><span id="modalItemCode"></span> (<span id="modalItem"></span>)</td>
+					</tr>
+                    <tr><td>가공 일자</td><td id="modalDate"></td></tr>
+                </table>
+        
+                <div class="info2">
+                    <!-- 공정 이력 -->
+                    <h3>공정 이력</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>공정명</th>
+                                <th>시작 시간</th>
+                                <th>종료 시간</th>
+                                <th>작업자</th>
+                            </tr>
+                        </thead>
+                        <tbody id="procHistoryBody"></tbody>
+                    </table>
+        
+                    <!-- 검사 결과 -->
+                    <h3>검사 결과</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>공정명</th>
+                                <th>검사 유형</th>
+                                <th>불량 유형</th>
+                                <th>개수</th>
+                                <th>검사자</th>
+                                <th>검사 시간</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inspectionResultBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="${pageContext.request.contextPath}/Html/asset/10_lot_tracking.js"></script>
 </body>
