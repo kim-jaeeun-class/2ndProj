@@ -69,16 +69,17 @@
 
     <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+            <a href = "/proj_mes/StandardCtrl"><li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li></a>
+            <a href = "/proj_mes/process"><li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li></a>
+            <a href = "/proj_mes/bom"><li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li></a>
+            <a href = "/proj_mes/orderList"><li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li></a>
+            <a href = "/proj_mes/stockList"><li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li></a>
+            <a href = "/proj_mes/proplan"><li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li></a>
+            <a href = "/proj_mes/items"><li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li></a>           
+            <a href = "/proj_mes/inspection"><li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li></a>
         </ul>
     </nav>
+    
 	<div class="titleBox">
 		<span>품질 검사 입력</span>
 		<a href="">
