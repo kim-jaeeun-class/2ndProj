@@ -54,10 +54,10 @@
         <input type="hidden" name="order_key" id="delete_keys">
         <button type="button" class="delete" id="deleteBtn">삭제</button>
 
-        <c:url var="addUrl" value="/orderDetail">
-          <c:param name="mode" value="add"/>
-        </c:url>
-        <a class="add item_add" href="${addUrl}">등록</a>
+    	 <a class="add" href="<c:url value='/orderDetail'>
+        	<c:param name='mode' value='add'/></c:url>">
+         	<button type="button" class="item_add">등록</button>
+	    </a>
       </form>
     </div>
 
