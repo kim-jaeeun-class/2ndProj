@@ -42,34 +42,55 @@
 }
 /* ////////////////////////////////////////////////////////////////// */
 
-.wrap {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+/* body */
+body {
+    margin: 0;
+    position: relative;
+    overflow-x: hidden;
+    background-color: var(--body-bg);
 }
 
-/* 제목 부분 */
-.titleBox {
-    background-color: var(--info-bg);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
+/* sidenwrap : 사이드바와 wrap 모두 감싸는 부분 */
+.sidenwrap {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: content-box; 
+    min-height: calc(100vh - 60px); /* header/nav 높이 뺀 나머지 채움 */
 }
 
-.titleBox span {
-    font-size: 1.4em;
+/* side : 사이드바 영역 */
+.side {
+    width: 15%;
+    min-width: 180px;
+    background-color: var(--header-bg);
+}
+.side-menu {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--header-text);
     font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+}
+.side-menu:hover {
+    background-color: var(--nav-bg);
 }
 
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
+/* wrap(사이드 제외 모든 컨텐츠) */
+.wrap {
+    flex: 1;
+    background-color: var(--body-bg);
+    max-width: 1280px;
+    margin: 10px auto;
+    padding: 20px;
+    overflow-x: hidden;
 }
+
+.wrap-title {
+    font-size: 30px;
+    font-weight: bold;
+    background-color: var(--body-bg);
+}
+
 
 
 /* 버튼 공통 양식*/
