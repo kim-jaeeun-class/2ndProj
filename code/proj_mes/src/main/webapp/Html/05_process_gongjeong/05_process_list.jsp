@@ -40,6 +40,7 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-100 text-gray-800">
     <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
         <div class="flex items-center space-x-2">
@@ -64,111 +65,109 @@
 
     <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+            <a href = "/proj_mes/StandardCtrl"><li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li></a>
+            <a href = "/proj_mes/process"><li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li></a>
+            <a href = "/proj_mes/bom"><li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li></a>
+            <a href = "/proj_mes/orderList"><li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li></a>
+            <a href = "/proj_mes/stockList"><li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li></a>
+            <a href = "/proj_mes/proplan"><li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li></a>
+            <a href = "/proj_mes/items"><li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li></a>           
+            <a href = "/proj_mes/inspection"><li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li></a>
         </ul>
     </nav>
     
-	<div class="titleBox">
-		<span>공정 목록</span>
-		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
-	
-	<div class="wrap">
-		<form id="processForm" action="process" method="get">
-			<div class="lookup">
-				<div>
-					품목코드&nbsp;
-					<select name="itemCode" onchange="this.form.submit()">
-						<option value="">전체</option>
-						<c:forEach var="itemCode" items="${itemCodes}">
-							<option value="${itemCode}" <c:if test="${selectedItemCode eq itemCode}">selected</c:if>>
-								<c:out value="${itemCode}" />
-							</option>
-						</c:forEach>
-					</select>
-				</div>
-				<div>	
-					부서&nbsp;
-					<select name="departLevel" onchange="this.form.submit()">
-						<option value="">전체</option>
-						<c:forEach var="departLevel" items="${departLevels}">
-				           	<option value="${departLevel}" <c:if test="${selectedDepart eq departLevel}">selected</c:if>>
-				                <c:out value="${departLevel}" />
-				           	</option>
-				       	</c:forEach>
-					</select>
-				</div>
-				<div>
-					공정명&nbsp;
-				    <select name="procName" onchange="this.form.submit()">
-						<option value="">전체</option>
-						<c:forEach var="procName" items="${procNames}">
-				            <option value="${procName}" <c:if test="${selectedProcName eq procName}">selected</c:if>>
-				                <c:out value="${procName}" />
-				            </option>
-				        </c:forEach>
-					</select>
-				</div>
-				<div class="btnDiv">
-					<input type="button" value="수정" class="updateProcessBtn btn"></input>
-					<input type="button" value="신규" class="newProcessBtn btn"></input>
-				</div>
-			</div>
 
-		</form>
-		
-		<div class="table-container" style="display: <c:if test="${not empty processes}">block</c:if>">
-			<table class="proc_tab">
-				<thead>
-					<tr>
-						<th>선택</th>
-						<th>순번</th>
-						<th>품목 코드</th>
-						<th>공정 코드</th>
-						<th>부서</th>
-						<th>공정 순서</th>
-						<th>공정명</th>
-						<th>공정 설명</th>
-						<th>이미지</th>
-					</tr>		
-				</thead>
-				<tbody>
-					<c:if test="${empty processes}">
-						<tr><td colspan="9">조회된 공정 정보가 없습니다.</td></tr>
-					</c:if>
-					<c:if test="${not empty processes}">
-						<c:forEach var="proc" items="${processes}" varStatus="status">
-							<tr>
-								<td><input type="radio" name="selectedProcId" value="${proc.proc_id}"></td>
-								<td><c:out value="${status.count}" /></td>
-								<td><c:out value="${proc.item_code}" /></td>
-								<td class="procIdCell"><c:out value="${proc.proc_id}" /></td>
-								<td class="departLevelCell"><c:out value="${proc.depart_level}" /></td>
-								<td class="procSeqCell"><c:out value="${proc.proc_seq}" /></td>
-								<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
-								<td class="procInfoCell"><c:out value="${proc.proc_info}" /></td>
-								<td>
-								    <c:if test="${not empty proc.proc_img}">
-								        <img src="${pageContext.request.contextPath}/${proc.proc_img}" alt="공정 이미지">
-								    </c:if>
-								</td>
-							</tr>
-						</c:forEach>
-					</c:if>
-				</tbody>
-			</table>
+     <div class="sidenwrap">
+        <div class="side">
+            <a href="/proj_mes/process"><div class="side-menu">공정 목록</div></a>
+            <a href="/proj_mes/process?mode=new"><div class="side-menu">공정 등록 / 수정 / 삭제</div></a>
+        </div>
+		<div class="wrap">
+			<div class="wrap-title">공정 목록</div>
+			<form id="processForm" action="process" method="get">
+				<div class="lookup">
+					<div>
+						품목코드&nbsp;
+						<select name="itemCode" onchange="this.form.submit()">
+							<option value="">전체</option>
+							<c:forEach var="itemCode" items="${itemCodes}">
+								<option value="${itemCode}" <c:if test="${selectedItemCode eq itemCode}">selected</c:if>>
+									<c:out value="${itemCode}" />
+								</option>
+							</c:forEach>
+						</select>
+					</div>
+					<div>	
+						부서&nbsp;
+						<select name="departLevel" onchange="this.form.submit()">
+							<option value="">전체</option>
+							<c:forEach var="departLevel" items="${departLevels}">
+					           	<option value="${departLevel}" <c:if test="${selectedDepart eq departLevel}">selected</c:if>>
+					                <c:out value="${departLevel}" />
+					           	</option>
+					       	</c:forEach>
+						</select>
+					</div>
+					<div>
+						공정명&nbsp;
+					    <select name="procName" onchange="this.form.submit()">
+							<option value="">전체</option>
+							<c:forEach var="procName" items="${procNames}">
+					            <option value="${procName}" <c:if test="${selectedProcName eq procName}">selected</c:if>>
+					                <c:out value="${procName}" />
+					            </option>
+					        </c:forEach>
+						</select>
+					</div>
+					<div class="btnDiv">
+						<input type="button" value="수정" class="updateProcessBtn btn"></input>
+						<input type="button" value="신규" class="newProcessBtn btn"></input>
+					</div>
+				</div>
+	
+			</form>
+			
+			<div class="table-container" style="display: <c:if test="${not empty processes}">block</c:if>">
+				<table class="proc_tab">
+					<thead>
+						<tr>
+							<th>선택</th>
+							<th>순번</th>
+							<th>품목 코드</th>
+							<th>공정 코드</th>
+							<th>부서</th>
+							<th>공정 순서</th>
+							<th>공정명</th>
+							<th>공정 설명</th>
+							<th>이미지</th>
+						</tr>		
+					</thead>
+					<tbody>
+						<c:if test="${empty processes}">
+							<tr><td colspan="9">조회된 공정 정보가 없습니다.</td></tr>
+						</c:if>
+						<c:if test="${not empty processes}">
+							<c:forEach var="proc" items="${processes}" varStatus="status">
+								<tr>
+									<td><input type="radio" name="selectedProcId" value="${proc.proc_id}"></td>
+									<td><c:out value="${status.count}" /></td>
+									<td><c:out value="${proc.item_code}" /></td>
+									<td class="procIdCell"><c:out value="${proc.proc_id}" /></td>
+									<td class="departLevelCell"><c:out value="${proc.depart_level}" /></td>
+									<td class="procSeqCell"><c:out value="${proc.proc_seq}" /></td>
+									<td class="procNameCell"><c:out value="${proc.proc_name}" /></td>
+									<td class="procInfoCell"><c:out value="${proc.proc_info}" /></td>
+									<td>
+									    <c:if test="${not empty proc.proc_img}">
+									        <img src="${pageContext.request.contextPath}/${proc.proc_img}" alt="공정 이미지">
+									    </c:if>
+									</td>
+								</tr>
+							</c:forEach>
+						</c:if>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>

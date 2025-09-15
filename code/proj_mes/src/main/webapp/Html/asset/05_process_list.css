@@ -42,43 +42,53 @@
 }
 /* ////////////////////////////////////////////////////////////////// */
 
-.wrap {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+/* body */
+body {
+    margin: 0;
+    position: relative;
+    overflow-x: hidden;
+    background-color: var(--body-bg);
 }
 
-/* 제목 부분 */
-.titleBox {
-    background-color: var(--info-bg);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
+/* sidenwrap : 사이드바와 wrap 모두 감싸는 부분 */
+.sidenwrap {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: content-box; 
+    min-height: calc(100vh - 60px); /* header/nav 높이 뺀 나머지 채움 */
 }
 
-.titleBox span {
-    font-size: 1.4em;
+/* side : 사이드바 영역 */
+.side {
+    width: 15%;
+    min-width: 180px;
+    background-color: var(--header-bg);
+}
+.side-menu {
+    border-bottom: 1px solid var(--border-color);
+    color: var(--header-text);
     font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    cursor: pointer;
+}
+.side-menu:hover {
+    background-color: var(--nav-bg);
 }
 
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
+/* wrap(사이드 제외 모든 컨텐츠) */
+.wrap {
+    flex: 1;
+    background-color: var(--body-bg);
+    max-width: 1280px;
+    margin: 10px auto;
+    padding: 20px;
+    overflow-x: hidden;
 }
 
-
-/* 버튼 양식*/
-.btn {
-    border-radius: var(--radius);
-    color: #ffffff;
+.wrap-title {
+    font-size: 30px;
     font-weight: bold;
-    font-size: 1.2rem;
-    padding: 5px 15px;
+    background-color: var(--body-bg);
 }
 
 /* 조회 부분 */
@@ -86,76 +96,76 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background-color: var(--info-bg);
-    padding: 5px;
-    margin: 10px 30px;
+    padding: 10px;
+    margin: 20px 0;
     display: flex;
     justify-content: space-around; 
     align-items: center; 
     gap: 15px;
     font-weight: bold;
 }
-
-
-.lookup > select {
+.lookup select {
     font-size: 1.1em;
 }
 
-/* btnDiv 부분 */
+/* 버튼 */
 .btnDiv {
-	margin: 10px 30px;
+    margin: 10px 0;
 }
 .newProcessBtn {
     background-color: #000000;
     border: 1px solid #000000;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
 }
-
 .updateProcessBtn {
     background-color: var(--green);
     border: 1px solid var(--green);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
 }
-
-.updateProcessBtn: hover {
+.updateProcessBtn:hover {
     background-color: var(--green-hover);
     border: 1px solid var(--green-hover);
 }
 
-
-/* 테이블 부분 */
+/* 테이블 */
 .table-container {
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
     height: 600px; 
-    overflow: auto; /* 내용이 넘칠 때 스크롤바가 생기도록 설정 */
-    margin: 10px 30px;
+    overflow: auto; 
+    margin: 10px 0;
+    background-color: #fff;
+    border-radius: var(--radius-sm);
 }
-
-/* 테이블 전체에 테두리 적용 */
 .proc_tab {
-    border-collapse: collapse; /* 셀 경계선이 겹치지 않고 하나로 합쳐지게 함 */
-    width: 100%; /* 테이블 너비를 꽉 채우도록 설정 */
+    border-collapse: collapse; 
+    width: 100%;
 }
-
-/* 모든 헤더 셀과 데이터 셀에 테두리 적용 */
 .proc_tab th, .proc_tab td {
-    border: 1px solid black; 
+    border: 1px solid var(--border-color); 
     padding: 8px; 
     text-align: center; 
 }
-
 .proc_tab > thead {
-    background-color: #999;
+    background-color: #f8fafc;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 /* 이미지 확대 */
-/* 기본 이미지 크기 */
 .proc_tab img {
     width: 50px;
     height: 50px;
     cursor: pointer;
     transition: width 0.3s ease, height 0.3s ease;
 }
-
-/* 확대 이미지 */
 .proc_tab img.expanded {
-    width: 150px;   /* 확대 시 너비 */
-    height: 150px;  /* 확대 시 높이 */
+    width: 150px;
+    height: 150px;
 }

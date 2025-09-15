@@ -64,117 +64,114 @@
 
     <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
         <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
-            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+            <a href = "/proj_mes/StandardCtrl"><li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li></a>
+            <a href = "/proj_mes/process"><li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li></a>
+            <a href = "/proj_mes/bom"><li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li></a>
+            <a href = "/proj_mes/orderList"><li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li></a>
+            <a href = "/proj_mes/stockList"><li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li></a>
+            <a href = "/proj_mes/proplan"><li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li></a>
+            <a href = "/proj_mes/items"><li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li></a>           
+            <a href = "/proj_mes/inspection"><li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li></a>
         </ul>
     </nav>
     
-	<div class="titleBox">
-		<span>공정 등록 / 수정 / 삭제</span>
-		<a href="${pageContext.request.contextPath}/Html/02_main/mainpage.html">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표" style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
-
-	<div class="wrap">		
-	    <form id="processCUDForm" action="process" method="post" enctype="multipart/form-data">
-	        <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}">
-	        <input type="hidden" name="action" id="action">
-	        <input type="hidden" name="procId" id="procId_hidden">
+    <div class="sidenwrap">
+        <div class="side">
+            <a href="/proj_mes/process"><div class="side-menu">공정 목록</div></a>
+            <a href="/proj_mes/process?mode=new"><div class="side-menu">공정 등록 / 수정 / 삭제</div></a>
+        </div>
+		<div class="wrap">		
+			<div class="wrap-title">공정 등록 / 수정 / 삭제</div>
+		    <form id="processCUDForm" action="process" method="post" enctype="multipart/form-data">
+		        <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}">
+		        <input type="hidden" name="action" id="action">
+		        <input type="hidden" name="procId" id="procId_hidden">
+		
+		        <div class="processInfo">
+		            <div class="table-container">
+		                <table class="inputTb">
+							<tr>
+								<td>품목 코드</td>
+								<td>
+								    <select id="itemCodeSelectCUD" name="itemCode" <c:if test="${mode eq 'update'}">disabled</c:if>>
+									    <option value="">선택</option>
+									    <c:forEach var="itemCode" items="${itemCodes}">
+									        <option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
+									            ${itemCode}
+									        </option>
+									    </c:forEach>
+									</select>
+									<c:if test="${mode eq 'update'}">
+									    <input type="hidden" name="itemCode" value="${process.item_code}">
+									</c:if>
+								</td>
+							</tr>
+							<tr>
+								<td>공정 코드</td>
+								<td><input type="text" id="procId" name="procId" value="${process.proc_id}">
+							</tr>
+							<tr>
+								<td>공정 순서</td>
+								<td><input type="text" id="procSeq" name="procSeq" value="${process.proc_seq}"></td>
+							</tr>
+							<tr>
+							    <td>소속 부서</td>
+							    <td>
+							        <select id="departSelect" name="departLevel">
+									    <option value="">선택</option>
+									    <c:forEach var="departLevel" items="${departLevels}"> <!-- getUniqueDepartLevels() -->
+									        <option value="${departLevel}" <c:if test="${process.depart_level eq departLevel}">selected</c:if>>
+									            ${departLevel}
+									        </option>
+									    </c:forEach>
+									</select>
+							    </td>
+							</tr>
+							<tr>
+								<td>공정</td>
+							    <td>                
+							        <select id="procNameSelect" name="procName" data-initial-proc="${process.proc_name}">
+								        <option value="">선택</option>
+								        <c:forEach var="procName" items="${procNames}">
+								            <option value="${procName}" <c:if test="${process.proc_name eq procName}">selected</c:if>>
+								                ${procName}
+								            </option>
+								        </c:forEach>
+								    </select>
+							    </td>
+							</tr>
+							<tr>
+								<td>공정 설명</td>
+								<td>
+									<textarea id="procInfo" name="procInfo" rows="5" cols="40">${process.proc_info}</textarea>
+								</td>
+							</tr>
+						</table>
+					</div>
+					
+					<div class="imgDiv">
+		                공정이미지
+		                <div>
+		                    <input type="file" name="procImage" id="procImageInput">
+		                    <c:if test="${not empty process.proc_img}">
+		                        <img src="${pageContext.request.contextPath}/${process.proc_img}" alt="공정 이미지" id="procImage">
+		                        <button type="button" id="deleteImageBtn">이미지 삭제</button>
+		                    </c:if>
+		                    <c:if test="${empty process.proc_img}">
+		                        <img src="" alt="공정 이미지" id="procImage" style="display:none;">
+		                    </c:if>
+		                    <input type="hidden" name="deleteImage" id="deleteImageHidden" value="false">
+		                </div>
+		            </div>
+	        	</div>
 	
-	        <div class="processInfo">
-	            <div class="table-container">
-	                <table class="inputTb">
-						<tr>
-							<td>품목 코드</td>
-							<td>
-							    <select id="itemCodeSelectCUD" name="itemCode" <c:if test="${mode eq 'update'}">disabled</c:if>>
-								    <option value="">선택</option>
-								    <c:forEach var="itemCode" items="${itemCodes}">
-								        <option value="${itemCode}" <c:if test="${process.item_code eq itemCode}">selected</c:if>>
-								            ${itemCode}
-								        </option>
-								    </c:forEach>
-								</select>
-								<c:if test="${mode eq 'update'}">
-								    <input type="hidden" name="itemCode" value="${process.item_code}">
-								</c:if>
-							</td>
-						</tr>
-						<tr>
-							<td>공정 코드</td>
-							<td><input type="text" id="procId" name="procId" value="${process.proc_id}">
-						</tr>
-						<tr>
-							<td>공정 순서</td>
-							<td><input type="text" id="procSeq" name="procSeq" value="${process.proc_seq}"></td>
-						</tr>
-						<tr>
-						    <td>소속 부서</td>
-						    <td>
-						        <select id="departSelect" name="departLevel">
-								    <option value="">선택</option>
-								    <c:forEach var="departLevel" items="${departLevels}"> <!-- getUniqueDepartLevels() -->
-								        <option value="${departLevel}" <c:if test="${process.depart_level eq departLevel}">selected</c:if>>
-								            ${departLevel}
-								        </option>
-								    </c:forEach>
-								</select>
-						    </td>
-						</tr>
-						<tr>
-							<td>공정</td>
-						    <td>                
-						        <select id="procNameSelect" name="procName" data-initial-proc="${process.proc_name}">
-							        <option value="">선택</option>
-							        <c:forEach var="procName" items="${procNames}">
-							            <option value="${procName}" <c:if test="${process.proc_name eq procName}">selected</c:if>>
-							                ${procName}
-							            </option>
-							        </c:forEach>
-							    </select>
-						    </td>
-						</tr>
-						<tr>
-							<td>공정 설명</td>
-							<td>
-								<textarea id="procInfo" name="procInfo" rows="5" cols="40">${process.proc_info}</textarea>
-							</td>
-						</tr>
-					</table>
-				</div>
-				
-				<div class="imgDiv">
-	                공정이미지
-	                <div>
-	                    <input type="file" name="procImage" id="procImageInput">
-	                    <c:if test="${not empty process.proc_img}">
-	                        <img src="${pageContext.request.contextPath}/${process.proc_img}" alt="공정 이미지" id="procImage">
-	                        <button type="button" id="deleteImageBtn">이미지 삭제</button>
-	                    </c:if>
-	                    <c:if test="${empty process.proc_img}">
-	                        <img src="" alt="공정 이미지" id="procImage" style="display:none;">
-	                    </c:if>
-	                    <input type="hidden" name="deleteImage" id="deleteImageHidden" value="false">
-	                </div>
-	            </div>
-        	</div>
-
-	        <div class="bottomBtn">
-	            <input type="button" value="삭제" class="deleteBtn btn"></input>
-	            <input type="button" value="수정" class="updateBtn btn"></input>
-	            <input type="button" value="등록" class="createBtn btn"></input>
-	        </div>
-		</form>
+		        <div class="bottomBtn">
+		            <input type="button" value="삭제" class="deleteBtn btn"></input>
+		            <input type="button" value="수정" class="updateBtn btn"></input>
+		            <input type="button" value="등록" class="createBtn btn"></input>
+		        </div>
+			</form>
+		</div>
 	</div>
 </body>
 </html>
