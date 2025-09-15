@@ -74,10 +74,16 @@
         </ul>
     </nav>
     
-	<div class="titleBox"></div>
-
+   	<div class="sidenwrap">
+       <div class="side">
+           <a href="/proj_mes/lotTracking"><div class="side-menu">LOT 추적 관리</div></a>
+           <a href="/proj_mes/inspection"><div class="side-menu">품질 검사 입력</div></a>
+           <a href="/proj_mes/defectRate"><div class="side-menu">불량률 현황</div></a>
+       </div>
+       
 	<div class="wrap">
-        <div class="lookup">
+		<div class="wrap-title">불량률 현황</div>
+
 		    <form method="get" action="${pageContext.request.contextPath}/defectRate">
 		        <!-- 품목 검색 -->
 		        품명:
@@ -172,6 +178,6 @@
 				</tfoot>
 			</table>
 		</div>
-	</div>
+	</div>	
 </body>
 </html>
