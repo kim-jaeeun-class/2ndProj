@@ -31,134 +31,134 @@
   <div id="header-slot"></div>
   <div id="nav-slot"></div>
 
-  <div class="titleBox">
-    <span>계정 목록</span>
+    <div class="titleBox">
+        <span>계정 목록</span>
 
-          <!-- 삭제/수정 제출 폼 -->
-          <form id="deleteForm" method="post" action="<c:url value='/AccountManage/delete'/>">
-            <div id="hiddenIds"></div>
-          </form>
-          <form id="updateForm" method="post" action="<c:url value='/AccountManage/update'/>">
-            <input type="hidden" name="workerId"    id="updWorkerId">
-            <input type="hidden" name="dapartId2"   id="updDept">
-            <input type="hidden" name="workerCando" id="updRole">
-          </form>
-  <div class="wrap">
-	<div class="box">
-       <!-- 액션 바 -->
-       <div>
-         <input id="searchInput" type="text" placeholder="이름/사번/부서 검색">
- 	   </div>
- 	   
-       <div>
-        <button id="btnSearch" class="btn filter_btn" type="button">검색</button>
-        <!-- <button id="btnRefresh" class="btn reset_btn" type="button">새로고침</button> -->
-       </div>
-	</div>
-  </div>
-<div class="wrap_list">
+            <!-- 삭제/수정 제출 폼 -->
+            <form id="deleteForm" method="post" action="<c:url value='/AccountManage/delete'/>">
+                <div id="hiddenIds"></div>
+            </form>
+            <form id="updateForm" method="post" action="<c:url value='/AccountManage/update'/>">
+                <input type="hidden" name="workerId"    id="updWorkerId">
+                <input type="hidden" name="dapartId2"   id="updDept">
+                <input type="hidden" name="workerCando" id="updRole">
+            </form>
+        <div class="wrap">
             <div class="box">
-              <!-- 계정생성 -->
-              <button id="btnAskDelete" class="btn delete_btn" type="button">삭제</button>
-              <a href="<c:url value='/AccountCreate'/>"><button class="btn add_btn" type="button">생성</button></a>
+                <!-- 액션 바 -->
+                <div>
+                <input id="searchInput" type="text" placeholder="이름/사번/부서 검색">
+                </div>
+            
+                <div>
+                    <button id="btnSearch" class="btn filter_btn" type="button">검색</button>
+                    <!-- <button id="btnRefresh" class="btn reset_btn" type="button">새로고침</button> -->
+                </div>
+            </div>
+        </div>
+        <div class="wrap_list">
+            <div class="box">
+                <!-- 계정생성 -->
+                <button id="btnAskDelete" class="btn delete_btn" type="button">삭제</button>
+                <a href="<c:url value='/AccountCreate'/>"><button class="btn add_btn" type="button">생성</button></a>
             </div>
           <!-- 테이블 -->
           <div class="table-wrap" tabindex="0">
-            <table class="tables" id="accountTable">
-              <thead>
-                <tr>
-                  <th><input type="checkbox" id="selectAll"></th>
-                  <th scope="col">사번</th>
-                  <th scope="col">이름</th>
-                  <th scope="col">부서ID</th>
-                  <th scope="col">직급</th>
-                  <th scope="col">권한</th>
-                  <th scope="col">액션</th>
-                </tr>
-              </thead>
-              <tbody>
-                <c:forEach var="acc" items="${accounts}">
-                  <tr data-empno="${acc.workerId}" data-name="${acc.workerName}">
-                    <td>
-                      <input type="checkbox" class="rowCheck" data-empno="${acc.workerId}" data-name="${acc.workerName}">
-                    </td>
-                    <td><c:out value="${acc.workerId}"/></td>
-                    <td><c:out value="${acc.workerName}"/></td>
-                    <td class="colDept"><c:out value="${acc.dapartId2}"/></td>
-                    <td class="colGrade"><c:out value="${acc.workerGrade}"/></td>
-                    <td class="colRole"><c:out value="${acc.workerCando}"/></td>
-                    <td><button class="btn btnEdit" type="button">수정</button></td>
-                  </tr>
-                </c:forEach>
-              </tbody>
-            </table>
-          </div>
-      <!-- 감사 로그 -->
-      <div class="list">
-        <div id="audit-title" class="box header_list" >
-	        <div>감사 로그(Audit)</div>
-	          <textarea id="audit" class="audit-textarea" placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
-      	</div>
-      </div>
-  </div>
-</div>
-      <!-- 삭제 모달 -->
-      <div class="modal_bg" id="deleteModalBg" style="display:none;"></div>
-      <div class="modal_wrap" id="deleteModal" style="display:none;">
-      	<div class="m_delwrap">
-        	<div id="deleteModalText"></div>
-	    	<div id="deleteModalText" class="ment">선택한 계정을 삭제할까요?</div>
-      	</div>
-        <div class="bottom">
-          <button class="modal_close delete_btn" id="btnConfirmDelete" type="button">예</button>
-          <button class="modal_close confirm_btn" id="btnCancelDelete" type="button">아니요</button>
+                <table class="tables" id="accountTable">
+                    <thead>
+                        <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th scope="col">사번</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">부서ID</th>
+                        <th scope="col">직급</th>
+                        <th scope="col">권한</th>
+                        <th scope="col">액션</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="acc" items="${accounts}">
+                        <tr data-empno="${acc.workerId}" data-name="${acc.workerName}">
+                            <td>
+                            <input type="checkbox" class="rowCheck" data-empno="${acc.workerId}" data-name="${acc.workerName}">
+                            </td>
+                            <td><c:out value="${acc.workerId}"/></td>
+                            <td><c:out value="${acc.workerName}"/></td>
+                            <td class="colDept"><c:out value="${acc.dapartId2}"/></td>
+                            <td class="colGrade"><c:out value="${acc.workerGrade}"/></td>
+                            <td class="colRole"><c:out value="${acc.workerCando}"/></td>
+                            <td><button class="btn btnEdit" type="button">수정</button></td>
+                        </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 감사 로그 -->
+            <div class="list">
+                <div id="audit-title" class="box header_list" >
+                    <div>감사 로그(Audit)</div>
+                    <textarea id="audit" class="audit-textarea" placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+                </div>
+            </div>
         </div>
-      </div>
+    </div>
+        <!-- 삭제 모달 -->
+        <div class="modal_bg" id="deleteModalBg" style="display:none;"></div>
+        <div class="modal_wrap" id="deleteModal" style="display:none;">
+            <div class="m_delwrap">
+                <div id="deleteModalText"></div>
+                <div id="deleteModalText" class="ment">선택한 계정을 삭제할까요?</div>
+            </div>
+            <div class="bottom">
+                <button class="modal_close delete_btn" id="btnConfirmDelete" type="button">예</button>
+                <button class="modal_close confirm_btn" id="btnCancelDelete" type="button">아니요</button>
+            </div>
+        </div>
 
-      <!-- 수정 모달 -->
-      <div class="modal_bg" id="editModalBg" style="display:none;"></div>
-      <div class="modal_wrap" id="editModal" style="display:none;">
-      	<div class="m_title">
-	        <div>계정 수정</div>
-      	</div>
-      	<div class="m_wrap">
-	        <div class="m_row">
-	        	<div class="label">
-		        	사번 : 
-	        	</div> 
-	        	<div id="editEmpNo" ></div>
-        	</div>
-	        <div class="m_row">
-				<div class="label">
-		        	이름 : 
-	        	</div> 
-	        	<div id="editName"></div>
-        	</div>
+        <!-- 수정 모달 -->
+        <div class="modal_bg" id="editModalBg" style="display:none;"></div>
+        <div class="modal_wrap" id="editModal" style="display:none;">
+            <div class="m_title">
+                <div>계정 수정</div>
+            </div>
+            <div class="m_wrap">
+                <div class="m_row">
+                    <div class="label">
+                        사번 : 
+                    </div> 
+                    <div id="editEmpNo" ></div>
+                </div>
+                <div class="m_row">
+                    <div class="label">
+                        이름 : 
+                    </div> 
+                    <div id="editName"></div>
+                </div>
 	
-	        <div class="m_row">
-		        <div class="label">
-		          부서ID : 
-		        </div>
-		        <div>
-		          <input id="editDept" type="text" class="m_input" placeholder="예: D001" >
-		        </div>
-			</div>
-	        <div class="m_row">
-		        <div class="label">
-		          권한 : 
-		        </div>
-		          <select id="editRole">
-		            <option value="USER">USER</option>
-		            <option value="MANAGER">MANAGER</option>
-		            <option value="ADMIN">ADMIN</option>
-		          </select>
-	        </div>
-      	</div>
+                <div class="m_row">
+                    <div class="label">
+                        부서ID : 
+                    </div>
+                    <div>
+                        <input id="editDept" type="text" class="m_input" placeholder="예: D001" >
+                    </div>
+                </div>
+                <div class="m_row">
+                    <div class="label">
+                        권한 : 
+                    </div>
+                    <select id="editRole">
+                        <option value="USER">USER</option>
+                        <option value="MANAGER">MANAGER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="bottom">
-          <button class="modal_close confirm_btn" id="btnEditSave" type="button">저장</button>
-          <button class="modal_close back_btn" id="btnEditCancel" type="button">취소</button>
-        </div>
+            <div class="bottom">
+                <button class="modal_close confirm_btn" id="btnEditSave" type="button">저장</button>
+                <button class="modal_close back_btn" id="btnEditCancel" type="button">취소</button>
+            </div>
       </div>
 
 

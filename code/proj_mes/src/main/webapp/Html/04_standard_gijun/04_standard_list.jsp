@@ -41,7 +41,7 @@
 	        </div>
       	</div>
         <div>
-        <button class="btn filter_btn" type="button" id="std-search">조회</button>
+        	<button class="btn filter_btn" type="button" id="std-search">조회</button>
         </div>
         <!-- <div class="spacer"></div> --><!-- 필요하신 건가요? -->
       </div>
