@@ -21,8 +21,19 @@ public class BOMCtrl extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 		
-		// 전체 조회용 서블릿
 		BOMService service = new BOMService();
+		String action = request.getParameter("action");
+		
+		if("edit".equals(action)) {
+		    String bomID = request.getParameter("bomID");
+		    BOMDTO dto = service.getBOMByID(bomID);
+
+		    request.setAttribute("edit", dto);
+		    request.getRequestDispatcher("/Html/06_bom/06_bom_edit.jsp").forward(request, response);
+		    return;
+		}
+		
+		// 전체 조회용 서블릿
 		List<BOMDTO> list = service.getAllBOM();
 		
 		request.setAttribute("list", list);
@@ -40,35 +51,33 @@ public class BOMCtrl extends HttpServlet {
 		
 		if("add".equals(action)) {
 			// 등록 영역 - 완
-			BOMDTO dto = new BOMDTO();
-			dto.setBomID(request.getParameter("bom-id"));
-			dto.setItem_code_1(request.getParameter("item-code-1"));
-			dto.setItem_code_2(request.getParameter("item-code-2"));
-			dto.setRequire_amount(Integer.parseInt(request.getParameter("require-amount")));
-			
-			int result = service.addBOM(dto);
-			if(result > 0) {
-				request.setAttribute("msg", "등록 성공");
-			}
-			else {
-				request.setAttribute("msg", "등록 실패");
-			}
-			
+		    BOMDTO dto = new BOMDTO();
+		    dto.setItem_code_1(request.getParameter("item-code-1"));
+		    dto.setItem_code_2(request.getParameter("item-code-2"));
+		    dto.setRequire_amount(Integer.parseInt(request.getParameter("require-amount")));
+
+		    int result = service.addBOM(dto);
+		    if(result > 0) {
+		        request.setAttribute("msg", "등록 성공");
+		    } 
+		    else {
+		        request.setAttribute("msg", "등록 실패");
+		    }
 		}
 		else if("delete".equals(action)) {
-			// 삭제 영역 - 체크박스로 삭제하도록
-			// 체크박스 value 가져와서 진행하기
-			String[] ids = request.getParameterValues("chk");
-			int delCount = 0;
-			if(ids != null) {
-				for(String id : ids) {
-					BOMDTO dto = new BOMDTO();
-					dto.setBomID(id);
-					delCount += service.removeBOM(dto);
-				}
-			}
-			request.setAttribute("msg", delCount + "건 삭제");
+		    String[] ids = request.getParameterValues("chk");
+		    int delCount = 0;
+		    if(ids != null) {
+		        for(String id : ids) {
+		            BOMDTO dto = new BOMDTO();
+		            dto.setBomID(id); 
+		            delCount += service.removeBOM(dto);
+		            System.out.println("일단 null은 아님");
+		        }
+		    }
+		    request.setAttribute("msg", delCount + "건 삭제");
 		}
+
 		else if("search".equals(action)) {
 			// 필터링 검색 영역
 			String item1 = request.getParameter("filter-item1");
@@ -97,8 +106,18 @@ public class BOMCtrl extends HttpServlet {
 			
 		}
 		else if("edit".equals(action)) {
-			// 수정 영역
-			// TODO 아 귀찮네... 이거 생산에서 그냥 add랑 합쳐서 하지 않았나. 안 써도 되지 않나. 나중에 확인하기.
+		    BOMDTO dto = new BOMDTO();
+		    dto.setBomID(request.getParameter("bomID"));
+		    dto.setItem_code_1(request.getParameter("item-code-1"));
+		    dto.setItem_code_2(request.getParameter("item-code-2"));
+		    dto.setRequire_amount(Integer.parseInt(request.getParameter("require-amount")));
+		    
+		    int result = service.editBOM(dto);
+		    if(result > 0) {
+		        request.setAttribute("msg", "수정 성공");
+		    } else {
+		        request.setAttribute("msg", "수정 실패");
+		    }
 		}
 		
 		// 작업 후 항상 최신 리스트 출력되도록

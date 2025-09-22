@@ -215,132 +215,314 @@ function filterTableRows(tableList, query) {
 
 
 function bindOrderReg() {
-    // ★ form id가 없으므로 action으로 안전하게 찾기
-    const form = document.querySelector('form[action$="/orderAdd"]'); 
-    if (!form) return; // 폼이 없으면 더 진행하지 않음
+  // ★ form id가 없으므로 action으로 안전하게 찾기
+  const form = document.querySelector('form[action$="/orderAdd"]');
+  if (!form) return;
 
-    const stateInput = document.querySelector('#order_state'); 
-    const saveBtn    = document.querySelector('#save');
-    const approveBtn = document.querySelector('#approve');
-    const cancelBtn  = document.querySelector('#recall');
+  const stateInput = document.querySelector('#order_state');
+  const saveBtn    = document.querySelector('#save');
+  const approveBtn = document.querySelector('#approve');
+  const cancelBtn  = document.querySelector('#recall');
 
-    // 페이지 로드 시 초기 상태값 반영
+  // --- 납기일: 오늘 이전 선택 불가(+ 기존 값 보정) + 즉시 경고 ---
+  const dueInput = document.querySelector('input[name="order_pay"]');
+  let todayStr = '';
+  if (dueInput && !dueInput.readOnly) {
+    const now = new Date();
+    const yyyy = String(now.getFullYear());
+    const mm   = String(now.getMonth() + 1).padStart(2, '0');
+    const dd   = String(now.getDate()).padStart(2, '0');
+    todayStr   = yyyy + '-' + mm + '-' + dd;
+
+    // 날짜 피커에서 과거 선택 자체를 막음
+    dueInput.min = todayStr;
+
+    // 기존 값이 과거면 즉시 오늘로 보정
+    if (dueInput.value && dueInput.value < todayStr) {
+      dueInput.value = todayStr;
+    }
+
+    // 사용자가 과거일로 변경/입력하면 즉시 경고 + 보정
+    function guardDue() {
+      const v = String(dueInput.value || '').trim();
+      if (!v) return; // 미입력은 제출 시에 별도 검증
+      if (v < todayStr) {
+        alert('납기일은 오늘(' + todayStr + ') 이후 날짜만 선택할 수 있습니다.');
+        dueInput.value = todayStr;
+        dueInput.focus();
+      }
+    }
+    dueInput.addEventListener('change', guardDue);
+    dueInput.addEventListener('input',  guardDue);
+    dueInput.addEventListener('blur',   guardDue);
+  }
+
+  // --- 공통 제출 함수: requestSubmit 사용(검증/submit 이벤트 타도록) ---
+  function safeRequestSubmit() {
+    if (typeof form.requestSubmit === 'function') {
+      form.requestSubmit();
+    } else {
+      // 폴백: 가짜 submit 버튼 클릭으로 submit 이벤트/검증 유도
+      const tmp = document.createElement('button');
+      tmp.type = 'submit';
+      tmp.style.display = 'none';
+      form.appendChild(tmp);
+      tmp.click();
+      form.removeChild(tmp);
+    }
+  }
+
+  // --- 제출 전 최종 검증(납기일 필수 + 과거 금지 포함) ---
+  function validateInputs() {
+    // ① 납기일 필수 + 과거 금지
+    const due = document.querySelector('input[name="order_pay"]');
+    if (due && !due.readOnly) {
+      const v = String(due.value || '').trim();
+      if (!v) {
+        alert('납기일을 입력하세요.');
+        due.focus();
+        return false;
+      }
+      // todayStr이 비어 있을 수 있어 다시 계산(안전)
+      if (!todayStr) {
+        const now = new Date();
+        const yyyy = String(now.getFullYear());
+        const mm   = String(now.getMonth() + 1).padStart(2, '0');
+        const dd   = String(now.getDate()).padStart(2, '0');
+        todayStr   = yyyy + '-' + mm + '-' + dd;
+      }
+      if (v < todayStr) {
+        alert('납기일은 오늘(' + todayStr + ') 이후 날짜만 선택할 수 있습니다.');
+        due.focus();
+        return false;
+      }
+    }
+
+    // ② (기존) 다른 입력 공란 검사 — readonly는 패스
+    const inputs = document.querySelectorAll('.main_input');
+    for (let i = 0; i < inputs.length; i++) {
+      const el = inputs[i];
+      if (el.readOnly) continue;
+      if (String(el.value || '').trim() === '') {
+        const label = el.previousElementSibling ? el.previousElementSibling.innerText : '필수';
+        alert(label + ' 항목을 입력하세요.');
+        el.focus();
+        return false;
+      }
+    }
+
+    // ③ (기존) 거래처 선택 여부 방어
+    const clientHidden = document.querySelector('#client_id');
+    if (!clientHidden || !String(clientHidden.value || '').trim()) {
+      alert('거래처를 선택해 주세요.');
+      return false;
+    }
+
+    return true;
+  }
+
+  // --- 폼의 submit 이벤트에도 방어(엔터 제출/다른 submit 버튼 대비) ---
+  form.addEventListener('submit', function (e) {
+    if (!validateInputs()) {
+      e.preventDefault();
+      return;
+    }
+  });
+
+  // 페이지 로드 시 버튼 노출 상태 반영
+  updateActionButtons();
+
+  // 임시저장
+  if (saveBtn) {
+    saveBtn.addEventListener('click', function () {
+      if (!validateInputs()) return;
+      setOrderStatus(0);
+      safeRequestSubmit(); // form.submit()는 쓰지 않음
+    });
+  }
+
+  // 승인요청
+  if (approveBtn) {
+    approveBtn.addEventListener('click', function () {
+      if (!validateInputs()) return;
+      setOrderStatus(1);
+      safeRequestSubmit();
+    });
+  }
+
+  // 회수
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', function () {
+      setOrderStatus(0);
+      safeRequestSubmit();
+    });
+  }
+
+  // 상태값 업데이트
+  function setOrderStatus(newStatus) {
+    if (stateInput) stateInput.value = newStatus;
     updateActionButtons();
+  }
 
-    // 임시저장
-    saveBtn.addEventListener('click', function() {
-        if (!validateInputs()) return; // 빈 값 체크
-        setOrderStatus(0);
-        form.submit();
-        alert('임시저장되었습니다.');
-    });
+  // 버튼 상태 갱신
+  function updateActionButtons() {
+    const status = parseInt((stateInput && stateInput.value) || '0', 10);
+    if (!saveBtn || !approveBtn || !cancelBtn) return;
 
-    // 승인요청
-    approveBtn.addEventListener('click', function() {
-        if (!validateInputs()) return; // 빈 값 체크
-        setOrderStatus(1);
-        form.submit();
-        alert('승인요청 되었습니다.');
-    });
-
-    // 회수
-    cancelBtn.addEventListener('click', function() {
-        setOrderStatus(0); 
-        form.submit();
-        alert('회수되었습니다.');
-    });
-
-    // 상태값 업데이트
-    function setOrderStatus(newStatus) {
-        stateInput.value = newStatus;
-        updateActionButtons();
+    if (status === 0) {
+      saveBtn.classList.remove('hide');
+      approveBtn.classList.remove('hide');
+      cancelBtn.classList.add('hide');
+    } else if (status === 2 || status === 3) {
+      saveBtn.classList.add('hide');
+      approveBtn.classList.add('hide');
+      cancelBtn.classList.remove('hide');
+    } else if (status === 1) {
+      saveBtn.classList.add('hide');
+      approveBtn.classList.add('hide');
+      cancelBtn.classList.add('hide');
     }
+  }
+    // === 납기일: 오늘 이전 강제 차단 ===
+    (function lockDueDate() {
+    const due = document.querySelector('input[name="order_pay"]');
+    if (!due || due.readOnly) return;
 
-    // 버튼 상태 갱신
-    function updateActionButtons() {
-        const status = parseInt(stateInput.value || "0", 10); // NaN 방지
-        if (status === 0) {
-            saveBtn.classList.remove('hide');
-            approveBtn.classList.remove('hide');
-            cancelBtn.classList.add('hide');
-        } else if (status === 2 || status === 3) {
-            saveBtn.classList.add('hide');
-            approveBtn.classList.add('hide');
-            cancelBtn.classList.remove('hide');
-        } else if (status === 1) {
-            saveBtn.classList.add('hide');
-            approveBtn.classList.add('hide');
-            cancelBtn.classList.add('hide');
+    const todayStr = () => {
+        const now = new Date();
+        const yyyy = String(now.getFullYear());
+        const mm   = String(now.getMonth() + 1).padStart(2, '0');
+        const dd   = String(now.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    };
+
+    const applyMin = () => {
+        const t = todayStr();
+        due.min = t;                             // 달력에서 과거 선택 자체 차단
+        if (due.value && due.value < t) {        // 기존값이 과거면 즉시 보정
+        alert(`납기일은 오늘(${t}) 이후만 가능합니다.`);
+        due.value = t;
+        due.focus();
         }
-    }
+    };
 
-    // 빈칸 방지 (★ readonly는 모달로 채워지므로 검사에서 제외)
-    function validateInputs() {
-        const inputs = document.querySelectorAll('.main_input');
+    // 최초/포커스 시점마다 min 재설정(자정 경과 대비)
+    applyMin();
+    due.addEventListener('focus', applyMin);
 
-        for (let i = 0; i < inputs.length; i++) {
-            const el = inputs[i];
-
-            // ★ 모달 선택으로만 채우는 칸은 readonly → 비어 있어도 여기서 막지 않음
-            if (el.readOnly) continue;
-
-            if (el.value.trim() === '') {
-                alert(`${el.previousElementSibling?.innerText || '필수'} 항목을 입력하세요.`);
-                el.focus();
-                return false;
-            }
+    // 수동 입력/선택으로 과거가 들어오면 즉시 차단 + 보정
+    const guard = () => {
+        const t = due.min || todayStr();
+        const v = String(due.value || '').trim();
+        if (v && v < t) {
+        alert(`납기일은 오늘(${t}) 이후만 가능합니다.`);
+        due.value = t;
+        due.focus();
         }
+    };
+    due.addEventListener('change', guard);
+    due.addEventListener('input',  guard);
+    due.addEventListener('blur',   guard);
+    })();
 
-        // ★ 최종 방어: client_id 숨김필드가 비면 Oracle에서 NULL 취급됨 → 전송 금지
-        const clientHidden = document.querySelector('#client_id');
-        if (!clientHidden || !String(clientHidden.value || '').trim()) {
-            alert('거래처를 선택해 주세요.');
-            return false;
-        }
-
-        return true;
-    }
 }
 
-// 발주 상세(품목) 체크박스 전체선택 + 삭제 기능
+
+
+
+// 발주 상세(품목) 체크박스 전체선택 + 삭제 
 function bindCheckboxDelete() {
-    const checkAll  = document.getElementById("checkAll");
-    const tableBody = document.querySelector(".order_list");           
-    const deleteBtn = document.querySelector(".list_action button[type='button']");
+  const tableBody = document.querySelector('.order_list');
+  let   header    = document.getElementById('checkAll'); // 교체될 수 있으니 let
 
-    // 전체선택
-    checkAll.addEventListener("change", function () {
-        const checkBoxes = tableBody.querySelectorAll(".row_check");
-        checkBoxes.forEach(cb => cb.checked = checkAll.checked);
+  if (!tableBody || !header) return;
+
+  const ROW_CB_SEL = '.row_check:not([disabled])';
+  const getBoxes   = () => tableBody.querySelectorAll(ROW_CB_SEL);
+  const getChecked = () => tableBody.querySelectorAll(ROW_CB_SEL + ':checked');
+
+  // 헤더 이벤트 부착(교체 후에도 재사용)
+  const attachHeaderHandler = () => {
+    header.addEventListener('change', () => {
+      const v = header.checked;
+      getBoxes().forEach(cb => { cb.checked = v; });
+      syncHeader(); // 상태 재동기화
     });
+  };
 
-    // 개별 체크박스 변화 시 전체선택 동기화
-    tableBody.addEventListener("change", function (e) {
-        if (e.target.classList.contains("row_check")) {
-            const checkBoxes   = tableBody.querySelectorAll(".row_check");
-            const checkedBoxes = tableBody.querySelectorAll(".row_check:checked");
-            checkAll.checked = checkBoxes.length === checkedBoxes.length;
-        }
+  // 헤더를 완전히 새로 생성해 교체(잔여 indeterminate/리스너/스타일 초기화)
+  const hardResetHeader = (checked = false) => {
+    const newHeader = header.cloneNode(true);
+    newHeader.checked = !!checked;
+    // indeterminate 강제 해제
+    newHeader.indeterminate = false;
+
+    header.replaceWith(newHeader);
+    header = newHeader;         // 참조 업데이트
+    attachHeaderHandler();      // 리스너 재부착
+  };
+
+  // 헤더 상태 동기화: 전부 체크일 때만 체크, 나머지는 완전 해제
+  const syncHeader = () => {
+    const total   = getBoxes().length;
+    const checked = getChecked().length;
+
+    if (total > 0 && checked === total) {
+      // 모두 체크 → 헤더 체크(필요시 하드 리셋하여 혼합 상태 제거)
+      if (!header.checked || header.indeterminate) hardResetHeader(true);
+      else {
+        header.indeterminate = false;
+        header.checked = true;
+      }
+    } else {
+      // 일부 또는 0개 → 헤더 완전 해제
+      if (header.checked || header.indeterminate) hardResetHeader(false);
+      else {
+        header.indeterminate = false;
+        header.checked = false;
+      }
+    }
+  };
+
+  // 개별 체크(동적 행 포함) → 헤더 상태 동기화
+  tableBody.addEventListener('change', (e) => {
+    const t = e.target;
+    if (!(t instanceof HTMLInputElement) || !t.classList.contains('row_check')) return;
+    syncHeader();
+  });
+
+  // 선택 삭제 버튼
+  const deleteBtn = document.querySelector('.item_del') 
+                 || document.querySelector('.list_action .item_del') 
+                 || document.querySelector('.list_action button[type="button"]');
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', () => {
+      const selected = Array.from(getChecked());
+      if (selected.length === 0) {
+        alert('삭제할 항목을 선택하세요.');
+        return;
+      }
+      if (!confirm(`선택한 ${selected.length}개의 항목을 삭제하시겠습니까?`)) return;
+
+      selected.forEach(cb => cb.closest('tr') && cb.closest('tr').remove());
+
+      // 번호/합계 갱신(있으면 호출)
+      if (typeof renumberRows === 'function') renumberRows();
+      if (typeof recalcFooter === 'function') recalcFooter();
+
+      // 헤더는 완전 해제 상태로
+      hardResetHeader(false);
+      syncHeader();
     });
+  }
 
-    // 삭제
-    deleteBtn.addEventListener("click", function () {
-        const checkedRows = tableBody.querySelectorAll(".row_check:checked");
-        if (checkedRows.length === 0) {
-            alert("삭제할 항목을 선택하세요.");
-            return;
-        }
-
-        const ok = confirm(`선택한 ${checkedRows.length}개의 항목을 정말 삭제하시겠습니까?`);
-        if (!ok) return;
-
-        checkedRows.forEach(cb => cb.closest("tr").remove());
-
-        checkAll.checked = false;
-        renumberRows();  // 번호 다시
-        recalcFooter();  // 합계 다시
-    });
+  // 초기: 헤더 리스너 부착 + 상태 동기화
+  attachHeaderHandler();
+  syncHeader();
 }
+
+
+
 
 // 숫자 유틸
 function toInt(v) {

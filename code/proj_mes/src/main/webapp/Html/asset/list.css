@@ -1,53 +1,81 @@
 :root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #a4a5a7;
-    --page-bg: #ffffff;
-    --radius: 10px;
+    --bg: #f3f5f7;          /* wrap 배경색 */
+    --titletext: #111827;   /* title 글씨색*/
+    --label: #616161;       /* input label */
+    --border: #cbcbcb;      /* input border */
+    --blue:#2764fd;         /* 파란버튼(수정, 목록) */
+    --blue-hover:#2552d9;   /* 파란버튼 호버 */
+    --red:#ef4444;          /* 빨간버튼(삭제, 취소) */
+    --red-hover:#dc2626;    /* 빨간버튼 호버 */
+    --green:#22c55e;        /* 초록버튼 (등록, 추가)*/
+    --green-hover:#16a34a;  /* 초록버튼 호버 */
+    --yellow: #f59e0b;      /* 노란버튼(수정)*/
+    --yellow-hover: #d97706;/* 노란버튼 호버*/ 
+    --badbtn: #9ca3af;      /* 중요하지 않은 버튼? */
+    --btnwidth: 80px;         /* 버튼 width */  
+    --btnheight: 40px;        /* 버튼 height */  
+    --btnradius: 5px;         /* 버튼 radius */
+    --inputradius: 8px;       /* input radius */
+    --radius: 12px;           /* 큰 박스 radius */  
+    --shadow: 0 20px 40px rgba(0,0,0,0.06), 0 2px 10px rgba(0,0,0,0.04);    /* 큰 박스 그림자*/
 }
 
 
 /* 메인 몸통 부분 */
 .wrap {
-    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: #ffffff;
+    width: 100%;
+    margin: 10px auto;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+
+}
+
+.wrap_list {
     border-radius: 5px;
     background-color: #ffffff;
-    width: 90%;
+    width: 100%;
     margin: 10px auto;
+    box-shadow: var(--shadow);
+    padding: 24px;
+
 }
 
+.titleBox {
+    box-sizing: content-box;
+    width: 90%;
+    margin: 0 auto;
+    padding: 24px;
+}
+.titleBox > span:first-child {
+    font-size: 30px;
+    font-weight: bold;
+}
 /* body 시작 */
 /* 필터 적용부분 */
-.main {
-    width: 90%;
-    margin: 16px auto;
-    padding: 14px 10px;
-    border: 1px solid #2f2f2f;
-    border-radius: 10px;
-    background: #fff;
-    display: flex;
-    flex-direction: column; /* 두 줄로 배치 */
-    gap: 14px; /* 줄 간격 */
-}
-
 /* select 필터 줄 */
 .filter {
     display: flex;
     flex-wrap: wrap; /* 화면 줄어들면 자동 줄바꿈 */
     gap: 12px 18px;  /* 위아래 12px / 좌우 18px */
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
+
 
 .box {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
-
+.box_filter {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    padding-bottom: 24px;
+}
 .filter select {
     min-width: 140px;
     height: 36px;
@@ -63,10 +91,9 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    padding-top: 8px;
-    border-top: 1px solid #ddd; /* 시각적으로 두 줄 구분 */
+    /* padding-top: 24px; */
+    /* border-top: 1px solid #ddd;  */
 }
-
 .date_filter .date {
     display: flex;
     align-items: center;
@@ -83,11 +110,12 @@
 
 /* 조회 버튼 */
 .date_filter button {
-    height: 36px;
+    height: var(--btnheight);
+    width: var(--btnwidth);
     padding: 0 16px;
-    border-radius: 8px;
-    border: 1px solid #666;
-    background: #7a7d81;
+    border-radius: var(--btnradius);
+    border: 1px solid var(--blue);
+    background-color: var(--blue);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
@@ -111,16 +139,17 @@
     border: 1px solid #9aa3af;
     border-radius: 6px;
 }      
-.order_period {
+.period {
     border: 1px solid grey;
     background-color: grey;
     border-radius: 7px;
-    width: 70px;
-    height: 35px;
-    line-height: 35px;
+    width: 250px;
+    height: 37px;
+    line-height: 37px;
     text-align: center;
+    color: #ffffff;
 }                
-.order_month {
+/* .order_month {
     border: 1px solid black;
     border-radius: 7px;
     width: 70px;
@@ -128,35 +157,37 @@
     line-height: 35px;
     text-align: center;
     margin-right: 20px;
-}
-.state select{
+} */
+/* .state select{
     min-width: 140px;
     height: 36px;
     padding: 4px 10px;
     border: 1px solid #9aa3af;
     border-radius: 6px;
     background: #fff;
-}
+} */
 .order_filter button {
-    height: 36px;
+    height: var(--btnheight);
+    width: var(--btnwidth);
     padding: 0 16px;
-    border-radius: 8px;
-    border: 1px solid #666;
-    background: #7a7d81;
+    border-radius: var(--btnradius);
+    border: 1px solid var(--blue);
+    background-color: var(--blue);
     color: #fff;
     font-weight: 700;
     cursor: pointer;
 }
-.period {
-    border: 1px solid grey;
-    background-color: grey;
-    border-radius: 7px;
-    width: 70px;
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
+
+#start_date,
+#end_date {
+    width: 100%;
+    height: 40px;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--inputradius);
+    background: #fff;
 }
-.month {
+/* .month {
     border: 1px solid black;
     border-radius: 7px;
     width: 70px;
@@ -164,7 +195,26 @@
     line-height: 35px;
     text-align: center;
     margin-right: 50px;
+} */
+
+#deleteBtn {
+    background-color: var(--red);
+    border: 1px solid var(--red);
+    border-radius: var(--btnradius);
+    color: #ffffff;
+    width: var(--btnwidth);
+    height: var(--btnheight);
 }
+.item_add {
+    background-color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: var(--btnradius);
+    color: #ffffff;
+    width: var(--btnwidth);
+    height: var(--btnheight);
+    margin: 0 0 0 8px;
+}
+
 /* 0) 테이블 기본 */
 .tables {
   width: 100%;
@@ -172,24 +222,27 @@
   border-collapse: collapse;
   border-spacing: 0;
   margin: 0 auto;
-  text-align: center;
+  /* text-align: center; */
 }
-.row_1,
+/* .row_1,
 .row_5,
 .row_7 {
     width: 40px;
 }
+*/
+
 .order_row_1,
 .order_row_2 {
     width: 30px;
 }
+/*
 .order_row_0 {
     width: 50px;
 }
 .order_row_3,
 .order_row_4 {
     width: 110px;
-}
+} */
 /*
 .order_row_5,
 .order_row_6 {
@@ -215,9 +268,8 @@
   max-height: 500px;            /* 필요시 값 조정 */
   overflow: auto;               /* 내부 스크롤 */
   min-height: 300px;                /* flex 컨텍스트에서 필수 */
-  width: 90%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  width: 100%;
+  border-radius: var(--radius);
   background-clip: padding-box; /* 라운드 안쪽 잘림 방지 */
   margin: 0 auto;
   /* 크롬/엣지 등: 스크롤바 공간을 미리 확보(헤더/열정렬 어긋남 방지) */
@@ -226,18 +278,25 @@
 
 /* 2) 헤더 고정 */
 .tables thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: #eef5ff;     
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-size:13px; 
+    color:#9aa3af; 
+    font-weight:700; 
+    text-align:center;
+    padding:12px 24px; 
+    background:#f8fafc; 
+    border-bottom: 0.5 solid var(--border);  
+    text-align: center;
 }
 .tables tbody {
     text-align: center;
 }
 /* 3) 셀 기본 패딩/라인 */
-.tables th, .tables td {
-  padding: 5px 5px;
-  border: 1px solid #000000;
+.tables td {
+    padding: 16px 24px;
+    border-top: 0.5px solid var(--border);
 }
 
 /* 4) 커스텀 스크롤바 (질문에 주신 것 유지) */
@@ -250,14 +309,14 @@
 }
 .table-wrap::-webkit-scrollbar-thumb {
     background: #c1c1c1; 
-    border-radius: 10px; 
+    border-radius: var(--radius); 
     border: 2px solid #f1f1f1;
 }
 .action {
-    text-align: right;
-    margin: 30px 60px;
+    display: flex;
+    flex-direction: row-reverse;
 }
-.action button {
+/* .action button {
     height: 32px;
     padding: 0 12px;
     border-radius: 8px;
@@ -266,7 +325,7 @@
     font-weight: 700;
     cursor: pointer;
     margin: 0 5px;
-}
+} */
 
 
 

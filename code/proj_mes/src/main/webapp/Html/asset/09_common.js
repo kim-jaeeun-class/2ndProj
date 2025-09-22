@@ -7,29 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===============================
     // 공통 기능 : 사이드 패널 열기/닫기
     // ===============================
-    const initPanel = () => {
-        const openBtns = document.querySelectorAll('.open-btn');
-        const panel = document.querySelector('.panel');
-        if (!panel) return;
-        const closeBtn = panel.querySelector('.close-btn');
-        const cancelBtn = panel.querySelector('.cancel');
-
-        openBtns.forEach(btn => btn.addEventListener('click', () => panel.classList.add('open')));
-        if (closeBtn) closeBtn.addEventListener('click', () => panel.classList.remove('open'));
-        if (cancelBtn) cancelBtn.addEventListener('click', () => panel.classList.remove('open'));
-    };
+    document.querySelectorAll('.open-btn').forEach(btn => {
+        btn.addEventListener('click', () => document.querySelector('.panel').classList.add('open'));
+    });
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', () => btn.closest('.panel').classList.remove('open'));
+    });
 
     // ===============================
     // 공통 기능 : 체크박스 전체 선택
     // ===============================
-    const initSelectAll = () => {
-        const selectAllCheckbox = document.querySelector('.select-all');
-        if (!selectAllCheckbox) return;
-        selectAllCheckbox.addEventListener('change', e => {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => cb.checked = e.target.checked);
+    const selectAll = document.querySelector('.select-all');
+    if (selectAll) {
+        selectAll.addEventListener('change', e => {
+            document.querySelectorAll('.wrap-table tbody input[type="checkbox"]').forEach(cb => cb.checked = e.target.checked);
         });
-    };
+    }
 
     // ===============================
     // 공통 기능 : 테이블 행 삭제
@@ -50,7 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const form = document.createElement('form');
                 form.method = 'post';
-                form.action = 'proplan';
+
+                if (page === 'pro-plan') {
+                    form.action = 'proplan';
+                } else if (page === 'wo') {
+                    form.action = 'workorder';
+                }
 
                 const actionInput = document.createElement('input');
                 actionInput.type = 'hidden';
@@ -76,120 +74,209 @@ document.addEventListener("DOMContentLoaded", () => {
     // 작업 지시서 페이지 기능
     // ===============================
     const initWorkOrder = () => {
-        const panelForm = document.querySelector('.panel form');
+        const panelForm = document.querySelector('#form-add');
         const mainTable = document.querySelector('.wrap-table tbody');
-        const panel = document.querySelector('.panel');
-        const saveBtn = panel.querySelector('.panel-save');
+        const panel = document.querySelector('#panel-add');
+        const panelAdd = document.querySelector('#panel-add');
         const panelDown = document.querySelector('#panel-down');
 
-        if (!panelForm || !mainTable || !saveBtn) return;
+        if (!panelForm || !mainTable || !panelAdd || !panelDown) {
+            return;
+        }
+        
+        const saveBtn = panelForm.querySelector('.panel-save');
+        const hiddenBOM = panelForm.querySelector('input[name="bom_id"]');
+        const hiddenPROC = panelForm.querySelector('input[name="proc_id"]');
+
+        const actionInput = panelForm.querySelector('#action-input');
+        const woNumHidden = panelForm.querySelector('#wo-num-hidden');
+        const panelTitle = document.querySelector('#panel-title-mode');
+        const woDateInput = panelForm.querySelector('#wo-date-input');
 
         // -------------------------------
-        // 슬라이딩 저장 → 메인 테이블 추가
+        // 저장 버튼 클릭
         // -------------------------------
         saveBtn.addEventListener('click', (e) => {
             e.preventDefault();
 
-            const orderDateInput = panelForm.querySelector('input[name="order-date"]');
-            const orderNo = panelForm.querySelector('input[name="client-code"]');
-            const person = panelForm.querySelector('input[name="client-name"]');
-            const personInput = panelForm.querySelector('input[name="person"]');
-            const duedate = panelForm.querySelector('input[name="give-date"]');
-            const orderNoInput = panelForm.querySelector('input[type="number"]');
+            const woDate = panelForm.querySelector('input[name="wo_date"]');
+            const woDuedate = panelForm.querySelector('input[name="wo_duedate"]');
+            const workerId = panelForm.querySelector('input[name="worker_id"]');
+            const woPQ = panelForm.querySelector('input[name="wo_pq"]');
+            const itemCode = panelForm.querySelector('input[name="item_code"]:checked');
 
-            const requiredInputs = [orderDateInput, orderNo, person, personInput, duedate, orderNoInput];
-            let allValid = true;
-
-            requiredInputs.forEach(input => {
-                if (!input.value) allValid = false;
-            });
-            if (!allValid) { alert('필수 항목을 모두 입력해주세요.'); return; }
-
-            if (orderNoInput.value < 1 || orderNoInput.value > 5) {
-                alert('주문번호는 1~5까지 입력 가능합니다.');
+            // 필수 항목 체크
+            if (!woDate.value || !woDuedate.value || !workerId.value || !woPQ.value || !itemCode) {
+                alert('필수 항목을 모두 입력해주세요.');
                 return;
             }
 
-            if (new Date(orderDateInput.value) > new Date(duedate.value)) {
+            // 수량 체크
+            if (parseInt(woPQ.value) < 1) {
+                alert('수량은 1 이상 입력해야 합니다.');
+                return;
+            }
+
+            // 지시일/납기일 체크
+            if (new Date(woDate.value) > new Date(woDuedate.value)) {
                 alert('지시일이 납기일보다 늦을 수 없습니다.');
                 return;
             }
 
-            // 테이블 행 생성
-            const tr = document.createElement('tr');
-            tr.classList.add('data');
+            // 수정/등록 액션 분기
+            if (actionInput.value === 'update') {
+                const confirmed = confirm('수정하시겠습니까?');
+                if (!confirmed) return;
+            }
 
-            // 체크박스
-            const tdCheckbox = document.createElement('td');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            tdCheckbox.appendChild(checkbox);
-            tr.appendChild(tdCheckbox);
+            // 선택된 품목에 따른 BOM/PROC hidden 세팅
+            hiddenBOM.value = itemCode.dataset.bomId || '0';
+            hiddenPROC.value = itemCode.dataset.procId || '0';
 
-            // 작업지시번호
-            const tdWoNo = document.createElement('td');
-            tdWoNo.textContent = `${orderDateInput.value.replace(/-/g,'')}-${orderNoInput.value}`;
-            tr.appendChild(tdWoNo);
-
-            // 일자
-            const tdDate = document.createElement('td');
-            tdDate.textContent = new Date().toISOString().split('T')[0];
-            tr.appendChild(tdDate);
-
-            // 거래처명
-            const tdClient = document.createElement('td');
-            tdClient.textContent = person.value;
-            tr.appendChild(tdClient);
-
-            // 담당자명
-            const tdPerson = document.createElement('td');
-            tdPerson.textContent = personInput.value;
-            tr.appendChild(tdPerson);
-
-            // 납기일
-            const tdGive = document.createElement('td');
-            tdGive.textContent = duedate.value;
-            tr.appendChild(tdGive);
-
-            // 빈 행 (품목 등)
-            tr.appendChild(document.createElement('td'));
-            tr.appendChild(document.createElement('td'));
-            tr.appendChild(document.createElement('td'));
-
-            mainTable.appendChild(tr);
-            checkbox.addEventListener('click', e => e.stopPropagation());
-
-            // 패널 닫기 + 폼 리셋
+            // 서버에 submit
+            panelForm.submit();
             panel.classList.remove('open');
-            panelForm.reset();
         });
 
         // -------------------------------
         // 메인 테이블 클릭 → 상세 패널
         // -------------------------------
-        if (mainTable && panelDown) {
+        if (mainTable) {
             mainTable.addEventListener('click', (e) => {
+                // `a` 태그의 기본 동작(페이지 이동)을 막습니다.
+                const link = e.target.closest('a');
+                if (link) {
+                    e.preventDefault();
+                }
+                
                 const row = e.target.closest('tr.data');
+                // 체크박스 클릭 제외 로직
                 if (!row || e.target.closest('input[type="checkbox"]')) return;
 
-                const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
-                const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
+                // 클릭된 행의 작업지시번호를 가져옵니다.
+                const woNum = row.querySelector('.wo-link').textContent.trim();
 
-                rowTds.forEach((td, i) => {
-                    if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
-                });
+                location.href = `workorder?wo_num=${woNum}`;
 
-                const hiddenInput = panelDown.querySelector('#detail-delete-id');
-                hiddenInput.value = row.querySelector('td:nth-child(2)').textContent.trim();
-
-                panelDown.classList.add('open');
             });
-
-            const panelDownCloseBtn = panelDown.querySelector('.close-btn');
-            if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
-            panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
         }
-    };
+
+        // -------------------------------
+        // 상세 패널에서 '수정' 버튼 클릭
+        // -------------------------------
+        const editAllBtn = panelDown.querySelector('.edit-all-btn');
+        if (editAllBtn) {
+            editAllBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // 현재 상세 데이터 가져오기
+                const woNum = editAllBtn.dataset.woNum;
+                const row = document.querySelector(`.wrap-table tr[data-wo-num="${woNum}"]`);
+                
+                // 패널 전환
+                panelDown.classList.remove('open');
+                panelAdd.classList.add('open');
+
+                // 등록 패널을 수정 모드로 전환
+                actionInput.value = 'update';
+                woNumHidden.value = woNum;
+                panelTitle.textContent = '작업 지시서 수정';
+
+                // 기존 데이터 채워 넣기 (상세 패널에서 읽거나 row dataset 이용)
+                panelForm.querySelector('input[name="wo_date"]').value = row.dataset.woDate;
+                panelForm.querySelector('input[name="wo_duedate"]').value = row.dataset.woDuedate;
+                panelForm.querySelector('input[name="worker_id"]').value = row.dataset.workerId;
+                panelForm.querySelector('input[name="wo_pq"]').value = row.dataset.woPq;
+                panelForm.querySelector(`input[name="item_code"][value="${row.dataset.itemCode}"]`).checked = true;
+
+                // hidden 값
+                hiddenBOM.value = row.dataset.bomId || "0";
+                hiddenPROC.value = row.dataset.procId || "0";
+            });
+        }
+
+
+
+        // -------------------------------
+        // '등록' 버튼 클릭 시 초기화
+        // -------------------------------
+        const openAddBtn = document.querySelector('.open-btn');
+        openAddBtn.addEventListener('click', () => {
+            panelForm.reset();
+            actionInput.value = 'add';
+            woNumHidden.value = '';
+            woDateInput.readOnly = false;
+            document.querySelector('.slide-title').textContent = '작업 지시서 등록';
+            panelDown.classList.remove('open');
+            panelAdd.classList.add('open');
+        });
+
+    // -------------------------------
+    // 생산수량 입력 버튼 클릭
+    // -------------------------------
+    const editAqBtn = panelDown.querySelector('#edit-aq-btn');
+    const aqDisplay = panelDown.querySelector('.production-quantity-display');
+    const editAqArea = panelDown.querySelector('.edit-aq-area');
+    const completeAqBtn = panelDown.querySelector('.complete-aq-btn');
+    const editAqInput = panelDown.querySelector('#edit-aq-input');
+
+    if (editAqBtn) {
+        editAqBtn.addEventListener('click', () => {
+            // 입력 모드로 전환
+            aqDisplay.style.display = 'none';
+            editAqArea.style.display = 'block';
+            editAqInput.value = aqDisplay.textContent.trim();
+        });
+    }
+
+    // -------------------------------
+    // 생산수량 입력 '완료' 버튼 클릭
+    // -------------------------------
+    if (completeAqBtn) {
+        completeAqBtn.addEventListener('click', () => {
+            const woNum = document.querySelector('#detail-wo-num').value;
+            const newAq = editAqInput.value;
+
+            if (newAq === "" || isNaN(newAq) || parseInt(newAq) < 0) {
+                alert('유효한 생산 수량을 입력해주세요.');
+                return;
+            }
+
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = 'workorder';
+
+            const action = document.createElement('input');
+            action.type = 'hidden';
+            action.name = 'action';
+            action.value = 'editAQ';
+            form.appendChild(action);
+
+            const num = document.createElement('input');
+            num.type = 'hidden';
+            num.name = 'wo_num';
+            num.value = woNum;
+            form.appendChild(num);
+
+            const aq = document.createElement('input');
+            aq.type = 'hidden';
+            aq.name = 'wo_aq';
+            aq.value = newAq;
+            form.appendChild(aq);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+
+    }
+
+    // -------------------------------
+    // 상세 패널 닫기
+    // -------------------------------
+    const panelDownCloseBtn = panelDown.querySelector('.close-btn');
+    if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
+    panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
+}
 
     // ===============================
     // 생산 계획 페이지
@@ -200,13 +287,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const panel = document.querySelector('.panel');
         const mainTable = document.querySelector('.wrap-table tbody');
         const panelDown = document.querySelector('#panel-down');
-        let editingRow = null; // 수정 중인 행 저장
+        let editingRow = null;
 
         if (!panelForm || !saveBtn || !mainTable) return;
 
-        // ===============================
-        // 등록/수정 버튼 클릭
-        // ===============================
         saveBtn.addEventListener('click', (e) => {
             e.preventDefault();
 
@@ -216,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const planEnd = panelForm.querySelector('input[name="plan-end"]');
             const bigo = panelForm.querySelector('input[name="bigo"]');
 
-            // 필수값 체크
             if (!itemNo.value || !planAmount.value || !planStart.value || !planEnd.value) {
                 alert('필수 항목을 모두 입력해주세요.');
                 return;
@@ -226,7 +309,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // 수정 모드라면 hidden에 수정 대상 ID 삽입
             if (editingRow) {
                 let hiddenId = panelForm.querySelector('input[name="cpID"]');
                 if (!hiddenId) {
@@ -238,95 +320,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 hiddenId.value = editingRow.dataset.cpId;
             }
 
-            // 서버 전송
             panelForm.submit();
         });
-
-        // ===============================
-        // 메인 테이블 클릭 → 상세 패널
-        // ===============================
-        if (mainTable && panelDown) {
-            mainTable.addEventListener('click', (e) => {
-                const row = e.target.closest('tr.data');
-                if (!row || e.target.closest('input[type="checkbox"]')) return;
-
-                const modalValueCells = panelDown.querySelectorAll('.modal-table .modal-table-con');
-                const rowTds = Array.from(row.querySelectorAll('td')).slice(1);
-
-                rowTds.forEach((td, i) => {
-                    if (modalValueCells[i]) modalValueCells[i].textContent = td.textContent.trim();
-                });
-
-                const hiddenInput = panelDown.querySelector('#detail-delete-id');
-                hiddenInput.value = row.dataset.cpId || row.querySelector('td:nth-child(2)').textContent.trim();
-
-                panelDown.classList.add('open');
-
-                // 수정 버튼
-                const editBtn = panelDown.querySelector('.edit');
-                if (editBtn) {
-                    editBtn.onclick = () => {
-                        panelDown.classList.remove('open');
-                        panel.classList.add('open');
-
-                        // 기존 데이터 input 채우기
-                        panelForm.querySelector('input[name="item-no"]').value = rowTds[1]?.textContent.trim() || '';
-                        panelForm.querySelector('input[name="plan-amount"]').value = rowTds[2]?.textContent.trim() || '';
-                        const dateRange = rowTds[3]?.textContent.trim().split(' ~ ') || [];
-                        panelForm.querySelector('input[name="plan-start"]').value = dateRange[0] || '';
-                        panelForm.querySelector('input[name="plan-end"]').value = dateRange[1] || '';
-                        panelForm.querySelector('input[name="bigo"]').value = rowTds[7]?.textContent.trim() || '';
-
-                        // 수정 대상 row 저장
-                        editingRow = row;
-                    };
-                }
-            });
-
-            const panelDownCloseBtn = panelDown.querySelector('.close-btn');
-            if (panelDownCloseBtn) panelDownCloseBtn.addEventListener('click', () => panelDown.classList.remove('open'));
-            panelDown.addEventListener('click', evt => { if (evt.target === panelDown) panelDown.classList.remove('open'); });
-
-            // 상세 삭제
-            const deleteBtn = panelDown.querySelector('.delete');
-            if (deleteBtn) {
-                deleteBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const cpID = panelDown.querySelector('#detail-delete-id').value;
-                    if (!cpID) return;
-                    if (!confirm('정말 이 항목을 삭제하시겠습니까?')) return;
-
-                    const form = document.createElement('form');
-                    form.method = 'post';
-                    form.action = 'proplan';
-
-                    const actionInput = document.createElement('input');
-                    actionInput.type = 'hidden';
-                    actionInput.name = 'action';
-                    actionInput.value = 'delete';
-                    form.appendChild(actionInput);
-
-                    const idInput = document.createElement('input');
-                    idInput.type = 'hidden';
-                    idInput.name = 'cpID';
-                    idInput.value = cpID;
-                    form.appendChild(idInput);
-
-                    document.body.appendChild(form);
-                    form.submit();
-                });
-            }
-        }
     };
-
 
     // ===============================
     // 초기화
     // ===============================
-    initPanel();
-    initSelectAll();
     initTableDelete();
-
     if (page === 'wo') initWorkOrder();
     if (page === 'pro-plan') initProduction();
 });

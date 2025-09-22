@@ -1,441 +1,544 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-  <meta charset="UTF-8" />
- 
-  <title>공지 사항 - 게시글 보기</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-:root {
-    --border: #9aa0a6;
-    --text: #222;
-    --muted: #666;
-    --button: #5a5a5a;
-    --button-text: #fff;
-    --field-border: #a4a5a7;
-    --page-bg: #ffffff;
-    --radius: 10px;
-}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> 자유게시판등록</title>
+    <!-- Inter 폰트 및 Tailwind CSS CDN -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic",
-        "Helvetica Neue", Arial, sans-serif;
-}
+        /* 드롭다운 메뉴 애니메이션 */
+        .group:hover .subList {
+            display: flex !important;
+        }
 
-/* 헤더 부분 */
-header {
-    background-color: #495057;
-    height : 50px;
-    border: 1px solid;
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .subList {
+            display: none !important;
+            flex-direction: column;
+            min-width: 150px;
+            z-index: 9999;
+            background-color: #4b5563;
+        }
 
-header .corp {
-    display: flex;
-    align-items: center; 
-    padding-left: 10px;
-    gap: 10px;
-    font-size: 1.2rem;
-}
+        .header-bg {
+            background-color: #002a40;
+        }
 
-header .search {
-    margin-left: auto;
-    margin-right: 10px;
-}
+        .nav-bg {
+            background-color: #003751;
+        }
 
-/* 회원 아이콘 부분*/
-header .myIcon {
-    position: relative;
-    padding: 5px 10px 5px 0;
-}
+        .mainList,
+        #noticeContent,
+        #boardContent {
+            cursor: pointer;
+        }
 
-header ul.subList {
-    display: none;
-    background-color: turquoise;
-    position: absolute;
-    top: 100%; /* 부모 요소(.myIcon) 바로 아래 */
-    right: 0;
-    list-style-type: none;
-    color: #333333;
-    font-weight: normal;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 150px; 
-    margin: 0; /* ul 기본 margin 제거 */
-    padding: 0; /* ul 기본 padding 제거 */
-}
+        .mainList li:hover {
+            background-color: #3b82f6;
+        }
 
-/* 마우스를 올리면 하위 메뉴 보이기 */
-header .myIcon:hover .subList {
-    display: flex;
-}
+        .hidden-section {
+            display: none;
+        }
 
-/* GNB 부분 */
-.gnb {
-    background-color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+        /* GNB */
+        .gnb {
+            background-color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
 
-.gnb ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-evenly;
-    padding-left: 0;
-}
+        .gnb ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: space-evenly;
+            padding-left: 0;
+        }
 
-.gnb ul.subList {
-    background-color: #495057;
-    color: white;
-    border-radius: 5%;
-    position: absolute;
-    left: 0;
-    display: none;
-    font-weight: normal;
-    font-size: medium;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    z-index: 9999; 
-    min-width: 130px; 
-}
-.gnb ul.mainList > li {
-    position: relative; /* 하위 메뉴의 위치 기준이 됨 */
-    color: #333333;
-}
-.gnb ul.mainList > li:hover .subList {
-    display: flex; /* 마우스를 올리면 보이도록 변경 (flex로 변경) */
-    margin-top: 0px;
-}
+        .gnb ul.subList {
+            background-color: #495057;
+            color: white;
+            border-radius: 5%;
+            position: absolute;
+            left: 0;
+            display: none;
+            font-weight: normal;
+            font-size: medium;
+            flex-direction: column;
+            justify-content: flex-start;
+            z-index: 9999;
+            min-width: 130px;
+        }
 
-.subList li {
-    padding: 2px 4px; /* 위아래 2px, 좌우 12px 여백 */
-    margin: 1px 1px;  /* 위아래 간격 추가 */
-}
+        .gnb ul.mainList>li {
+            position: relative;
+            color: #333333;
+        }
 
-/* a 링크 양식 지정 */
-a, a:link, a:visited {
-    color: inherit;
-    text-decoration: none;
-}
+        .gnb ul.mainList>li:hover .subList {
+            display: flex;
+            margin-top: 0px;
+        }
 
-/* 제목 부분 */
-.titleBox {
-    background-color: var(--field-border);
-    height: 25px;
-    margin: 0 auto;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .subList li {
+            padding: 2px 4px;
+            margin: 1px 1px;
+        }
 
-.titleBox span {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-left: 10px;
-    color: #333333;
-}
+        a,
+        a:link,
+        a:visited {
+            color: inherit;
+            text-decoration: none;
+        }
 
-.toMainpage {
-    color: var(--button);
-    margin-right: 10px;
-}
+        /* 제목 */
+        .titleBox {
+            background-color: var(--field-border);
+            height: 25px;
+            margin: 0 auto;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-/* 메인 몸통 부분 */
-.wrap {
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background-color: #ffffff;
-    width: 90%;
-    margin: 10px auto;
-}
+        .titleBox span {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-left: 10px;
+            color: #333333;
+        }
 
-/* 모바일 반응형 */
-@media (max-width: 768px) {
-    /* 여기에 모바일 스타일 넣으시면 됩니다 */
-}
-    body {
-  font-family: '맑은 고딕', sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 40px;
-}
+        .toMainpage {
+            color: var(--button);
+            margin-right: 10px;
+        }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border: 1px solid #ccc;
-}
+        /* 커스텀 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-/* 헤더 */
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
+        .modal-content {
+            background-color: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
 
-.board-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
+        .modal-message {
+            margin-bottom: 24px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+        }
 
-.main-link {
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-}
+        /* 텍스트 편집기 스타일 */
+        .text-editor-toolbar {
+            background-color: #e5e7eb;
+            border: 1px solid #d1d5db;
+            border-radius: 8px 8px 0 0;
+            padding: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-/* 게시글 정보 */
-.post-info {
-  border: 1px solid #ccc;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: #f7f7f7;
-}
+        .text-editor-toolbar button {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #f9fafb;
+            font-size: 14px;
+        }
 
-.post-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
+        .text-editor-toolbar button:hover {
+            background-color: #e5e7eb;
+        }
 
-.post-meta {
-  font-size: 13px;
-  color: #555;
-}
+        /* 컨텐츠 내 삭제 버튼 */
+        .deletable-item {
+            position: relative;
+            display: inline-block;
+        }
 
-/* 본문 */
-.post-content {
-  border: 1px solid #ccc;
-  padding: 20px;
-  background-color: #f2f2f2;
-  min-height: 300px;
-  margin-bottom: 30px;
-}
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+        }
 
-.post-content p {
-  font-size: 15px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.highlight {
-  font-weight: bold;
-  color: #000;
-}
-
-/* 하단 버튼 */
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn {
-  padding: 8px 16px;
-  background-color: #333;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn:hover {
-  background-color: #555;
-}
-
-.btn.gray {
-  background-color: #999;
-}
-
-.nav-buttons {
-  display: flex;
-  gap: 10px;
-}
-  </style>
+        .deletable-item:hover .delete-btn {
+            display: flex;
+        }
+    </style>
 </head>
-<body>
-  <header>
-		<div class="corp">
-			<img src="https://i.postimg.cc/qMsq73hD/icon.png" width="40px" alt="회사 로고">
-			<h3>J2P4</h3>
-		</div>
-		<div class="search">
-			<img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" width="30px" alt="검색용 아이콘">
-		</div>
-		<div class="logout">
-			로그아웃
-		</div>
-		<div class="myIcon">
-			<a href="javascript:void(0);" id="myIconBtn">
-				<img src="https://i.postimg.cc/zfVqTbvr/user.png" width="35px" alt="마이페이지 아이콘"
-					style="background-color: #ffffff; border-radius: 100%;">
-			</a>
-			<ul class="subList">
-				<li><a href="">하위메뉴1</a></li>
-				<li><a href="">하위메뉴2</a></li>
-			</ul>
-		</div>
-	</header>
 
-	<div class="gnb">
-		<ul class="mainList">
-			<li>기준 관리
-				<ul class="subList">
-					<li><a href="">기준 목록</a></li>
-				</ul>
-			</li>
-			<li>공정 관리
-				<ul class="subList">
-					<li><a href="">공정 목록</a></li>
-					<li><a href="">공정 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>BOM 관리
-				<ul class="subList">
-					<li><a href="">BOM 목록</a></li>
-					<li><a href="">BOM 등록/수정/삭제</a></li>
-				</ul>
-			</li>
-			<li>발주 관리
-				<ul class="subList">
-					<li><a href="">발주 목록</a></li>
-				</ul>
-			</li>
-			<li>재고 관리
-				<ul class="subList">
-					<li><a href="">재고 목록</a></li>
-					<li><a href="">재고 삭제</a></li>
-				</ul>
-			</li>
-			<li>생산 관리
-				<ul class="subList">
-					<li><a href="">생산 계획</a></li>
-					<li><a href="">생산 실적 현황</a></li>
-				</ul>
-			</li>
-			<li>품질 관리
-				<ul class="subList">
-					<li><a href="">LOT 추적</a></li>
-					<li><a href="">공정별 현황</a></li>
-					<li><a href="">품질 검사 입력</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+<body class="bg-gray-100 text-gray-800">
+    <!-- 헤더 섹션 (기존 코드 유지) -->
+    <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
+        <div class="flex items-center space-x-2">
+            <img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고">
+            <h3 class="text-xl font-bold">J2P4</h3>
+        </div>
+        <div class="flex items-center space-x-4 sm:space-x-8">
+            <div class="search cursor-pointer">
+                <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘">
+            </div>
+            <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
+                로그아웃
+            </div>
+            <div class="myIcon relative">
+                <a href="javascript:void(0);" id="myIconBtn">
+                    <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘">
+                </a>
+            </div>
+        </div>
+    </header>
 
-	<div class="titleBox">
-		<span>공지 사항</span>
-		<a href="">
-			<div class="toMainpage">
-				<img src="https://i.postimg.cc/ZKF2nbTx/43-20250904122343.png" width="13px" alt="메인 화면으로 가는 화살표"
-					style="transform: scaleX(-1);">
-				메인 화면으로
-			</div>
-		</a>
-	</div>
+    <!-- 메인 내비게이션 (기존 코드 유지) -->
+    <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
+        <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
+            <li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li>
+        </ul>
+    </nav>
 
-	<div class="wrap">
-	</div>
-  <div class="container">
-    <!-- 헤더 -->
+    <!-- 공지 사항 등록 섹션 -->
+    <div class="p-4 sm:p-8 max-w-4xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">자유게시판 등록</h2>
 
-    <!-- 게시글 상단 정보 -->
-    <section class="post-info">
-      <div class="post-title">
-        <strong>[공유]</strong> 안전 수칙 교육 일정 및 내용 안내
-      </div>
-      <div class="post-meta">
-        작성자: 안전보건팀 | 작성 시간: 2024-12-13 17:30
-      </div>
-    </section>
+        <!-- 메인 컨테이너 - 더 깔끔하게 디자인 -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl">
+            <div class="mb-6 flex flex-wrap items-center gap-2">
+                <!-- 유형 드롭다운 -->
+                <select id="postType" class="px-4 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all duration-200">
+                    <option value="">유형 선택</option>
+                    <option value="안내">[안내]</option>
+                    <option value="긴급">[자유]</option>
+                   
+                </select>
+                <!-- 부서 드롭다운 -->
+                <select id="department" class="px-4 py-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all duration-200">
+                    <option value="">부서 선택</option>
+                    <option value="IT운영팀">[IT운영팀]</option>
+                    <option value="경영관리팀">[경영관리팀]</option>
+                    <option value="연구개발팀">[연구개발팀]</option>
+                    <option value="시설관리팀">[시설관리팀]</option>
+                    <option value="자재관리팀">[자재 관리팀]</option>
+                    <option value="정보보안팀">[정보보안팀]</option>
+                    <option value="품질관리팀">[품질관리팀]</option>
+                    <option value="생산관리팀">[생산관리팀]</option>
+                    <option value="생산기술팀">[생산기술팀]</option>
+                    <option value="재무회계팀">[재무회계팀]</option>
+                    <option value="안전보건팀">[안전보건팀]</option>
+                    <option value="인사팀">[인사팀]</option>
+                    <option value="기획팀">[기획팀]</option>
+                    <option value="총무팀">[총무팀]</option>
+                    <option value="마케팅팀">[마케팅팀]</option>
+                    <option value="영업팀">[영업팀]</option>
+                </select>
+                <!-- 게시글 제목 입력 -->
+                <input type="text" id="postTitle" class="flex-grow px-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all duration-200"
+                    placeholder="제목을 입력하세요" />
+            </div>
 
-    <!-- 게시글 본문 -->
-    <section id="postContent" class="post-content">
-      <p>안녕하세요. 안전보건팀입니다.<br>
-        안전 수칙 교육 일정 및 내용을 아래와 같이 공유합니다.<br><br>
-        모두의 안전하고 건강한 근무 환경 조성을 위해 정기 안전 수칙 교육을 아래와 같이 실시합니다.
-        이번 교육은 새롭게 개정된 안전 수칙과 더불어, 실제 현장에서 발생할 수 있는 사고 사례를 중심으로 진행됩니다.<br><br>
+            <!-- 텍스트 편집기 툴바 -->
+            <div class="text-editor-toolbar mb-0 border-b-0">
+                <button onclick="insertImage()">사진</button>
+                <button onclick="insertTable()">표</button>
+                <button onclick="insertSchedule()">일정</button>
+                <!-- 폰트 사이즈 드롭다운 -->
+                <select id="fontSizeSelect">
+                    <option value="">폰트 크기</option>
+                    <option value="1">작게</option>
+                    <option value="2">보통</option>
+                    <option value="3">크게</option>
+                </select>
+                <button onclick="formatText('bold')" class="font-bold">
+                    B
+                </button>
+                <button onclick="formatText('italic')" class="italic">
+                    /
+                </button>
+            </div>
 
-        <strong>[교육 개요]</strong>
+            <!-- 본문 입력 영역 -->
+            <div id="postContent" contenteditable="true"
+                class="w-full h-80 p-4 border border-gray-300 rounded-lg rounded-t-none focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all duration-200 resize-y"
+                placeholder="본문을 입력하세요..." style="min-height: 200px;"></div>
 
-            <ul><li>일시: 2024년 6월 25일(화) 14:00 ~ 16:00</li></ul>
-            <ul><li>장소: 본사 대강당</li></ul>
-            <ul><li>대상: 전 직원 (부서별 순환 교육 진행)</li></ul><br>
+            <!-- 첨부 파일 섹션 -->
+            <div class="file-upload mt-6">
+                <label for="file" class="block mb-2 font-semibold text-gray-700">첨부파일</label>
+                <input type="file" id="file"
+                    class="w-full text-gray-700 p-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
 
-        <strong>[교육 내용]</strong>
-
-            <ul>1. 일시: 2024년 6월 25일(화) 14:00 ~ 16:00</ul>
-            <ul>2. 작업장 내 위험 요소 식별 및 대처 방법: 생산 라인, 사무실 등 각 작업 환경의 잠재적 위험 요소 분석</ul>
-            <ul>3. 응급 상황 발생 시 행동 요령: 소화기 사용법, 심폐소생술(CPR) 실습 등</ul>
-            <ul>4. 사고 사례 공유 및 질의응답: 실제 발생했던 사고 사례를 통해 안전 의식 고취</ul><br>
-
-        안전 수칙 교육은 선택이 아닌 필수입니다. 모든 직원이 적극적으로 참여하여 안전 의식을 높이고, 안전한 일터를 함께 만들어가는 데 동참해 주시기를 부탁드립니다.<br><br>
-
-        교육 관련 문의사항은 안전보건팀(내선: 3210)으로 연락 주시면 상세히 안내해 드리겠습니다.
-      </p>
-    </section>
-
-    <!-- 하단 버튼 영역 -->
-    <div class="button-group">
-      <button id ="editBtn" class="btn black"> 수정 </button>
-      <a href="Gongjiboard.html" class="btn gray">목록보기</a>
-      <div class="nav-buttons">
-        <button class="btn">이전 글</button>
-        <button class="btn">다음 글 ▼</button>
-      </div>
+            <!-- 버튼 그룹 -->
+            <div class="button-group mt-8 flex justify-end gap-3">
+                <button id="cancelBtn"
+                    class="btn px-6 py-2.5 bg-gray-400 text-white rounded-lg font-semibold hover:bg-gray-500 transition-colors duration-200 shadow-md">취소</button>
+                <button id="registerBtn"
+                    class="btn px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-md">등록</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-const editBtn = document.getElementById("editBtn");
-const postContent = document.getElementById("postContent");
-const navButtons = document.querySelector(".nav-buttons"); // ← nav-buttons 선택
+    <!-- 커스텀 모달 오버레이 -->
+    <div id="customModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modalMessage" class="modal-message"></div>
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="modalConfirmBtn"
+                    class="px-5 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition-colors duration-200">확인</button>
+                <button id="modalCancelBtn"
+                    class="px-5 py-2 bg-gray-400 text-white rounded-md font-semibold hover:bg-gray-500 transition-colors duration-200">취소</button>
+            </div>
+        </div>
+    </div>
 
-let isEditing = false;
+    <script>
+        const registerBtn = document.getElementById("registerBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        const postTitle = document.getElementById("postTitle");
+        const postContent = document.getElementById("postContent");
+        const customModal = document.getElementById("customModal");
+        const modalMessage = document.getElementById("modalMessage");
+        const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+        const modalCancelBtn = document.getElementById("modalCancelBtn");
+        const fontSizeSelect = document.getElementById("fontSizeSelect");
+        const postTypeSelect = document.getElementById("postType");
+        const departmentSelect = document.getElementById("department");
 
-editBtn.addEventListener("click", () => {
-  if (!isEditing) {
-    // 수정 모드 진입
-    const originalText = postContent.innerText.trim();
+        let modalCallback = null;
 
-    postContent.innerHTML = `
-      <textarea id="editArea" style="width: 100%; height: 250px;">${originalText}</textarea>
-    `;
+        // 커스텀 모달을 보여주는 함수
+        function showModal(message, type, callback) {
+            modalMessage.textContent = message;
+            modalCallback = callback;
+            if (type === 'confirm') {
+                modalCancelBtn.style.display = 'inline-block';
+            } else {
+                modalCancelBtn.style.display = 'none';
+            }
+            customModal.style.display = 'flex';
+        }
 
-    editBtn.textContent = "저장";
-    isEditing = true;
+        // 모달을 숨기는 함수
+        function hideModal() {
+            customModal.style.display = 'none';
+            modalCallback = null;
+        }
 
-    // 🔽 이전/다음 글 버튼 숨기기
-    navButtons.style.display = "none";
+        // 모달 확인 버튼 클릭 시
+        modalConfirmBtn.addEventListener('click', () => {
+            hideModal();
+            if (modalCallback) {
+                modalCallback(true);
+            }
+        });
 
-  } else {
-    // 저장 모드 - 텍스트 적용
-    const newText = document.getElementById("editArea").value;
-    const formattedText = newText.replace(/\n/g, "<br>");
+        // 모달 취소 버튼 클릭 시
+        modalCancelBtn.addEventListener('click', () => {
+            hideModal();
+            if (modalCallback) {
+                modalCallback(false);
+            }
+        });
 
-    postContent.innerHTML = `<p>${formattedText}</p>`;
-    editBtn.textContent = "수정";
-    isEditing = false;
+        // 텍스트 편집 기능
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            postContent.focus();
+        }
 
-    // 🔼 이전/다음 글 버튼 다시 보이기
-    navButtons.style.display = "flex";
-  }
-});
-  
+        // 삭제 버튼 생성 함수
+        function createDeleteButton() {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'X';
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (e.target.parentElement) {
+                    e.target.parentElement.remove();
+                }
+            });
+            return deleteBtn;
+        }
 
+        // 사진 삽입 기능
+        function insertImage() {
+            const imageUrl = prompt("이미지 URL을 입력하세요:");
+            if (imageUrl) {
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'deletable-item';
+                imgContainer.style.position = 'relative';
+                const imgTag = document.createElement('img');
+                imgTag.src = imageUrl;
+                imgTag.className = 'w-full h-auto rounded-lg my-2';
+                imgTag.alt = '이미지';
+                imgContainer.appendChild(imgTag);
+                imgContainer.appendChild(createDeleteButton());
+                document.execCommand('insertHTML', false, imgContainer.outerHTML + '<br>');
+            }
+            postContent.focus();
+        }
 
-</script>
+        // 표 삽입 기능
+        function insertTable() {
+            const tableContainer = document.createElement('div');
+            tableContainer.className = 'deletable-item';
+            tableContainer.style.position = 'relative';
+            const tableHTML = `
+                <table class="table-auto border-collapse w-full my-4">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border border-gray-300 p-2 text-left">제목1</th>
+                            <th class="border border-gray-300 p-2 text-left">제목2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 p-2">내용1</td>
+                            <td class="border border-gray-300 p-2">내용2</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 p-2">내용3</td>
+                            <td class="border border-gray-300 p-2">내용4</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            tableContainer.innerHTML = tableHTML;
+            tableContainer.appendChild(createDeleteButton());
+            document.execCommand('insertHTML', false, tableContainer.outerHTML + '<br>');
+            postContent.focus();
+        }
+
+        // 일정 삽입 기능
+        function insertSchedule() {
+            const scheduleContainer = document.createElement('div');
+            scheduleContainer.className = 'deletable-item';
+            scheduleContainer.style.position = 'relative';
+            const scheduleHTML = `
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 my-4">
+                    <h4 class="font-bold text-lg mb-2">일정 안내</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><span class="font-semibold">일시:</span> 2024년 12월 24일 오후 2시</li>
+                        <li><span class="font-semibold">장소:</span> 대회의실</li>
+                        <li><span class="font-semibold">내용:</span> 연말 워크숍</li>
+                    </ul>
+                </div>
+            `;
+            scheduleContainer.innerHTML = scheduleHTML;
+            scheduleContainer.appendChild(createDeleteButton());
+            document.execCommand('insertHTML', false, scheduleContainer.outerHTML + '<br>');
+            postContent.focus();
+        }
+        
+        // 폰트 사이즈 변경 기능
+        fontSizeSelect.addEventListener('change', (e) => {
+            const size = e.target.value;
+            if (size) {
+                formatText('fontSize', size);
+            }
+        });
+
+        // 등록 버튼 클릭 이벤트
+        registerBtn.addEventListener("click", () => {
+            const selectedType = postTypeSelect.value;
+            const selectedDepartment = departmentSelect.value;
+            const titleValue = postTitle.value.trim();
+            const contentValue = postContent.innerHTML.trim();
+
+            if (selectedType === "" || selectedDepartment === "") {
+                showModal("유형과 담당 부서를 모두 선택해주세요.", 'alert');
+                return;
+            }
+
+            if (titleValue === "" || contentValue === "") {
+                showModal("제목과 내용을 모두 입력해주세요.", 'alert');
+                return;
+            }
+
+            showModal("게시글을 등록하시겠습니까?", 'confirm', (confirmed) => {
+                if (confirmed) {
+                    const postData = {
+                        type: selectedType,
+                        department: selectedDepartment,
+                        title: titleValue,
+                        content: contentValue,
+                        date: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.'),
+                        time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+                        success: true
+                    };
+                    localStorage.setItem('newPost', JSON.stringify(postData));
+                    window.location.href = "gongji_board.html";
+                }
+            });
+        });
+
+        // 취소 버튼 클릭 이벤트 핸들러
+        cancelBtn.addEventListener("click", () => {
+            if (postTitle.value.trim() !== "" || postContent.innerHTML.trim() !== "") {
+                showModal("내용을 모두 삭제하고 취소하시겠습니까?", 'confirm', (confirmed) => {
+                    if (confirmed) {
+                        postTitle.value = "";
+                        postContent.innerHTML = "";
+                        postTypeSelect.value = "";
+                        departmentSelect.value = "";
+                    }
+                });
+            } else {
+                window.location.href = "gongji_board.html";
+            }
+        });
+
+    </script>
 </body>
+
 </html>

@@ -1,179 +1,160 @@
 window.addEventListener('load', init);
 
 function init() {
-  bindOrder_list();
+  bindOrderList();
 }
 
-function bindOrder_list() {
+function bindOrderList() {
   const table = document.querySelector('.tables');
-  if (!table) return;
+  const tbody = document.querySelector('.tables_body');
+  if (!table || !tbody) return;
 
-  const thead = table.querySelector('thead');
-  const tbody = table.querySelector('tbody.tables_body');
+  // UI refs
+  const filterForm = document.querySelector('.order_filter');
+  const startInput = document.getElementById('start_date');
+  const endInput   = document.getElementById('end_date');
+  const checkAll   = document.getElementById('check_all');
 
-  // 필터 UI
-  const startDate = document.getElementById('start_date');
-  const endDate   = document.getElementById('end_date');
-  const stateSel  = document.getElementById('state_select');
-  const filterBtn = document.getElementById('filter_btn');
+  const deleteBtn  = document.getElementById('deleteBtn');
+  const deleteKeys = document.getElementById('delete_keys');
+  const deleteForm = document.getElementById('deleteForm');
 
-  // 액션 버튼
-  const deleteBtn = document.querySelector('.action .delete');
+  // ===== 유틸 =====
+  const thCount = table.querySelectorAll('thead th').length;
 
-  // 헤더 전체선택 체크박스
-  const headerCb = thead ? thead.querySelector('input[type="checkbox"]') : null;
+  const isVisible = (tr) => tr && tr.style.display !== 'none';
+  const visibleRows = () =>
+    Array.from(tbody.querySelectorAll('tr'))
+      .filter(tr => isVisible(tr) && !tr.classList.contains('empty-row'));
 
-  // ---------- 유틸 ----------
-  const isVisible = (el) => el.style.display !== 'none';
-
-  // 상태 문자열에서 공백 제거
-  function normalizeState(str) {
-    return (str || '').replace(/\s/g, '');
-  }
-
-  // NO 다시 번호 매기기
   function renumberVisible() {
-    let n = 1;
-    tbody.querySelectorAll('tr').forEach(tr => {
-      if (isVisible(tr)) {
-        tr.children[1].textContent = n++;
-      }
+    const rows = visibleRows();
+    rows.forEach((tr, i) => {
+      const noCell = tr.children[1];
+      if (noCell) noCell.textContent = i + 1;
     });
   }
 
-  // 전체선택 체크박스 해제
-  function clearSelectAll() {
-    if (headerCb) headerCb.checked = false;
+  function removeEmptyRow() {
+    const old = tbody.querySelector('.empty-row');
+    if (old) old.remove();
   }
 
-  // ---------- 회수 버튼 표시/숨김 ----------
-  function updateRecallButtonVisibility(tr) {
-    const stateCell = tr.querySelector('.row_state');
-    const recallBtn = tr.querySelector('.recall');
-    if (!stateCell || !recallBtn) return;
-
-    const state = normalizeState(stateCell.textContent.trim());
-    // 승인 또는 임시저장 상태 → 회수 버튼 숨김
-    if (state === '승인' || state === '임시저장') {
-      recallBtn.style.display = 'none';
-    } else {
-      recallBtn.style.display = '';
+  function showEmptyRowIfNeeded() {
+    const anyVisible = visibleRows().length > 0;
+    removeEmptyRow();
+    if (!anyVisible) {
+      const tr = document.createElement('tr');
+      tr.className = 'empty-row';
+      const td = document.createElement('td');
+      td.colSpan = thCount;
+      td.style.textAlign = 'center';
+      td.textContent = '조건에 맞는 발주가 없습니다.';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
     }
   }
 
-  // 테이블 전체에 대해 초기 상태 확인
-  function updateAllRecallButtons() {
-    tbody.querySelectorAll('tr').forEach(updateRecallButtonVisibility);
+  function clearHeaderSelect() {
+    if (checkAll) {
+      checkAll.checked = false;
+      checkAll.indeterminate = false;
+    }
   }
 
-  // ---------- 필터 ----------
-  function applyFilter() {
-    const start = startDate && startDate.value ? startDate.value : ''; // yyyy-mm-dd
-    const end   = endDate && endDate.value ? endDate.value : '';
-    const sel   = stateSel && stateSel.value ? stateSel.value : '전체';
-    const selNorm = normalizeState(sel);
+  // ===== 날짜 min/max 제약 =====
+  function applyDateConstraints() {
+    // 시작일 → 종료일 min
+    if (startInput && endInput) {
+      endInput.min = startInput.value || '';
+      if (startInput.value && endInput.value && endInput.value < startInput.value) {
+        endInput.value = startInput.value;
+      }
+    }
+    // 종료일 → 시작일 max
+    if (startInput && endInput) {
+      startInput.max = endInput.value || '';
+      if (startInput.value && endInput.value && startInput.value > endInput.value) {
+        startInput.value = endInput.value;
+      }
+    }
+  }
 
+  // ===== 기간 필터 =====
+  function applyFilter(evt) {
+    if (evt) evt.preventDefault();
+    applyDateConstraints();
+
+    const start = startInput && startInput.value ? startInput.value : '';
+    const end   = endInput   && endInput.value   ? endInput.value   : '';
+
+   // 날짜는 3번째 컬럼(index 2), 형식: yyyy-MM-dd 가정
     tbody.querySelectorAll('tr').forEach(tr => {
-      const dateCell  = tr.querySelector('.row_date');
-      const stateCell = tr.querySelector('.row_state');
-
-      const dateStr   = dateCell ? dateCell.textContent.trim() : '';
-      const stateStr  = stateCell ? stateCell.textContent.trim() : '';
-      const stateNorm = normalizeState(stateStr);
-
+      const dateCell = tr.children[2];
+      const dateStr  = dateCell ? dateCell.textContent.trim() : '';
       let show = true;
 
-      // 상태 필터
-      if (sel !== '전체') {
-        show = (stateNorm === selNorm);
-      }
-
-      // 기간 필터
       if (start) show = show && (dateStr >= start);
       if (end)   show = show && (dateStr <= end);
 
       tr.style.display = show ? '' : 'none';
-
-      // 회수 버튼 노출 조건 다시 확인
-      updateRecallButtonVisibility(tr);
     });
 
-    clearSelectAll();
+    clearHeaderSelect();
     renumberVisible();
+    showEmptyRowIfNeeded();
   }
 
-  // 조회 버튼
-  if (filterBtn) {
-    filterBtn.addEventListener('click', applyFilter);
-  }
-
-  // 전체선택 → 보이는 행만 체크/해제
-  if (headerCb) {
-    headerCb.addEventListener('change', () => {
-      const checked = headerCb.checked;
-      tbody.querySelectorAll('tr').forEach(tr => {
-        if (!isVisible(tr)) return;
+  // ===== 전체선택(보이는 행만) =====
+  if (checkAll) {
+    checkAll.addEventListener('change', () => {
+      const checked = checkAll.checked;
+      visibleRows().forEach(tr => {
         const cb = tr.querySelector('input.row_check[type="checkbox"]');
         if (cb) cb.checked = checked;
       });
     });
   }
 
-  // 개별 체크 → 헤더 체크 상태 동기화
+  // 개별 체크 → 헤더 체크 동기화
   tbody.addEventListener('change', (e) => {
-    const target = e.target;
-    if (!(target instanceof HTMLInputElement) || target.type !== 'checkbox') return;
+    const t = e.target;
+    if (!(t instanceof HTMLInputElement) || t.type !== 'checkbox' || !t.classList.contains('row_check')) return;
 
-    const visibleRows = Array.from(tbody.querySelectorAll('tr')).filter(isVisible);
-    let allChecked = true;
-
-    for (let i = 0; i < visibleRows.length; i++) {
-      const cb = visibleRows[i].querySelector('input.row_check[type="checkbox"]');
-      if (!cb || !cb.checked) {
-        allChecked = false;
-        break;
-      }
-    }
-    if (headerCb) headerCb.checked = allChecked && visibleRows.length > 0;
+    if (!checkAll) return;
+    const rows = visibleRows();
+    const allChecked = rows.length > 0 && rows.every(tr => {
+      const cb = tr.querySelector('input.row_check[type="checkbox"]');
+      return cb && cb.checked;
+    });
+    checkAll.checked = allChecked;
+    checkAll.indeterminate = false;
   });
 
-  // 삭제 버튼 → 체크된 행 삭제
-  if (deleteBtn) {
+  // ===== 삭제(서버 전송: CSV) =====
+  if (deleteBtn && deleteKeys && deleteForm) {
     deleteBtn.addEventListener('click', () => {
-      const checkedRows = Array.from(
-        tbody.querySelectorAll('input.row_check[type="checkbox"]:checked')
-      ).map(cb => cb.closest('tr'));
+      const keys = Array.from(tbody.querySelectorAll('.row_check:checked'))
+        .map(cb => cb.value)
+        .filter(Boolean);
 
-      if (checkedRows.length === 0) {
+      if (keys.length === 0) {
         alert('삭제할 항목을 선택하세요.');
         return;
       }
-
-      checkedRows.forEach(tr => tr.remove());
-      clearSelectAll();
-      renumberVisible();
+      deleteKeys.value = keys.join(',');
+      deleteForm.submit();
     });
   }
 
-  // 회수 버튼 클릭 → 승인대기 또는 반려 → 임시저장으로 변경
-  tbody.addEventListener('click', (e) => {
-    const btn = e.target;
-    if (!(btn instanceof HTMLButtonElement)) return;
-    if (!btn.classList.contains('recall')) return;
+  // ===== 바인딩 =====
+  if (startInput) startInput.addEventListener('change', applyDateConstraints);
+  if (endInput)   endInput.addEventListener('change', applyDateConstraints);
+  if (filterForm) filterForm.addEventListener('submit', applyFilter);
 
-    const tr = btn.closest('tr');
-    const statusCell = tr.querySelector('.row_state');
-    if (!statusCell) return;
-
-    const cur = normalizeState(statusCell.textContent.trim());
-
-    // 승인대기 또는 반려 상태만 회수 가능
-    if (cur === '승인대기' || cur === '반려') {
-      statusCell.textContent = '임시저장';
-      updateRecallButtonVisibility(tr); // 버튼 숨기기
-    }
-  });
-
-  // 초기 상태에서 회수 버튼 숨김 처리
-  updateAllRecallButtons();
+  // 초기값 존재 시 즉시 필터
+  applyDateConstraints();
+  if ((startInput && startInput.value) || (endInput && endInput.value)) {
+    applyFilter();
+  }
 }

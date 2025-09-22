@@ -108,12 +108,11 @@ public class BOMDAO {
 			
 			// SQL 준비
 			String query = "delete from bom"
-					+ "		where item_code_1 = ? and item_code_2 = ?";
+					+ "		where bom_id = ?";
 			
 			PreparedStatement ps = conn.prepareStatement(query);
 			
-			ps.setString(1, dto.getItem_code_1());
-			ps.setString(2, dto.getItem_code_2());
+			ps.setString(1, dto.getBomID());
 			
 			// SQL 실행
 			result = ps.executeUpdate();
@@ -185,6 +184,51 @@ public class BOMDAO {
 		}
 		
 		return result;
+	}
+	
+	// 오늘 날짜 prefix로 마지막 BOM ID 조회
+	public String selectLastBOMID(String datePrefix) {
+	    String lastID = null;
+	    try {
+	        Connection conn = getConn();
+	        String query = "select max(bom_id) as last_id from bom where bom_id like ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, datePrefix + "%");
+	        ResultSet rs = ps.executeQuery();
+	        if(rs.next()) {
+	            lastID = rs.getString("last_id");
+	        }
+	        ps.close();
+	        conn.close();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return lastID;
+	}
+
+	// 수정용
+	public BOMDTO selectBOMByID(String bomID) {
+	    BOMDTO dto = null;
+	    try {
+	        Connection conn = getConn();
+	        String query = "SELECT bom_id, item_code_1, item_code_2, require_amount FROM bom WHERE bom_id = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setString(1, bomID);
+	        ResultSet rs = ps.executeQuery();
+	        if(rs.next()) {
+	            dto = new BOMDTO();
+	            dto.setBomID(rs.getString("bom_id"));
+	            dto.setItem_code_1(rs.getString("item_code_1"));
+	            dto.setItem_code_2(rs.getString("item_code_2"));
+	            dto.setRequire_amount(rs.getInt("require_amount"));
+	        }
+	        rs.close();
+	        ps.close();
+	        conn.close();
+	    } catch(Exception e) {
+	        e.printStackTrace();
+	    }
+	    return dto;
 	}
 
 }

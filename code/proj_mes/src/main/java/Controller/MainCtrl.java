@@ -28,7 +28,7 @@ public class MainCtrl extends HttpServlet {
     request.setAttribute("workerId", loginUser.getWorkerId());
     request.setAttribute("workerGrade", loginUser.getWorkerGrade());
 
-    request.getRequestDispatcher("/Html/02_main/mainpage.html")
+    request.getRequestDispatcher("/Html/02_main/mainpage.jsp")
            .forward(request, response);
   }
 

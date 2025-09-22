@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ page import="java.util.List, Dto.ItemDTO" %>
 
-
 <%
   @SuppressWarnings("unchecked")
   List<ItemDTO> items = (List<ItemDTO>) request.getAttribute("items");
@@ -31,20 +30,9 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-
-
-
-
-
-
-<!--  여기 두 줄이 템플릿에서 끌어올 자리 -->
+<!-- 템플릿 삽입 위치 -->
 <div id="header-slot"></div>
 <div id="nav-slot"></div>
-
-
-
-
-
 
 <div class="p-4 sm:p-8 max-w-7xl mx-auto">
   <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">품목 목록</h2>
@@ -146,29 +134,17 @@
 </div>
 
 <script>
-  // 템플릿의 header/nav만 로드
-  (async function () {
-    try {
-      const url = '<%= ctx %>/Html/00_template/template.html';
-      const text = await (await fetch(url, { credentials: 'same-origin' })).text();
-      const doc  = new DOMParser().parseFromString(text, 'text/html');
-      const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
-      const nav    = doc.querySelector('nav.nav-bg')    || doc.querySelector('nav');
-      const headerSlot = document.getElementById('header-slot');
-      const navSlot    = document.getElementById('nav-slot');
-      if (header && headerSlot) headerSlot.replaceWith(header);
-      if (nav && navSlot)       navSlot.replaceWith(nav);
-    } catch (e) {
-      console.error('템플릿 로드 실패:', e);
+  // 전체 선택 체크박스
+  (function(){
+    const all = document.getElementById('selectAllCheckbox');
+    if (all) {
+      all.addEventListener('change', (e) => {
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = e.target.checked);
+      });
     }
   })();
 
-  // 전체 선택
-  document.getElementById('selectAllCheckbox').addEventListener('change', (e) => {
-    document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = e.target.checked);
-  });
-
-  // 더블클릭 → 상세
+  // 더블클릭 → 상세 이동
   (function(){
     const ctx = '<%= ctx %>';
     document.querySelectorAll('#itemTableBody tr[data-code]').forEach(tr => {
@@ -179,6 +155,57 @@
       });
     });
   })();
+
+  // 템플릿(header/nav) 비동기 로드 후, 사용자 메뉴 바인딩
+  (async function () {
+    try {
+      const url = '<%= ctx %>/Html/00_template/template.html';
+      const res = await fetch(url, { credentials: 'same-origin' });
+      const text = await res.text();
+      const doc  = new DOMParser().parseFromString(text, 'text/html');
+
+      const header = doc.querySelector('header.header-bg') || doc.querySelector('header');
+      const nav    = doc.querySelector('nav.nav-bg')       || doc.querySelector('nav');
+
+      const headerSlot = document.getElementById('header-slot');
+      const navSlot    = document.getElementById('nav-slot');
+
+      if (header && headerSlot) headerSlot.replaceWith(header);
+      if (nav && navSlot)       navSlot.replaceWith(nav);
+
+      // 헤더/네비가 DOM에 들어간 뒤에만 바인딩
+      bindUserMenu();
+    } catch (e) {
+      console.error('템플릿 로드 실패:', e);
+    }
+  })();
+
+  // 사람 아이콘 드롭다운 바인딩
+  function bindUserMenu() {
+    const myIconBtn = document.getElementById('myIconBtn');
+    const userMenu  = document.getElementById('userMenu');
+
+    // 템플릿에 요소가 없으면 조용히 종료
+    if (!myIconBtn || !userMenu) return;
+
+    function closeUserMenu() {
+      userMenu.classList.add('hidden');
+      myIconBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    myIconBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userMenu.classList.toggle('hidden');
+      myIconBtn.setAttribute(
+        'aria-expanded',
+        userMenu.classList.contains('hidden') ? 'false' : 'true'
+      );
+    });
+
+    userMenu.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', closeUserMenu);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeUserMenu(); });
+  }
 </script>
 </body>
 </html>

@@ -1,125 +1,499 @@
-<!-- 개선 사항 
- 1: 체크 박스에 체크가 된 목록이 삽입, 삭제 되도록
- 2 : 로그 형식을 구상할것
-  -->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>이슈 처리</title>
-  <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" />
-  <link rel="stylesheet" href="/proj_mes/Html/asset/03_issue.css">
-  <script src ="/proj_mes/Html/asset/template_load.js" ></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이슈 처리 · 개선 v2</title>
 
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- jQuery (코드 하단의 $ 의존성 해결) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
+  <!-- Chart.js (필요 시 유지) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- <link rel="stylesheet" href="/proj_mes/Html/asset/03_account_create.css" /> -->
+  <link rel="stylesheet" href="/proj_mes/Html/asset/03_issue.css" />
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    canvas { max-height: 200px; }
+    .header-bg { background-color: #002a40; }
+    .nav-bg { background-color: #003751; }
+    .mainList, #noticeContent, #boardContent { cursor: pointer; }
+    .mainList li:hover { background-color: #3b82f6; }
+
+    /* 카드 공통 */
+    .card { @apply bg-white rounded-2xl shadow-sm border border-gray-200; }
+    .card-header { @apply px-4 py-3 text-lg font-semibold text-gray-800 border-b; }
+    .card-body { @apply p-4; }
+
+    /* 테이블 */
+    .table-wrap { @apply overflow-auto rounded-xl border border-gray-200; }
+    .tables { @apply w-full text-sm; border-collapse: separate; border-spacing: 0; }
+    .tables th { @apply bg-gray-50 text-left font-semibold text-gray-700 sticky top-0 z-10; }
+    .tables th, .tables td { @apply px-3 py-2 border-b; }
+
+    /* 버튼 */
+    .btn { @apply px-3 py-2 rounded-xl bg-gray-800 text-white text-sm hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed; }
+    .btn-approve { @apply bg-green-600 hover:bg-green-500; }
+    .btn-delete { @apply bg-rose-600 hover:bg-rose-500; }
+    .btn-outline { @apply bg-white text-gray-800 border border-gray-300 hover:bg-gray-50; }
+
+    /* 모달 */
+    .modal_bg{ display:none; position:fixed; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,.4); z-index:60; }
+    .modal_wrap{ display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:380px; background:#fff; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.2); z-index:70; }
+    .modal_message{ padding:20px; text-align:center; font-weight:600; }
+    .modal_actions{ padding:0 20px 20px; display:flex; justify-content:center; gap:8px; }
+    .modal_close{ @apply btn; }
+
+    /* 감사 로그 */
+    .audit-textarea{ @apply w-full h-56 p-3 rounded-xl border border-gray-300 font-mono text-xs bg-gray-50; }
+    .audit-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+
+    /* 선택된 항목 패널 */
+    .selected-panel h3{ @apply text-base font-semibold text-gray-800; }
+    .selected-item{ @apply flex items-center justify-between gap-2 px-3 py-2 rounded-xl border bg-white; }
+    .selected-item .meta{ @apply text-sm text-gray-700; }
+  </style>
 </head>
-<body>
-  <header></header>
-  <div class="gnb"></div>
-  <div class="titleBox"></div>
-<div class = "wrap">
-<main class="main">
-  <!-- 상단 탭 (같은 디자인) -->
-  <div class="tabs">
-    <button class="tab active" role="tab" aria-selected="true">이슈</button>
-    <button class="tab" role="tab" aria-selected="false">계정 관리</button>
+<body class="min-h-screen">
+  <!-- 헤더 -->
+  <header class="header-bg text-white p-4 shadow-lg flex justify-between items-center z-50 relative">
+    <div class="flex items-center space-x-2">
+      <a href="/proj_mes/mainpage"><img src="https://i.postimg.cc/qMsq73hD/icon.png" class="w-10" alt="회사 로고" /></a>
+      <a href="/proj_mes/mainpage"><h3 class="text-xl font-bold">J2P4</h3></a>
+    </div>
+    <div class="flex items-center space-x-4 sm:space-x-8">
+      <div class="search cursor-pointer"><img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" class="w-6 sm:w-7" alt="검색용 아이콘" /></div>
+      <div class="logout text-sm sm:text-base cursor-pointer hover:underline">
+        <form method="post" action="/proj_mes/logout"><button type="submit">로그아웃</button></form>
+      </div>
+      <div class="myIcon relative">
+        <button id="myIconBtn" class="focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          <img src="https://i.postimg.cc/zfVqTbvr/user.png" class="w-8 sm:w-9 rounded-full bg-white" alt="마이페이지 아이콘" />
+        </button>
+        <div id="userMenu" class="absolute right-0 mt-2 w-40 bg-white text-gray-800 rounded-lg shadow-lg border hidden z-50 p-2 text-sm">
+          <a class="block px-2 py-1 rounded hover:bg-gray-50" href="/proj_mes/AccountManage">계정관리</a>
+          <a class="block px-2 py-1 rounded hover:bg-gray-50" href="/proj_mes/IssueCtrl">이슈처리</a>
+          <a class="block px-2 py-1 rounded hover:bg-gray-50" href="/proj_mes/Client">거래처 관리</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 내비 -->
+  <nav class="nav-bg text-white py-2 shadow-inner z-40 relative">
+    <ul class="mainList flex flex-wrap justify-center text-sm sm:text-base">
+      <a href="/proj_mes/StandardCtrl"><li class="relative px-2 sm:px-4 py-2 rounded-md">기준 관리</li></a>
+      <a href="/proj_mes/process"><li class="relative px-2 sm:px-4 py-2 rounded-md">공정 관리</li></a>
+      <a href="/proj_mes/bom"><li class="relative px-2 sm:px-4 py-2 rounded-md">BOM 관리</li></a>
+      <a href="/proj_mes/orderList"><li class="relative px-2 sm:px-4 py-2 rounded-md">발주 관리</li></a>
+      <a href="/proj_mes/stockList"><li class="relative px-2 sm:px-4 py-2 rounded-md">재고 관리</li></a>
+      <a href="/proj_mes/proplan"><li class="relative px-2 sm:px-4 py-2 rounded-md">생산 관리</li></a>
+      <a href="/proj_mes/items"><li class="relative px-2 sm:px-4 py-2 rounded-md">품목 관리</li></a>
+      <li class="relative px-2 sm:px-4 py-2 rounded-md">품질 관리</li>
+    </ul>
+  </nav>
+
+<div class="titleBox">
+        <span>이슈 처리</span> 
+	<div class="box">
+	  <div class="wrap_list_1">
+	      <!-- 이슈 목록 카드 -->
+	      <section class="card xl:col-span-2">
+	        <header id="issue-title" class="top card-header">
+	        	<div>발생 이슈</div>
+	        <div>
+	        <div class="flex flex-wrap gap-2">
+	            <button class="btn add_btn" type="button" id="btn-add">문제추가</button>
+	            <button class="btn confirm_btn" type="button" id="btn-bulk-approve" disabled>선택 승인</button>
+	            <button class="btn delete_btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
+	          </div>
+	        </div>
+	        </header>
+	        <div class="card-body">
+	          <div class="table-wrap" tabindex="0">
+	            <table class="tables" id="issue-table">
+	              <thead>
+	                <tr>
+	                  <th scope="col" class="text-center"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
+	                  <th scope="col">유형</th>
+	                  <th scope="col">키값</th>
+	                  <th scope="col">처리상태</th>
+	                  <th scope="col">요청자</th>
+	                  <th scope="col">요청일</th>
+	                  <th scope="col" class="w-40 row_7">처리</th>
+	                </tr>
+	              </thead>
+	              <tbody id="issue-tbody">
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>Line A scrap spike</td>
+	                  <td>재열 처리 원인 분석 필요</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>품질보증팀</td>
+	                  <td>2025.08.30</td>
+	                  <td class="issue_td row_7">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button" data-name="Line A scrap spike">삭제</button>
+	                  </td>
+	                </tr>
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>공정 B 불량률 급증</td>
+	                  <td>설비 교정 및 파라미터 점검</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>생산기술팀</td>
+	                  <td>2025.08.29</td>
+	                  <td class="issue_td">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button">삭제</button>
+	                  </td>
+	                </tr>
+	                <tr>
+	                  <td class="text-center"><input type="checkbox" class="row-check" /></td>
+	                  <td>라인 C 안전센서 오류</td>
+	                  <td>교체 필요 여부 판단</td>
+	                  <td><a href="#" class="status-link" data-status="open">open</a></td>
+	                  <td>안전관리팀</td>
+	                  <td>2025.08.28</td>
+	                  <td class="issue_td">
+	                    <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+	                    <button class="btn btn-delete delete_btn_row" type="button" data-name="라인 C 안전센서 오류">삭제</button>
+	                  </td>
+	                </tr>
+	              </tbody>
+	            </table>
+	          </div>
+	
+	          <!-- 하단 액션 -->
+	          
+	        </div>
+	      </section>
+		</div>
+		
+		
+		<div class="wrap_list_2">
+	      <!-- 선택된 항목(체크 시 삽입 · 체크 해제/삭제 시 제거) -->
+	      <aside class="card selected-panel">
+	        <header class="card-header flex items-center justify-between">
+	          <span>선택된 항목</span>
+	          <div class="flex gap-2">
+	            <button id="btn-clear-selected" class="btn btn-outline back_btn" type="button">비우기</button>
+	          </div>
+	        </header>
+	        <div class="card-body space-y-2">
+	          <p class="text-sm text-gray-500">체크박스를 선택하면 이 패널에 자동으로 추가됩니다.</p>
+	          <div id="selected-list" class="space-y-2 "></div>
+	        </div>
+	      </aside>
+	
+	      <!-- 모달 -->
+	      <div class="modal_bg" onclick="popClose();"></div>
+	      <div class="modal_wrap">
+	        <div class="modal_message"><span id="modal-target">선택한</span> 항목을 정말 삭제하시겠습니까?</div>
+	        <div class="modal_actions">
+	          <button class="modal_close" id="modal-yes">예</button>
+	          <button class="modal_close" onclick="popClose();">아니요</button>
+	        </div>
+	      </div>
+		</div>
+	</div>
+
+	<div class="wrap">
+      <!-- 감사 로그 카드 -->
+      <section class="card xl:col-span-3" style = "width : 100%">
+        <header id="audit-title" class="card-header audit-header">
+          <span>감사 로그(Audit)</span>
+          <div class="flex items-center gap-2">
+            <button id="btn-copy-log" class="btn btn-outline" type="button">복사</button>
+            <button id="btn-download-log" class="btn btn-outline" type="button">CSV 내보내기</button>
+          </div>
+        </header>
+        <div class="card-body">
+          <textarea id="audit" class="audit-textarea" placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
+          <p class="mt-2 text-xs text-gray-500">포맷: <code>ISO8601, ACTION, ISSUE, REQUESTER, PREV_STATUS, NEW_STATUS, NOTE</code></p>
+        </div>
+      </section>
+  </div>
   </div>
 
-  <!-- 이슈 목록 카드 (같은 카드/테이블 구조) -->
-  <section class="card">
-    <header id="issue-title" class="card-header">이슈 처리</header>
-    <div class="card-body">
-      <div class="table-wrap" tabindex="0">
-        <table class="tables" id="issue-table">
-          <thead>
-            <tr>
-              <th scope="col"><input type="checkbox" id="check-all" aria-label="전체 선택" /></th>
-              <th scope="col">유형</th>
-              <th scope="col">키값</th>
-              <th scope="col">처리상태</th>
-              <th scope="col">요청자</th>
-              <th scope="col">요청일</th>
-              <th scope="col">처리</th>
-            </tr>
-          </thead>
-          <tbody id="issue-tbody">
-            <!-- 예시 데이터 (원하시면 서버 데이터로 대체) -->
-            <tr>
-              <td><input type="checkbox" class="row-check" /></td>
-              <td>Line A scrap spike</td>
-              <td>재열 처리 원인 분석 필요</td>
-              <td><a href="#" class="status-link" data-status="open">open</a></td>
-              <td>품질보증팀</td>
-              <td>2025.08.30</td>
-              <td>
-                <button class="btn btn-approve" type="button">승인</button>
-                <button class="btn btn-delete" type="button" data-name="Line A scrap spike">삭제</button>
-              </td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="row-check" /></td>
-              <td>공정 B 불량률 급증</td>
-              <td>설비 교정 및 파라미터 점검</td>
-              <td><a href="#" class="status-link" data-status="in_progress">open</a></td>
-              <td>생산기술팀</td>
-              <td>2025.08.29</td>
-              <td>
-                <button class="btn btn-approve" type="button">승인</button>
-                <button class="btn btn-delete" type="button">삭제</button>
-              </td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" class="row-check" /></td>
-              <td>라인 C 안전센서 오류</td>
-              <td>교체 필요 여부 판단</td>
-              <td><a href="#" class="status-link" data-status="open">open</a></td>
-              <td>안전관리팀</td>
-              <td>2025.08.28</td>
-              <td>
-                <button class="btn btn-approve" type="button">승인</button>
-                <button class="btn btn-delete" type="button" data-name="라인 C 안전센서 오류">삭제</button>
-              </td>
-            </tr>
-            <!-- 필요 시 더 추가 -->
-          </tbody>
-        </table>
-      </div>
+  <script src="/proj_mes/Html/asset/03_issue.js"></script>
+  <script>
+    // --- 유저 메뉴 드롭다운 접근성 ---
+    const myIconBtn = document.getElementById('myIconBtn');
+    const userMenu  = document.getElementById('userMenu');
+    function closeUserMenu(){ userMenu.classList.add('hidden'); myIconBtn.setAttribute('aria-expanded','false'); }
+    myIconBtn.addEventListener('click', (e)=>{ e.stopPropagation(); userMenu.classList.toggle('hidden'); myIconBtn.setAttribute('aria-expanded', userMenu.classList.contains('hidden')?'false':'true'); });
+    userMenu.addEventListener('click', (e)=>e.stopPropagation());
+    document.addEventListener('click', closeUserMenu);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeUserMenu(); });
 
-      <!-- 하단 액션 (같은 버튼 스타일) -->
-      <div class="actions">
-        <button class="btn" type="button" id="btn-add">문제추가</button>
-        <button class="btn" type="button" id="btn-bulk-approve" disabled>선택 승인</button>
-        <button class="btn" type="button" id="btn-bulk-delete" disabled>선택 삭제</button>
-      </div>
+    // ----- 공통: 모달 열고 닫기 -----
+    function popOpen(){ $('.modal_wrap').show(); $('.modal_bg').show(); }
+    function popClose(){ $('.modal_wrap').hide(); $('.modal_bg').hide(); }
 
+    // ===== 유틸 =====
+    function uid(){ return 'ISSUE-' + Math.random().toString(36).slice(2,10); }
+    function rowToMeta($row){
+      return {
+        id: $row.attr('data-issue-id') || '',
+        type: $row.find('td').eq(1).text().trim(),
+        key: $row.find('td').eq(2).text().trim(),
+        statusText: $row.find('.status-link').text().trim(),
+        requester: $row.find('td').eq(4).text().trim(),
+        date: $row.find('td').eq(5).text().trim()
+      };
+    }
 
-  </section>
+    // ----- 감사 로그 설계 (CSV 스타일 & 헤더 유지) -----
+    function ensureAuditHeader(){
+      const $audit = $('#audit');
+      const v = $audit.val();
+      const header = 'ISO8601,ACTION,ISSUE,REQUESTER,PREV_STATUS,NEW_STATUS,NOTE\n';
+      if(!v.startsWith('ISO8601,')){
+        $audit.val(header + v);
+      }
+    }
 
-  <!-- 모달 (같은 팝업 구조/클래스) -->
-  <div class="modal_bg" onclick="popClose();"></div>
-  <div class="modal_wrap">
-    <div class="modal_message"><span id="modal-target">선택한</span> 항목을 정말 삭제하시겠습니까?</div>
-    <div class="modal_actions" style="margin-top:10px; text-align:center;">
-      <button class="modal_close" id="modal-yes">예</button>
-      <button class="modal_close" onclick="popClose();">아니요</button>
-    </div>
-  </div>
+    function pushAudit(action, note, metaBefore, metaAfter){
+      ensureAuditHeader();
+      const ts = new Date().toISOString();
+      const issue = (metaBefore?.type || metaAfter?.type || '').replaceAll(',', ' ');
+      const requester = (metaBefore?.requester || metaAfter?.requester || '').replaceAll(',', ' ');
+      const prevS = (metaBefore?.statusText ?? '').replaceAll(',', ' ');
+      const newS  = (metaAfter?.statusText ?? '').replaceAll(',', ' ');
+      const line = `${ts},${action},${issue},${requester},${prevS},${newS},${(note||'').replaceAll(',', ' ')}\n`;
+      const $audit = $('#audit');
+      $audit.val($audit.val() + line);
+      // 스크롤 아래로
+      $audit.scrollTop($audit[0].scrollHeight);
+    }
 
-  <!-- 감사 로그 카드 (같은 구성) -->
-  <section class="card">
-    <header id="audit-title" class="card-header audit-header">감사 로그(Audit)</header>
-    <div class="card-body">
-      <textarea id="audit" class="audit-textarea"
-        placeholder="시스템의 감사 로그가 여기에 표시됩니다."></textarea>
-    </div>
-  </section>
-</main>
-</div>
+    function downloadCSV(filename, text){
+      const blob = new Blob([text], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
 
-<script src ="/proj_mes/Html/asset/03_issue.js" ></script>
+    // ===== 선택 패널 동기화 =====
+    function renderSelectedItem(meta){
+      return $(
+        `<div class="selected-item issue" data-issue-id="${meta.id}">
+          <div class="meta">
+            <div class="font-semibold">${meta.type}</div>
+            <div class="text-xs text-gray-500">요청자: ${meta.requester} · 상태: ${meta.statusText}</div>
+          </div>
+          <div class="flex gap-1">
+            <button class="btn btn-outline btn-uncheck back_btn" type="button" title="체크 해제">해제</button>
+            <button class="btn btn-delete btn-remove-row delete_btn" type="button" title="행 삭제">삭제</button>
+          </div>
+        </div>`
+      );
+    }
+
+    function syncSelectedList(){
+      const $panel = $('#selected-list');
+      const selectedIds = new Set($('.row-check:checked').map(function(){ return $(this).closest('tr').attr('data-issue-id'); }).get());
+      // 1) 기존 패널에서 체크 해제된 항목 제거
+      $panel.children('.selected-item').each(function(){
+        const id = $(this).attr('data-issue-id');
+        if(!selectedIds.has(id)) $(this).remove();
+      });
+      // 2) 새로 체크된 항목 추가
+      $('.row-check:checked').each(function(){
+        const $row = $(this).closest('tr');
+        const id = $row.attr('data-issue-id');
+        if($panel.find(`.selected-item[data-issue-id="${id}"]`).length === 0){
+          $panel.append(renderSelectedItem(rowToMeta($row)));
+        }
+      });
+    }
+
+    function assignIdsIfMissing(){
+      $('#issue-tbody tr').each(function(){
+        if(!$(this).attr('data-issue-id')) $(this).attr('data-issue-id', uid());
+      });
+    }
+
+    // ===== 페이지 로직 =====
+    (function(){
+      assignIdsIfMissing();
+
+      // 전체선택
+      $('#check-all').on('change', function(){
+        const checked = $(this).is(':checked');
+        $('.row-check').prop('checked', checked);
+        toggleBulkButtons();
+        syncSelectedList();
+      });
+
+      // 개별선택
+      $(document).on('change', '.row-check', function(){
+        const all = $('.row-check').length;
+        const checked = $('.row-check:checked').length;
+        $('#check-all').prop('checked', all === checked);
+        toggleBulkButtons();
+        syncSelectedList();
+      });
+
+      function toggleBulkButtons(){
+        const has = $('.row-check:checked').length > 0;
+        $('#btn-bulk-approve').prop('disabled', !has);
+        $('#btn-bulk-delete').prop('disabled', !has);
+      }
+
+      // 삭제(개별)
+      let pendingDeleteRow = null; // 'bulk' | jQuery<tr>
+      $(document).on('click', '.btn-delete', function(){
+        // 패널에서 온 삭제인지, 테이블에서 온 삭제인지 판단
+        const $selectedItem = $(this).closest('.selected-item');
+        if($selectedItem.length){
+          const id = $selectedItem.attr('data-issue-id');
+          pendingDeleteRow = $('#issue-tbody tr[data-issue-id="'+id+'"]');
+          $('#modal-target').text(pendingDeleteRow.find('td').eq(1).text().trim() || '선택한');
+        } else {
+          pendingDeleteRow = $(this).closest('tr');
+          $('#modal-target').text($(this).data('name') || '선택한');
+        }
+        popOpen();
+      });
+
+      // 삭제(일괄)
+      $('#btn-bulk-delete').on('click', function(){
+        $('#modal-target').text($('.row-check:checked').length + '개');
+        pendingDeleteRow = 'bulk';
+        popOpen();
+      });
+
+      // 모달 예
+      $('#modal-yes').on('click', function(){
+        if(pendingDeleteRow === 'bulk'){
+          $('.row-check:checked').each(function(){
+            const $row = $(this).closest('tr');
+            const before = rowToMeta($row);
+            const id = $row.attr('data-issue-id');
+            $('#selected-list .selected-item[data-issue-id="'+id+'"]').remove();
+            $row.remove();
+            pushAudit('DELETE', '일괄 삭제', before, null);
+          });
+        } else if(pendingDeleteRow) {
+          const before = rowToMeta(pendingDeleteRow);
+          const id = pendingDeleteRow.attr('data-issue-id');
+          $('#selected-list .selected-item[data-issue-id="'+id+'"]').remove();
+          pendingDeleteRow.remove();
+          pushAudit('DELETE', '항목 삭제', before, null);
+        }
+        pendingDeleteRow = null;
+        popClose();
+        toggleBulkButtons();
+      });
+
+      // 승인(개별)
+      $(document).on('click', '.btn-approve', function(){
+        const $row = $(this).closest('tr');
+        const before = rowToMeta($row);
+        $row.find('.status-link').text('resolved').attr('data-status','resolved');
+        const after = rowToMeta($row);
+        pushAudit('RESOLVE', '완료 처리', before, after);
+      });
+
+      // 승인(일괄)
+      $('#btn-bulk-approve').on('click', function(){
+        $('.row-check:checked').each(function(){
+          const $row = $(this).closest('tr');
+          const before = rowToMeta($row);
+          $row.find('.status-link').text('resolved').attr('data-status','resolved');
+          const after = rowToMeta($row);
+          pushAudit('RESOLVE', '선택 항목 완료', before, after);
+          // 자동 체크 해제해 패널과 동기화
+          $row.find('.row-check').prop('checked', false);
+        });
+        $('#check-all').prop('checked', false);
+        toggleBulkButtons();
+        syncSelectedList();
+      });
+
+      // 문제추가(샘플)
+      $('#btn-add').on('click', function(){
+        const id = uid();
+        const today = new Date().toISOString().slice(0,10).replaceAll('-','.');
+        const tpl = `
+          <tr data-issue-id="${id}">
+            <td class="text-center"><input type="checkbox" class="row-check" /></td>
+            <td>신규 이슈</td>
+            <td>세부내역을 입력하세요</td>
+            <td><a href="#" class="status-link" data-status="open">open</a></td>
+            <td>관리자</td>
+            <td>${today}</td>
+            <td class="issue_td">
+              <button class="btn btn-approve confirm_btn_row" type="button">승인</button>
+              <button class="btn btn-delete delete_btn_row" type="button" data-name="신규 이슈">삭제</button>
+            </td>
+          </tr>`;
+        $('#issue-tbody').prepend(tpl);
+        pushAudit('CREATE', '이슈 추가', null, { statusText:'open', type:'신규 이슈', requester:'관리자' });
+      });
+
+      // 상태 링크 클릭 (자리만 유지)
+      $(document).on('click', '.status-link', function(e){ e.preventDefault(); });
+
+      // 선택 패널: 해제 버튼 -> 체크 해제 & 패널 제거
+      $(document).on('click', '.btn-uncheck', function(){
+        const $item = $(this).closest('.selected-item');
+        const id = $item.attr('data-issue-id');
+        const $row = $('#issue-tbody tr[data-issue-id="'+id+'"]').get(0);
+        if($row){
+          $($row).find('.row-check').prop('checked', false);
+          syncSelectedList();
+          toggleBulkButtons();
+        }
+      });
+
+      // 선택 패널: 삭제 버튼 -> 해당 행 삭제(모달 거치지 않고 즉시)
+      $(document).on('click', '.btn-remove-row', function(){
+        const $item = $(this).closest('.selected-item');
+        const id = $item.attr('data-issue-id');
+        const $row = $('#issue-tbody tr[data-issue-id="'+id+'"]').first();
+        const before = rowToMeta($row);
+        $row.remove();
+        $item.remove();
+        pushAudit('DELETE', '패널에서 삭제', before, null);
+        toggleBulkButtons();
+      });
+
+      // 선택 패널 비우기
+      $('#btn-clear-selected').on('click', function(){
+        // 패널만 비우고 체크는 유지하지 않도록 동기화 타이밍 제어
+        $('.row-check:checked').prop('checked', false);
+        $('#check-all').prop('checked', false);
+        syncSelectedList();
+        toggleBulkButtons();
+      });
+
+      // 로그 복사/다운로드
+      $('#btn-copy-log').on('click', function(){
+        const $audit = $('#audit');
+        $audit[0].select();
+        document.execCommand('copy');
+        // 가벼운 피드백
+        $(this).text('복사됨').prop('disabled', true);
+        setTimeout(()=>{ $(this).text('복사').prop('disabled', false); }, 1200);
+      });
+
+      $('#btn-download-log').on('click', function(){
+        ensureAuditHeader();
+        downloadCSV('audit_log.csv', $('#audit').val());
+      });
+    })();
+  </script>
 </body>
 </html>

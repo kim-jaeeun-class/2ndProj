@@ -1,4 +1,4 @@
-  // 주소 검색 버튼
+ 
   document.getElementById('addrSearch').addEventListener('click', execDaumPostcode);
 
   function execDaumPostcode() {

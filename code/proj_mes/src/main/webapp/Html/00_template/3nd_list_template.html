@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>템플릿</title>
+    <!-- 깨끗하고 현대적인 느낌을 주는 Inter 폰트 사용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/asset/3nd_template.css" />
+</head>
+<body>
+
+    <!-- 템플릿 헤더 시작 -->
+    <header>
+        <div class="header">
+            <div class="logo_header">
+                <div class="logo" >
+                    <a  href = "/proj_mes/mainpage">
+                        <!-- <img  src="https://i.postimg.cc/qMsq73hD/icon.png"  alt="회사 로고"> -->
+                    </a>
+                </div>
+                <div>
+                    <a class="logo_name" href = "/proj_mes/mainpage">J2P4</a>
+                </div>
+            </div>
+            <div class="logo_header">
+                <div class="searchicon">
+                    <img src="https://i.postimg.cc/9QcMwQym/magnifier-white.png" alt="검색용 아이콘">
+                </div>
+                <div>
+                    <form method="post" action="/proj_mes/logout">
+                        <button class="logout" type="submit">로그아웃</button>
+                    </form>
+                </div>
+                
+                <!-- 사람 아이콘 + 드롭다운 -->
+                <div>
+                    <div class="myicon">
+                        <img src="https://i.postimg.cc/zfVqTbvr/user.png" alt="마이페이지 아이콘">
+                    </div>
+                    
+                    <!-- 드롭다운 메뉴 -->
+                    <div id="usermenu" class="hide">
+                        <div class="user_row">
+                            <a href="/proj_mes/AccountManage">계정관리</a>
+                        </div>
+                        <div class="user_row">
+                            <a href="/proj_mes/IssueCtrl">이슈처리</a>
+                        </div>
+                        <div class="user_row">
+                            <a href="/proj_mes/Client">거래처 관리</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 내비게이션 -->
+    <div>
+        <ul class="nav">
+            <a href = "/proj_mes/StandardCtrl">
+                <li class="nav_li">기준 관리</li>
+            </a>
+            <a href = "/proj_mes/process">
+                <li class="nav_li">공정 관리</li>
+            </a>
+            <a href = "/proj_mes/bom">
+                <li class="nav_li">BOM 관리</li>
+            </a>
+            <a href = "/proj_mes/orderList">
+                <li class="nav_li">발주 관리</li>
+            </a>
+            <a href = "/proj_mes/stockList">
+                <li class="nav_li">재고 관리</li>
+            </a>
+            <a href = "/proj_mes/proplan">
+                <li class="nav_li">생산 관리</li>
+            </a>
+            <a href = "/proj_mes/items">
+                <li class="nav_li">품목 관리</li>
+            </a>           
+            <a href = "/proj_mes/inspection">
+                <li class="nav_li">품질 관리</li>
+            </a>
+        </ul>
+    </div>
+    <!-- 템플릿 헤더 끝 -->
+
+    <!-- 여기부터 내용 작성하시면 됩니다. -->
+    <div class="titleBox">
+        <div class="title"> </div><!-- 여기다 title 입력 -->
+        <div class="wrap"> <!-- 여기는 필터영역 -->
+            <div class="filter">
+                <!-- 여기에 필터할 select나 date 중 안쓰는 건 주석처리 하세요 -->
+                <div class="filter_date"><!-- 여긴 기간 date-->
+                    <div class="period">기간</div>
+                    <div>
+                        <input type="date">
+                        <span>~</span>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="filter_type"><!-- 여긴 분류 select -->
+                    <div class="label">분류</div><!-- 여긴 select label 이름 작성-->
+                    <div>
+                        <select>
+                            <option>전체</option>
+                        </select>
+                    </div>
+                </div> 
+                <div>
+                    <!-- 여기에 검색버튼이나 조회버튼 넣으세요-->
+                    <button class="gray_btn" type="button">조회</button> 
+                </div>
+            </div>
+        </div>
+        <div class="wrap_list"> <!-- 여기는 테이블 목록 영역입니다 -->
+            <div class="action">
+                <!-- 여기는 등록이나 삭제 버튼이 필요하면 여기에 넣으세요 -->
+                <div>
+                    <button class="red_btn" type="button">삭제</button>
+                </div>
+                <div>
+                    <button class="green_btn" type="button">등록</button>
+                </div>
+            </div>
+            <div class="table-wrap" tabindex="0">
+                <table class="tables">
+                    <thead>
+                        <!-- 고정할 테이블 th 작성 -->
+                         <tr>
+                             <th>제목 1</th>
+                             <th>제목 2</th>
+                             <th>제목 3</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tables_body">
+                        <!-- 내용 추가할 td 작성 -->
+                         <tr>
+                            <td>내용 1</td>
+                            <td>내용 2</td>
+                            <td>내용 3</td>
+                         </tr>
+                         <tr>
+                            <td>내용 1</td>
+                            <td>내용 2</td>
+                            <td>내용 3</td>
+                         </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- 내용 부분 끝 -->
+
+<!-- js 부분 -->
+<script>
+
+const myIconBtn = document.getElementById('myIconBtn');
+const userMenu  = document.getElementById('userMenu');
+
+function closeUserMenu() {
+    userMenu.classList.add('hidden');
+    myIconBtn.setAttribute('aria-expanded', 'false');
+}
+
+myIconBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    userMenu.classList.toggle('hidden');
+    myIconBtn.setAttribute('aria-expanded',
+        userMenu.classList.contains('hidden') ? 'false' : 'true');
+});
+
+userMenu.addEventListener('click', (e) => e.stopPropagation());
+document.addEventListener('click', closeUserMenu);
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeUserMenu();
+});
+
+
+</script>
+
+
+
+</body>
+
+
+
+
+</html>

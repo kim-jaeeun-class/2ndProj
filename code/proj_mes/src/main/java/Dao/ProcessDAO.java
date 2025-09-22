@@ -35,26 +35,25 @@ public class ProcessDAO {
 	
 	// createProcess - 새로운 공정 등록
 	public boolean createProcess(ProcessDTO dto) {
-	    String sql = "INSERT INTO process"
-	               + " (proc_id, item_code, dapart_id2, proc_name, proc_seq, proc_info, proc_img, process_check)"
-	               + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO process "
+		           + "(proc_id, item_code, dapart_id2, proc_name, proc_seq, proc_info, proc_img, process_check) "
+		           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-	    try (Connection conn = getConn();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = getConn();
+		     PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	        ps.setString(1, dto.getProc_id());      
-	        ps.setString(2, dto.getItem_code());
-	        ps.setString(3, dto.getDapart_id2());
-	        ps.setString(4, dto.getProc_name());
-	        ps.setInt(5, dto.getProc_seq());
-	        ps.setString(6, dto.getProc_info());
-	        ps.setString(7, dto.getProc_img());
-	        ps.setInt(8, dto.getProcess_check());
+			ps.setString(1, dto.getProc_id());   // PK 직접 입력
+		    ps.setString(2, dto.getItem_code());
+		    ps.setString(3, dto.getDapart_id2());
+		    ps.setString(4, dto.getProc_name());
+		    ps.setInt(5, dto.getProc_seq());
+		    ps.setString(6, dto.getProc_info());
+		    ps.setString(7, dto.getProc_img());
+		    ps.setInt(8, dto.getProcess_check());
 
-	        int result = ps.executeUpdate();
-	        return result > 0;
-
-	    } catch (SQLException e) {
+		    int result = ps.executeUpdate();
+		    return result > 0;
+		} catch (SQLException e) {
 	        e.printStackTrace();
 	        return false;
 	    }
@@ -62,6 +61,48 @@ public class ProcessDAO {
 
 	
 	// Read (조회) =========================
+	
+	
+	
+	
+	// process 전체 목록 조회 (부서 없더라도 포함)
+	public List<ProcessDTO> getAllProcesses() {
+	    List<ProcessDTO> list = new ArrayList<>();
+	    String sql = "SELECT p.*, d.depart_level " +
+	                 "FROM process p " +
+	                 "LEFT JOIN department d ON p.dapart_id2 = d.dapart_id2 " +
+	                 "ORDER BY p.item_code NULLS LAST, p.proc_seq NULLS LAST, p.proc_id";
+
+	    try (Connection conn = getConn();
+	         PreparedStatement pstmt = conn.prepareStatement(sql);
+	         ResultSet rs = pstmt.executeQuery()) {
+
+	        while (rs.next()) {
+	            list.add(createProcessDTO(rs));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// item 테이블에서 item_code 모두 조회
 	public List<String> getAllItemCodes() {
