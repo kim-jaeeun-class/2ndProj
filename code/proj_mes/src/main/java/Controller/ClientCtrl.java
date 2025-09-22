@@ -32,8 +32,8 @@ public class ClientCtrl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        List<ClientDTO> list = clientService.getAllItem();
-        req.setAttribute("clients", list);
+//        List<ClientDTO> list = clientService.getAllItem();
+//        req.setAttribute("clients", list);
         req.getRequestDispatcher("/Html/04_standard_gijun/04_client.jsp").forward(req, resp);
     }
 

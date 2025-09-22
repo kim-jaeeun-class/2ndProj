@@ -106,20 +106,17 @@ public class StandardService {
         @Override
         public List<Map<String, Object>> data() {
             List<Map<String,Object>> rows = new ArrayList<>();
-            List<?> list = dao.selectAll(); // 원 DAO 시그니처 유지(raw List)
-            for (Object o : list) {
-                OrderDTO d = (OrderDTO) o;
-                Map<String,Object> row = new LinkedHashMap<>();
-                row.put("order_key",    nz(d.getOrder_key()));
-                row.put("order_number", nz(d.getOrder_number()));
-                row.put("order_date",   d.getOrder_date()); // java.sql.Date 그대로
-                row.put("order_pay",    d.getOrder_pay());
-                row.put("order_state",  d.getOrder_state());
-                row.put("client_id",    nz(d.getClient_id()));
-                row.put("worker_id",    nz(d.getWorker_id()));
-                row.put("dapart_ID2",   nz(d.getDapart_ID2()));
-                rows.add(row);
-            }
+			/*
+			 * List<?> list = dao.selectAll(); // 원 DAO 시그니처 유지(raw List) for (Object o :
+			 * list) { OrderDTO d = (OrderDTO) o; Map<String,Object> row = new
+			 * LinkedHashMap<>(); row.put("order_key", nz(d.getOrder_key()));
+			 * row.put("order_number", nz(d.getOrder_number())); row.put("order_date",
+			 * d.getOrder_date()); // java.sql.Date 그대로 row.put("order_pay",
+			 * d.getOrder_pay()); row.put("order_state", d.getOrder_state());
+			 * row.put("client_id", nz(d.getClient_id())); row.put("worker_id",
+			 * nz(d.getWorker_id())); row.put("dapart_ID2", nz(d.getDapart_ID2()));
+			 * rows.add(row); }
+			 */
             return rows;
         }
 
@@ -200,19 +197,17 @@ public class StandardService {
         @Override
         public List<Map<String, Object>> data() {
             List<Map<String,Object>> rows = new ArrayList<>();
-            List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List)
-            for (Object o : list) {
-            	ProcessDTO d = (ProcessDTO) o;
-                Map<String,Object> row = new LinkedHashMap<>();
-                row.put("proc_id",    nz(d.getProc_id()));
-                row.put("proc_name", d.getProc_name());
-                row.put("item_code",   d.getItem_code()); // java.sql.Date 그대로
-                row.put("depart_id2",    d.getDapart_id2());
-                row.put("proc_info",  d.getProc_info());
-
-
-                rows.add(row);
-            }
+			/*
+			 * List<?> list = dao.getAllProcesses(); // 원 DAO 시그니처 유지(raw List) for (Object
+			 * o : list) { ProcessDTO d = (ProcessDTO) o; Map<String,Object> row = new
+			 * LinkedHashMap<>(); row.put("proc_id", nz(d.getProc_id()));
+			 * row.put("proc_name", d.getProc_name()); row.put("item_code",
+			 * d.getItem_code()); // java.sql.Date 그대로 row.put("depart_id2",
+			 * d.getDapart_id2()); row.put("proc_info", d.getProc_info());
+			 * 
+			 * 
+			 * rows.add(row); }
+			 */
             return rows;
         }
 

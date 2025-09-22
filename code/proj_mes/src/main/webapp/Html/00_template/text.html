@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>템플릿</title>
+    <title>test 템플릿</title>
     <!-- 깨끗하고 현대적인 느낌을 주는 Inter 폰트 사용 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
@@ -147,7 +147,45 @@
 
         <!-- 메인 콘텐츠 영역 -->
         <main class="main-content flex-1 p-8 overflow-y-auto">
+            <h1 class="text-3xl font-bold mb-4">메인 콘텐츠 영역</h1>
+            <p class="text-gray-600">이곳에 대시보드, 표, 차트 등 주요 정보를 표시할 수 있습니다.</p>
             
+            <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <!-- 예시 카드: 차트 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">생산량 추이</h2>
+                    <canvas id="productionChart"></canvas>
+                </div>
+    
+                <!-- 예시 카드: 통계 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">현재 재고 현황</h2>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between items-center text-lg">
+                            <span>원자재 A</span>
+                            <span class="font-bold text-blue-600">5,432개</span>
+                        </li>
+                        <li class="flex justify-between items-center text-lg">
+                            <span>완제품 B</span>
+                            <span class="font-bold text-green-600">1,210개</span>
+                        </li>
+                        <li class="flex justify-between items-center text-lg">
+                            <span>부품 C</span>
+                            <span class="font-bold text-red-600">240개</span>
+                        </li>
+                    </ul>
+                </div>
+    
+                <!-- 예시 카드: 공지사항 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">공지사항</h2>
+                    <ul class="space-y-2">
+                        <li class="text-gray-700">새로운 생산 관리 시스템 도입 안내</li>
+                        <li class="text-gray-700">2024년 3분기 실적 발표</li>
+                        <li class="text-gray-700">정기 시스템 점검 예정</li>
+                    </ul>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -225,6 +263,32 @@
                         event.stopPropagation();
                     });
                 });
+            });
+            
+            // Chart.js를 사용한 예시 차트
+            const ctx = document.getElementById('productionChart').getContext('2d');
+            const productionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+                    datasets: [{
+                        label: '월별 생산량',
+                        data: [120, 150, 100, 180, 140, 200],
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
         });
     </script>
